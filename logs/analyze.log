@@ -1,0 +1,66 @@
+== (a) within-model paraphrase vs random cos ==
+qwen|jlens-raw-dense                     para=0.903 rand=0.734 partner@1=0.68 (chance 0.013)
+qwen|jlens-raw-top32                     para=0.781 rand=0.609 partner@1=0.42 (chance 0.013)
+qwen|jlens-centred-dense                 para=0.911 rand=0.757 partner@1=0.66 (chance 0.013)
+qwen|jlens-centred-top32                 para=0.839 rand=0.712 partner@1=0.33 (chance 0.013)
+qwen|logit-raw-dense                     para=0.855 rand=0.663 partner@1=0.59 (chance 0.013)
+qwen|logit-raw-top32                     para=0.575 rand=0.349 partner@1=0.38 (chance 0.013)
+qwen|logit-centred-dense                 para=0.840 rand=0.630 partner@1=0.60 (chance 0.013)
+qwen|logit-centred-top32                 para=0.582 rand=0.358 partner@1=0.44 (chance 0.013)
+qwen|final-raw-dense                     para=0.904 rand=0.697 partner@1=0.78 (chance 0.013)
+qwen|final-raw-top32                     para=0.743 rand=0.535 partner@1=0.42 (chance 0.013)
+qwen|final-centred-dense                 para=0.902 rand=0.700 partner@1=0.78 (chance 0.013)
+qwen|final-centred-top32                 para=0.780 rand=0.601 partner@1=0.50 (chance 0.013)
+smol|jlens-raw-dense                     para=0.940 rand=0.741 partner@1=0.89 (chance 0.013)
+smol|jlens-raw-top32                     para=0.882 rand=0.692 partner@1=0.62 (chance 0.013)
+smol|jlens-centred-dense                 para=0.937 rand=0.723 partner@1=0.89 (chance 0.013)
+smol|jlens-centred-top32                 para=0.886 rand=0.714 partner@1=0.59 (chance 0.013)
+smol|logit-raw-dense                     para=0.902 rand=0.645 partner@1=0.86 (chance 0.013)
+smol|logit-raw-top32                     para=0.668 rand=0.364 partner@1=0.59 (chance 0.013)
+smol|logit-centred-dense                 para=0.894 rand=0.618 partner@1=0.86 (chance 0.013)
+smol|logit-centred-top32                 para=0.637 rand=0.346 partner@1=0.57 (chance 0.013)
+smol|final-raw-dense                     para=0.950 rand=0.743 partner@1=0.93 (chance 0.013)
+smol|final-raw-top32                     para=0.800 rand=0.521 partner@1=0.78 (chance 0.013)
+smol|final-centred-dense                 para=0.941 rand=0.706 partner@1=0.93 (chance 0.013)
+smol|final-centred-top32                 para=0.823 rand=0.585 partner@1=0.61 (chance 0.013)
+== (b) cross-model ==
+multihop|jlens-raw-dense                 N=93 A2B@1=0.570 B2A@1=0.656 @5=0.892 chance=0.011 shufctrl=0.008(max 0.022) cos m/mm=0.723/0.272
+multihop|jlens-raw-top32                 N=93 A2B@1=0.495 B2A@1=0.452 @5=0.828 chance=0.011 shufctrl=0.011(max 0.032) cos m/mm=0.520/0.089
+multihop|jlens-centred-dense             N=93 A2B@1=0.624 B2A@1=0.624 @5=0.860 chance=0.011 shufctrl=0.009(max 0.032) cos m/mm=0.768/0.313
+multihop|jlens-centred-top32             N=93 A2B@1=0.473 B2A@1=0.462 @5=0.806 chance=0.011 shufctrl=0.016(max 0.032) cos m/mm=0.581/0.101
+multihop|logit-raw-dense                 N=93 A2B@1=0.570 B2A@1=0.484 @5=0.892 chance=0.011 shufctrl=0.012(max 0.065) cos m/mm=0.403/0.176
+multihop|logit-raw-top32                 N=93 A2B@1=0.301 B2A@1=0.226 @5=0.591 chance=0.011 shufctrl=0.011(max 0.032) cos m/mm=0.278/0.090
+multihop|logit-centred-dense             N=93 A2B@1=0.581 B2A@1=0.516 @5=0.903 chance=0.011 shufctrl=0.012(max 0.032) cos m/mm=0.448/0.198
+multihop|logit-centred-top32             N=93 A2B@1=0.333 B2A@1=0.301 @5=0.720 chance=0.011 shufctrl=0.011(max 0.043) cos m/mm=0.319/0.103
+multihop|final-raw-dense                 N=93 A2B@1=0.763 B2A@1=0.785 @5=0.957 chance=0.011 shufctrl=0.008(max 0.022) cos m/mm=0.779/0.451
+multihop|final-raw-top32                 N=93 A2B@1=0.484 B2A@1=0.538 @5=0.796 chance=0.011 shufctrl=0.011(max 0.032) cos m/mm=0.648/0.153
+multihop|final-centred-dense             N=93 A2B@1=0.763 B2A@1=0.731 @5=0.946 chance=0.011 shufctrl=0.013(max 0.032) cos m/mm=0.672/0.238
+multihop|final-centred-top32             N=93 A2B@1=0.484 B2A@1=0.516 @5=0.839 chance=0.011 shufctrl=0.008(max 0.043) cos m/mm=0.593/0.104
+assoc|jlens-raw-dense                    N=102 A2B@1=0.480 B2A@1=0.451 @5=0.725 chance=0.010 shufctrl=0.008(max 0.020) cos m/mm=0.843/0.793
+assoc|jlens-raw-top32                    N=102 A2B@1=0.167 B2A@1=0.049 @5=0.353 chance=0.010 shufctrl=0.012(max 0.029) cos m/mm=0.736/0.697
+assoc|jlens-centred-dense                N=102 A2B@1=0.490 B2A@1=0.461 @5=0.735 chance=0.010 shufctrl=0.007(max 0.020) cos m/mm=0.859/0.810
+assoc|jlens-centred-top32                N=102 A2B@1=0.098 B2A@1=0.078 @5=0.245 chance=0.010 shufctrl=0.010(max 0.039) cos m/mm=0.796/0.766
+assoc|logit-raw-dense                    N=102 A2B@1=0.206 B2A@1=0.255 @5=0.422 chance=0.010 shufctrl=0.008(max 0.029) cos m/mm=0.378/0.320
+assoc|logit-raw-top32                    N=102 A2B@1=0.088 B2A@1=0.059 @5=0.196 chance=0.010 shufctrl=0.010(max 0.020) cos m/mm=0.302/0.254
+assoc|logit-centred-dense                N=102 A2B@1=0.225 B2A@1=0.206 @5=0.431 chance=0.010 shufctrl=0.007(max 0.029) cos m/mm=0.378/0.312
+assoc|logit-centred-top32                N=102 A2B@1=0.078 B2A@1=0.049 @5=0.284 chance=0.010 shufctrl=0.012(max 0.029) cos m/mm=0.269/0.218
+assoc|final-raw-dense                    N=102 A2B@1=0.627 B2A@1=0.461 @5=0.853 chance=0.010 shufctrl=0.009(max 0.020) cos m/mm=0.872/0.809
+assoc|final-raw-top32                    N=102 A2B@1=0.255 B2A@1=0.167 @5=0.480 chance=0.010 shufctrl=0.010(max 0.029) cos m/mm=0.685/0.539
+assoc|final-centred-dense                N=102 A2B@1=0.608 B2A@1=0.490 @5=0.853 chance=0.010 shufctrl=0.010(max 0.020) cos m/mm=0.880/0.821
+assoc|final-centred-top32                N=102 A2B@1=0.225 B2A@1=0.235 @5=0.529 chance=0.010 shufctrl=0.007(max 0.029) cos m/mm=0.711/0.580
+para|jlens-raw-dense                     N=80 A2B@1=0.613 B2A@1=0.512 @5=0.950 chance=0.013 shufctrl=0.013(max 0.037) cos m/mm=0.797/0.638
+para|jlens-raw-top32                     N=80 A2B@1=0.263 B2A@1=0.163 @5=0.537 chance=0.013 shufctrl=0.010(max 0.037) cos m/mm=0.746/0.622
+para|jlens-centred-dense                 N=80 A2B@1=0.588 B2A@1=0.525 @5=0.925 chance=0.013 shufctrl=0.020(max 0.050) cos m/mm=0.832/0.674
+para|jlens-centred-top32                 N=80 A2B@1=0.225 B2A@1=0.163 @5=0.525 chance=0.013 shufctrl=0.013(max 0.037) cos m/mm=0.804/0.688
+para|logit-raw-dense                     N=80 A2B@1=0.350 B2A@1=0.250 @5=0.713 chance=0.013 shufctrl=0.015(max 0.050) cos m/mm=0.375/0.264
+para|logit-raw-top32                     N=80 A2B@1=0.125 B2A@1=0.113 @5=0.325 chance=0.013 shufctrl=0.013(max 0.037) cos m/mm=0.316/0.216
+para|logit-centred-dense                 N=80 A2B@1=0.325 B2A@1=0.212 @5=0.750 chance=0.013 shufctrl=0.011(max 0.025) cos m/mm=0.381/0.261
+para|logit-centred-top32                 N=80 A2B@1=0.150 B2A@1=0.163 @5=0.375 chance=0.013 shufctrl=0.010(max 0.025) cos m/mm=0.287/0.192
+para|final-raw-dense                     N=80 A2B@1=0.675 B2A@1=0.475 @5=0.975 chance=0.013 shufctrl=0.014(max 0.050) cos m/mm=0.839/0.670
+para|final-raw-top32                     N=80 A2B@1=0.263 B2A@1=0.400 @5=0.562 chance=0.013 shufctrl=0.013(max 0.037) cos m/mm=0.686/0.495
+para|final-centred-dense                 N=80 A2B@1=0.688 B2A@1=0.475 @5=0.963 chance=0.013 shufctrl=0.011(max 0.025) cos m/mm=0.832/0.653
+para|final-centred-top32                 N=80 A2B@1=0.263 B2A@1=0.350 @5=0.625 chance=0.013 shufctrl=0.014(max 0.037) cos m/mm=0.727/0.566
+== (c) minimal pairs ==
+jlens {"qwen": {"n_pairs_scored": 29, "mean_pair_cos": 0.9086693232194161, "frac_w1_top10": 0.3448275862068966, "frac_w2_top10": 0.4482758620689655, "frac_both_top10": 0.1724137931034483, "frac_both_top50": 0.20689655172413793, "median_rank_w1": 129.0, "median_rank_w2": 80.0, "frac_pairs_cos_below_0.9": 0.36666666666666664}, "smol": {"n_pairs_scored": 29, "mean_pair_cos": 0.9119084628403905, "frac_w1_top10": 0.4482758620689655, "frac_w2_top10": 0.5172413793103449, "frac_both_top10": 0.27586206896551724, "frac_both_top50": 0.41379310344827586, "median_rank_w1": 29.0, "median_rank_w2": 10.0, "frac_pairs_cos_below_0.9": 0.3}, "cross_diff_matched_cos": 0.4023306623833085, "cross_diff_mismatched_cos": 0.005848314684089752, "cross_diff_A2B_top1": 0.7666666666666667, "chance": 0.03333333333333333}
+logit {"qwen": {"n_pairs_scored": 29, "mean_pair_cos": 0.8952336221572132, "frac_w1_top10": 0.27586206896551724, "frac_w2_top10": 0.2413793103448276, "frac_both_top10": 0.1724137931034483, "frac_both_top50": 0.1724137931034483, "median_rank_w1": 165.0, "median_rank_w2": 158.0, "frac_pairs_cos_below_0.9": 0.43333333333333335}, "smol": {"n_pairs_scored": 29, "mean_pair_cos": 0.8949341286939629, "frac_w1_top10": 0.27586206896551724, "frac_w2_top10": 0.2413793103448276, "frac_both_top10": 0.13793103448275862, "frac_both_top50": 0.20689655172413793, "median_rank_w1": 81.0, "median_rank_w2": 122.0, "frac_pairs_cos_below_0.9": 0.3}, "cross_diff_matched_cos": 0.21640349732354833, "cross_diff_mismatched_cos": 0.0005559893268532697, "cross_diff_A2B_top1": 0.8, "chance": 0.03333333333333333}
+final {"qwen": {"n_pairs_scored": 29, "mean_pair_cos": 0.8332240056103406, "frac_w1_top10": 0.6206896551724138, "frac_w2_top10": 0.7241379310344828, "frac_both_top10": 0.4827586206896552, "frac_both_top50": 0.5517241379310345, "median_rank_w1": 4.0, "median_rank_w2": 2.0, "frac_pairs_cos_below_0.9": 0.7}, "smol": {"n_pairs_scored": 29, "mean_pair_cos": 0.8461849229770967, "frac_w1_top10": 0.6206896551724138, "frac_w2_top10": 0.7931034482758621, "frac_both_top10": 0.4827586206896552, "frac_both_top50": 0.6896551724137931, "median_rank_w1": 5.0, "median_rank_w2": 1.0, "frac_pairs_cos_below_0.9": 0.7}, "cross_diff_matched_cos": 0.36616780098466056, "cross_diff_mismatched_cos": 0.0008591329784776718, "cross_diff_A2B_top1": 0.9666666666666667, "chance": 0.03333333333333333}

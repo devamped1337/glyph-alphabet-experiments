@@ -1,0 +1,695 @@
+{
+ "version": "maths-book-v3.0",
+ "layers": {
+  "0": {
+   "layer": {
+    "qwen": 8,
+    "smol": 11
+   },
+   "probe_heldout_acc": {
+    "qwen|left": 1.0,
+    "qwen|op": 1.0,
+    "qwen|right": 1.0,
+    "smol|left": 1.0,
+    "smol|op": 1.0,
+    "smol|right": 1.0
+   },
+   "rounds": [
+    {
+     "round": 1,
+     "accepted": {
+      "left": [
+       "0",
+       "1",
+       "2",
+       "3",
+       "4",
+       "5",
+       "6",
+       "7",
+       "8",
+       "9"
+      ],
+      "op": [
+       "add",
+       "gt",
+       "sub"
+      ],
+      "right": [
+       "0",
+       "1",
+       "2",
+       "3",
+       "4",
+       "5",
+       "6",
+       "7",
+       "8",
+       "9"
+      ],
+      "eq": [
+       "="
+      ]
+     },
+     "n_accepted": 24,
+     "rate_roundtrip": 1.0,
+     "rate_keeper": 1.0,
+     "rate_decodes": 1.0,
+     "op": {
+      "op:add": {
+       "roundtrip_AtoBtoA": true,
+       "roundtrip_BtoAtoB": true,
+       "keeper": true,
+       "decodes": true,
+       "cos_A_B": 0.99785446381382,
+       "op_entry_offset_cos_AB": 0.9974124791295776,
+       "eq_state_offset_cos_AB": 0.9902896794573477,
+       "closer_to_symbol_than_word": {
+        "qwen": true,
+        "smol": true
+       },
+       "direction_ok": true,
+       "pass": true
+      },
+      "op:sub": {
+       "roundtrip_AtoBtoA": true,
+       "roundtrip_BtoAtoB": true,
+       "keeper": true,
+       "decodes": true,
+       "cos_A_B": 0.9981102298319402,
+       "op_entry_offset_cos_AB": 0.9972010872666558,
+       "eq_state_offset_cos_AB": 0.9868410129962208,
+       "closer_to_symbol_than_word": {
+        "qwen": true,
+        "smol": true
+       },
+       "direction_ok": true,
+       "pass": true
+      },
+      "op:gt": {
+       "roundtrip_AtoBtoA": true,
+       "roundtrip_BtoAtoB": true,
+       "keeper": true,
+       "decodes": true,
+       "cos_A_B": 0.9991749033674918,
+       "op_entry_offset_cos_AB": 0.9987393186888942,
+       "eq_state_offset_cos_AB": 0.9959210617665291,
+       "direction_ok": true,
+       "pass": true
+      }
+     }
+    }
+   ],
+   "final_checks": {
+    "left:0": {
+     "roundtrip_AtoBtoA": true,
+     "roundtrip_BtoAtoB": true,
+     "keeper": true,
+     "decodes": true,
+     "cos_A_B": 0.9935090412354474,
+     "pass": true
+    },
+    "left:1": {
+     "roundtrip_AtoBtoA": true,
+     "roundtrip_BtoAtoB": true,
+     "keeper": true,
+     "decodes": true,
+     "cos_A_B": 0.9836611376211604,
+     "pass": true
+    },
+    "left:2": {
+     "roundtrip_AtoBtoA": true,
+     "roundtrip_BtoAtoB": true,
+     "keeper": true,
+     "decodes": true,
+     "cos_A_B": 0.983749493313734,
+     "pass": true
+    },
+    "left:3": {
+     "roundtrip_AtoBtoA": true,
+     "roundtrip_BtoAtoB": true,
+     "keeper": true,
+     "decodes": true,
+     "cos_A_B": 0.9828061432054072,
+     "pass": true
+    },
+    "left:4": {
+     "roundtrip_AtoBtoA": true,
+     "roundtrip_BtoAtoB": true,
+     "keeper": true,
+     "decodes": true,
+     "cos_A_B": 0.988536870191087,
+     "pass": true
+    },
+    "left:5": {
+     "roundtrip_AtoBtoA": true,
+     "roundtrip_BtoAtoB": true,
+     "keeper": true,
+     "decodes": true,
+     "cos_A_B": 0.9778979941956664,
+     "pass": true
+    },
+    "left:6": {
+     "roundtrip_AtoBtoA": true,
+     "roundtrip_BtoAtoB": true,
+     "keeper": true,
+     "decodes": true,
+     "cos_A_B": 0.9755283143627151,
+     "pass": true
+    },
+    "left:7": {
+     "roundtrip_AtoBtoA": true,
+     "roundtrip_BtoAtoB": true,
+     "keeper": true,
+     "decodes": true,
+     "cos_A_B": 0.9853856988037627,
+     "pass": true
+    },
+    "left:8": {
+     "roundtrip_AtoBtoA": true,
+     "roundtrip_BtoAtoB": true,
+     "keeper": true,
+     "decodes": true,
+     "cos_A_B": 0.9845451343475028,
+     "pass": true
+    },
+    "left:9": {
+     "roundtrip_AtoBtoA": true,
+     "roundtrip_BtoAtoB": true,
+     "keeper": true,
+     "decodes": true,
+     "cos_A_B": 0.9916812085963276,
+     "pass": true
+    },
+    "op:add": {
+     "roundtrip_AtoBtoA": true,
+     "roundtrip_BtoAtoB": true,
+     "keeper": true,
+     "decodes": true,
+     "cos_A_B": 0.99785446381382,
+     "op_entry_offset_cos_AB": 0.9974124791295776,
+     "eq_state_offset_cos_AB": 0.9902896794573477,
+     "closer_to_symbol_than_word": {
+      "qwen": true,
+      "smol": true
+     },
+     "direction_ok": true,
+     "pass": true
+    },
+    "op:sub": {
+     "roundtrip_AtoBtoA": true,
+     "roundtrip_BtoAtoB": true,
+     "keeper": true,
+     "decodes": true,
+     "cos_A_B": 0.9981102298319402,
+     "op_entry_offset_cos_AB": 0.9972010872666558,
+     "eq_state_offset_cos_AB": 0.9868410129962208,
+     "closer_to_symbol_than_word": {
+      "qwen": true,
+      "smol": true
+     },
+     "direction_ok": true,
+     "pass": true
+    },
+    "op:gt": {
+     "roundtrip_AtoBtoA": true,
+     "roundtrip_BtoAtoB": true,
+     "keeper": true,
+     "decodes": true,
+     "cos_A_B": 0.9991749033674918,
+     "op_entry_offset_cos_AB": 0.9987393186888942,
+     "eq_state_offset_cos_AB": 0.9959210617665291,
+     "direction_ok": true,
+     "pass": true
+    },
+    "right:0": {
+     "roundtrip_AtoBtoA": true,
+     "roundtrip_BtoAtoB": true,
+     "keeper": true,
+     "decodes": true,
+     "cos_A_B": 0.9949182423103878,
+     "pass": true
+    },
+    "right:1": {
+     "roundtrip_AtoBtoA": true,
+     "roundtrip_BtoAtoB": true,
+     "keeper": true,
+     "decodes": true,
+     "cos_A_B": 0.992414820639415,
+     "pass": true
+    },
+    "right:2": {
+     "roundtrip_AtoBtoA": true,
+     "roundtrip_BtoAtoB": true,
+     "keeper": true,
+     "decodes": true,
+     "cos_A_B": 0.989474995747881,
+     "pass": true
+    },
+    "right:3": {
+     "roundtrip_AtoBtoA": true,
+     "roundtrip_BtoAtoB": true,
+     "keeper": true,
+     "decodes": true,
+     "cos_A_B": 0.9855101901344432,
+     "pass": true
+    },
+    "right:4": {
+     "roundtrip_AtoBtoA": true,
+     "roundtrip_BtoAtoB": true,
+     "keeper": true,
+     "decodes": true,
+     "cos_A_B": 0.9851271487462196,
+     "pass": true
+    },
+    "right:5": {
+     "roundtrip_AtoBtoA": true,
+     "roundtrip_BtoAtoB": true,
+     "keeper": true,
+     "decodes": true,
+     "cos_A_B": 0.9816018787957872,
+     "pass": true
+    },
+    "right:6": {
+     "roundtrip_AtoBtoA": true,
+     "roundtrip_BtoAtoB": true,
+     "keeper": true,
+     "decodes": true,
+     "cos_A_B": 0.987888387654204,
+     "pass": true
+    },
+    "right:7": {
+     "roundtrip_AtoBtoA": true,
+     "roundtrip_BtoAtoB": true,
+     "keeper": true,
+     "decodes": true,
+     "cos_A_B": 0.9815134264895697,
+     "pass": true
+    },
+    "right:8": {
+     "roundtrip_AtoBtoA": true,
+     "roundtrip_BtoAtoB": true,
+     "keeper": true,
+     "decodes": true,
+     "cos_A_B": 0.9769000370746769,
+     "pass": true
+    },
+    "right:9": {
+     "roundtrip_AtoBtoA": true,
+     "roundtrip_BtoAtoB": true,
+     "keeper": true,
+     "decodes": true,
+     "cos_A_B": 0.9666560176161301,
+     "pass": true
+    },
+    "eq:=": {
+     "roundtrip_AtoBtoA": true,
+     "roundtrip_BtoAtoB": true,
+     "keeper": true,
+     "decodes": true,
+     "cos_A_B": 0.9995986244774868,
+     "pass": true
+    }
+   },
+   "accepted": {
+    "left": [
+     "0",
+     "1",
+     "2",
+     "3",
+     "4",
+     "5",
+     "6",
+     "7",
+     "8",
+     "9"
+    ],
+    "op": [
+     "add",
+     "gt",
+     "sub"
+    ],
+    "right": [
+     "0",
+     "1",
+     "2",
+     "3",
+     "4",
+     "5",
+     "6",
+     "7",
+     "8",
+     "9"
+    ],
+    "eq": [
+     "="
+    ]
+   }
+  },
+  "1": {
+   "layer": {
+    "qwen": 14,
+    "smol": 19
+   },
+   "probe_heldout_acc": {
+    "qwen|left": 1.0,
+    "qwen|op": 1.0,
+    "qwen|right": 1.0,
+    "smol|left": 1.0,
+    "smol|op": 1.0,
+    "smol|right": 1.0
+   },
+   "rounds": [
+    {
+     "round": 1,
+     "accepted": {
+      "left": [
+       "0",
+       "1",
+       "2",
+       "3",
+       "4",
+       "5",
+       "6",
+       "7",
+       "8",
+       "9"
+      ],
+      "op": [
+       "add",
+       "gt",
+       "sub"
+      ],
+      "right": [
+       "0",
+       "1",
+       "2",
+       "3",
+       "4",
+       "5",
+       "6",
+       "7",
+       "8",
+       "9"
+      ],
+      "eq": [
+       "="
+      ]
+     },
+     "n_accepted": 24,
+     "rate_roundtrip": 1.0,
+     "rate_keeper": 1.0,
+     "rate_decodes": 1.0,
+     "op": {
+      "op:add": {
+       "roundtrip_AtoBtoA": true,
+       "roundtrip_BtoAtoB": true,
+       "keeper": true,
+       "decodes": true,
+       "cos_A_B": 0.9974235115366379,
+       "op_entry_offset_cos_AB": 0.9967575534901209,
+       "eq_state_offset_cos_AB": 0.9930980205912773,
+       "closer_to_symbol_than_word": {
+        "qwen": true,
+        "smol": true
+       },
+       "direction_ok": true,
+       "pass": true
+      },
+      "op:sub": {
+       "roundtrip_AtoBtoA": true,
+       "roundtrip_BtoAtoB": true,
+       "keeper": true,
+       "decodes": true,
+       "cos_A_B": 0.9985091278443837,
+       "op_entry_offset_cos_AB": 0.9971205788814799,
+       "eq_state_offset_cos_AB": 0.9937416357631319,
+       "closer_to_symbol_than_word": {
+        "qwen": true,
+        "smol": true
+       },
+       "direction_ok": true,
+       "pass": true
+      },
+      "op:gt": {
+       "roundtrip_AtoBtoA": true,
+       "roundtrip_BtoAtoB": true,
+       "keeper": true,
+       "decodes": true,
+       "cos_A_B": 0.9984367875749424,
+       "op_entry_offset_cos_AB": 0.9984806108193331,
+       "eq_state_offset_cos_AB": 0.9978111237306144,
+       "direction_ok": true,
+       "pass": true
+      }
+     }
+    }
+   ],
+   "final_checks": {
+    "left:0": {
+     "roundtrip_AtoBtoA": true,
+     "roundtrip_BtoAtoB": true,
+     "keeper": true,
+     "decodes": true,
+     "cos_A_B": 0.9967252410814702,
+     "pass": true
+    },
+    "left:1": {
+     "roundtrip_AtoBtoA": true,
+     "roundtrip_BtoAtoB": true,
+     "keeper": true,
+     "decodes": true,
+     "cos_A_B": 0.9957362458904755,
+     "pass": true
+    },
+    "left:2": {
+     "roundtrip_AtoBtoA": true,
+     "roundtrip_BtoAtoB": true,
+     "keeper": true,
+     "decodes": true,
+     "cos_A_B": 0.9945840133387822,
+     "pass": true
+    },
+    "left:3": {
+     "roundtrip_AtoBtoA": true,
+     "roundtrip_BtoAtoB": true,
+     "keeper": true,
+     "decodes": true,
+     "cos_A_B": 0.9933635948284933,
+     "pass": true
+    },
+    "left:4": {
+     "roundtrip_AtoBtoA": true,
+     "roundtrip_BtoAtoB": true,
+     "keeper": true,
+     "decodes": true,
+     "cos_A_B": 0.9944399101323398,
+     "pass": true
+    },
+    "left:5": {
+     "roundtrip_AtoBtoA": true,
+     "roundtrip_BtoAtoB": true,
+     "keeper": true,
+     "decodes": true,
+     "cos_A_B": 0.995915153036669,
+     "pass": true
+    },
+    "left:6": {
+     "roundtrip_AtoBtoA": true,
+     "roundtrip_BtoAtoB": true,
+     "keeper": true,
+     "decodes": true,
+     "cos_A_B": 0.9927424731735306,
+     "pass": true
+    },
+    "left:7": {
+     "roundtrip_AtoBtoA": true,
+     "roundtrip_BtoAtoB": true,
+     "keeper": true,
+     "decodes": true,
+     "cos_A_B": 0.996411540756619,
+     "pass": true
+    },
+    "left:8": {
+     "roundtrip_AtoBtoA": true,
+     "roundtrip_BtoAtoB": true,
+     "keeper": true,
+     "decodes": true,
+     "cos_A_B": 0.993081275139137,
+     "pass": true
+    },
+    "left:9": {
+     "roundtrip_AtoBtoA": true,
+     "roundtrip_BtoAtoB": true,
+     "keeper": true,
+     "decodes": true,
+     "cos_A_B": 0.994757368137539,
+     "pass": true
+    },
+    "op:add": {
+     "roundtrip_AtoBtoA": true,
+     "roundtrip_BtoAtoB": true,
+     "keeper": true,
+     "decodes": true,
+     "cos_A_B": 0.9974235115366379,
+     "op_entry_offset_cos_AB": 0.9967575534901209,
+     "eq_state_offset_cos_AB": 0.9930980205912773,
+     "closer_to_symbol_than_word": {
+      "qwen": true,
+      "smol": true
+     },
+     "direction_ok": true,
+     "pass": true
+    },
+    "op:sub": {
+     "roundtrip_AtoBtoA": true,
+     "roundtrip_BtoAtoB": true,
+     "keeper": true,
+     "decodes": true,
+     "cos_A_B": 0.9985091278443837,
+     "op_entry_offset_cos_AB": 0.9971205788814799,
+     "eq_state_offset_cos_AB": 0.9937416357631319,
+     "closer_to_symbol_than_word": {
+      "qwen": true,
+      "smol": true
+     },
+     "direction_ok": true,
+     "pass": true
+    },
+    "op:gt": {
+     "roundtrip_AtoBtoA": true,
+     "roundtrip_BtoAtoB": true,
+     "keeper": true,
+     "decodes": true,
+     "cos_A_B": 0.9984367875749424,
+     "op_entry_offset_cos_AB": 0.9984806108193331,
+     "eq_state_offset_cos_AB": 0.9978111237306144,
+     "direction_ok": true,
+     "pass": true
+    },
+    "right:0": {
+     "roundtrip_AtoBtoA": true,
+     "roundtrip_BtoAtoB": true,
+     "keeper": true,
+     "decodes": true,
+     "cos_A_B": 0.9976313975762716,
+     "pass": true
+    },
+    "right:1": {
+     "roundtrip_AtoBtoA": true,
+     "roundtrip_BtoAtoB": true,
+     "keeper": true,
+     "decodes": true,
+     "cos_A_B": 0.9974347295318539,
+     "pass": true
+    },
+    "right:2": {
+     "roundtrip_AtoBtoA": true,
+     "roundtrip_BtoAtoB": true,
+     "keeper": true,
+     "decodes": true,
+     "cos_A_B": 0.9965448444898136,
+     "pass": true
+    },
+    "right:3": {
+     "roundtrip_AtoBtoA": true,
+     "roundtrip_BtoAtoB": true,
+     "keeper": true,
+     "decodes": true,
+     "cos_A_B": 0.9949382457385085,
+     "pass": true
+    },
+    "right:4": {
+     "roundtrip_AtoBtoA": true,
+     "roundtrip_BtoAtoB": true,
+     "keeper": true,
+     "decodes": true,
+     "cos_A_B": 0.9902816576643458,
+     "pass": true
+    },
+    "right:5": {
+     "roundtrip_AtoBtoA": true,
+     "roundtrip_BtoAtoB": true,
+     "keeper": true,
+     "decodes": true,
+     "cos_A_B": 0.995139452896309,
+     "pass": true
+    },
+    "right:6": {
+     "roundtrip_AtoBtoA": true,
+     "roundtrip_BtoAtoB": true,
+     "keeper": true,
+     "decodes": true,
+     "cos_A_B": 0.9960414630945935,
+     "pass": true
+    },
+    "right:7": {
+     "roundtrip_AtoBtoA": true,
+     "roundtrip_BtoAtoB": true,
+     "keeper": true,
+     "decodes": true,
+     "cos_A_B": 0.9952530914928379,
+     "pass": true
+    },
+    "right:8": {
+     "roundtrip_AtoBtoA": true,
+     "roundtrip_BtoAtoB": true,
+     "keeper": true,
+     "decodes": true,
+     "cos_A_B": 0.9916746097772868,
+     "pass": true
+    },
+    "right:9": {
+     "roundtrip_AtoBtoA": true,
+     "roundtrip_BtoAtoB": true,
+     "keeper": true,
+     "decodes": true,
+     "cos_A_B": 0.9594996201871828,
+     "pass": true
+    },
+    "eq:=": {
+     "roundtrip_AtoBtoA": true,
+     "roundtrip_BtoAtoB": true,
+     "keeper": true,
+     "decodes": true,
+     "cos_A_B": 0.9991059108552427,
+     "pass": true
+    }
+   },
+   "accepted": {
+    "left": [
+     "0",
+     "1",
+     "2",
+     "3",
+     "4",
+     "5",
+     "6",
+     "7",
+     "8",
+     "9"
+    ],
+    "op": [
+     "add",
+     "gt",
+     "sub"
+    ],
+    "right": [
+     "0",
+     "1",
+     "2",
+     "3",
+     "4",
+     "5",
+     "6",
+     "7",
+     "8",
+     "9"
+    ],
+    "eq": [
+     "="
+    ]
+   }
+  }
+ }
+}

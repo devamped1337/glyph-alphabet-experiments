@@ -1,0 +1,42 @@
+INFO:httpx:HTTP Request: GET https://huggingface.co/api/models/Qwen/Qwen2.5-0.5B "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: GET https://huggingface.co/api/models/Qwen/Qwen2.5-0.5B/tree/main/additional_chat_templates?recursive=false&expand=false "HTTP/1.1 404 Not Found"
+INFO:httpx:HTTP Request: GET https://huggingface.co/api/models/Qwen/Qwen2.5-0.5B/tree/main?recursive=true&expand=false "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: GET https://huggingface.co/api/models/Qwen/Qwen2.5-0.5B "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: GET https://huggingface.co/api/models/Qwen/Qwen2.5-0.5B "HTTP/1.1 200 OK"
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  30%|███       | 87/290 [00:00<00:00, 841.13it/s]Loading weights:  84%|████████▍ | 243/290 [00:00<00:00, 1252.15it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 1241.15it/s]
+HFLensModel(Qwen2ForCausalLM, n_layers=24, d_model=896) source layers [4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
+[     3s +  3.08s] fit: n_layers=24 d_model=896, fitting 16 source layers (target=L23) on 32 prompts
+[  1m10s + 67.54s]   prompt 1/32  seq_len=64 n_valid=47  68s  max||J||/sqrt(d)=1.442  max_d_mean=nan
+[  2m26s + 75.93s]   prompt 2/32  seq_len=64 n_valid=47  76s  max||J||/sqrt(d)=1.481  max_d_mean=4.90e-01
+[  3m34s + 68.05s]   prompt 3/32  seq_len=64 n_valid=47  68s  max||J||/sqrt(d)=1.379  max_d_mean=3.03e-01
+[  4m42s + 68.28s]   prompt 4/32  seq_len=64 n_valid=47  68s  max||J||/sqrt(d)=1.317  max_d_mean=2.97e-01
+[  5m52s + 69.65s]   prompt 5/32  seq_len=64 n_valid=47  70s  max||J||/sqrt(d)=1.444  max_d_mean=2.91e-01
+[  7m20s + 87.59s]   prompt 6/32  seq_len=64 n_valid=47  88s  max||J||/sqrt(d)=1.509  max_d_mean=2.39e-01
+[ 19m04s +704.04s]   prompt 7/32  seq_len=64 n_valid=47  704s  max||J||/sqrt(d)=1.626  max_d_mean=2.50e-01
+[ 23m52s +288.29s]   prompt 8/32  seq_len=64 n_valid=47  288s  max||J||/sqrt(d)=1.365  max_d_mean=1.36e-01
+[ 25m04s + 72.42s]   prompt 9/32  seq_len=64 n_valid=47  72s  max||J||/sqrt(d)=1.424  max_d_mean=1.11e-01
+[ 26m15s + 70.71s]   prompt 10/32  seq_len=64 n_valid=47  71s  max||J||/sqrt(d)=1.383  max_d_mean=1.11e-01
+[ 27m22s + 67.10s]   prompt 11/32  seq_len=64 n_valid=47  67s  max||J||/sqrt(d)=1.395  max_d_mean=1.04e-01
+[ 28m30s + 67.35s]   prompt 12/32  seq_len=64 n_valid=47  67s  max||J||/sqrt(d)=1.423  max_d_mean=1.06e-01
+[ 29m38s + 68.86s]   prompt 13/32  seq_len=64 n_valid=47  69s  max||J||/sqrt(d)=1.538  max_d_mean=1.22e-01
+[ 30m48s + 69.93s]   prompt 14/32  seq_len=64 n_valid=47  70s  max||J||/sqrt(d)=1.476  max_d_mean=1.01e-01
+[ 31m55s + 67.13s]   prompt 15/32  seq_len=64 n_valid=47  67s  max||J||/sqrt(d)=1.403  max_d_mean=1.11e-01
+[ 33m02s + 66.12s]   prompt 16/32  seq_len=64 n_valid=47  66s  max||J||/sqrt(d)=1.434  max_d_mean=6.50e-02
+[ 34m13s + 71.29s]   prompt 17/32  seq_len=64 n_valid=47  71s  max||J||/sqrt(d)=1.361  max_d_mean=8.42e-02
+[ 35m19s + 65.64s]   prompt 18/32  seq_len=64 n_valid=47  66s  max||J||/sqrt(d)=1.481  max_d_mean=7.97e-02
+[ 36m28s + 69.01s]   prompt 19/32  seq_len=64 n_valid=47  69s  max||J||/sqrt(d)=1.653  max_d_mean=1.11e-01
+[ 37m33s + 65.37s]   prompt 20/32  seq_len=64 n_valid=47  65s  max||J||/sqrt(d)=1.452  max_d_mean=6.56e-02
+[ 38m42s + 69.08s]   prompt 21/32  seq_len=64 n_valid=47  69s  max||J||/sqrt(d)=1.371  max_d_mean=5.49e-02
+[ 39m56s + 73.82s]   prompt 22/32  seq_len=64 n_valid=47  74s  max||J||/sqrt(d)=1.490  max_d_mean=5.56e-02
+[ 40m56s + 60.61s]   prompt 23/32  seq_len=64 n_valid=47  61s  max||J||/sqrt(d)=1.396  max_d_mean=6.97e-02
+[ 42m04s + 67.97s]   prompt 24/32  seq_len=64 n_valid=47  68s  max||J||/sqrt(d)=1.478  max_d_mean=5.65e-02
+[ 43m11s + 66.48s]   prompt 25/32  seq_len=64 n_valid=47  66s  max||J||/sqrt(d)=1.436  max_d_mean=4.37e-02
+[ 44m08s + 57.02s]   prompt 26/32  seq_len=64 n_valid=47  57s  max||J||/sqrt(d)=1.425  max_d_mean=5.40e-02
+[ 45m22s + 74.40s]   prompt 27/32  seq_len=64 n_valid=47  74s  max||J||/sqrt(d)=1.374  max_d_mean=3.69e-02
+[ 46m22s + 59.94s]   prompt 28/32  seq_len=64 n_valid=47  60s  max||J||/sqrt(d)=1.363  max_d_mean=3.93e-02
+[ 47m31s + 68.39s]   prompt 29/32  seq_len=64 n_valid=47  68s  max||J||/sqrt(d)=1.449  max_d_mean=4.37e-02
+[ 48m27s + 56.64s]   prompt 30/32  seq_len=64 n_valid=47  57s  max||J||/sqrt(d)=1.415  max_d_mean=3.70e-02
+[ 49m25s + 57.41s]   prompt 31/32  seq_len=64 n_valid=47  57s  max||J||/sqrt(d)=1.469  max_d_mean=3.87e-02
+[ 50m25s + 59.87s]   prompt 32/32  seq_len=64 n_valid=47  60s  max||J||/sqrt(d)=1.472  max_d_mean=3.92e-02
+[ 50m25s +  0.24s] fit: done, 32 prompts
+DONE qwen prompts=32 L=64 fit_time=3022s

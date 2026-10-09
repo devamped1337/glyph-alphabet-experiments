@@ -1,0 +1,26 @@
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  54%|█████▍    | 156/290 [00:00<00:00, 1530.45it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 1542.34it/s]
+injection done 87s
+none                         acc=0.071 (cap 0.07 lang 0.07) margin=-0.00 n=28
+oracle_text_bridge_named     acc=1.000 (cap 1.00 lang 1.00) margin=+10.57 n=28
+full_twohop_prompt           acc=1.000 (cap 1.00 lang 1.00) margin=+8.42 n=28
+text_bow_k16                 acc=0.643 (cap 0.71 lang 0.57) margin=+4.69 n=28
+text_bow_noanswers_k16       acc=0.643 (cap 0.79 lang 0.50) margin=+3.62 n=28
+text_bridge_word_only        acc=1.000 (cap 1.00 lang 1.00) margin=+9.07 n=28
+inj_real_a1.0                acc=0.286 (cap 0.21 lang 0.36) margin=+1.99 n=28
+inj_real_noanswers_a1.0      acc=0.250 (cap 0.14 lang 0.36) margin=+1.32 n=28
+inj_bridge_only_a1.0         acc=0.893 (cap 0.79 lang 1.00) margin=+4.96 n=28
+inj_shuffled_a1.0            acc=0.064 (cap 0.07 lang 0.06) margin=-0.01 n=140
+inj_real_a2.0                acc=0.393 (cap 0.21 lang 0.57) margin=+2.81 n=28
+inj_real_noanswers_a2.0      acc=0.250 (cap 0.14 lang 0.36) margin=+1.80 n=28
+inj_bridge_only_a2.0         acc=0.857 (cap 0.79 lang 0.93) margin=+6.88 n=28
+inj_shuffled_a2.0            acc=0.071 (cap 0.07 lang 0.07) margin=-0.07 n=140
+inj_real_a4.0                acc=0.429 (cap 0.36 lang 0.50) margin=+3.90 n=28
+inj_real_noanswers_a4.0      acc=0.214 (cap 0.14 lang 0.29) margin=+2.27 n=28
+inj_bridge_only_a4.0         acc=0.964 (cap 1.00 lang 0.93) margin=+11.64 n=28
+inj_shuffled_a4.0            acc=0.071 (cap 0.09 lang 0.06) margin=-0.08 n=140
+inj_real_a8.0                acc=0.500 (cap 0.50 lang 0.50) margin=+4.97 n=28
+inj_real_noanswers_a8.0      acc=0.250 (cap 0.14 lang 0.36) margin=+2.68 n=28
+inj_bridge_only_a8.0         acc=0.964 (cap 1.00 lang 0.93) margin=+17.01 n=28
+inj_shuffled_a8.0            acc=0.050 (cap 0.04 lang 0.06) margin=-0.02 n=140
+bridge rank in source glyph: {'France': 1, 'Germany': 2, 'Japan': 1, 'Italy': 1, 'Spain': 3, 'Russia': 1, 'China': 1, 'Egypt': 1, 'Greece': 2, 'Portugal': 1, 'Turkey': 4, 'Sweden': 7, 'Netherlands': 1, 'Poland': 3}
+87s

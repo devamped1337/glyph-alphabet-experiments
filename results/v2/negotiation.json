@@ -1,0 +1,860 @@
+[
+ {
+  "round": 1,
+  "n_live_candidates": 255,
+  "n_adapter_fit_on": 255,
+  "n_accepted": 175,
+  "n_passed_all_checks": 175,
+  "n_on_probation": 0,
+  "rate_meaning": 0.7529411764705882,
+  "rate_roundtrip": 0.8274509803921568,
+  "rate_geometry": 0.9333333333333333,
+  "rate_readability": 0.984313725490196,
+  "rate_readability_A": 0.9921568627450981,
+  "rate_readability_B": 0.9921568627450981,
+  "rsa_global_spearman": 0.9330241058496143,
+  "relations": {
+   "country->capital": {
+    "n_pairs": 24,
+    "mean_offset_cos_AB": 0.9871660205326436,
+    "per_pair_offset_cos_AB": 0.8768793211131612,
+    "cross_model_LOO_analogy_acc": 0.7708333333333334,
+    "within_A_consistency": 0.9146797506692889,
+    "chance_analogy": 0.041666666666666664
+   },
+   "country->language": {
+    "n_pairs": 17,
+    "mean_offset_cos_AB": 0.9856625001846124,
+    "per_pair_offset_cos_AB": 0.8824127769214748,
+    "cross_model_LOO_analogy_acc": 0.7058823529411765,
+    "within_A_consistency": 0.9130659998594879,
+    "chance_analogy": 0.058823529411764705
+   },
+   "male->female": {
+    "n_pairs": 10,
+    "mean_offset_cos_AB": 0.8770530160625951,
+    "per_pair_offset_cos_AB": 0.5123326767401472,
+    "cross_model_LOO_analogy_acc": 0.95,
+    "within_A_consistency": 0.8082252506178225,
+    "chance_analogy": 0.1
+   },
+   "adj->comparative": {
+    "n_pairs": 6,
+    "mean_offset_cos_AB": 0.884296016269101,
+    "per_pair_offset_cos_AB": 0.5687705820922376,
+    "cross_model_LOO_analogy_acc": 0.25,
+    "within_A_consistency": 0.5680750283564271,
+    "chance_analogy": 0.16666666666666666
+   },
+   "adj->opposite": {
+    "n_pairs": 12,
+    "mean_offset_cos_AB": 0.5046718419638555,
+    "per_pair_offset_cos_AB": 0.17075385379783303,
+    "cross_model_LOO_analogy_acc": 0.875,
+    "within_A_consistency": 0.3935479148145668,
+    "chance_analogy": 0.08333333333333333
+   },
+   "number->next": {
+    "n_pairs": 9,
+    "mean_offset_cos_AB": 0.47040409726801846,
+    "per_pair_offset_cos_AB": 0.11391233566033097,
+    "cross_model_LOO_analogy_acc": 0.05555555555555555,
+    "within_A_consistency": -0.3726903897519606,
+    "chance_analogy": 0.1111111111111111
+   },
+   "country->city(non-capital)": {
+    "n_pairs": 6,
+    "mean_offset_cos_AB": 0.9186426575465337,
+    "per_pair_offset_cos_AB": 0.7166874029037463,
+    "cross_model_LOO_analogy_acc": 0.6666666666666666,
+    "within_A_consistency": 0.786987250917135,
+    "chance_analogy": 0.16666666666666666
+   }
+  },
+  "kept_relations": [
+   "adj->opposite",
+   "country->capital",
+   "country->city(non-capital)",
+   "country->language",
+   "male->female"
+  ],
+  "n_revised": 80,
+  "merged": [],
+  "dropped": [],
+  "accepted_changed": 80
+ },
+ {
+  "round": 2,
+  "n_live_candidates": 255,
+  "n_adapter_fit_on": 175,
+  "n_accepted": 186,
+  "n_passed_all_checks": 159,
+  "n_on_probation": 27,
+  "rate_meaning": 0.7725490196078432,
+  "rate_roundtrip": 0.7098039215686275,
+  "rate_geometry": 0.9882352941176471,
+  "rate_readability": 0.9882352941176471,
+  "rate_readability_A": 0.9921568627450981,
+  "rate_readability_B": 0.9921568627450981,
+  "rsa_global_spearman": 0.9434819686656905,
+  "relations": {
+   "country->capital": {
+    "n_pairs": 24,
+    "mean_offset_cos_AB": 0.9787184210216271,
+    "per_pair_offset_cos_AB": 0.8625045279122782,
+    "cross_model_LOO_analogy_acc": 0.7291666666666666,
+    "within_A_consistency": 0.8957173183216791,
+    "chance_analogy": 0.041666666666666664
+   },
+   "country->language": {
+    "n_pairs": 17,
+    "mean_offset_cos_AB": 0.9834561744453597,
+    "per_pair_offset_cos_AB": 0.8699499123335509,
+    "cross_model_LOO_analogy_acc": 0.7647058823529411,
+    "within_A_consistency": 0.9020570659821565,
+    "chance_analogy": 0.058823529411764705
+   },
+   "male->female": {
+    "n_pairs": 10,
+    "mean_offset_cos_AB": 0.883470066417346,
+    "per_pair_offset_cos_AB": 0.5580736005866588,
+    "cross_model_LOO_analogy_acc": 0.95,
+    "within_A_consistency": 0.8410720218373136,
+    "chance_analogy": 0.1
+   },
+   "adj->comparative": {
+    "n_pairs": 6,
+    "mean_offset_cos_AB": 0.9273191074288888,
+    "per_pair_offset_cos_AB": 0.5480589922979036,
+    "cross_model_LOO_analogy_acc": 0.3333333333333333,
+    "within_A_consistency": 0.5410232811253053,
+    "chance_analogy": 0.16666666666666666
+   },
+   "adj->opposite": {
+    "n_pairs": 12,
+    "mean_offset_cos_AB": 0.47268070930648554,
+    "per_pair_offset_cos_AB": 0.20453840640486098,
+    "cross_model_LOO_analogy_acc": 0.875,
+    "within_A_consistency": 0.36574444653630417,
+    "chance_analogy": 0.08333333333333333
+   },
+   "number->next": {
+    "n_pairs": 9,
+    "mean_offset_cos_AB": 0.5070227195610194,
+    "per_pair_offset_cos_AB": 0.22631593676272377,
+    "cross_model_LOO_analogy_acc": 0.05555555555555555,
+    "within_A_consistency": -0.3141092567243615,
+    "chance_analogy": 0.1111111111111111
+   },
+   "country->city(non-capital)": {
+    "n_pairs": 6,
+    "mean_offset_cos_AB": 0.9002201619921312,
+    "per_pair_offset_cos_AB": 0.6946427412787606,
+    "cross_model_LOO_analogy_acc": 0.5833333333333334,
+    "within_A_consistency": 0.7605580523286269,
+    "chance_analogy": 0.16666666666666666
+   }
+  },
+  "kept_relations": [
+   "adj->comparative",
+   "country->capital",
+   "country->city(non-capital)",
+   "country->language",
+   "male->female"
+  ],
+  "n_revised": 69,
+  "merged": [],
+  "dropped": [],
+  "accepted_changed": 11
+ },
+ {
+  "round": 3,
+  "n_live_candidates": 255,
+  "n_adapter_fit_on": 186,
+  "n_accepted": 187,
+  "n_passed_all_checks": 173,
+  "n_on_probation": 14,
+  "rate_meaning": 0.8,
+  "rate_roundtrip": 0.7607843137254902,
+  "rate_geometry": 0.9882352941176471,
+  "rate_readability": 0.9921568627450981,
+  "rate_readability_A": 0.996078431372549,
+  "rate_readability_B": 0.996078431372549,
+  "rsa_global_spearman": 0.9436523256779623,
+  "relations": {
+   "country->capital": {
+    "n_pairs": 24,
+    "mean_offset_cos_AB": 0.9799879057547762,
+    "per_pair_offset_cos_AB": 0.8686209031344269,
+    "cross_model_LOO_analogy_acc": 0.75,
+    "within_A_consistency": 0.9010613315534397,
+    "chance_analogy": 0.041666666666666664
+   },
+   "country->language": {
+    "n_pairs": 17,
+    "mean_offset_cos_AB": 0.9878985700962636,
+    "per_pair_offset_cos_AB": 0.8867991303378773,
+    "cross_model_LOO_analogy_acc": 0.7647058823529411,
+    "within_A_consistency": 0.9040864444501567,
+    "chance_analogy": 0.058823529411764705
+   },
+   "male->female": {
+    "n_pairs": 10,
+    "mean_offset_cos_AB": 0.8712474033615745,
+    "per_pair_offset_cos_AB": 0.5411802710910657,
+    "cross_model_LOO_analogy_acc": 1.0,
+    "within_A_consistency": 0.8316515317114854,
+    "chance_analogy": 0.1
+   },
+   "adj->comparative": {
+    "n_pairs": 6,
+    "mean_offset_cos_AB": 0.9029442387067994,
+    "per_pair_offset_cos_AB": 0.5771531156670022,
+    "cross_model_LOO_analogy_acc": 0.5,
+    "within_A_consistency": 0.5801738385553049,
+    "chance_analogy": 0.16666666666666666
+   },
+   "adj->opposite": {
+    "n_pairs": 12,
+    "mean_offset_cos_AB": 0.4825455079012186,
+    "per_pair_offset_cos_AB": 0.13224186850203082,
+    "cross_model_LOO_analogy_acc": 0.8333333333333334,
+    "within_A_consistency": 0.3581651571265527,
+    "chance_analogy": 0.08333333333333333
+   },
+   "number->next": {
+    "n_pairs": 9,
+    "mean_offset_cos_AB": 0.5148487091969237,
+    "per_pair_offset_cos_AB": 0.18284479401851683,
+    "cross_model_LOO_analogy_acc": 0.1111111111111111,
+    "within_A_consistency": -0.37395810081255426,
+    "chance_analogy": 0.1111111111111111
+   },
+   "country->city(non-capital)": {
+    "n_pairs": 6,
+    "mean_offset_cos_AB": 0.9271737090988164,
+    "per_pair_offset_cos_AB": 0.7199016343724751,
+    "cross_model_LOO_analogy_acc": 0.5833333333333334,
+    "within_A_consistency": 0.7853059136396962,
+    "chance_analogy": 0.16666666666666666
+   }
+  },
+  "kept_relations": [
+   "adj->comparative",
+   "country->capital",
+   "country->city(non-capital)",
+   "country->language",
+   "male->female"
+  ],
+  "n_revised": 12,
+  "merged": [],
+  "dropped": [
+   "Sweden",
+   "Netherlands",
+   "Poland",
+   "Mexico",
+   "Australia",
+   "Norway",
+   "Denmark",
+   "Hungary",
+   "Argentina",
+   "Athens",
+   "Lisbon",
+   "Stockholm",
+   "Warsaw",
+   "Ottawa",
+   "Oslo",
+   "Vienna",
+   "Seoul",
+   "Helsinki",
+   "Copenhagen",
+   "Budapest",
+   "Ankara",
+   "Shanghai",
+   "Portuguese",
+   "aunt",
+   "horse",
+   "sheep",
+   "tiger",
+   "monkey",
+   "bear",
+   "rabbit",
+   "duck",
+   "apple",
+   "orange",
+   "bread",
+   "tea",
+   "beer",
+   "blue",
+   "pink",
+   "two",
+   "three",
+   "four",
+   "five",
+   "six",
+   "seven",
+   "eight",
+   "nine",
+   "thousand",
+   "hot",
+   "old",
+   "weak",
+   "high",
+   "moon",
+   "spring",
+   "Monday",
+   "Friday",
+   "history"
+  ],
+  "accepted_changed": 25
+ },
+ {
+  "round": 4,
+  "n_live_candidates": 199,
+  "n_adapter_fit_on": 187,
+  "n_accepted": 191,
+  "n_passed_all_checks": 177,
+  "n_on_probation": 14,
+  "rate_meaning": 0.9045226130653267,
+  "rate_roundtrip": 0.949748743718593,
+  "rate_geometry": 0.9949748743718593,
+  "rate_readability": 1.0,
+  "rate_readability_A": 1.0,
+  "rate_readability_B": 1.0,
+  "rsa_global_spearman": 0.9369735195658365,
+  "relations": {
+   "country->capital": {
+    "n_pairs": 10,
+    "mean_offset_cos_AB": 0.9782403185204467,
+    "per_pair_offset_cos_AB": 0.8751696245156664,
+    "cross_model_LOO_analogy_acc": 0.75,
+    "within_A_consistency": 0.9090380460664056,
+    "chance_analogy": 0.1
+   },
+   "country->language": {
+    "n_pairs": 13,
+    "mean_offset_cos_AB": 0.9865251070600123,
+    "per_pair_offset_cos_AB": 0.8869916456586642,
+    "cross_model_LOO_analogy_acc": 0.7307692307692307,
+    "within_A_consistency": 0.9154457304473177,
+    "chance_analogy": 0.07692307692307693
+   },
+   "male->female": {
+    "n_pairs": 9,
+    "mean_offset_cos_AB": 0.8713932673830356,
+    "per_pair_offset_cos_AB": 0.5536723377997014,
+    "cross_model_LOO_analogy_acc": 1.0,
+    "within_A_consistency": 0.8319835117649729,
+    "chance_analogy": 0.1111111111111111
+   },
+   "adj->comparative": {
+    "n_pairs": 5,
+    "mean_offset_cos_AB": 0.9030792551367042,
+    "per_pair_offset_cos_AB": 0.642599944654634,
+    "cross_model_LOO_analogy_acc": 0.6,
+    "within_A_consistency": 0.6111022721793231,
+    "chance_analogy": 0.2
+   },
+   "adj->opposite": {
+    "n_pairs": 8,
+    "mean_offset_cos_AB": 0.3717148762516368,
+    "per_pair_offset_cos_AB": 0.12208744182823378,
+    "cross_model_LOO_analogy_acc": 0.8125,
+    "within_A_consistency": 0.25809398965473795,
+    "chance_analogy": 0.125
+   },
+   "country->city(non-capital)": {
+    "n_pairs": 5,
+    "mean_offset_cos_AB": 0.9159185379249681,
+    "per_pair_offset_cos_AB": 0.7115098044091812,
+    "cross_model_LOO_analogy_acc": 0.6,
+    "within_A_consistency": 0.7763489587230445,
+    "chance_analogy": 0.2
+   }
+  },
+  "kept_relations": [
+   "adj->comparative",
+   "country->capital",
+   "country->city(non-capital)",
+   "country->language",
+   "male->female"
+  ],
+  "n_revised": 8,
+  "merged": [],
+  "dropped": [],
+  "accepted_changed": 16
+ },
+ {
+  "round": 5,
+  "n_live_candidates": 199,
+  "n_adapter_fit_on": 191,
+  "n_accepted": 188,
+  "n_passed_all_checks": 173,
+  "n_on_probation": 15,
+  "rate_meaning": 0.8844221105527639,
+  "rate_roundtrip": 0.9396984924623115,
+  "rate_geometry": 1.0,
+  "rate_readability": 1.0,
+  "rate_readability_A": 1.0,
+  "rate_readability_B": 1.0,
+  "rsa_global_spearman": 0.9368170333096942,
+  "relations": {
+   "country->capital": {
+    "n_pairs": 10,
+    "mean_offset_cos_AB": 0.9754774855079211,
+    "per_pair_offset_cos_AB": 0.8732907976257284,
+    "cross_model_LOO_analogy_acc": 0.75,
+    "within_A_consistency": 0.9110367413702726,
+    "chance_analogy": 0.1
+   },
+   "country->language": {
+    "n_pairs": 13,
+    "mean_offset_cos_AB": 0.9871476451974304,
+    "per_pair_offset_cos_AB": 0.8925048416462329,
+    "cross_model_LOO_analogy_acc": 0.7692307692307693,
+    "within_A_consistency": 0.9215831707886812,
+    "chance_analogy": 0.07692307692307693
+   },
+   "male->female": {
+    "n_pairs": 9,
+    "mean_offset_cos_AB": 0.8336453492458973,
+    "per_pair_offset_cos_AB": 0.5262312415425847,
+    "cross_model_LOO_analogy_acc": 1.0,
+    "within_A_consistency": 0.8265875801301653,
+    "chance_analogy": 0.1111111111111111
+   },
+   "adj->comparative": {
+    "n_pairs": 5,
+    "mean_offset_cos_AB": 0.9147383076501706,
+    "per_pair_offset_cos_AB": 0.6501132388088553,
+    "cross_model_LOO_analogy_acc": 0.6,
+    "within_A_consistency": 0.6493582588460203,
+    "chance_analogy": 0.2
+   },
+   "adj->opposite": {
+    "n_pairs": 8,
+    "mean_offset_cos_AB": 0.44443691527451845,
+    "per_pair_offset_cos_AB": 0.22236066900676785,
+    "cross_model_LOO_analogy_acc": 0.875,
+    "within_A_consistency": 0.2863652070034426,
+    "chance_analogy": 0.125
+   },
+   "country->city(non-capital)": {
+    "n_pairs": 5,
+    "mean_offset_cos_AB": 0.9158009587820648,
+    "per_pair_offset_cos_AB": 0.7131005607453956,
+    "cross_model_LOO_analogy_acc": 0.7,
+    "within_A_consistency": 0.7929113791410856,
+    "chance_analogy": 0.2
+   }
+  },
+  "kept_relations": [
+   "adj->comparative",
+   "country->capital",
+   "country->city(non-capital)",
+   "country->language",
+   "male->female"
+  ],
+  "n_revised": 9,
+  "merged": [],
+  "dropped": [
+   "Canberra",
+   "good"
+  ],
+  "accepted_changed": 11
+ },
+ {
+  "round": 6,
+  "n_live_candidates": 197,
+  "n_adapter_fit_on": 188,
+  "n_accepted": 188,
+  "n_passed_all_checks": 178,
+  "n_on_probation": 10,
+  "rate_meaning": 0.9289340101522843,
+  "rate_roundtrip": 0.9543147208121827,
+  "rate_geometry": 0.9898477157360406,
+  "rate_readability": 0.9949238578680203,
+  "rate_readability_A": 0.9949238578680203,
+  "rate_readability_B": 1.0,
+  "rsa_global_spearman": 0.9358018692571236,
+  "relations": {
+   "country->capital": {
+    "n_pairs": 10,
+    "mean_offset_cos_AB": 0.9801647734347777,
+    "per_pair_offset_cos_AB": 0.8819627481065986,
+    "cross_model_LOO_analogy_acc": 0.75,
+    "within_A_consistency": 0.9100975674704633,
+    "chance_analogy": 0.1
+   },
+   "country->language": {
+    "n_pairs": 13,
+    "mean_offset_cos_AB": 0.9864415112049175,
+    "per_pair_offset_cos_AB": 0.8866772737657337,
+    "cross_model_LOO_analogy_acc": 0.8076923076923077,
+    "within_A_consistency": 0.9108515514184943,
+    "chance_analogy": 0.07692307692307693
+   },
+   "male->female": {
+    "n_pairs": 9,
+    "mean_offset_cos_AB": 0.8772531789458415,
+    "per_pair_offset_cos_AB": 0.5558073560217788,
+    "cross_model_LOO_analogy_acc": 1.0,
+    "within_A_consistency": 0.8404760017644325,
+    "chance_analogy": 0.1111111111111111
+   },
+   "adj->comparative": {
+    "n_pairs": 5,
+    "mean_offset_cos_AB": 0.8824555108514076,
+    "per_pair_offset_cos_AB": 0.6249528649828032,
+    "cross_model_LOO_analogy_acc": 0.5,
+    "within_A_consistency": 0.5748394832496427,
+    "chance_analogy": 0.2
+   },
+   "adj->opposite": {
+    "n_pairs": 7,
+    "mean_offset_cos_AB": 0.3748397209225824,
+    "per_pair_offset_cos_AB": 0.20921715254932163,
+    "cross_model_LOO_analogy_acc": 0.9285714285714286,
+    "within_A_consistency": 0.22288206575209743,
+    "chance_analogy": 0.14285714285714285
+   },
+   "country->city(non-capital)": {
+    "n_pairs": 5,
+    "mean_offset_cos_AB": 0.8861597650348587,
+    "per_pair_offset_cos_AB": 0.6918240471850707,
+    "cross_model_LOO_analogy_acc": 0.7,
+    "within_A_consistency": 0.7932254864973183,
+    "chance_analogy": 0.2
+   }
+  },
+  "kept_relations": [
+   "adj->comparative",
+   "country->capital",
+   "country->city(non-capital)",
+   "country->language",
+   "male->female"
+  ],
+  "n_revised": 7,
+  "merged": [],
+  "dropped": [
+   "light",
+   "easy"
+  ],
+  "accepted_changed": 10
+ },
+ {
+  "round": 7,
+  "n_live_candidates": 195,
+  "n_adapter_fit_on": 188,
+  "n_accepted": 186,
+  "n_passed_all_checks": 173,
+  "n_on_probation": 13,
+  "rate_meaning": 0.9179487179487179,
+  "rate_roundtrip": 0.9641025641025641,
+  "rate_geometry": 0.9897435897435898,
+  "rate_readability": 0.9948717948717949,
+  "rate_readability_A": 0.9948717948717949,
+  "rate_readability_B": 1.0,
+  "rsa_global_spearman": 0.9352620055979181,
+  "relations": {
+   "country->capital": {
+    "n_pairs": 10,
+    "mean_offset_cos_AB": 0.9768111952930143,
+    "per_pair_offset_cos_AB": 0.8752738542780479,
+    "cross_model_LOO_analogy_acc": 0.9,
+    "within_A_consistency": 0.9064061570629379,
+    "chance_analogy": 0.1
+   },
+   "country->language": {
+    "n_pairs": 13,
+    "mean_offset_cos_AB": 0.9874085473542363,
+    "per_pair_offset_cos_AB": 0.8748649376048003,
+    "cross_model_LOO_analogy_acc": 0.7307692307692307,
+    "within_A_consistency": 0.8999707193986303,
+    "chance_analogy": 0.07692307692307693
+   },
+   "male->female": {
+    "n_pairs": 9,
+    "mean_offset_cos_AB": 0.8639272088149266,
+    "per_pair_offset_cos_AB": 0.5427334770862581,
+    "cross_model_LOO_analogy_acc": 1.0,
+    "within_A_consistency": 0.8366893568164593,
+    "chance_analogy": 0.1111111111111111
+   },
+   "adj->comparative": {
+    "n_pairs": 5,
+    "mean_offset_cos_AB": 0.9239365385133623,
+    "per_pair_offset_cos_AB": 0.5932054882935159,
+    "cross_model_LOO_analogy_acc": 0.6,
+    "within_A_consistency": 0.6020597942824836,
+    "chance_analogy": 0.2
+   },
+   "adj->opposite": {
+    "n_pairs": 5,
+    "mean_offset_cos_AB": 0.34310457298038355,
+    "per_pair_offset_cos_AB": 0.08624712046392792,
+    "cross_model_LOO_analogy_acc": 1.0,
+    "within_A_consistency": 0.41036608313921275,
+    "chance_analogy": 0.2
+   },
+   "country->city(non-capital)": {
+    "n_pairs": 5,
+    "mean_offset_cos_AB": 0.9251237388151823,
+    "per_pair_offset_cos_AB": 0.73368087056696,
+    "cross_model_LOO_analogy_acc": 0.7,
+    "within_A_consistency": 0.8036926936448394,
+    "chance_analogy": 0.2
+   }
+  },
+  "kept_relations": [
+   "adj->comparative",
+   "country->capital",
+   "country->city(non-capital)",
+   "country->language",
+   "male->female"
+  ],
+  "n_revised": 7,
+  "merged": [],
+  "dropped": [
+   "dog",
+   "happy"
+  ],
+  "accepted_changed": 6
+ },
+ {
+  "round": 8,
+  "n_live_candidates": 193,
+  "n_adapter_fit_on": 186,
+  "n_accepted": 180,
+  "n_passed_all_checks": 175,
+  "n_on_probation": 5,
+  "rate_meaning": 0.9378238341968912,
+  "rate_roundtrip": 0.9585492227979274,
+  "rate_geometry": 0.9896373056994818,
+  "rate_readability": 0.9948186528497409,
+  "rate_readability_A": 1.0,
+  "rate_readability_B": 0.9948186528497409,
+  "rsa_global_spearman": 0.9346918563228455,
+  "relations": {
+   "country->capital": {
+    "n_pairs": 10,
+    "mean_offset_cos_AB": 0.9787725434512609,
+    "per_pair_offset_cos_AB": 0.8792462277229243,
+    "cross_model_LOO_analogy_acc": 0.8,
+    "within_A_consistency": 0.9105098916081991,
+    "chance_analogy": 0.1
+   },
+   "country->language": {
+    "n_pairs": 13,
+    "mean_offset_cos_AB": 0.9834811964941496,
+    "per_pair_offset_cos_AB": 0.8623780805579121,
+    "cross_model_LOO_analogy_acc": 0.7307692307692307,
+    "within_A_consistency": 0.9007912143024873,
+    "chance_analogy": 0.07692307692307693
+   },
+   "male->female": {
+    "n_pairs": 9,
+    "mean_offset_cos_AB": 0.8870613663694558,
+    "per_pair_offset_cos_AB": 0.5767346093830827,
+    "cross_model_LOO_analogy_acc": 1.0,
+    "within_A_consistency": 0.8300902574636273,
+    "chance_analogy": 0.1111111111111111
+   },
+   "adj->comparative": {
+    "n_pairs": 5,
+    "mean_offset_cos_AB": 0.9135842502468521,
+    "per_pair_offset_cos_AB": 0.6549011846403564,
+    "cross_model_LOO_analogy_acc": 0.7,
+    "within_A_consistency": 0.6118229533147714,
+    "chance_analogy": 0.2
+   },
+   "adj->opposite": {
+    "n_pairs": 4,
+    "mean_offset_cos_AB": 0.48677550753300014,
+    "per_pair_offset_cos_AB": 0.22784019604346886,
+    "cross_model_LOO_analogy_acc": 1.0,
+    "within_A_consistency": 0.3194774742370285,
+    "chance_analogy": 0.25
+   },
+   "country->city(non-capital)": {
+    "n_pairs": 5,
+    "mean_offset_cos_AB": 0.9093293912336684,
+    "per_pair_offset_cos_AB": 0.7076924454883933,
+    "cross_model_LOO_analogy_acc": 0.7,
+    "within_A_consistency": 0.8020755944615827,
+    "chance_analogy": 0.2
+   }
+  },
+  "kept_relations": [
+   "adj->comparative",
+   "country->capital",
+   "country->city(non-capital)",
+   "country->language",
+   "male->female"
+  ],
+  "n_revised": 10,
+  "merged": [],
+  "dropped": [
+   "hundred",
+   "true",
+   "train"
+  ],
+  "accepted_changed": 12
+ },
+ {
+  "round": 9,
+  "n_live_candidates": 190,
+  "n_adapter_fit_on": 180,
+  "n_accepted": 186,
+  "n_passed_all_checks": 175,
+  "n_on_probation": 11,
+  "rate_meaning": 0.9368421052631579,
+  "rate_roundtrip": 0.9842105263157894,
+  "rate_geometry": 0.9894736842105263,
+  "rate_readability": 0.9947368421052631,
+  "rate_readability_A": 1.0,
+  "rate_readability_B": 0.9947368421052631,
+  "rsa_global_spearman": 0.934667474577366,
+  "relations": {
+   "country->capital": {
+    "n_pairs": 10,
+    "mean_offset_cos_AB": 0.9791732515432602,
+    "per_pair_offset_cos_AB": 0.8733685708831326,
+    "cross_model_LOO_analogy_acc": 0.7,
+    "within_A_consistency": 0.9077209692551875,
+    "chance_analogy": 0.1
+   },
+   "country->language": {
+    "n_pairs": 13,
+    "mean_offset_cos_AB": 0.9834362207297321,
+    "per_pair_offset_cos_AB": 0.8708634045564408,
+    "cross_model_LOO_analogy_acc": 0.6923076923076923,
+    "within_A_consistency": 0.9054089109201571,
+    "chance_analogy": 0.07692307692307693
+   },
+   "male->female": {
+    "n_pairs": 9,
+    "mean_offset_cos_AB": 0.8597511707673944,
+    "per_pair_offset_cos_AB": 0.5321742362971822,
+    "cross_model_LOO_analogy_acc": 1.0,
+    "within_A_consistency": 0.8288131609224367,
+    "chance_analogy": 0.1111111111111111
+   },
+   "adj->comparative": {
+    "n_pairs": 5,
+    "mean_offset_cos_AB": 0.7312109986583514,
+    "per_pair_offset_cos_AB": 0.5271646721961254,
+    "cross_model_LOO_analogy_acc": 0.7,
+    "within_A_consistency": 0.5247137317333314,
+    "chance_analogy": 0.2
+   },
+   "adj->opposite": {
+    "n_pairs": 3,
+    "mean_offset_cos_AB": 0.3010795605041162,
+    "per_pair_offset_cos_AB": 0.1316084752374412,
+    "cross_model_LOO_analogy_acc": 1.0,
+    "within_A_consistency": 0.3248908519925739,
+    "chance_analogy": 0.3333333333333333
+   },
+   "country->city(non-capital)": {
+    "n_pairs": 5,
+    "mean_offset_cos_AB": 0.92587060508588,
+    "per_pair_offset_cos_AB": 0.7262344520772173,
+    "cross_model_LOO_analogy_acc": 0.7,
+    "within_A_consistency": 0.789257036182809,
+    "chance_analogy": 0.2
+   }
+  },
+  "kept_relations": [
+   "adj->comparative",
+   "country->capital",
+   "country->city(non-capital)",
+   "country->language",
+   "male->female"
+  ],
+  "n_revised": 3,
+  "merged": [],
+  "dropped": [
+   "one"
+  ],
+  "accepted_changed": 8
+ },
+ {
+  "round": 10,
+  "n_live_candidates": 189,
+  "n_adapter_fit_on": 186,
+  "n_accepted": 183,
+  "n_passed_all_checks": 176,
+  "n_on_probation": 7,
+  "rate_meaning": 0.9417989417989417,
+  "rate_roundtrip": 0.9788359788359788,
+  "rate_geometry": 0.9947089947089947,
+  "rate_readability": 1.0,
+  "rate_readability_A": 1.0,
+  "rate_readability_B": 1.0,
+  "rsa_global_spearman": 0.9350980793529061,
+  "relations": {
+   "country->capital": {
+    "n_pairs": 10,
+    "mean_offset_cos_AB": 0.9761377834710951,
+    "per_pair_offset_cos_AB": 0.8775366119713919,
+    "cross_model_LOO_analogy_acc": 0.7,
+    "within_A_consistency": 0.9159264088777495,
+    "chance_analogy": 0.1
+   },
+   "country->language": {
+    "n_pairs": 13,
+    "mean_offset_cos_AB": 0.9850004238010894,
+    "per_pair_offset_cos_AB": 0.8777490752871706,
+    "cross_model_LOO_analogy_acc": 0.7307692307692307,
+    "within_A_consistency": 0.9102980893336319,
+    "chance_analogy": 0.07692307692307693
+   },
+   "male->female": {
+    "n_pairs": 9,
+    "mean_offset_cos_AB": 0.8434035435149101,
+    "per_pair_offset_cos_AB": 0.5400637440411881,
+    "cross_model_LOO_analogy_acc": 1.0,
+    "within_A_consistency": 0.8372414988265576,
+    "chance_analogy": 0.1111111111111111
+   },
+   "adj->comparative": {
+    "n_pairs": 5,
+    "mean_offset_cos_AB": 0.9239326674820643,
+    "per_pair_offset_cos_AB": 0.695190470355459,
+    "cross_model_LOO_analogy_acc": 0.8,
+    "within_A_consistency": 0.6897407768341126,
+    "chance_analogy": 0.2
+   },
+   "adj->opposite": {
+    "n_pairs": 3,
+    "mean_offset_cos_AB": 0.29171441434279766,
+    "per_pair_offset_cos_AB": 0.0812862703500636,
+    "cross_model_LOO_analogy_acc": 1.0,
+    "within_A_consistency": 0.27215727134571727,
+    "chance_analogy": 0.3333333333333333
+   },
+   "country->city(non-capital)": {
+    "n_pairs": 5,
+    "mean_offset_cos_AB": 0.863290262859814,
+    "per_pair_offset_cos_AB": 0.6729729005705721,
+    "cross_model_LOO_analogy_acc": 0.6,
+    "within_A_consistency": 0.8008005001403091,
+    "chance_analogy": 0.2
+   }
+  },
+  "kept_relations": [
+   "adj->comparative",
+   "country->capital",
+   "country->city(non-capital)",
+   "country->language",
+   "male->female"
+  ],
+  "n_revised": 5,
+  "merged": [],
+  "dropped": [
+   "rich"
+  ],
+  "accepted_changed": 7
+ }
+]

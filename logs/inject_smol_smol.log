@@ -1,0 +1,37 @@
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  58%|█████▊    | 169/290 [00:00<00:00, 1674.33it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 1794.38it/s]
+injection done 100s
+none                         acc=0.071 (cap 0.07 lang 0.07) margin=-0.00 n=28
+oracle_text_bridge_named     acc=1.000 (cap 1.00 lang 1.00) margin=+10.57 n=28
+full_twohop_prompt           acc=1.000 (cap 1.00 lang 1.00) margin=+8.42 n=28
+text_bow_k16                 acc=0.464 (cap 0.57 lang 0.36) margin=+2.66 n=28
+text_bow_noanswers_k16       acc=0.536 (cap 0.57 lang 0.50) margin=+3.10 n=28
+text_bridge_word_only        acc=1.000 (cap 1.00 lang 1.00) margin=+9.07 n=28
+inj_real_a1.0                acc=0.321 (cap 0.21 lang 0.43) margin=+1.33 n=28
+inj_real_noanswers_a1.0      acc=0.214 (cap 0.21 lang 0.21) margin=+1.29 n=28
+inj_bridge_only_a1.0         acc=0.893 (cap 0.79 lang 1.00) margin=+4.96 n=28
+inj_shuffled_a1.0            acc=0.093 (cap 0.07 lang 0.11) margin=+0.02 n=140
+inj_real_a2.0                acc=0.250 (cap 0.14 lang 0.36) margin=+1.68 n=28
+inj_real_noanswers_a2.0      acc=0.250 (cap 0.29 lang 0.21) margin=+1.56 n=28
+inj_bridge_only_a2.0         acc=0.857 (cap 0.79 lang 0.93) margin=+6.88 n=28
+inj_shuffled_a2.0            acc=0.071 (cap 0.09 lang 0.06) margin=-0.03 n=140
+inj_real_a4.0                acc=0.321 (cap 0.29 lang 0.36) margin=+1.98 n=28
+inj_real_noanswers_a4.0      acc=0.214 (cap 0.21 lang 0.21) margin=+1.78 n=28
+inj_bridge_only_a4.0         acc=0.964 (cap 1.00 lang 0.93) margin=+11.64 n=28
+inj_shuffled_a4.0            acc=0.036 (cap 0.06 lang 0.01) margin=-0.07 n=140
+inj_real_a8.0                acc=0.321 (cap 0.36 lang 0.29) margin=+2.29 n=28
+inj_real_noanswers_a8.0      acc=0.214 (cap 0.21 lang 0.21) margin=+1.99 n=28
+inj_bridge_only_a8.0         acc=0.964 (cap 1.00 lang 0.93) margin=+17.01 n=28
+inj_shuffled_a8.0            acc=0.079 (cap 0.09 lang 0.07) margin=-0.13 n=140
+abl_none                     acc=1.000 (cap 1.00 lang 1.00) margin=+8.42 n=28
+abl_band_bundle_k16          acc=0.964 (cap 1.00 lang 0.93) margin=+8.49 n=28
+abl_band_bundle_noanswers_k16 acc=1.000 (cap 1.00 lang 1.00) margin=+8.49 n=28
+abl_band_random_k16          acc=1.000 (cap 1.00 lang 1.00) margin=+8.59 n=140
+abl_band_bridge_only         acc=1.000 (cap 1.00 lang 1.00) margin=+7.68 n=28
+abl_band_random_1            acc=1.000 (cap 1.00 lang 1.00) margin=+8.32 n=28
+abl_all_fitted_bundle_k16    acc=0.893 (cap 0.86 lang 0.93) margin=+6.80 n=28
+abl_all_fitted_bundle_noanswers_k16 acc=0.893 (cap 0.93 lang 0.86) margin=+6.54 n=28
+abl_all_fitted_random_k16    acc=0.993 (cap 0.99 lang 1.00) margin=+8.28 n=140
+abl_all_fitted_bridge_only   acc=0.929 (cap 0.86 lang 1.00) margin=+6.93 n=28
+abl_all_fitted_random_1      acc=1.000 (cap 1.00 lang 1.00) margin=+8.37 n=28
+bridge rank in source glyph: {'France': 19, 'Germany': 13, 'Japan': 19, 'Italy': 10, 'Spain': 14, 'Russia': 11, 'China': 10, 'Egypt': 7, 'Greece': 5, 'Portugal': 12, 'Turkey': 15, 'Sweden': 29, 'Netherlands': 15, 'Poland': 48}
+144s

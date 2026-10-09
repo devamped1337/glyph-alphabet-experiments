@@ -1,0 +1,9 @@
+layer idx 0 R1: accepted 24/24 rt=1.00 keeper=1.00 decodes=1.00 rejected=[]
+     op:add {'roundtrip_AtoBtoA': True, 'roundtrip_BtoAtoB': True, 'keeper': True, 'decodes': True, 'cos_A_B': 0.998, 'op_entry_offset_cos_AB': 0.997, 'eq_state_offset_cos_AB': 0.99, 'closer_to_symbol_than_word': {'qwen': True, 'smol': True}, 'direction_ok': True, 'pass': True}
+     op:sub {'roundtrip_AtoBtoA': True, 'roundtrip_BtoAtoB': True, 'keeper': True, 'decodes': True, 'cos_A_B': 0.998, 'op_entry_offset_cos_AB': 0.997, 'eq_state_offset_cos_AB': 0.987, 'closer_to_symbol_than_word': {'qwen': True, 'smol': True}, 'direction_ok': True, 'pass': True}
+     op:gt {'roundtrip_AtoBtoA': True, 'roundtrip_BtoAtoB': True, 'keeper': True, 'decodes': True, 'cos_A_B': 0.999, 'op_entry_offset_cos_AB': 0.999, 'eq_state_offset_cos_AB': 0.996, 'direction_ok': True, 'pass': True}
+layer idx 1 R1: accepted 24/24 rt=1.00 keeper=1.00 decodes=1.00 rejected=[]
+     op:add {'roundtrip_AtoBtoA': True, 'roundtrip_BtoAtoB': True, 'keeper': True, 'decodes': True, 'cos_A_B': 0.997, 'op_entry_offset_cos_AB': 0.997, 'eq_state_offset_cos_AB': 0.993, 'closer_to_symbol_than_word': {'qwen': True, 'smol': True}, 'direction_ok': True, 'pass': True}
+     op:sub {'roundtrip_AtoBtoA': True, 'roundtrip_BtoAtoB': True, 'keeper': True, 'decodes': True, 'cos_A_B': 0.999, 'op_entry_offset_cos_AB': 0.997, 'eq_state_offset_cos_AB': 0.994, 'closer_to_symbol_than_word': {'qwen': True, 'smol': True}, 'direction_ok': True, 'pass': True}
+     op:gt {'roundtrip_AtoBtoA': True, 'roundtrip_BtoAtoB': True, 'keeper': True, 'decodes': True, 'cos_A_B': 0.998, 'op_entry_offset_cos_AB': 0.998, 'eq_state_offset_cos_AB': 0.998, 'direction_ok': True, 'pass': True}
+probe acc {'0': {'qwen|left': 1.0, 'qwen|op': 1.0, 'qwen|right': 1.0, 'smol|left': 1.0, 'smol|op': 1.0, 'smol|right': 1.0}, '1': {'qwen|left': 1.0, 'qwen|op': 1.0, 'qwen|right': 1.0, 'smol|left': 1.0, 'smol|op': 1.0, 'smol|right': 1.0}} 1s

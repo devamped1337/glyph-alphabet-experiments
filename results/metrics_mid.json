@@ -1,0 +1,4562 @@
+{
+ "models": [
+  "Qwen/Qwen2.5-0.5B",
+  "HuggingFaceTB/SmolLM2-360M"
+ ],
+ "bands": [
+  [
+   11,
+   12,
+   13
+  ],
+  [
+   15,
+   16,
+   17
+  ]
+ ],
+ "n_anchors": 2000,
+ "topk": 32,
+ "a_within": {
+  "qwen|jlens-raw-dense": {
+   "para_cos": 0.9003894121765308,
+   "para_cos_sd": 0.06541399364241822,
+   "random_cos": 0.7256713322861591,
+   "random_cos_sd": 0.13870521170168837,
+   "partner_retrieval_top1": 0.65,
+   "chance": 0.012658227848101266
+  },
+  "qwen|jlens-raw-top32": {
+   "para_cos": 0.5793909288949382,
+   "para_cos_sd": 0.1327007535305014,
+   "random_cos": 0.3253103153733662,
+   "random_cos_sd": 0.14377968209930966,
+   "partner_retrieval_top1": 0.4125,
+   "chance": 0.012658227848101266
+  },
+  "qwen|jlens-centred-dense": {
+   "para_cos": 0.8846704123922144,
+   "para_cos_sd": 0.08499596455580732,
+   "random_cos": 0.6864963679508103,
+   "random_cos_sd": 0.17395216501045674,
+   "partner_retrieval_top1": 0.6625,
+   "chance": 0.012658227848101266
+  },
+  "qwen|jlens-centred-top32": {
+   "para_cos": 0.6179018223004578,
+   "para_cos_sd": 0.1532730200242571,
+   "random_cos": 0.3881555329121814,
+   "random_cos_sd": 0.1587181706884652,
+   "partner_retrieval_top1": 0.3375,
+   "chance": 0.012658227848101266
+  },
+  "qwen|logit-raw-dense": {
+   "para_cos": 0.8761367526924285,
+   "para_cos_sd": 0.09479126152606296,
+   "random_cos": 0.7196394697700847,
+   "random_cos_sd": 0.1848205979598336,
+   "partner_retrieval_top1": 0.575,
+   "chance": 0.012658227848101266
+  },
+  "qwen|logit-raw-top32": {
+   "para_cos": 0.5392739977785711,
+   "para_cos_sd": 0.16099468371233933,
+   "random_cos": 0.33141697663885183,
+   "random_cos_sd": 0.14022458259658477,
+   "partner_retrieval_top1": 0.3875,
+   "chance": 0.012658227848101266
+  },
+  "qwen|logit-centred-dense": {
+   "para_cos": 0.8659278648018042,
+   "para_cos_sd": 0.10728644143545746,
+   "random_cos": 0.6980495002422324,
+   "random_cos_sd": 0.2042912101761741,
+   "partner_retrieval_top1": 0.5875,
+   "chance": 0.012658227848101266
+  },
+  "qwen|logit-centred-top32": {
+   "para_cos": 0.5318373011991244,
+   "para_cos_sd": 0.15007437172208393,
+   "random_cos": 0.31891645067229757,
+   "random_cos_sd": 0.13975838950188327,
+   "partner_retrieval_top1": 0.3875,
+   "chance": 0.012658227848101266
+  },
+  "qwen|final-raw-dense": {
+   "para_cos": 0.903544380283163,
+   "para_cos_sd": 0.06797817398222193,
+   "random_cos": 0.6973551874857837,
+   "random_cos_sd": 0.15378893727858714,
+   "partner_retrieval_top1": 0.775,
+   "chance": 0.012658227848101266
+  },
+  "qwen|final-raw-top32": {
+   "para_cos": 0.743195239195168,
+   "para_cos_sd": 0.14401533830338165,
+   "random_cos": 0.5353418579873843,
+   "random_cos_sd": 0.20420637845787726,
+   "partner_retrieval_top1": 0.425,
+   "chance": 0.012658227848101266
+  },
+  "qwen|final-centred-dense": {
+   "para_cos": 0.9023269940368674,
+   "para_cos_sd": 0.08250357875878263,
+   "random_cos": 0.7000761488660373,
+   "random_cos_sd": 0.17860011551689703,
+   "partner_retrieval_top1": 0.775,
+   "chance": 0.012658227848101266
+  },
+  "qwen|final-centred-top32": {
+   "para_cos": 0.780401850429989,
+   "para_cos_sd": 0.12118165543726525,
+   "random_cos": 0.6009880369539016,
+   "random_cos_sd": 0.20689180113636244,
+   "partner_retrieval_top1": 0.5,
+   "chance": 0.012658227848101266
+  },
+  "smol|jlens-raw-dense": {
+   "para_cos": 0.8848304081656397,
+   "para_cos_sd": 0.09048977113545328,
+   "random_cos": 0.6077567211497019,
+   "random_cos_sd": 0.15941722096595376,
+   "partner_retrieval_top1": 0.7875,
+   "chance": 0.012658227848101266
+  },
+  "smol|jlens-raw-top32": {
+   "para_cos": 0.6211629621873355,
+   "para_cos_sd": 0.132268697533546,
+   "random_cos": 0.2750623445677418,
+   "random_cos_sd": 0.14806602521626028,
+   "partner_retrieval_top1": 0.625,
+   "chance": 0.012658227848101266
+  },
+  "smol|jlens-centred-dense": {
+   "para_cos": 0.8679279004483142,
+   "para_cos_sd": 0.0925246620688017,
+   "random_cos": 0.5414245816591545,
+   "random_cos_sd": 0.17536597180120994,
+   "partner_retrieval_top1": 0.8125,
+   "chance": 0.012658227848101266
+  },
+  "smol|jlens-centred-top32": {
+   "para_cos": 0.5851002547828756,
+   "para_cos_sd": 0.12930945367973537,
+   "random_cos": 0.2546103544089816,
+   "random_cos_sd": 0.1530270262302437,
+   "partner_retrieval_top1": 0.6125,
+   "chance": 0.012658227848101266
+  },
+  "smol|logit-raw-dense": {
+   "para_cos": 0.8906679549779384,
+   "para_cos_sd": 0.09223806461137309,
+   "random_cos": 0.7094485240562738,
+   "random_cos_sd": 0.1499056479484989,
+   "partner_retrieval_top1": 0.75,
+   "chance": 0.012658227848101266
+  },
+  "smol|logit-raw-top32": {
+   "para_cos": 0.6717685501793639,
+   "para_cos_sd": 0.15979612714026117,
+   "random_cos": 0.4416063712931068,
+   "random_cos_sd": 0.1578669161114577,
+   "partner_retrieval_top1": 0.5375,
+   "chance": 0.012658227848101266
+  },
+  "smol|logit-centred-dense": {
+   "para_cos": 0.8819785016572631,
+   "para_cos_sd": 0.10870867168310647,
+   "random_cos": 0.6906185830026472,
+   "random_cos_sd": 0.1713261334675904,
+   "partner_retrieval_top1": 0.7625,
+   "chance": 0.012658227848101266
+  },
+  "smol|logit-centred-top32": {
+   "para_cos": 0.6430714945600956,
+   "para_cos_sd": 0.16406067862332946,
+   "random_cos": 0.39616241794567536,
+   "random_cos_sd": 0.15180727292274,
+   "partner_retrieval_top1": 0.5125,
+   "chance": 0.012658227848101266
+  },
+  "smol|final-raw-dense": {
+   "para_cos": 0.9500232005415967,
+   "para_cos_sd": 0.05379146885880371,
+   "random_cos": 0.7428001349003854,
+   "random_cos_sd": 0.19316295561615365,
+   "partner_retrieval_top1": 0.925,
+   "chance": 0.012658227848101266
+  },
+  "smol|final-raw-top32": {
+   "para_cos": 0.8004725266751672,
+   "para_cos_sd": 0.1278982614205338,
+   "random_cos": 0.5211153888958139,
+   "random_cos_sd": 0.19085458441061617,
+   "partner_retrieval_top1": 0.775,
+   "chance": 0.012658227848101266
+  },
+  "smol|final-centred-dense": {
+   "para_cos": 0.9413376810141697,
+   "para_cos_sd": 0.07004103544262395,
+   "random_cos": 0.7057414613011936,
+   "random_cos_sd": 0.23981542356143282,
+   "partner_retrieval_top1": 0.925,
+   "chance": 0.012658227848101266
+  },
+  "smol|final-centred-top32": {
+   "para_cos": 0.8228381120398872,
+   "para_cos_sd": 0.14033293610266412,
+   "random_cos": 0.5853131208122678,
+   "random_cos_sd": 0.20293330912130716,
+   "partner_retrieval_top1": 0.6125,
+   "chance": 0.012658227848101266
+  }
+ },
+ "b_cross": {
+  "multihop|jlens-raw-dense": {
+   "N": 93,
+   "matched_cos": 0.407520210529086,
+   "mismatched_cos": 0.16070174821676694,
+   "A2B_top1": 0.1827956989247312,
+   "B2A_top1": 0.24731182795698925,
+   "A2B_top5": 0.5053763440860215,
+   "chance_top1": 0.010752688172043012,
+   "chance_top5": 0.053763440860215055,
+   "shuffled_anchor_A2B_top1_mean": 0.0064516129032258064,
+   "shuffled_anchor_A2B_top1_max": 0.021505376344086023,
+   "shuffled_anchor_matched_cos": -0.0027836131521796962
+  },
+  "multihop|jlens-raw-top32": {
+   "N": 93,
+   "matched_cos": 0.2300284369656761,
+   "mismatched_cos": 0.07783956831404687,
+   "A2B_top1": 0.23655913978494625,
+   "B2A_top1": 0.22580645161290322,
+   "A2B_top5": 0.5053763440860215,
+   "chance_top1": 0.010752688172043012,
+   "chance_top5": 0.053763440860215055,
+   "shuffled_anchor_A2B_top1_mean": 0.012903225806451613,
+   "shuffled_anchor_A2B_top1_max": 0.03225806451612903,
+   "shuffled_anchor_matched_cos": 0.014582015741078059
+  },
+  "multihop|jlens-centred-dense": {
+   "N": 93,
+   "matched_cos": 0.5562852526666695,
+   "mismatched_cos": 0.26566958946252783,
+   "A2B_top1": 0.3763440860215054,
+   "B2A_top1": 0.3548387096774194,
+   "A2B_top5": 0.6989247311827957,
+   "chance_top1": 0.010752688172043012,
+   "chance_top5": 0.053763440860215055,
+   "shuffled_anchor_A2B_top1_mean": 0.010215053763440859,
+   "shuffled_anchor_A2B_top1_max": 0.03225806451612903,
+   "shuffled_anchor_matched_cos": -0.0010398374576713189
+  },
+  "multihop|jlens-centred-top32": {
+   "N": 93,
+   "matched_cos": 0.3105539538966,
+   "mismatched_cos": 0.12087068214654871,
+   "A2B_top1": 0.23655913978494625,
+   "B2A_top1": 0.24731182795698925,
+   "A2B_top5": 0.5161290322580645,
+   "chance_top1": 0.010752688172043012,
+   "chance_top5": 0.053763440860215055,
+   "shuffled_anchor_A2B_top1_mean": 0.009139784946236561,
+   "shuffled_anchor_A2B_top1_max": 0.021505376344086023,
+   "shuffled_anchor_matched_cos": 0.017453589396410958
+  },
+  "multihop|logit-raw-dense": {
+   "N": 93,
+   "matched_cos": 0.19322942178683045,
+   "mismatched_cos": 0.0992881810822525,
+   "A2B_top1": 0.1935483870967742,
+   "B2A_top1": 0.20430107526881722,
+   "A2B_top5": 0.4946236559139785,
+   "chance_top1": 0.010752688172043012,
+   "chance_top5": 0.053763440860215055,
+   "shuffled_anchor_A2B_top1_mean": 0.011827956989247311,
+   "shuffled_anchor_A2B_top1_max": 0.021505376344086023,
+   "shuffled_anchor_matched_cos": 0.0004679598504368708
+  },
+  "multihop|logit-raw-top32": {
+   "N": 93,
+   "matched_cos": 0.04550316714391831,
+   "mismatched_cos": 0.024787148207505178,
+   "A2B_top1": 0.053763440860215055,
+   "B2A_top1": 0.08602150537634409,
+   "A2B_top5": 0.16129032258064516,
+   "chance_top1": 0.010752688172043012,
+   "chance_top5": 0.053763440860215055,
+   "shuffled_anchor_A2B_top1_mean": 0.006989247311827956,
+   "shuffled_anchor_A2B_top1_max": 0.021505376344086023,
+   "shuffled_anchor_matched_cos": 0.015549880231892665
+  },
+  "multihop|logit-centred-dense": {
+   "N": 93,
+   "matched_cos": 0.24974265812781038,
+   "mismatched_cos": 0.14165606532051525,
+   "A2B_top1": 0.21505376344086022,
+   "B2A_top1": 0.21505376344086022,
+   "A2B_top5": 0.5053763440860215,
+   "chance_top1": 0.010752688172043012,
+   "chance_top5": 0.053763440860215055,
+   "shuffled_anchor_A2B_top1_mean": 0.011827956989247311,
+   "shuffled_anchor_A2B_top1_max": 0.043010752688172046,
+   "shuffled_anchor_matched_cos": -0.0018616656240003245
+  },
+  "multihop|logit-centred-top32": {
+   "N": 93,
+   "matched_cos": 0.09864093813435515,
+   "mismatched_cos": 0.06022611859366899,
+   "A2B_top1": 0.053763440860215055,
+   "B2A_top1": 0.043010752688172046,
+   "A2B_top5": 0.15053763440860216,
+   "chance_top1": 0.010752688172043012,
+   "chance_top5": 0.053763440860215055,
+   "shuffled_anchor_A2B_top1_mean": 0.007526881720430108,
+   "shuffled_anchor_A2B_top1_max": 0.03225806451612903,
+   "shuffled_anchor_matched_cos": 0.017293678019590274
+  },
+  "multihop|final-raw-dense": {
+   "N": 93,
+   "matched_cos": 0.7793510606640421,
+   "mismatched_cos": 0.45100591945073587,
+   "A2B_top1": 0.7634408602150538,
+   "B2A_top1": 0.7849462365591398,
+   "A2B_top5": 0.956989247311828,
+   "chance_top1": 0.010752688172043012,
+   "chance_top5": 0.053763440860215055,
+   "shuffled_anchor_A2B_top1_mean": 0.007526881720430106,
+   "shuffled_anchor_A2B_top1_max": 0.021505376344086023,
+   "shuffled_anchor_matched_cos": 0.0015593213705826646
+  },
+  "multihop|final-raw-top32": {
+   "N": 93,
+   "matched_cos": 0.6481001846832117,
+   "mismatched_cos": 0.15303265859854912,
+   "A2B_top1": 0.4838709677419355,
+   "B2A_top1": 0.5376344086021505,
+   "A2B_top5": 0.7956989247311828,
+   "chance_top1": 0.010752688172043012,
+   "chance_top5": 0.053763440860215055,
+   "shuffled_anchor_A2B_top1_mean": 0.010752688172043012,
+   "shuffled_anchor_A2B_top1_max": 0.03225806451612903,
+   "shuffled_anchor_matched_cos": 0.012921911138561629
+  },
+  "multihop|final-centred-dense": {
+   "N": 93,
+   "matched_cos": 0.6715602899852582,
+   "mismatched_cos": 0.2384138809589296,
+   "A2B_top1": 0.7634408602150538,
+   "B2A_top1": 0.7311827956989247,
+   "A2B_top5": 0.946236559139785,
+   "chance_top1": 0.010752688172043012,
+   "chance_top5": 0.053763440860215055,
+   "shuffled_anchor_A2B_top1_mean": 0.013440860215053762,
+   "shuffled_anchor_A2B_top1_max": 0.03225806451612903,
+   "shuffled_anchor_matched_cos": -0.0007341403797811333
+  },
+  "multihop|final-centred-top32": {
+   "N": 93,
+   "matched_cos": 0.5926574464428037,
+   "mismatched_cos": 0.10428729730097346,
+   "A2B_top1": 0.4838709677419355,
+   "B2A_top1": 0.5161290322580645,
+   "A2B_top5": 0.8387096774193549,
+   "chance_top1": 0.010752688172043012,
+   "chance_top5": 0.053763440860215055,
+   "shuffled_anchor_A2B_top1_mean": 0.008064516129032258,
+   "shuffled_anchor_A2B_top1_max": 0.043010752688172046,
+   "shuffled_anchor_matched_cos": 0.015237038416805326
+  },
+  "assoc|jlens-raw-dense": {
+   "N": 102,
+   "matched_cos": 0.4022635397574828,
+   "mismatched_cos": 0.3178188130294506,
+   "A2B_top1": 0.11764705882352941,
+   "B2A_top1": 0.19607843137254902,
+   "A2B_top5": 0.30392156862745096,
+   "chance_top1": 0.00980392156862745,
+   "chance_top5": 0.049019607843137254,
+   "shuffled_anchor_A2B_top1_mean": 0.008823529411764706,
+   "shuffled_anchor_A2B_top1_max": 0.0196078431372549,
+   "shuffled_anchor_matched_cos": -0.00037536604764039865
+  },
+  "assoc|jlens-raw-top32": {
+   "N": 102,
+   "matched_cos": 0.17762956468829202,
+   "mismatched_cos": 0.12504541974112768,
+   "A2B_top1": 0.10784313725490197,
+   "B2A_top1": 0.029411764705882353,
+   "A2B_top5": 0.29411764705882354,
+   "chance_top1": 0.00980392156862745,
+   "chance_top5": 0.049019607843137254,
+   "shuffled_anchor_A2B_top1_mean": 0.00784313725490196,
+   "shuffled_anchor_A2B_top1_max": 0.0196078431372549,
+   "shuffled_anchor_matched_cos": 0.015536470252237094
+  },
+  "assoc|jlens-centred-dense": {
+   "N": 102,
+   "matched_cos": 0.5973639476877589,
+   "mismatched_cos": 0.5011540839420444,
+   "A2B_top1": 0.18627450980392157,
+   "B2A_top1": 0.29411764705882354,
+   "A2B_top5": 0.43137254901960786,
+   "chance_top1": 0.00980392156862745,
+   "chance_top5": 0.049019607843137254,
+   "shuffled_anchor_A2B_top1_mean": 0.010784313725490194,
+   "shuffled_anchor_A2B_top1_max": 0.0392156862745098,
+   "shuffled_anchor_matched_cos": -0.0032429406479990834
+  },
+  "assoc|jlens-centred-top32": {
+   "N": 102,
+   "matched_cos": 0.30869155160206724,
+   "mismatched_cos": 0.2394418438046286,
+   "A2B_top1": 0.0784313725490196,
+   "B2A_top1": 0.09803921568627451,
+   "A2B_top5": 0.2549019607843137,
+   "chance_top1": 0.00980392156862745,
+   "chance_top5": 0.049019607843137254,
+   "shuffled_anchor_A2B_top1_mean": 0.006372549019607843,
+   "shuffled_anchor_A2B_top1_max": 0.0392156862745098,
+   "shuffled_anchor_matched_cos": 0.016499955017797812
+  },
+  "assoc|logit-raw-dense": {
+   "N": 102,
+   "matched_cos": 0.24100775902560137,
+   "mismatched_cos": 0.22023606256400519,
+   "A2B_top1": 0.09803921568627451,
+   "B2A_top1": 0.11764705882352941,
+   "A2B_top5": 0.28431372549019607,
+   "chance_top1": 0.00980392156862745,
+   "chance_top5": 0.049019607843137254,
+   "shuffled_anchor_A2B_top1_mean": 0.007843137254901959,
+   "shuffled_anchor_A2B_top1_max": 0.0196078431372549,
+   "shuffled_anchor_matched_cos": 0.005791290708670269
+  },
+  "assoc|logit-raw-top32": {
+   "N": 102,
+   "matched_cos": 0.11900271638281118,
+   "mismatched_cos": 0.11127654987258881,
+   "A2B_top1": 0.00980392156862745,
+   "B2A_top1": 0.0196078431372549,
+   "A2B_top5": 0.0784313725490196,
+   "chance_top1": 0.00980392156862745,
+   "chance_top5": 0.049019607843137254,
+   "shuffled_anchor_A2B_top1_mean": 0.00980392156862745,
+   "shuffled_anchor_A2B_top1_max": 0.029411764705882353,
+   "shuffled_anchor_matched_cos": 0.01815105561656045
+  },
+  "assoc|logit-centred-dense": {
+   "N": 102,
+   "matched_cos": 0.2974759382818141,
+   "mismatched_cos": 0.2745511320415292,
+   "A2B_top1": 0.1568627450980392,
+   "B2A_top1": 0.10784313725490197,
+   "A2B_top5": 0.3333333333333333,
+   "chance_top1": 0.00980392156862745,
+   "chance_top5": 0.049019607843137254,
+   "shuffled_anchor_A2B_top1_mean": 0.010784313725490194,
+   "shuffled_anchor_A2B_top1_max": 0.0196078431372549,
+   "shuffled_anchor_matched_cos": 0.007435887784592546
+  },
+  "assoc|logit-centred-top32": {
+   "N": 102,
+   "matched_cos": 0.11507644851131178,
+   "mismatched_cos": 0.10589602158313931,
+   "A2B_top1": 0.00980392156862745,
+   "B2A_top1": 0.0196078431372549,
+   "A2B_top5": 0.06862745098039216,
+   "chance_top1": 0.00980392156862745,
+   "chance_top5": 0.049019607843137254,
+   "shuffled_anchor_A2B_top1_mean": 0.012745098039215686,
+   "shuffled_anchor_A2B_top1_max": 0.029411764705882353,
+   "shuffled_anchor_matched_cos": 0.013909089088897935
+  },
+  "assoc|final-raw-dense": {
+   "N": 102,
+   "matched_cos": 0.8719614360392658,
+   "mismatched_cos": 0.8094217930888759,
+   "A2B_top1": 0.6274509803921569,
+   "B2A_top1": 0.46078431372549017,
+   "A2B_top5": 0.8529411764705882,
+   "chance_top1": 0.00980392156862745,
+   "chance_top5": 0.049019607843137254,
+   "shuffled_anchor_A2B_top1_mean": 0.009313725490196078,
+   "shuffled_anchor_A2B_top1_max": 0.0196078431372549,
+   "shuffled_anchor_matched_cos": 0.004422379024952745
+  },
+  "assoc|final-raw-top32": {
+   "N": 102,
+   "matched_cos": 0.6847292674406934,
+   "mismatched_cos": 0.5393041570755424,
+   "A2B_top1": 0.2549019607843137,
+   "B2A_top1": 0.16666666666666666,
+   "A2B_top5": 0.4803921568627451,
+   "chance_top1": 0.00980392156862745,
+   "chance_top5": 0.049019607843137254,
+   "shuffled_anchor_A2B_top1_mean": 0.010294117647058822,
+   "shuffled_anchor_A2B_top1_max": 0.029411764705882353,
+   "shuffled_anchor_matched_cos": 0.016733488500760264
+  },
+  "assoc|final-centred-dense": {
+   "N": 102,
+   "matched_cos": 0.8798448856350535,
+   "mismatched_cos": 0.8211868450931199,
+   "A2B_top1": 0.6078431372549019,
+   "B2A_top1": 0.49019607843137253,
+   "A2B_top5": 0.8529411764705882,
+   "chance_top1": 0.00980392156862745,
+   "chance_top5": 0.049019607843137254,
+   "shuffled_anchor_A2B_top1_mean": 0.010294117647058823,
+   "shuffled_anchor_A2B_top1_max": 0.0196078431372549,
+   "shuffled_anchor_matched_cos": -0.002169831512931655
+  },
+  "assoc|final-centred-top32": {
+   "N": 102,
+   "matched_cos": 0.7110599250072308,
+   "mismatched_cos": 0.5803482868367577,
+   "A2B_top1": 0.22549019607843138,
+   "B2A_top1": 0.23529411764705882,
+   "A2B_top5": 0.5294117647058824,
+   "chance_top1": 0.00980392156862745,
+   "chance_top5": 0.049019607843137254,
+   "shuffled_anchor_A2B_top1_mean": 0.006862745098039215,
+   "shuffled_anchor_A2B_top1_max": 0.029411764705882353,
+   "shuffled_anchor_matched_cos": 0.013165228945290226
+  },
+  "para|jlens-raw-dense": {
+   "N": 80,
+   "matched_cos": 0.42665043045539297,
+   "mismatched_cos": 0.24697770077840944,
+   "A2B_top1": 0.3125,
+   "B2A_top1": 0.4875,
+   "A2B_top5": 0.6625,
+   "chance_top1": 0.0125,
+   "chance_top5": 0.0625,
+   "shuffled_anchor_A2B_top1_mean": 0.014375000000000002,
+   "shuffled_anchor_A2B_top1_max": 0.0625,
+   "shuffled_anchor_matched_cos": -0.0007674428277203776
+  },
+  "para|jlens-raw-top32": {
+   "N": 80,
+   "matched_cos": 0.24670102277472203,
+   "mismatched_cos": 0.1325945454810862,
+   "A2B_top1": 0.1875,
+   "B2A_top1": 0.3,
+   "A2B_top5": 0.525,
+   "chance_top1": 0.0125,
+   "chance_top5": 0.0625,
+   "shuffled_anchor_A2B_top1_mean": 0.014375000000000002,
+   "shuffled_anchor_A2B_top1_max": 0.0375,
+   "shuffled_anchor_matched_cos": 0.016535503446261368
+  },
+  "para|jlens-centred-dense": {
+   "N": 80,
+   "matched_cos": 0.5838610774222879,
+   "mismatched_cos": 0.3756222878618215,
+   "A2B_top1": 0.4625,
+   "B2A_top1": 0.6375,
+   "A2B_top5": 0.75,
+   "chance_top1": 0.0125,
+   "chance_top5": 0.0625,
+   "shuffled_anchor_A2B_top1_mean": 0.013125000000000001,
+   "shuffled_anchor_A2B_top1_max": 0.0375,
+   "shuffled_anchor_matched_cos": -0.006027851291472371
+  },
+  "para|jlens-centred-top32": {
+   "N": 80,
+   "matched_cos": 0.302107688585345,
+   "mismatched_cos": 0.17091487855873533,
+   "A2B_top1": 0.2,
+   "B2A_top1": 0.2875,
+   "A2B_top5": 0.4625,
+   "chance_top1": 0.0125,
+   "chance_top5": 0.0625,
+   "shuffled_anchor_A2B_top1_mean": 0.013125000000000001,
+   "shuffled_anchor_A2B_top1_max": 0.025,
+   "shuffled_anchor_matched_cos": 0.01387356338708549
+  },
+  "para|logit-raw-dense": {
+   "N": 80,
+   "matched_cos": 0.22824975662057928,
+   "mismatched_cos": 0.18007753744472893,
+   "A2B_top1": 0.15,
+   "B2A_top1": 0.1125,
+   "A2B_top5": 0.375,
+   "chance_top1": 0.0125,
+   "chance_top5": 0.0625,
+   "shuffled_anchor_A2B_top1_mean": 0.017499999999999998,
+   "shuffled_anchor_A2B_top1_max": 0.05,
+   "shuffled_anchor_matched_cos": 0.0072797987063174694
+  },
+  "para|logit-raw-top32": {
+   "N": 80,
+   "matched_cos": 0.10608848239947499,
+   "mismatched_cos": 0.08023302359309248,
+   "A2B_top1": 0.0375,
+   "B2A_top1": 0.0375,
+   "A2B_top5": 0.175,
+   "chance_top1": 0.0125,
+   "chance_top5": 0.0625,
+   "shuffled_anchor_A2B_top1_mean": 0.018125000000000002,
+   "shuffled_anchor_A2B_top1_max": 0.05,
+   "shuffled_anchor_matched_cos": 0.019532971599087814
+  },
+  "para|logit-centred-dense": {
+   "N": 80,
+   "matched_cos": 0.261433883928628,
+   "mismatched_cos": 0.20968664224349334,
+   "A2B_top1": 0.175,
+   "B2A_top1": 0.1,
+   "A2B_top5": 0.4625,
+   "chance_top1": 0.0125,
+   "chance_top5": 0.0625,
+   "shuffled_anchor_A2B_top1_mean": 0.0125,
+   "shuffled_anchor_A2B_top1_max": 0.05,
+   "shuffled_anchor_matched_cos": -0.0016429364297935057
+  },
+  "para|logit-centred-top32": {
+   "N": 80,
+   "matched_cos": 0.1294829220211547,
+   "mismatched_cos": 0.09654900197284348,
+   "A2B_top1": 0.05,
+   "B2A_top1": 0.0625,
+   "A2B_top5": 0.1625,
+   "chance_top1": 0.0125,
+   "chance_top5": 0.0625,
+   "shuffled_anchor_A2B_top1_mean": 0.008125000000000002,
+   "shuffled_anchor_A2B_top1_max": 0.025,
+   "shuffled_anchor_matched_cos": 0.014681695508728795
+  },
+  "para|final-raw-dense": {
+   "N": 80,
+   "matched_cos": 0.8390448477476837,
+   "mismatched_cos": 0.6703015427119268,
+   "A2B_top1": 0.675,
+   "B2A_top1": 0.475,
+   "A2B_top5": 0.975,
+   "chance_top1": 0.0125,
+   "chance_top5": 0.0625,
+   "shuffled_anchor_A2B_top1_mean": 0.013750000000000002,
+   "shuffled_anchor_A2B_top1_max": 0.05,
+   "shuffled_anchor_matched_cos": -7.380695856076344e-05
+  },
+  "para|final-raw-top32": {
+   "N": 80,
+   "matched_cos": 0.6855864138948011,
+   "mismatched_cos": 0.49546325341971464,
+   "A2B_top1": 0.2625,
+   "B2A_top1": 0.4,
+   "A2B_top5": 0.5625,
+   "chance_top1": 0.0125,
+   "chance_top5": 0.0625,
+   "shuffled_anchor_A2B_top1_mean": 0.0125,
+   "shuffled_anchor_A2B_top1_max": 0.0375,
+   "shuffled_anchor_matched_cos": 0.011393940079728895
+  },
+  "para|final-centred-dense": {
+   "N": 80,
+   "matched_cos": 0.8323173593663512,
+   "mismatched_cos": 0.652654598844917,
+   "A2B_top1": 0.6875,
+   "B2A_top1": 0.475,
+   "A2B_top5": 0.9625,
+   "chance_top1": 0.0125,
+   "chance_top5": 0.0625,
+   "shuffled_anchor_A2B_top1_mean": 0.011250000000000003,
+   "shuffled_anchor_A2B_top1_max": 0.025,
+   "shuffled_anchor_matched_cos": 0.002462278394538283
+  },
+  "para|final-centred-top32": {
+   "N": 80,
+   "matched_cos": 0.7271611209695479,
+   "mismatched_cos": 0.5664458676241189,
+   "A2B_top1": 0.2625,
+   "B2A_top1": 0.35,
+   "A2B_top5": 0.625,
+   "chance_top1": 0.0125,
+   "chance_top5": 0.0625,
+   "shuffled_anchor_A2B_top1_mean": 0.014375000000000002,
+   "shuffled_anchor_A2B_top1_max": 0.0375,
+   "shuffled_anchor_matched_cos": 0.012405496959895212
+  }
+ },
+ "c_minimal": {
+  "jlens": {
+   "summary": {
+    "qwen": {
+     "n_pairs_scored": 29,
+     "mean_pair_cos": 0.9141487105172489,
+     "frac_w1_top10": 0.13793103448275862,
+     "frac_w2_top10": 0.13793103448275862,
+     "frac_both_top10": 0.034482758620689655,
+     "frac_both_top50": 0.10344827586206896,
+     "median_rank_w1": 291.0,
+     "median_rank_w2": 631.0,
+     "frac_pairs_cos_below_0.9": 0.26666666666666666
+    },
+    "smol": {
+     "n_pairs_scored": 29,
+     "mean_pair_cos": 0.9210627899647197,
+     "frac_w1_top10": 0.13793103448275862,
+     "frac_w2_top10": 0.13793103448275862,
+     "frac_both_top10": 0.0,
+     "frac_both_top50": 0.06896551724137931,
+     "median_rank_w1": 288.0,
+     "median_rank_w2": 317.0,
+     "frac_pairs_cos_below_0.9": 0.23333333333333334
+    },
+    "cross_diff_matched_cos": 0.2870405936936475,
+    "cross_diff_mismatched_cos": 0.0008958130255072428,
+    "cross_diff_A2B_top1": 0.5666666666666667,
+    "chance": 0.03333333333333333
+   },
+   "rows": [
+    {
+     "model": "qwen",
+     "pair": 0,
+     "cos_pair": 0.9922185309700672,
+     "rank_w1_in_diff": 3,
+     "rank_w2_in_negdiff": 517,
+     "top_pos": [
+      "Theatre",
+      "Charleston",
+      "Paris",
+      "sculpture",
+      "Plaza"
+     ],
+     "top_neg": [
+      "Germany",
+      "Norway",
+      "German",
+      "Japan",
+      "Japanese"
+     ]
+    },
+    {
+     "model": "qwen",
+     "pair": 1,
+     "cos_pair": 0.9948000469594026,
+     "rank_w1_in_diff": 315,
+     "rank_w2_in_negdiff": 1056,
+     "top_pos": [
+      "Railroad",
+      "Germany",
+      "Japan",
+      "Nazi",
+      "bass"
+     ],
+     "top_neg": [
+      "metres",
+      "kilometres",
+      "colour",
+      "minute",
+      "travelled"
+     ]
+    },
+    {
+     "model": "qwen",
+     "pair": 2,
+     "cos_pair": 0.9739853464004251,
+     "rank_w1_in_diff": 6,
+     "rank_w2_in_negdiff": 1,
+     "top_pos": [
+      "Japan",
+      "Japanese",
+      "Manila",
+      "Islands",
+      "island"
+     ],
+     "top_neg": [
+      "Moscow",
+      "Russian",
+      "Russia",
+      "Czech",
+      "Polish"
+     ]
+    },
+    {
+     "model": "qwen",
+     "pair": 3,
+     "cos_pair": 0.9770363996381812,
+     "rank_w1_in_diff": 264,
+     "rank_w2_in_negdiff": 1748,
+     "top_pos": [
+      "blacks",
+      "Indians",
+      "ancient",
+      "Ming",
+      "Cherokee"
+     ],
+     "top_neg": [
+      "submarine",
+      "Administrative",
+      "decision",
+      "total",
+      "overall"
+     ]
+    },
+    {
+     "model": "qwen",
+     "pair": 4,
+     "cos_pair": 0.9594698314626746,
+     "rank_w1_in_diff": 118,
+     "rank_w2_in_negdiff": 614,
+     "top_pos": [
+      "probably",
+      "want",
+      "things",
+      "something",
+      "really"
+     ],
+     "top_neg": [
+      "deployed",
+      "focused",
+      "deployment",
+      "core",
+      "overall"
+     ]
+    },
+    {
+     "model": "qwen",
+     "pair": 5,
+     "cos_pair": 0.9888629110368722,
+     "rank_w1_in_diff": 44,
+     "rank_w2_in_negdiff": 1,
+     "top_pos": [
+      "instead",
+      "rather",
+      "generally",
+      "actually",
+      "overall"
+     ],
+     "top_neg": [
+      "Italian",
+      "Italy",
+      "Spanish",
+      "Guatemala",
+      "Moon"
+     ]
+    },
+    {
+     "model": "qwen",
+     "pair": 6,
+     "cos_pair": 0.9908645152240132,
+     "rank_w1_in_diff": 11,
+     "rank_w2_in_negdiff": 3,
+     "top_pos": [
+      "programme",
+      "Amsterdam",
+      "defence",
+      "Prague",
+      "France"
+     ],
+     "top_neg": [
+      "Pacific",
+      "Korean",
+      "Japanese",
+      "featuring",
+      "Tropical"
+     ]
+    },
+    {
+     "model": "qwen",
+     "pair": 7,
+     "cos_pair": 0.9731550219886274,
+     "rank_w1_in_diff": 377,
+     "rank_w2_in_negdiff": 1250,
+     "top_pos": [
+      "sometimes",
+      "Church",
+      "often",
+      "usually",
+      "church"
+     ],
+     "top_neg": [
+      "anime",
+      "storyline",
+      "However",
+      "said",
+      "ranked"
+     ]
+    },
+    {
+     "model": "qwen",
+     "pair": 8,
+     "cos_pair": 0.9921792104629268,
+     "rank_w1_in_diff": 251,
+     "rank_w2_in_negdiff": 179,
+     "top_pos": [
+      "kilometres",
+      "bought",
+      "services",
+      "store",
+      "system"
+     ],
+     "top_neg": [
+      "Carolina",
+      "Island",
+      "Olivia",
+      "Alabama",
+      "Charleston"
+     ]
+    },
+    {
+     "model": "qwen",
+     "pair": 9,
+     "cos_pair": 0.9109190014279549,
+     "rank_w1_in_diff": 1566,
+     "rank_w2_in_negdiff": 462,
+     "top_pos": [
+      "estimates",
+      "hour",
+      "decision",
+      "Beijing",
+      "Task"
+     ],
+     "top_neg": [
+      "native",
+      "family",
+      "young",
+      "car",
+      "store"
+     ]
+    },
+    {
+     "model": "qwen",
+     "pair": 10,
+     "cos_pair": 0.8401094313919617,
+     "rank_w1_in_diff": 1419,
+     "rank_w2_in_negdiff": 395,
+     "top_pos": [
+      "constitution",
+      "status",
+      "prior",
+      "associated",
+      "subsequently"
+     ],
+     "top_neg": [
+      "things",
+      "town",
+      "schools",
+      "school",
+      "weekend"
+     ]
+    },
+    {
+     "model": "qwen",
+     "pair": 11,
+     "cos_pair": 0.9031298310900318,
+     "rank_w1_in_diff": 2,
+     "rank_w2_in_negdiff": 1710,
+     "top_pos": [
+      "food",
+      "cold",
+      "colour",
+      "death",
+      "air"
+     ],
+     "top_neg": [
+      "intersects",
+      "intersection",
+      "Avenue",
+      "Committee",
+      "downtown"
+     ]
+    },
+    {
+     "model": "qwen",
+     "pair": 12,
+     "cos_pair": 0.828506460890634,
+     "rank_w1_in_diff": 2,
+     "rank_w2_in_negdiff": 325,
+     "top_pos": [
+      "combination",
+      "decrease",
+      "club",
+      "exit",
+      "weekend"
+     ],
+     "top_neg": [
+      "religion",
+      "religious",
+      "emperor",
+      "God",
+      "Indians"
+     ]
+    },
+    {
+     "model": "qwen",
+     "pair": 13,
+     "cos_pair": 0.9931565265450907,
+     "rank_w1_in_diff": 1213,
+     "rank_w2_in_negdiff": 835,
+     "top_pos": [
+      "Indians",
+      "latter",
+      "bridge",
+      "India",
+      "Indies"
+     ],
+     "top_neg": [
+      "focused",
+      "typically",
+      "Impact",
+      "storyline",
+      "parents"
+     ]
+    },
+    {
+     "model": "qwen",
+     "pair": 14,
+     "cos_pair": 0.9029002816648889,
+     "rank_w1_in_diff": 466,
+     "rank_w2_in_negdiff": 1199,
+     "top_pos": [
+      "Yuan",
+      "metres",
+      "wounded",
+      "kilometres",
+      "brake"
+     ],
+     "top_neg": [
+      "sites",
+      "Charleston",
+      "Peninsula",
+      "membership",
+      "Historic"
+     ]
+    },
+    {
+     "model": "qwen",
+     "pair": 15,
+     "cos_pair": 0.9793756806094249,
+     "rank_w1_in_diff": 1096,
+     "rank_w2_in_negdiff": 1411,
+     "top_pos": [
+      "continuing",
+      "Delaware",
+      "continued",
+      "moving",
+      "building"
+     ],
+     "top_neg": [
+      "Australians",
+      "Australian",
+      "colour",
+      "Indonesia",
+      "Queensland"
+     ]
+    },
+    {
+     "model": "qwen",
+     "pair": 16,
+     "cos_pair": 0.741610660206163,
+     "rank_w1_in_diff": 291,
+     "rank_w2_in_negdiff": 631,
+     "top_pos": [
+      "events",
+      "culture",
+      "travelled",
+      "nature",
+      "dates"
+     ],
+     "top_neg": [
+      "Parker",
+      "mph",
+      "Charleston",
+      "average",
+      "scored"
+     ]
+    },
+    {
+     "model": "qwen",
+     "pair": 17,
+     "cos_pair": 0.9984636383561631,
+     "rank_w1_in_diff": 144,
+     "rank_w2_in_negdiff": 1580,
+     "top_pos": [
+      "memorial",
+      "President",
+      "Governor",
+      "Supreme",
+      "popular"
+     ],
+     "top_neg": [
+      "start",
+      "working",
+      "move",
+      "work",
+      "sources"
+     ]
+    },
+    {
+     "model": "qwen",
+     "pair": 18,
+     "cos_pair": 0.9948448895632396,
+     "rank_w1_in_diff": 580,
+     "rank_w2_in_negdiff": 131,
+     "top_pos": [
+      "voted",
+      "elected",
+      "ranked",
+      "awarded",
+      "ultimately"
+     ],
+     "top_neg": [
+      "supply",
+      "supplies",
+      "metres",
+      "contract",
+      "economy"
+     ]
+    },
+    {
+     "model": "qwen",
+     "pair": 19,
+     "cos_pair": 0.9652335604500386,
+     "rank_w1_in_diff": 25,
+     "rank_w2_in_negdiff": 1399,
+     "top_pos": [
+      "states",
+      "nation",
+      "cities",
+      "planet",
+      "world"
+     ],
+     "top_neg": [
+      "replacement",
+      "evening",
+      "afternoon",
+      "replaced",
+      "Polish"
+     ]
+    },
+    {
+     "model": "qwen",
+     "pair": 20,
+     "cos_pair": 0.9631980107944296,
+     "rank_w1_in_diff": 539,
+     "rank_w2_in_negdiff": 914,
+     "top_pos": [
+      "Moscow",
+      "Russia",
+      "Russian",
+      "Poland",
+      "Warsaw"
+     ],
+     "top_neg": [
+      "others",
+      "species",
+      "ultimately",
+      "meaning",
+      "though"
+     ]
+    },
+    {
+     "model": "qwen",
+     "pair": 21,
+     "cos_pair": 0.9329139119845657,
+     "rank_w1_in_diff": 1494,
+     "rank_w2_in_negdiff": 1742,
+     "top_pos": [
+      "Training",
+      "Brigade",
+      "Exit",
+      "Division",
+      "Route"
+     ],
+     "top_neg": [
+      "visible",
+      "evidence",
+      "religion",
+      "temples",
+      "moment"
+     ]
+    },
+    {
+     "model": "qwen",
+     "pair": 22,
+     "cos_pair": 0.8573820398135107,
+     "rank_w1_in_diff": 430,
+     "rank_w2_in_negdiff": 1264,
+     "top_pos": [
+      "Airport",
+      "Circle",
+      "Tag",
+      "Hamburg",
+      "Hotel"
+     ],
+     "top_neg": [
+      "carved",
+      "populations",
+      "shaped",
+      "structures",
+      "born"
+     ]
+    },
+    {
+     "model": "qwen",
+     "pair": 23,
+     "cos_pair": 0.9040646114143732,
+     "rank_w1_in_diff": 222,
+     "rank_w2_in_negdiff": 10,
+     "top_pos": [
+      "flying",
+      "Prague",
+      "Flight",
+      "aircraft",
+      "plane"
+     ],
+     "top_neg": [
+      "fishing",
+      "inland",
+      "flooding",
+      "river",
+      "streams"
+     ]
+    },
+    {
+     "model": "qwen",
+     "pair": 24,
+     "cos_pair": 0.8110144506108129,
+     "rank_w1_in_diff": 1311,
+     "rank_w2_in_negdiff": 1454,
+     "top_pos": [
+      "defence",
+      "roles",
+      "division",
+      "deployment",
+      "fleet"
+     ],
+     "top_neg": [
+      "Clinton",
+      "Indians",
+      "Cherokee",
+      "mountains",
+      "book"
+     ]
+    },
+    {
+     "model": "qwen",
+     "pair": 25,
+     "cos_pair": 0.5694939771395571,
+     "rank_w1_in_diff": null,
+     "rank_w2_in_negdiff": null,
+     "top_pos": [
+      "Township",
+      "structures",
+      "permanent",
+      "inland",
+      "mainland"
+     ],
+     "top_neg": [
+      "fired",
+      "guitar",
+      "Hot",
+      "afternoon",
+      "night"
+     ]
+    },
+    {
+     "model": "qwen",
+     "pair": 26,
+     "cos_pair": 0.7937764687056686,
+     "rank_w1_in_diff": 13,
+     "rank_w2_in_negdiff": 628,
+     "top_pos": [
+      "political",
+      "Britain",
+      "emperor",
+      "constitution",
+      "Russia"
+     ],
+     "top_neg": [
+      "lane",
+      "mph",
+      "Olivia",
+      "team",
+      "lanes"
+     ]
+    },
+    {
+     "model": "qwen",
+     "pair": 27,
+     "cos_pair": 0.7549521082876645,
+     "rank_w1_in_diff": 251,
+     "rank_w2_in_negdiff": 15,
+     "top_pos": [
+      "writing",
+      "words",
+      "lyrics",
+      "letter",
+      "culture"
+     ],
+     "top_neg": [
+      "grazing",
+      "damage",
+      "armour",
+      "kill",
+      "killed"
+     ]
+    },
+    {
+     "model": "qwen",
+     "pair": 28,
+     "cos_pair": 0.9657636243868659,
+     "rank_w1_in_diff": 801,
+     "rank_w2_in_negdiff": 1445,
+     "top_pos": [
+      "emperor",
+      "planet",
+      "visible",
+      "caused",
+      "sky"
+     ],
+     "top_neg": [
+      "centre",
+      "town",
+      "county",
+      "County",
+      "village"
+     ]
+    },
+    {
+     "model": "qwen",
+     "pair": 29,
+     "cos_pair": 0.971080336041235,
+     "rank_w1_in_diff": 328,
+     "rank_w2_in_negdiff": 14,
+     "top_pos": [
+      "sources",
+      "listed",
+      "metres",
+      "stated",
+      "recorded"
+     ],
+     "top_neg": [
+      "Polish",
+      "piano",
+      "Hamburg",
+      "Depression",
+      "Berlin"
+     ]
+    },
+    {
+     "model": "smol",
+     "pair": 0,
+     "cos_pair": 0.9952325024943358,
+     "rank_w1_in_diff": 53,
+     "rank_w2_in_negdiff": 964,
+     "top_pos": [
+      "dancers",
+      "chapel",
+      "sculpture",
+      "dance",
+      "artist"
+     ],
+     "top_neg": [
+      "Government",
+      "Military",
+      "Afghanistan",
+      "Air",
+      "Group"
+     ]
+    },
+    {
+     "model": "smol",
+     "pair": 1,
+     "cos_pair": 0.9980130603255694,
+     "rank_w1_in_diff": 890,
+     "rank_w2_in_negdiff": 295,
+     "top_pos": [
+      "carved",
+      "Creek",
+      "claimed",
+      "stem",
+      "matter"
+     ],
+     "top_neg": [
+      "Singapore",
+      "programme",
+      "office",
+      "employment",
+      "hours"
+     ]
+    },
+    {
+     "model": "smol",
+     "pair": 2,
+     "cos_pair": 0.9932607577184249,
+     "rank_w1_in_diff": 288,
+     "rank_w2_in_negdiff": 1,
+     "top_pos": [
+      "Sydney",
+      "guitar",
+      "Queensland",
+      "dancers",
+      "residents"
+     ],
+     "top_neg": [
+      "Moscow",
+      "Russia",
+      "Russian",
+      "Czech",
+      "Poland"
+     ]
+    },
+    {
+     "model": "smol",
+     "pair": 3,
+     "cos_pair": 0.9933015511179694,
+     "rank_w1_in_diff": 681,
+     "rank_w2_in_negdiff": 596,
+     "top_pos": [
+      "sustained",
+      "damaged",
+      "estimated",
+      "African",
+      "diameter"
+     ],
+     "top_neg": [
+      "really",
+      "Stockholm",
+      "things",
+      "Jersey",
+      "Dublin"
+     ]
+    },
+    {
+     "model": "smol",
+     "pair": 4,
+     "cos_pair": 0.9822844700540168,
+     "rank_w1_in_diff": 9,
+     "rank_w2_in_negdiff": 1880,
+     "top_pos": [
+      "Britain",
+      "armour",
+      "colour",
+      "defence",
+      "something"
+     ],
+     "top_neg": [
+      "Indonesia",
+      "Southeast",
+      "Korean",
+      "Arabic",
+      "Turkish"
+     ]
+    },
+    {
+     "model": "smol",
+     "pair": 5,
+     "cos_pair": 0.9929682019857211,
+     "rank_w1_in_diff": 85,
+     "rank_w2_in_negdiff": 160,
+     "top_pos": [
+      "talks",
+      "reviews",
+      "Germany",
+      "roles",
+      "review"
+     ],
+     "top_neg": [
+      "Indians",
+      "Indian",
+      "jungle",
+      "tropical",
+      "dynasty"
+     ]
+    },
+    {
+     "model": "smol",
+     "pair": 6,
+     "cos_pair": 0.9709826631816787,
+     "rank_w1_in_diff": 4,
+     "rank_w2_in_negdiff": 1708,
+     "top_pos": [
+      "Swedish",
+      "Netherlands",
+      "Dutch",
+      "French",
+      "France"
+     ],
+     "top_neg": [
+      "voice",
+      "terms",
+      "intelligence",
+      "age",
+      "contact"
+     ]
+    },
+    {
+     "model": "smol",
+     "pair": 7,
+     "cos_pair": 0.9852311985344724,
+     "rank_w1_in_diff": 1670,
+     "rank_w2_in_negdiff": 749,
+     "top_pos": [
+      "however",
+      "events",
+      "elements",
+      "notable",
+      "scenes"
+     ],
+     "top_neg": [
+      "probably",
+      "school",
+      "School",
+      "college",
+      "academic"
+     ]
+    },
+    {
+     "model": "smol",
+     "pair": 8,
+     "cos_pair": 0.9875353665433992,
+     "rank_w1_in_diff": 997,
+     "rank_w2_in_negdiff": 699,
+     "top_pos": [
+      "novel",
+      "metres",
+      "Singapore",
+      "winning",
+      "victory"
+     ],
+     "top_neg": [
+      "personnel",
+      "Operation",
+      "Music",
+      "music",
+      "Training"
+     ]
+    },
+    {
+     "model": "smol",
+     "pair": 9,
+     "cos_pair": 0.9077809915085274,
+     "rank_w1_in_diff": 1607,
+     "rank_w2_in_negdiff": 209,
+     "top_pos": [
+      "radio",
+      "Beijing",
+      "Britain",
+      "Portugal",
+      "Japan"
+     ],
+     "top_neg": [
+      "Boys",
+      "children",
+      "male",
+      "purchased",
+      "Township"
+     ]
+    },
+    {
+     "model": "smol",
+     "pair": 10,
+     "cos_pair": 0.8782598022170954,
+     "rank_w1_in_diff": 1245,
+     "rank_w2_in_negdiff": 607,
+     "top_pos": [
+      "medical",
+      "hospital",
+      "Hospital",
+      "blood",
+      "assassination"
+     ],
+     "top_neg": [
+      "rain",
+      "Oregon",
+      "acres",
+      "wind",
+      "inland"
+     ]
+    },
+    {
+     "model": "smol",
+     "pair": 11,
+     "cos_pair": 0.9572138552167754,
+     "rank_w1_in_diff": 1,
+     "rank_w2_in_negdiff": 1130,
+     "top_pos": [
+      "cold",
+      "television",
+      "Hot",
+      "food",
+      "million"
+     ],
+     "top_neg": [
+      "routing",
+      "route",
+      "formation",
+      "direction",
+      "movements"
+     ]
+    },
+    {
+     "model": "smol",
+     "pair": 12,
+     "cos_pair": 0.9135957445725532,
+     "rank_w1_in_diff": 6,
+     "rank_w2_in_negdiff": 33,
+     "top_pos": [
+      "activity",
+      "approach",
+      "response",
+      "operations",
+      "operation"
+     ],
+     "top_neg": [
+      "Indies",
+      "claimed",
+      "allegations",
+      "claiming",
+      "Constitution"
+     ]
+    },
+    {
+     "model": "smol",
+     "pair": 13,
+     "cos_pair": 0.9871520414483828,
+     "rank_w1_in_diff": 1441,
+     "rank_w2_in_negdiff": 901,
+     "top_pos": [
+      "School",
+      "school",
+      "academic",
+      "children",
+      "parents"
+     ],
+     "top_neg": [
+      "reaching",
+      "survivors",
+      "surviving",
+      "losing",
+      "island"
+     ]
+    },
+    {
+     "model": "smol",
+     "pair": 14,
+     "cos_pair": 0.9082711523474932,
+     "rank_w1_in_diff": 25,
+     "rank_w2_in_negdiff": 1813,
+     "top_pos": [
+      "Defence",
+      "centre",
+      "colour",
+      "defence",
+      "squadron"
+     ],
+     "top_neg": [
+      "studies",
+      "sites",
+      "parents",
+      "populations",
+      "overall"
+     ]
+    },
+    {
+     "model": "smol",
+     "pair": 15,
+     "cos_pair": 0.9703649962500638,
+     "rank_w1_in_diff": 555,
+     "rank_w2_in_negdiff": 655,
+     "top_pos": [
+      "Colorado",
+      "Kansas",
+      "Texas",
+      "Denver",
+      "Riley"
+     ],
+     "top_neg": [
+      "colour",
+      "armour",
+      "defence",
+      "programme",
+      "centre"
+     ]
+    },
+    {
+     "model": "smol",
+     "pair": 16,
+     "cos_pair": 0.7854688188075383,
+     "rank_w1_in_diff": 610,
+     "rank_w2_in_negdiff": 486,
+     "top_pos": [
+      "scenes",
+      "dark",
+      "night",
+      "sails",
+      "patrols"
+     ],
+     "top_neg": [
+      "size",
+      "diameter",
+      "Ave",
+      "Municipal",
+      "length"
+     ]
+    },
+    {
+     "model": "smol",
+     "pair": 17,
+     "cos_pair": 0.9930048475575797,
+     "rank_w1_in_diff": 859,
+     "rank_w2_in_negdiff": 2,
+     "top_pos": [
+      "Potter",
+      "Rome",
+      "office",
+      "children",
+      "decrease"
+     ],
+     "top_neg": [
+      "crew",
+      "guitar",
+      "Battalion",
+      "Team",
+      "Marines"
+     ]
+    },
+    {
+     "model": "smol",
+     "pair": 18,
+     "cos_pair": 0.9905878880274477,
+     "rank_w1_in_diff": 662,
+     "rank_w2_in_negdiff": 120,
+     "top_pos": [
+      "either",
+      "intersection",
+      "thus",
+      "prior",
+      "whether"
+     ],
+     "top_neg": [
+      "Burma",
+      "Korean",
+      "Korea",
+      "Vietnam",
+      "Indonesia"
+     ]
+    },
+    {
+     "model": "smol",
+     "pair": 19,
+     "cos_pair": 0.9457031808514733,
+     "rank_w1_in_diff": 43,
+     "rank_w2_in_negdiff": 66,
+     "top_pos": [
+      "Europe",
+      "world",
+      "overseas",
+      "America",
+      "Africa"
+     ],
+     "top_neg": [
+      "afternoon",
+      "intersection",
+      "Angle",
+      "grazing",
+      "nearby"
+     ]
+    },
+    {
+     "model": "smol",
+     "pair": 20,
+     "cos_pair": 0.9746026086218653,
+     "rank_w1_in_diff": 25,
+     "rank_w2_in_negdiff": 3,
+     "top_pos": [
+      "blocks",
+      "erected",
+      "Battalion",
+      "Jim",
+      "Township"
+     ],
+     "top_neg": [
+      "women",
+      "woman",
+      "queen",
+      "Sydney",
+      "daughter"
+     ]
+    },
+    {
+     "model": "smol",
+     "pair": 21,
+     "cos_pair": 0.9307670708883771,
+     "rank_w1_in_diff": 46,
+     "rank_w2_in_negdiff": 317,
+     "top_pos": [
+      "armour",
+      "medical",
+      "guns",
+      "Entertainment",
+      "weapons"
+     ],
+     "top_neg": [
+      "follows",
+      "provides",
+      "song",
+      "agreement",
+      "response"
+     ]
+    },
+    {
+     "model": "smol",
+     "pair": 22,
+     "cos_pair": 0.8904640614976375,
+     "rank_w1_in_diff": 304,
+     "rank_w2_in_negdiff": 287,
+     "top_pos": [
+      "businesses",
+      "business",
+      "Portuguese",
+      "Manila",
+      "Indies"
+     ],
+     "top_neg": [
+      "surface",
+      "protection",
+      "floor",
+      "Constitution",
+      "Protection"
+     ]
+    },
+    {
+     "model": "smol",
+     "pair": 23,
+     "cos_pair": 0.9620919113173142,
+     "rank_w1_in_diff": 35,
+     "rank_w2_in_negdiff": 789,
+     "top_pos": [
+      "tower",
+      "artillery",
+      "flying",
+      "Louisville",
+      "Air"
+     ],
+     "top_neg": [
+      "inland",
+      "terms",
+      "access",
+      "lanes",
+      "withdraw"
+     ]
+    },
+    {
+     "model": "smol",
+     "pair": 24,
+     "cos_pair": 0.7183233360710616,
+     "rank_w1_in_diff": 63,
+     "rank_w2_in_negdiff": 702,
+     "top_pos": [
+      "engine",
+      "cars",
+      "downtown",
+      "tanks",
+      "scheduled"
+     ],
+     "top_neg": [
+      "colonial",
+      "mainland",
+      "Victorian",
+      "sail",
+      "colonies"
+     ]
+    },
+    {
+     "model": "smol",
+     "pair": 25,
+     "cos_pair": 0.5312495117017095,
+     "rank_w1_in_diff": null,
+     "rank_w2_in_negdiff": null,
+     "top_pos": [
+      "Canada",
+      "Lake",
+      "Wales",
+      "Russia",
+      "Norway"
+     ],
+     "top_neg": [
+      "hotels",
+      "matches",
+      "conference",
+      "talks",
+      "really"
+     ]
+    },
+    {
+     "model": "smol",
+     "pair": 26,
+     "cos_pair": 0.8476187578825501,
+     "rank_w1_in_diff": 103,
+     "rank_w2_in_negdiff": 48,
+     "top_pos": [
+      "military",
+      "naval",
+      "inland",
+      "Afghanistan",
+      "federal"
+     ],
+     "top_neg": [
+      "player",
+      "Olivia",
+      "Tree",
+      "Ave",
+      "players"
+     ]
+    },
+    {
+     "model": "smol",
+     "pair": 27,
+     "cos_pair": 0.7606741249516119,
+     "rank_w1_in_diff": 486,
+     "rank_w2_in_negdiff": 2,
+     "top_pos": [
+      "letter",
+      "writing",
+      "positive",
+      "written",
+      "commitment"
+     ],
+     "top_neg": [
+      "armour",
+      "knife",
+      "weapons",
+      "killing",
+      "steel"
+     ]
+    },
+    {
+     "model": "smol",
+     "pair": 28,
+     "cos_pair": 0.9453314419058786,
+     "rank_w1_in_diff": 786,
+     "rank_w2_in_negdiff": 30,
+     "top_pos": [
+      "flying",
+      "Week",
+      "radio",
+      "weekend",
+      "Air"
+     ],
+     "top_neg": [
+      "ancient",
+      "structure",
+      "stone",
+      "structures",
+      "buildings"
+     ]
+    },
+    {
+     "model": "smol",
+     "pair": 29,
+     "cos_pair": 0.9345477833430622,
+     "rank_w1_in_diff": 48,
+     "rank_w2_in_negdiff": 212,
+     "top_pos": [
+      "businesses",
+      "food",
+      "water",
+      "Classic",
+      "roadway"
+     ],
+     "top_neg": [
+      "Sweden",
+      "anime",
+      "role",
+      "Norway",
+      "participated"
+     ]
+    }
+   ]
+  },
+  "logit": {
+   "summary": {
+    "qwen": {
+     "n_pairs_scored": 29,
+     "mean_pair_cos": 0.9113492631586103,
+     "frac_w1_top10": 0.0,
+     "frac_w2_top10": 0.0,
+     "frac_both_top10": 0.0,
+     "frac_both_top50": 0.0,
+     "median_rank_w1": 811.0,
+     "median_rank_w2": 809.0,
+     "frac_pairs_cos_below_0.9": 0.3333333333333333
+    },
+    "smol": {
+     "n_pairs_scored": 29,
+     "mean_pair_cos": 0.9211298660564441,
+     "frac_w1_top10": 0.0,
+     "frac_w2_top10": 0.034482758620689655,
+     "frac_both_top10": 0.0,
+     "frac_both_top50": 0.0,
+     "median_rank_w1": 812.0,
+     "median_rank_w2": 986.0,
+     "frac_pairs_cos_below_0.9": 0.2
+    },
+    "cross_diff_matched_cos": 0.06405989685662211,
+    "cross_diff_mismatched_cos": 0.0003936636261491706,
+    "cross_diff_A2B_top1": 0.3,
+    "chance": 0.03333333333333333
+   },
+   "rows": [
+    {
+     "model": "qwen",
+     "pair": 0,
+     "cos_pair": 0.9917755162703534,
+     "rank_w1_in_diff": 654,
+     "rank_w2_in_negdiff": 1415,
+     "top_pos": [
+      "arrangement",
+      "centre",
+      "junction",
+      "voted",
+      "Hot"
+     ],
+     "top_neg": [
+      "build",
+      "covered",
+      "hold",
+      "cover",
+      "even"
+     ]
+    },
+    {
+     "model": "qwen",
+     "pair": 1,
+     "cos_pair": 0.9946267461573904,
+     "rank_w1_in_diff": 1224,
+     "rank_w2_in_negdiff": 352,
+     "top_pos": [
+      "authority",
+      "follow",
+      "track",
+      "following",
+      "broken"
+     ],
+     "top_neg": [
+      "screen",
+      "revealed",
+      "players",
+      "Zimbabwe",
+      "enlisted"
+     ]
+    },
+    {
+     "model": "qwen",
+     "pair": 2,
+     "cos_pair": 0.9733774008427623,
+     "rank_w1_in_diff": 1777,
+     "rank_w2_in_negdiff": 576,
+     "top_pos": [
+      "voice",
+      "room",
+      "signature",
+      "form",
+      "Best"
+     ],
+     "top_neg": [
+      "blocks",
+      "unit",
+      "printing",
+      "stem",
+      "units"
+     ]
+    },
+    {
+     "model": "qwen",
+     "pair": 3,
+     "cos_pair": 0.9838313218799131,
+     "rank_w1_in_diff": 1990,
+     "rank_w2_in_negdiff": 1042,
+     "top_pos": [
+      "local",
+      "southeast",
+      "World",
+      "national",
+      "nearby"
+     ],
+     "top_neg": [
+      "carries",
+      "commander",
+      "Front",
+      "Force",
+      "top"
+     ]
+    },
+    {
+     "model": "qwen",
+     "pair": 4,
+     "cos_pair": 0.9717408881383023,
+     "rank_w1_in_diff": 385,
+     "rank_w2_in_negdiff": 718,
+     "top_pos": [
+      "Depression",
+      "age",
+      "arts",
+      "metres",
+      "elsewhere"
+     ],
+     "top_neg": [
+      "top",
+      "cover",
+      "individual",
+      "built",
+      "live"
+     ]
+    },
+    {
+     "model": "qwen",
+     "pair": 5,
+     "cos_pair": 0.9867980901383266,
+     "rank_w1_in_diff": 1290,
+     "rank_w2_in_negdiff": 1224,
+     "top_pos": [
+      "enter",
+      "instead",
+      "replace",
+      "events",
+      "states"
+     ],
+     "top_neg": [
+      "Spanish",
+      "ranked",
+      "peak",
+      "Point",
+      "Headquarters"
+     ]
+    },
+    {
+     "model": "qwen",
+     "pair": 6,
+     "cos_pair": 0.9872937032886107,
+     "rank_w1_in_diff": 1434,
+     "rank_w2_in_negdiff": 600,
+     "top_pos": [
+      "possible",
+      "now",
+      "lines",
+      "effects",
+      "critical"
+     ],
+     "top_neg": [
+      "left",
+      "Wilson",
+      "temples",
+      "Shop",
+      "win"
+     ]
+    },
+    {
+     "model": "qwen",
+     "pair": 7,
+     "cos_pair": 0.9698021887472704,
+     "rank_w1_in_diff": 514,
+     "rank_w2_in_negdiff": 760,
+     "top_pos": [
+      "generally",
+      "Protection",
+      "numerous",
+      "sometimes",
+      "War"
+     ],
+     "top_neg": [
+      "championship",
+      "blue",
+      "Company",
+      "Meanwhile",
+      "bout"
+     ]
+    },
+    {
+     "model": "qwen",
+     "pair": 8,
+     "cos_pair": 0.990091230272416,
+     "rank_w1_in_diff": 653,
+     "rank_w2_in_negdiff": 1055,
+     "top_pos": [
+      "television",
+      "store",
+      "strong",
+      "Arthur",
+      "strength"
+     ],
+     "top_neg": [
+      "Peninsula",
+      "Styles",
+      "Western",
+      "west",
+      "height"
+     ]
+    },
+    {
+     "model": "qwen",
+     "pair": 9,
+     "cos_pair": 0.9121137514399552,
+     "rank_w1_in_diff": 811,
+     "rank_w2_in_negdiff": 1817,
+     "top_pos": [
+      "writing",
+      "passing",
+      "conference",
+      "Second",
+      "events"
+     ],
+     "top_neg": [
+      "generally",
+      "even",
+      "End",
+      "end",
+      "dead"
+     ]
+    },
+    {
+     "model": "qwen",
+     "pair": 10,
+     "cos_pair": 0.8804318591586139,
+     "rank_w1_in_diff": 498,
+     "rank_w2_in_negdiff": 1728,
+     "top_pos": [
+      "states",
+      "States",
+      "incident",
+      "James",
+      "Following"
+     ],
+     "top_neg": [
+      "season",
+      "Depression",
+      "miles",
+      "sky",
+      "perimeter"
+     ]
+    },
+    {
+     "model": "qwen",
+     "pair": 11,
+     "cos_pair": 0.924002124024276,
+     "rank_w1_in_diff": 291,
+     "rank_w2_in_negdiff": 807,
+     "top_pos": [
+      "Turner",
+      "human",
+      "declined",
+      "heard",
+      "released"
+     ],
+     "top_neg": [
+      "book",
+      "blocks",
+      "action",
+      "points",
+      "couple"
+     ]
+    },
+    {
+     "model": "qwen",
+     "pair": 12,
+     "cos_pair": 0.8644085169882892,
+     "rank_w1_in_diff": 311,
+     "rank_w2_in_negdiff": 49,
+     "top_pos": [
+      "reaction",
+      "Major",
+      "Styles",
+      "respectively",
+      "weekend"
+     ],
+     "top_neg": [
+      "base",
+      "follow",
+      "council",
+      "park",
+      "watch"
+     ]
+    },
+    {
+     "model": "qwen",
+     "pair": 13,
+     "cos_pair": 0.9891303902997297,
+     "rank_w1_in_diff": 1182,
+     "rank_w2_in_negdiff": 1175,
+     "top_pos": [
+      "meets",
+      "concrete",
+      "acting",
+      "Service",
+      "accused"
+     ],
+     "top_neg": [
+      "continue",
+      "times",
+      "contributed",
+      "Times",
+      "style"
+     ]
+    },
+    {
+     "model": "qwen",
+     "pair": 14,
+     "cos_pair": 0.8854869393771457,
+     "rank_w1_in_diff": 16,
+     "rank_w2_in_negdiff": 1966,
+     "top_pos": [
+      "Area",
+      "respectively",
+      "Southeast",
+      "woman",
+      "Yuan"
+     ],
+     "top_neg": [
+      "routes",
+      "aggressive",
+      "regular",
+      "commitment",
+      "concerns"
+     ]
+    },
+    {
+     "model": "qwen",
+     "pair": 15,
+     "cos_pair": 0.979155238432101,
+     "rank_w1_in_diff": 1927,
+     "rank_w2_in_negdiff": 71,
+     "top_pos": [
+      "monuments",
+      "Commonwealth",
+      "calling",
+      "met",
+      "dancers"
+     ],
+     "top_neg": [
+      "period",
+      "event",
+      "events",
+      "pair",
+      "broke"
+     ]
+    },
+    {
+     "model": "qwen",
+     "pair": 16,
+     "cos_pair": 0.6934714386143668,
+     "rank_w1_in_diff": 136,
+     "rank_w2_in_negdiff": 701,
+     "top_pos": [
+      "streams",
+      "coming",
+      "come",
+      "subject",
+      "waters"
+     ],
+     "top_neg": [
+      "declared",
+      "scored",
+      "finishing",
+      "served",
+      "concert"
+     ]
+    },
+    {
+     "model": "qwen",
+     "pair": 17,
+     "cos_pair": 0.9983528094545171,
+     "rank_w1_in_diff": 1227,
+     "rank_w2_in_negdiff": 873,
+     "top_pos": [
+      "house",
+      "homes",
+      "House",
+      "Mississippi",
+      "whole"
+     ],
+     "top_neg": [
+      "tactics",
+      "longer",
+      "move",
+      "future",
+      "headed"
+     ]
+    },
+    {
+     "model": "qwen",
+     "pair": 18,
+     "cos_pair": 0.9924135633181821,
+     "rank_w1_in_diff": 1825,
+     "rank_w2_in_negdiff": 809,
+     "top_pos": [
+      "first",
+      "Graves",
+      "First",
+      "career",
+      "fight"
+     ],
+     "top_neg": [
+      "seal",
+      "enforcement",
+      "contract",
+      "middle",
+      "ship"
+     ]
+    },
+    {
+     "model": "qwen",
+     "pair": 19,
+     "cos_pair": 0.9593116082606787,
+     "rank_w1_in_diff": 600,
+     "rank_w2_in_negdiff": 445,
+     "top_pos": [
+      "Headquarters",
+      "visit",
+      "mixed",
+      "ranked",
+      "numbered"
+     ],
+     "top_neg": [
+      "Line",
+      "lane",
+      "line",
+      "alignment",
+      "victims"
+     ]
+    },
+    {
+     "model": "qwen",
+     "pair": 20,
+     "cos_pair": 0.9483437107012581,
+     "rank_w1_in_diff": 155,
+     "rank_w2_in_negdiff": 854,
+     "top_pos": [
+      "blocks",
+      "scenes",
+      "initially",
+      "pie",
+      "People"
+     ],
+     "top_neg": [
+      "better",
+      "meaning",
+      "leading",
+      "returned",
+      "passed"
+     ]
+    },
+    {
+     "model": "qwen",
+     "pair": 21,
+     "cos_pair": 0.9410895735363468,
+     "rank_w1_in_diff": 293,
+     "rank_w2_in_negdiff": 1890,
+     "top_pos": [
+      "either",
+      "mainland",
+      "heavy",
+      "Song",
+      "lyrics"
+     ],
+     "top_neg": [
+      "lived",
+      "frame",
+      "incident",
+      "similar",
+      "joined"
+     ]
+    },
+    {
+     "model": "qwen",
+     "pair": 22,
+     "cos_pair": 0.8417189137074996,
+     "rank_w1_in_diff": 31,
+     "rank_w2_in_negdiff": 1273,
+     "top_pos": [
+      "successfully",
+      "try",
+      "attempted",
+      "line",
+      "senior"
+     ],
+     "top_neg": [
+      "Mississippi",
+      "movements",
+      "among",
+      "Africa",
+      "populations"
+     ]
+    },
+    {
+     "model": "qwen",
+     "pair": 23,
+     "cos_pair": 0.8850716873906675,
+     "rank_w1_in_diff": 874,
+     "rank_w2_in_negdiff": 725,
+     "top_pos": [
+      "service",
+      "Service",
+      "edition",
+      "drama",
+      "services"
+     ],
+     "top_neg": [
+      "points",
+      "nearby",
+      "blood",
+      "Security",
+      "Committee"
+     ]
+    },
+    {
+     "model": "qwen",
+     "pair": 24,
+     "cos_pair": 0.7408789025438075,
+     "rank_w1_in_diff": 1615,
+     "rank_w2_in_negdiff": 856,
+     "top_pos": [
+      "good",
+      "close",
+      "scored",
+      "rated",
+      "network"
+     ],
+     "top_neg": [
+      "Major",
+      "Tropical",
+      "civil",
+      "China",
+      "Mountain"
+     ]
+    },
+    {
+     "model": "qwen",
+     "pair": 25,
+     "cos_pair": 0.47792672925411667,
+     "rank_w1_in_diff": null,
+     "rank_w2_in_negdiff": null,
+     "top_pos": [
+      "Marie",
+      "acres",
+      "homes",
+      "bridges",
+      "arrested"
+     ],
+     "top_neg": [
+      "flight",
+      "Flight",
+      "signature",
+      "different",
+      "senior"
+     ]
+    },
+    {
+     "model": "qwen",
+     "pair": 26,
+     "cos_pair": 0.8297768207967671,
+     "rank_w1_in_diff": 882,
+     "rank_w2_in_negdiff": 387,
+     "top_pos": [
+      "rather",
+      "post",
+      "generally",
+      "largely",
+      "relatively"
+     ],
+     "top_neg": [
+      "travelled",
+      "awarded",
+      "crowd",
+      "lasted",
+      "kilometres"
+     ]
+    },
+    {
+     "model": "qwen",
+     "pair": 27,
+     "cos_pair": 0.8128002210544936,
+     "rank_w1_in_diff": 57,
+     "rank_w2_in_negdiff": 1157,
+     "top_pos": [
+      "change",
+      "period",
+      "States",
+      "states",
+      "state"
+     ],
+     "top_neg": [
+      "awarded",
+      "patrols",
+      "testified",
+      "purchased",
+      "rated"
+     ]
+    },
+    {
+     "model": "qwen",
+     "pair": 28,
+     "cos_pair": 0.9640651224199508,
+     "rank_w1_in_diff": 1521,
+     "rank_w2_in_negdiff": 534,
+     "top_pos": [
+      "caused",
+      "started",
+      "experienced",
+      "Classic",
+      "sustained"
+     ],
+     "top_neg": [
+      "case",
+      "broken",
+      "meaning",
+      "head",
+      "concerns"
+     ]
+    },
+    {
+     "model": "qwen",
+     "pair": 29,
+     "cos_pair": 0.9711908882501993,
+     "rank_w1_in_diff": 1435,
+     "rank_w2_in_negdiff": 437,
+     "top_pos": [
+      "species",
+      "wheel",
+      "passengers",
+      "spikes",
+      "Graves"
+     ],
+     "top_neg": [
+      "Kurt",
+      "attempt",
+      "critical",
+      "failed",
+      "attempts"
+     ]
+    },
+    {
+     "model": "smol",
+     "pair": 0,
+     "cos_pair": 0.9954381634641629,
+     "rank_w1_in_diff": 633,
+     "rank_w2_in_negdiff": 1954,
+     "top_pos": [
+      "matter",
+      "Amsterdam",
+      "Boat",
+      "Queensland",
+      "Zealand"
+     ],
+     "top_neg": [
+      "previous",
+      "non",
+      "former",
+      "Civil",
+      "access"
+     ]
+    },
+    {
+     "model": "smol",
+     "pair": 1,
+     "cos_pair": 0.9941114864210947,
+     "rank_w1_in_diff": 1623,
+     "rank_w2_in_negdiff": 1235,
+     "top_pos": [
+      "actors",
+      "chapel",
+      "races",
+      "Shop",
+      "organizations"
+     ],
+     "top_neg": [
+      "red",
+      "system",
+      "far",
+      "forward",
+      "hand"
+     ]
+    },
+    {
+     "model": "smol",
+     "pair": 2,
+     "cos_pair": 0.9905010357166669,
+     "rank_w1_in_diff": 1164,
+     "rank_w2_in_negdiff": 171,
+     "top_pos": [
+      "trade",
+      "food",
+      "known",
+      "number",
+      "Tom"
+     ],
+     "top_neg": [
+      "Infantry",
+      "Office",
+      "office",
+      "Meanwhile",
+      "elsewhere"
+     ]
+    },
+    {
+     "model": "smol",
+     "pair": 3,
+     "cos_pair": 0.9929679469247175,
+     "rank_w1_in_diff": 45,
+     "rank_w2_in_negdiff": 1560,
+     "top_pos": [
+      "reported",
+      "attacking",
+      "pair",
+      "overall",
+      "right"
+     ],
+     "top_neg": [
+      "route",
+      "date",
+      "favor",
+      "dating",
+      "Route"
+     ]
+    },
+    {
+     "model": "smol",
+     "pair": 4,
+     "cos_pair": 0.9845763128927312,
+     "rank_w1_in_diff": 1720,
+     "rank_w2_in_negdiff": 804,
+     "top_pos": [
+      "essay",
+      "retired",
+      "convicted",
+      "Nations",
+      "tribute"
+     ],
+     "top_neg": [
+      "concerns",
+      "resulting",
+      "back",
+      "additional",
+      "previously"
+     ]
+    },
+    {
+     "model": "smol",
+     "pair": 5,
+     "cos_pair": 0.9909301543547344,
+     "rank_w1_in_diff": 1488,
+     "rank_w2_in_negdiff": 261,
+     "top_pos": [
+      "bit",
+      "critical",
+      "together",
+      "similar",
+      "open"
+     ],
+     "top_neg": [
+      "Empire",
+      "world",
+      "erected",
+      "sails",
+      "era"
+     ]
+    },
+    {
+     "model": "smol",
+     "pair": 6,
+     "cos_pair": 0.9618089284299585,
+     "rank_w1_in_diff": 450,
+     "rank_w2_in_negdiff": 1464,
+     "top_pos": [
+      "Avenue",
+      "replaced",
+      "concerts",
+      "withdrawn",
+      "criticized"
+     ],
+     "top_neg": [
+      "open",
+      "trade",
+      "using",
+      "use",
+      "via"
+     ]
+    },
+    {
+     "model": "smol",
+     "pair": 7,
+     "cos_pair": 0.9846405815604631,
+     "rank_w1_in_diff": 1660,
+     "rank_w2_in_negdiff": 1643,
+     "top_pos": [
+      "created",
+      "named",
+      "composed",
+      "destroyed",
+      "known"
+     ],
+     "top_neg": [
+      "Meanwhile",
+      "Corps",
+      "International",
+      "likely",
+      "training"
+     ]
+    },
+    {
+     "model": "smol",
+     "pair": 8,
+     "cos_pair": 0.9849747526317659,
+     "rank_w1_in_diff": 1031,
+     "rank_w2_in_negdiff": 1622,
+     "top_pos": [
+      "sides",
+      "Among",
+      "Award",
+      "cases",
+      "among"
+     ],
+     "top_neg": [
+      "primary",
+      "become",
+      "playing",
+      "System",
+      "daily"
+     ]
+    },
+    {
+     "model": "smol",
+     "pair": 9,
+     "cos_pair": 0.9303528898658261,
+     "rank_w1_in_diff": 1602,
+     "rank_w2_in_negdiff": 90,
+     "top_pos": [
+      "said",
+      "took",
+      "taken",
+      "number",
+      "modern"
+     ],
+     "top_neg": [
+      "market",
+      "body",
+      "stage",
+      "storyline",
+      "lands"
+     ]
+    },
+    {
+     "model": "smol",
+     "pair": 10,
+     "cos_pair": 0.9459527681867892,
+     "rank_w1_in_diff": 247,
+     "rank_w2_in_negdiff": 1332,
+     "top_pos": [
+      "case",
+      "withdrew",
+      "withdrawn",
+      "grew",
+      "confirmed"
+     ],
+     "top_neg": [
+      "sky",
+      "economy",
+      "floor",
+      "fans",
+      "Early"
+     ]
+    },
+    {
+     "model": "smol",
+     "pair": 11,
+     "cos_pair": 0.9605128084186259,
+     "rank_w1_in_diff": 69,
+     "rank_w2_in_negdiff": 1846,
+     "top_pos": [
+      "Division",
+      "trying",
+      "brown",
+      "least",
+      "pre"
+     ],
+     "top_neg": [
+      "agent",
+      "formation",
+      "happened",
+      "Later",
+      "Joshua"
+     ]
+    },
+    {
+     "model": "smol",
+     "pair": 12,
+     "cos_pair": 0.908697440553447,
+     "rank_w1_in_diff": 1233,
+     "rank_w2_in_negdiff": 200,
+     "top_pos": [
+      "area",
+      "group",
+      "terms",
+      "term",
+      "country"
+     ],
+     "top_neg": [
+      "Minister",
+      "Chan",
+      "comedy",
+      "oak",
+      "Headquarters"
+     ]
+    },
+    {
+     "model": "smol",
+     "pair": 13,
+     "cos_pair": 0.9782798969602077,
+     "rank_w1_in_diff": 812,
+     "rank_w2_in_negdiff": 1171,
+     "top_pos": [
+      "anime",
+      "bass",
+      "membership",
+      "drive",
+      "scored"
+     ],
+     "top_neg": [
+      "enough",
+      "concluded",
+      "eventually",
+      "Wilson",
+      "Mount"
+     ]
+    },
+    {
+     "model": "smol",
+     "pair": 14,
+     "cos_pair": 0.8585204186354464,
+     "rank_w1_in_diff": 315,
+     "rank_w2_in_negdiff": 834,
+     "top_pos": [
+      "Blues",
+      "roof",
+      "Streets",
+      "room",
+      "mounted"
+     ],
+     "top_neg": [
+      "done",
+      "per",
+      "long",
+      "overall",
+      "sites"
+     ]
+    },
+    {
+     "model": "smol",
+     "pair": 15,
+     "cos_pair": 0.9778568519682447,
+     "rank_w1_in_diff": 780,
+     "rank_w2_in_negdiff": 781,
+     "top_pos": [
+      "small",
+      "general",
+      "make",
+      "numbers",
+      "security"
+     ],
+     "top_neg": [
+      "Township",
+      "Exit",
+      "armour",
+      "Order",
+      "praised"
+     ]
+    },
+    {
+     "model": "smol",
+     "pair": 16,
+     "cos_pair": 0.7112920364196496,
+     "rank_w1_in_diff": 1445,
+     "rank_w2_in_negdiff": 133,
+     "top_pos": [
+      "business",
+      "side",
+      "part",
+      "sides",
+      "bit"
+     ],
+     "top_neg": [
+      "Ave",
+      "Park",
+      "largest",
+      "park",
+      "testified"
+     ]
+    },
+    {
+     "model": "smol",
+     "pair": 17,
+     "cos_pair": 0.9938407107046472,
+     "rank_w1_in_diff": 1052,
+     "rank_w2_in_negdiff": 151,
+     "top_pos": [
+      "awarded",
+      "Defence",
+      "office",
+      "proved",
+      "Route"
+     ],
+     "top_neg": [
+      "behind",
+      "clear",
+      "per",
+      "paid",
+      "instead"
+     ]
+    },
+    {
+     "model": "smol",
+     "pair": 18,
+     "cos_pair": 0.9925716162521002,
+     "rank_w1_in_diff": 1447,
+     "rank_w2_in_negdiff": 434,
+     "top_pos": [
+      "enough",
+      "proved",
+      "intersects",
+      "limited",
+      "convicted"
+     ],
+     "top_neg": [
+      "side",
+      "future",
+      "star",
+      "long",
+      "self"
+     ]
+    },
+    {
+     "model": "smol",
+     "pair": 19,
+     "cos_pair": 0.9622404101882664,
+     "rank_w1_in_diff": 19,
+     "rank_w2_in_negdiff": 812,
+     "top_pos": [
+      "designed",
+      "Europe",
+      "lies",
+      "First",
+      "bound"
+     ],
+     "top_neg": [
+      "Angle",
+      "area",
+      "perimeter",
+      "Interstate",
+      "sides"
+     ]
+    },
+    {
+     "model": "smol",
+     "pair": 20,
+     "cos_pair": 0.9751096746076592,
+     "rank_w1_in_diff": 967,
+     "rank_w2_in_negdiff": 1275,
+     "top_pos": [
+      "erected",
+      "Styles",
+      "blocks",
+      "estimates",
+      "divisions"
+     ],
+     "top_neg": [
+      "cost",
+      "little",
+      "though",
+      "since",
+      "seen"
+     ]
+    },
+    {
+     "model": "smol",
+     "pair": 21,
+     "cos_pair": 0.94911706779776,
+     "rank_w1_in_diff": 1564,
+     "rank_w2_in_negdiff": 735,
+     "top_pos": [
+      "right",
+      "medical",
+      "area",
+      "equipment",
+      "Cambridge"
+     ],
+     "top_neg": [
+      "commented",
+      "convicted",
+      "withdrawn",
+      "responded",
+      "lyrics"
+     ]
+    },
+    {
+     "model": "smol",
+     "pair": 22,
+     "cos_pair": 0.8449564591770534,
+     "rank_w1_in_diff": 85,
+     "rank_w2_in_negdiff": 1417,
+     "top_pos": [
+      "times",
+      "entire",
+      "cases",
+      "flag",
+      "use"
+     ],
+     "top_neg": [
+      "Hotel",
+      "inch",
+      "Die",
+      "wheel",
+      "spent"
+     ]
+    },
+    {
+     "model": "smol",
+     "pair": 23,
+     "cos_pair": 0.9617251287839874,
+     "rank_w1_in_diff": 292,
+     "rank_w2_in_negdiff": 1398,
+     "top_pos": [
+      "Turner",
+      "serving",
+      "flying",
+      "sold",
+      "later"
+     ],
+     "top_neg": [
+      "access",
+      "task",
+      "terms",
+      "extended",
+      "open"
+     ]
+    },
+    {
+     "model": "smol",
+     "pair": 24,
+     "cos_pair": 0.7133998146172493,
+     "rank_w1_in_diff": 684,
+     "rank_w2_in_negdiff": 986,
+     "top_pos": [
+      "close",
+      "known",
+      "scheduled",
+      "commercial",
+      "Group"
+     ],
+     "top_neg": [
+      "defeated",
+      "landed",
+      "cap",
+      "tracks",
+      "Blues"
+     ]
+    },
+    {
+     "model": "smol",
+     "pair": 25,
+     "cos_pair": 0.5263171626072709,
+     "rank_w1_in_diff": null,
+     "rank_w2_in_negdiff": null,
+     "top_pos": [
+      "completed",
+      "known",
+      "complete",
+      "well",
+      "operations"
+     ],
+     "top_neg": [
+      "enough",
+      "room",
+      "Lisbon",
+      "Hamburg",
+      "commercial"
+     ]
+    },
+    {
+     "model": "smol",
+     "pair": 26,
+     "cos_pair": 0.9044917859959143,
+     "rank_w1_in_diff": 446,
+     "rank_w2_in_negdiff": 873,
+     "top_pos": [
+      "declared",
+      "rated",
+      "determined",
+      "attacked",
+      "included"
+     ],
+     "top_neg": [
+      "someone",
+      "District",
+      "group",
+      "Circle",
+      "community"
+     ]
+    },
+    {
+     "model": "smol",
+     "pair": 27,
+     "cos_pair": 0.7634709438769123,
+     "rank_w1_in_diff": 561,
+     "rank_w2_in_negdiff": 8,
+     "top_pos": [
+      "possible",
+      "capital",
+      "country",
+      "required",
+      "state"
+     ],
+     "top_neg": [
+      "wooden",
+      "oak",
+      "patrols",
+      "divisions",
+      "tour"
+     ]
+    },
+    {
+     "model": "smol",
+     "pair": 28,
+     "cos_pair": 0.9601004752171539,
+     "rank_w1_in_diff": 142,
+     "rank_w2_in_negdiff": 1474,
+     "top_pos": [
+      "favor",
+      "line",
+      "action",
+      "someone",
+      "favorite"
+     ],
+     "top_neg": [
+      "approach",
+      "structures",
+      "winds",
+      "militia",
+      "Infantry"
+     ]
+    },
+    {
+     "model": "smol",
+     "pair": 29,
+     "cos_pair": 0.9351402584628138,
+     "rank_w1_in_diff": 933,
+     "rank_w2_in_negdiff": 1369,
+     "top_pos": [
+      "complex",
+      "Empire",
+      "pieces",
+      "hold",
+      "face"
+     ],
+     "top_neg": [
+      "roles",
+      "role",
+      "included",
+      "others",
+      "fact"
+     ]
+    }
+   ]
+  },
+  "final": {
+   "summary": {
+    "qwen": {
+     "n_pairs_scored": 29,
+     "mean_pair_cos": 0.8332240056103406,
+     "frac_w1_top10": 0.6206896551724138,
+     "frac_w2_top10": 0.7241379310344828,
+     "frac_both_top10": 0.4827586206896552,
+     "frac_both_top50": 0.5517241379310345,
+     "median_rank_w1": 4.0,
+     "median_rank_w2": 2.0,
+     "frac_pairs_cos_below_0.9": 0.7
+    },
+    "smol": {
+     "n_pairs_scored": 29,
+     "mean_pair_cos": 0.8461849229770967,
+     "frac_w1_top10": 0.6206896551724138,
+     "frac_w2_top10": 0.7931034482758621,
+     "frac_both_top10": 0.4827586206896552,
+     "frac_both_top50": 0.6896551724137931,
+     "median_rank_w1": 5.0,
+     "median_rank_w2": 1.0,
+     "frac_pairs_cos_below_0.9": 0.7
+    },
+    "cross_diff_matched_cos": 0.36616780098466056,
+    "cross_diff_mismatched_cos": 0.0008591329784776718,
+    "cross_diff_A2B_top1": 0.9666666666666667,
+    "chance": 0.03333333333333333
+   },
+   "rows": [
+    {
+     "model": "qwen",
+     "pair": 0,
+     "cos_pair": 0.8897400548239864,
+     "rank_w1_in_diff": 1,
+     "rank_w2_in_negdiff": 2,
+     "top_pos": [
+      "Paris",
+      "France",
+      "French",
+      "lobster",
+      "Marie"
+     ],
+     "top_neg": [
+      "Hamburg",
+      "Berlin",
+      "Germany",
+      "German",
+      "West"
+     ]
+    },
+    {
+     "model": "qwen",
+     "pair": 1,
+     "cos_pair": 0.9079105905575848,
+     "rank_w1_in_diff": 4,
+     "rank_w2_in_negdiff": 1,
+     "top_pos": [
+      "Wisconsin",
+      "Italy",
+      "Italian",
+      "Rome",
+      "Lake"
+     ],
+     "top_neg": [
+      "Madrid",
+      "Spain",
+      "Spanish",
+      "Mexico",
+      "Manila"
+     ]
+    },
+    {
+     "model": "qwen",
+     "pair": 2,
+     "cos_pair": 0.8126149284464369,
+     "rank_w1_in_diff": 2,
+     "rank_w2_in_negdiff": 1,
+     "top_pos": [
+      "Japan",
+      "Tokyo",
+      "Japanese",
+      "Henderson",
+      "hit"
+     ],
+     "top_neg": [
+      "Moscow",
+      "Russian",
+      "Catherine",
+      "federal",
+      "Peter"
+     ]
+    },
+    {
+     "model": "qwen",
+     "pair": 3,
+     "cos_pair": 0.7687353601940159,
+     "rank_w1_in_diff": 1,
+     "rank_w2_in_negdiff": 2,
+     "top_pos": [
+      "Cairo",
+      "Egypt",
+      "Arabic",
+      "Upper",
+      "campaign"
+     ],
+     "top_neg": [
+      "economy",
+      "Athens",
+      "Korea",
+      "Greece",
+      "Islands"
+     ]
+    },
+    {
+     "model": "qwen",
+     "pair": 4,
+     "cos_pair": 0.847361245373029,
+     "rank_w1_in_diff": 3,
+     "rank_w2_in_negdiff": 1,
+     "top_pos": [
+      "England",
+      "York",
+      "London",
+      "Lamb",
+      "Oxford"
+     ],
+     "top_neg": [
+      "Dublin",
+      "Ireland",
+      "State",
+      "Island",
+      "segment"
+     ]
+    },
+    {
+     "model": "qwen",
+     "pair": 5,
+     "cos_pair": 0.8925073850436707,
+     "rank_w1_in_diff": 5,
+     "rank_w2_in_negdiff": 1,
+     "top_pos": [
+      "Hamburg",
+      "Berlin",
+      "Germany",
+      "Swedish",
+      "German"
+     ],
+     "top_neg": [
+      "Italian",
+      "Italy",
+      "Rome",
+      "cap",
+      "Spain"
+     ]
+    },
+    {
+     "model": "qwen",
+     "pair": 6,
+     "cos_pair": 0.8540602655840757,
+     "rank_w1_in_diff": 3,
+     "rank_w2_in_negdiff": 1,
+     "top_pos": [
+      "Paris",
+      "France",
+      "French",
+      "Guinea",
+      "Spain"
+     ],
+     "top_neg": [
+      "Japanese",
+      "Tokyo",
+      "Japan",
+      "Korea",
+      "Korean"
+     ]
+    },
+    {
+     "model": "qwen",
+     "pair": 7,
+     "cos_pair": 0.9713022387033353,
+     "rank_w1_in_diff": 290,
+     "rank_w2_in_negdiff": 108,
+     "top_pos": [
+      "Churchill",
+      "Jersey",
+      "Cardiff",
+      "Trail",
+      "junction"
+     ],
+     "top_neg": [
+      "piano",
+      "bass",
+      "Moon",
+      "Music",
+      "dancers"
+     ]
+    },
+    {
+     "model": "qwen",
+     "pair": 8,
+     "cos_pair": 0.9584933452731181,
+     "rank_w1_in_diff": 1,
+     "rank_w2_in_negdiff": 1,
+     "top_pos": [
+      "cow",
+      "producer",
+      "films",
+      "voted",
+      "response"
+     ],
+     "top_neg": [
+      "chicken",
+      "Guatemala",
+      "Turkey",
+      "flying",
+      "flight"
+     ]
+    },
+    {
+     "model": "qwen",
+     "pair": 9,
+     "cos_pair": 0.8620458700228811,
+     "rank_w1_in_diff": 813,
+     "rank_w2_in_negdiff": 7,
+     "top_pos": [
+      "practice",
+      "Paul",
+      "Angeles",
+      "formed",
+      "division"
+     ],
+     "top_neg": [
+      "live",
+      "young",
+      "Live",
+      "native",
+      "dead"
+     ]
+    },
+    {
+     "model": "qwen",
+     "pair": 10,
+     "cos_pair": 0.8233326617261825,
+     "rank_w1_in_diff": 306,
+     "rank_w2_in_negdiff": 96,
+     "top_pos": [
+      "System",
+      "transport",
+      "Live",
+      "Williams",
+      "Press"
+     ],
+     "top_neg": [
+      "winter",
+      "long",
+      "ever",
+      "falling",
+      "growing"
+     ]
+    },
+    {
+     "model": "qwen",
+     "pair": 11,
+     "cos_pair": 0.6786991767774218,
+     "rank_w1_in_diff": 1,
+     "rank_w2_in_negdiff": 1,
+     "top_pos": [
+      "cold",
+      "winter",
+      "Hot",
+      "steam",
+      "summer"
+     ],
+     "top_neg": [
+      "down",
+      "votes",
+      "vote",
+      "Line",
+      "line"
+     ]
+    },
+    {
+     "model": "qwen",
+     "pair": 12,
+     "cos_pair": 0.6589825061211929,
+     "rank_w1_in_diff": 1,
+     "rank_w2_in_negdiff": 1,
+     "top_pos": [
+      "decrease",
+      "increase",
+      "increased",
+      "reduced",
+      "smaller"
+     ],
+     "top_neg": [
+      "false",
+      "accused",
+      "lies",
+      "alleged",
+      "conspiracy"
+     ]
+    },
+    {
+     "model": "qwen",
+     "pair": 13,
+     "cos_pair": 0.9691891276071568,
+     "rank_w1_in_diff": 1,
+     "rank_w2_in_negdiff": 1997,
+     "top_pos": [
+      "seven",
+      "says",
+      "six",
+      "nine",
+      "tried"
+     ],
+     "top_neg": [
+      "artist",
+      "Free",
+      "Wing",
+      "Flight",
+      "Forest"
+     ]
+    },
+    {
+     "model": "qwen",
+     "pair": 14,
+     "cos_pair": 0.7583029425310948,
+     "rank_w1_in_diff": 6,
+     "rank_w2_in_negdiff": 142,
+     "top_pos": [
+      "falling",
+      "letter",
+      "down",
+      "arrangement",
+      "wind"
+     ],
+     "top_neg": [
+      "Nevada",
+      "Oregon",
+      "Texas",
+      "job",
+      "Project"
+     ]
+    },
+    {
+     "model": "qwen",
+     "pair": 15,
+     "cos_pair": 0.9107763179995454,
+     "rank_w1_in_diff": 97,
+     "rank_w2_in_negdiff": 3,
+     "top_pos": [
+      "cast",
+      "fall",
+      "August",
+      "America",
+      "Athens"
+     ],
+     "top_neg": [
+      "spring",
+      "January",
+      "winter",
+      "Company",
+      "peace"
+     ]
+    },
+    {
+     "model": "qwen",
+     "pair": 16,
+     "cos_pair": 0.7459732477925193,
+     "rank_w1_in_diff": 1833,
+     "rank_w2_in_negdiff": 2,
+     "top_pos": [
+      "featured",
+      "full",
+      "short",
+      "killing",
+      "history"
+     ],
+     "top_neg": [
+      "diameter",
+      "Jupiter",
+      "Exit",
+      "Order",
+      "Impact"
+     ]
+    },
+    {
+     "model": "qwen",
+     "pair": 17,
+     "cos_pair": 0.9892391552800852,
+     "rank_w1_in_diff": 1,
+     "rank_w2_in_negdiff": 1,
+     "top_pos": [
+      "piano",
+      "Polish",
+      "Poland",
+      "Warsaw",
+      "Russian"
+     ],
+     "top_neg": [
+      "guitar",
+      "Bond",
+      "Oregon",
+      "Marines",
+      "trade"
+     ]
+    },
+    {
+     "model": "qwen",
+     "pair": 18,
+     "cos_pair": 0.9862837292028321,
+     "rank_w1_in_diff": 1,
+     "rank_w2_in_negdiff": 1,
+     "top_pos": [
+      "apple",
+      "Township",
+      "Air",
+      "rather",
+      "Scottish"
+     ],
+     "top_neg": [
+      "banana",
+      "tropical",
+      "Tropical",
+      "Indonesia",
+      "Zambia"
+     ]
+    },
+    {
+     "model": "qwen",
+     "pair": 19,
+     "cos_pair": 0.9699714162971804,
+     "rank_w1_in_diff": 74,
+     "rank_w2_in_negdiff": 9,
+     "top_pos": [
+      "Indies",
+      "Netherlands",
+      "India",
+      "Portugal",
+      "Europe"
+     ],
+     "top_neg": [
+      "find",
+      "help",
+      "show",
+      "replace",
+      "serve"
+     ]
+    },
+    {
+     "model": "qwen",
+     "pair": 20,
+     "cos_pair": 0.9703745897536807,
+     "rank_w1_in_diff": 261,
+     "rank_w2_in_negdiff": 84,
+     "top_pos": [
+      "increase",
+      "kilometres",
+      "anniversary",
+      "converted",
+      "want"
+     ],
+     "top_neg": [
+      "class",
+      "shear",
+      "anything",
+      "others",
+      "rare"
+     ]
+    },
+    {
+     "model": "qwen",
+     "pair": 21,
+     "cos_pair": 0.888182358757652,
+     "rank_w1_in_diff": 3,
+     "rank_w2_in_negdiff": 142,
+     "top_pos": [
+      "Hospital",
+      "General",
+      "hospital",
+      "general",
+      "medical"
+     ],
+     "top_neg": [
+      "library",
+      "square",
+      "row",
+      "storyline",
+      "sequence"
+     ]
+    },
+    {
+     "model": "qwen",
+     "pair": 22,
+     "cos_pair": 0.8218048254643522,
+     "rank_w1_in_diff": 15,
+     "rank_w2_in_negdiff": 186,
+     "top_pos": [
+      "office",
+      "break",
+      "Turkish",
+      "Portugal",
+      "university"
+     ],
+     "top_neg": [
+      "acres",
+      "stars",
+      "human",
+      "wheel",
+      "winds"
+     ]
+    },
+    {
+     "model": "qwen",
+     "pair": 23,
+     "cos_pair": 0.8592167608161722,
+     "rank_w1_in_diff": 7,
+     "rank_w2_in_negdiff": 112,
+     "top_pos": [
+      "figure",
+      "Tree",
+      "Airport",
+      "Forest",
+      "building"
+     ],
+     "top_neg": [
+      "rulers",
+      "revealed",
+      "good",
+      "tanks",
+      "resumed"
+     ]
+    },
+    {
+     "model": "qwen",
+     "pair": 24,
+     "cos_pair": 0.47533808631065677,
+     "rank_w1_in_diff": 23,
+     "rank_w2_in_negdiff": 3,
+     "top_pos": [
+      "tanks",
+      "engine",
+      "passengers",
+      "performance",
+      "brake"
+     ],
+     "top_neg": [
+      "Line",
+      "line",
+      "legs",
+      "Mouth",
+      "pine"
+     ]
+    },
+    {
+     "model": "qwen",
+     "pair": 25,
+     "cos_pair": 0.6315909517438688,
+     "rank_w1_in_diff": null,
+     "rank_w2_in_negdiff": null,
+     "top_pos": [
+      "acres",
+      "twelve",
+      "size",
+      "miles",
+      "inches"
+     ],
+     "top_neg": [
+      "Campaign",
+      "fired",
+      "work",
+      "enough",
+      "Tag"
+     ]
+    },
+    {
+     "model": "qwen",
+     "pair": 26,
+     "cos_pair": 0.7511684650007087,
+     "rank_w1_in_diff": 2,
+     "rank_w2_in_negdiff": 2,
+     "top_pos": [
+      "political",
+      "peace",
+      "restoration",
+      "arms",
+      "largely"
+     ],
+     "top_neg": [
+      "player",
+      "score",
+      "team",
+      "matches",
+      "boss"
+     ]
+    },
+    {
+     "model": "qwen",
+     "pair": 27,
+     "cos_pair": 0.790014071183278,
+     "rank_w1_in_diff": 18,
+     "rank_w2_in_negdiff": 1,
+     "top_pos": [
+      "signature",
+      "capital",
+      "look",
+      "request",
+      "character"
+     ],
+     "top_neg": [
+      "knife",
+      "saw",
+      "Edge",
+      "matches",
+      "shear"
+     ]
+    },
+    {
+     "model": "qwen",
+     "pair": 28,
+     "cos_pair": 0.6617684067154763,
+     "rank_w1_in_diff": 1,
+     "rank_w2_in_negdiff": 1,
+     "top_pos": [
+      "Paris",
+      "metal",
+      "French",
+      "France",
+      "Station"
+     ],
+     "top_neg": [
+      "Rome",
+      "Zimbabwe",
+      "Greece",
+      "Italy",
+      "Theatre"
+     ]
+    },
+    {
+     "model": "qwen",
+     "pair": 29,
+     "cos_pair": 0.8917400872070235,
+     "rank_w1_in_diff": 196,
+     "rank_w2_in_negdiff": 4,
+     "top_pos": [
+      "York",
+      "England",
+      "William",
+      "business",
+      "king"
+     ],
+     "top_neg": [
+      "Warsaw",
+      "Berlin",
+      "Swedish",
+      "German",
+      "Germany"
+     ]
+    },
+    {
+     "model": "smol",
+     "pair": 0,
+     "cos_pair": 0.8874706820906287,
+     "rank_w1_in_diff": 2,
+     "rank_w2_in_negdiff": 1,
+     "top_pos": [
+      "France",
+      "Paris",
+      "French",
+      "Plaza",
+      "frame"
+     ],
+     "top_neg": [
+      "Berlin",
+      "Hamburg",
+      "Germany",
+      "German",
+      "course"
+     ]
+    },
+    {
+     "model": "smol",
+     "pair": 1,
+     "cos_pair": 0.8625496913438133,
+     "rank_w1_in_diff": 5,
+     "rank_w2_in_negdiff": 1,
+     "top_pos": [
+      "Italy",
+      "Italian",
+      "wheel",
+      "Lake",
+      "Rome"
+     ],
+     "top_neg": [
+      "Madrid",
+      "Spain",
+      "Plaza",
+      "Spanish",
+      "Guinea"
+     ]
+    },
+    {
+     "model": "smol",
+     "pair": 2,
+     "cos_pair": 0.8383947510011771,
+     "rank_w1_in_diff": 1,
+     "rank_w2_in_negdiff": 1,
+     "top_pos": [
+      "Tokyo",
+      "Japan",
+      "Japanese",
+      "anime",
+      "Douglas"
+     ],
+     "top_neg": [
+      "Moscow",
+      "Russia",
+      "Russian",
+      "Polish",
+      "European"
+     ]
+    },
+    {
+     "model": "smol",
+     "pair": 3,
+     "cos_pair": 0.8120652364194754,
+     "rank_w1_in_diff": 1,
+     "rank_w2_in_negdiff": 1,
+     "top_pos": [
+      "Cairo",
+      "Ward",
+      "Egypt",
+      "Arabic",
+      "governor"
+     ],
+     "top_neg": [
+      "Athens",
+      "Greece",
+      "Portugal",
+      "mainland",
+      "Europe"
+     ]
+    },
+    {
+     "model": "smol",
+     "pair": 4,
+     "cos_pair": 0.8575925149102188,
+     "rank_w1_in_diff": 9,
+     "rank_w2_in_negdiff": 1,
+     "top_pos": [
+      "Salisbury",
+      "England",
+      "Oxford",
+      "edge",
+      "Britain"
+     ],
+     "top_neg": [
+      "Dublin",
+      "Ireland",
+      "Sullivan",
+      "cargo",
+      "sect"
+     ]
+    },
+    {
+     "model": "smol",
+     "pair": 5,
+     "cos_pair": 0.8941777740091085,
+     "rank_w1_in_diff": 3,
+     "rank_w2_in_negdiff": 3,
+     "top_pos": [
+      "Nazi",
+      "Hamburg",
+      "German",
+      "Dutch",
+      "Germany"
+     ],
+     "top_neg": [
+      "Rome",
+      "Italy",
+      "Italian",
+      "metres",
+      "square"
+     ]
+    },
+    {
+     "model": "smol",
+     "pair": 6,
+     "cos_pair": 0.8362091576277416,
+     "rank_w1_in_diff": 3,
+     "rank_w2_in_negdiff": 1,
+     "top_pos": [
+      "France",
+      "Paris",
+      "French",
+      "Marie",
+      "Patrick"
+     ],
+     "top_neg": [
+      "Japanese",
+      "Tokyo",
+      "Japan",
+      "Korean",
+      "Korea"
+     ]
+    },
+    {
+     "model": "smol",
+     "pair": 7,
+     "cos_pair": 0.9658732146987589,
+     "rank_w1_in_diff": 50,
+     "rank_w2_in_negdiff": 9,
+     "top_pos": [
+      "artillery",
+      "guns",
+      "Spain",
+      "Portugal",
+      "fired"
+     ],
+     "top_neg": [
+      "mother",
+      "queen",
+      "daughter",
+      "parents",
+      "Jane"
+     ]
+    },
+    {
+     "model": "smol",
+     "pair": 8,
+     "cos_pair": 0.9353448713386362,
+     "rank_w1_in_diff": 42,
+     "rank_w2_in_negdiff": 1,
+     "top_pos": [
+      "Czech",
+      "won",
+      "community",
+      "River",
+      "Indians"
+     ],
+     "top_neg": [
+      "chicken",
+      "laid",
+      "Matthews",
+      "Flight",
+      "Parker"
+     ]
+    },
+    {
+     "model": "smol",
+     "pair": 9,
+     "cos_pair": 0.8864599798720503,
+     "rank_w1_in_diff": 553,
+     "rank_w2_in_negdiff": 1,
+     "top_pos": [
+      "frame",
+      "Theatre",
+      "hour",
+      "Berlin",
+      "effect"
+     ],
+     "top_neg": [
+      "green",
+      "policy",
+      "yards",
+      "need",
+      "Kentucky"
+     ]
+    },
+    {
+     "model": "smol",
+     "pair": 10,
+     "cos_pair": 0.8925041900739521,
+     "rank_w1_in_diff": 4,
+     "rank_w2_in_negdiff": 12,
+     "top_pos": [
+      "Guinea",
+      "blood",
+      "wounded",
+      "red",
+      "iron"
+     ],
+     "top_neg": [
+      "winter",
+      "summit",
+      "Northern",
+      "lands",
+      "Boulder"
+     ]
+    },
+    {
+     "model": "smol",
+     "pair": 11,
+     "cos_pair": 0.6850302863946651,
+     "rank_w1_in_diff": 1,
+     "rank_w2_in_negdiff": 1,
+     "top_pos": [
+      "cold",
+      "steam",
+      "Swedish",
+      "tropical",
+      "summer"
+     ],
+     "top_neg": [
+      "down",
+      "towards",
+      "rights",
+      "forward",
+      "height"
+     ]
+    },
+    {
+     "model": "smol",
+     "pair": 12,
+     "cos_pair": 0.5278089239423127,
+     "rank_w1_in_diff": 1,
+     "rank_w2_in_negdiff": 1,
+     "top_pos": [
+      "decrease",
+      "increase",
+      "decline",
+      "withdraw",
+      "loss"
+     ],
+     "top_neg": [
+      "false",
+      "lies",
+      "believing",
+      "white",
+      "art"
+     ]
+    },
+    {
+     "model": "smol",
+     "pair": 13,
+     "cos_pair": 0.859230966343097,
+     "rank_w1_in_diff": 22,
+     "rank_w2_in_negdiff": 9,
+     "top_pos": [
+      "away",
+      "others",
+      "Williams",
+      "difficult",
+      "Jersey"
+     ],
+     "top_neg": [
+      "ten",
+      "place",
+      "Front",
+      "Ten",
+      "Afghanistan"
+     ]
+    },
+    {
+     "model": "smol",
+     "pair": 14,
+     "cos_pair": 0.7636799941234098,
+     "rank_w1_in_diff": 2,
+     "rank_w2_in_negdiff": 799,
+     "top_pos": [
+      "storm",
+      "rain",
+      "wind",
+      "down",
+      "December"
+     ],
+     "top_neg": [
+      "populations",
+      "medical",
+      "concerns",
+      "response",
+      "cases"
+     ]
+    },
+    {
+     "model": "smol",
+     "pair": 15,
+     "cos_pair": 0.964637272086917,
+     "rank_w1_in_diff": 1454,
+     "rank_w2_in_negdiff": 1,
+     "top_pos": [
+      "staff",
+      "schools",
+      "Staff",
+      "Angeles",
+      "critical"
+     ],
+     "top_neg": [
+      "winter",
+      "Norse",
+      "morning",
+      "Chinese",
+      "December"
+     ]
+    },
+    {
+     "model": "smol",
+     "pair": 16,
+     "cos_pair": 0.7714201018886404,
+     "rank_w1_in_diff": 708,
+     "rank_w2_in_negdiff": 1,
+     "top_pos": [
+      "losing",
+      "dry",
+      "culture",
+      "killing",
+      "landing"
+     ],
+     "top_neg": [
+      "Jupiter",
+      "performed",
+      "performances",
+      "performance",
+      "Tree"
+     ]
+    },
+    {
+     "model": "smol",
+     "pair": 17,
+     "cos_pair": 0.9900200492257556,
+     "rank_w1_in_diff": 1,
+     "rank_w2_in_negdiff": 1,
+     "top_pos": [
+      "piano",
+      "Beijing",
+      "Marie",
+      "Moscow",
+      "Chinese"
+     ],
+     "top_neg": [
+      "guitar",
+      "Gulf",
+      "Guatemala",
+      "Texas",
+      "rocks"
+     ]
+    },
+    {
+     "model": "smol",
+     "pair": 18,
+     "cos_pair": 0.9872786743359097,
+     "rank_w1_in_diff": 1,
+     "rank_w2_in_negdiff": 1,
+     "top_pos": [
+      "apple",
+      "oak",
+      "Fox",
+      "pie",
+      "city"
+     ],
+     "top_neg": [
+      "banana",
+      "Burma",
+      "Tropical",
+      "Zambia",
+      "Zimbabwe"
+     ]
+    },
+    {
+     "model": "smol",
+     "pair": 19,
+     "cos_pair": 0.9827701216979162,
+     "rank_w1_in_diff": 90,
+     "rank_w2_in_negdiff": 5,
+     "top_pos": [
+      "Nations",
+      "Africa",
+      "America",
+      "Europe",
+      "Indonesia"
+     ],
+     "top_neg": [
+      "park",
+      "Park",
+      "behind",
+      "cars",
+      "lake"
+     ]
+    },
+    {
+     "model": "smol",
+     "pair": 20,
+     "cos_pair": 0.98616249203508,
+     "rank_w1_in_diff": 109,
+     "rank_w2_in_negdiff": 24,
+     "top_pos": [
+      "wife",
+      "level",
+      "divisions",
+      "infantry",
+      "Yuan"
+     ],
+     "top_neg": [
+      "shear",
+      "Australian",
+      "colonial",
+      "colonies",
+      "Victorian"
+     ]
+    },
+    {
+     "model": "smol",
+     "pair": 21,
+     "cos_pair": 0.9083352563874243,
+     "rank_w1_in_diff": 8,
+     "rank_w2_in_negdiff": 9,
+     "top_pos": [
+      "operating",
+      "operated",
+      "operation",
+      "Operation",
+      "operations"
+     ],
+     "top_neg": [
+      "class",
+      "subject",
+      "activity",
+      "sense",
+      "History"
+     ]
+    },
+    {
+     "model": "smol",
+     "pair": 22,
+     "cos_pair": 0.8115828527894708,
+     "rank_w1_in_diff": 5,
+     "rank_w2_in_negdiff": 171,
+     "top_pos": [
+      "Czech",
+      "Arabic",
+      "British",
+      "Italian",
+      "morning"
+     ],
+     "top_neg": [
+      "pitch",
+      "bass",
+      "critical",
+      "position",
+      "king"
+     ]
+    },
+    {
+     "model": "smol",
+     "pair": 23,
+     "cos_pair": 0.9279940248197981,
+     "rank_w1_in_diff": 12,
+     "rank_w2_in_negdiff": 46,
+     "top_pos": [
+      "Flight",
+      "winds",
+      "aircraft",
+      "wind",
+      "Infantry"
+     ],
+     "top_neg": [
+      "tanks",
+      "boats",
+      "surface",
+      "boat",
+      "schools"
+     ]
+    },
+    {
+     "model": "smol",
+     "pair": 24,
+     "cos_pair": 0.6013732829009851,
+     "rank_w1_in_diff": 9,
+     "rank_w2_in_negdiff": 5,
+     "top_pos": [
+      "brake",
+      "speed",
+      "driven",
+      "drive",
+      "available"
+     ],
+     "top_neg": [
+      "build",
+      "long",
+      "Mouth",
+      "short",
+      "legs"
+     ]
+    },
+    {
+     "model": "smol",
+     "pair": 25,
+     "cos_pair": 0.57584410094952,
+     "rank_w1_in_diff": null,
+     "rank_w2_in_negdiff": null,
+     "top_pos": [
+      "monument",
+      "Hill",
+      "Lake",
+      "Sea",
+      "Railroad"
+     ],
+     "top_neg": [
+      "fired",
+      "guns",
+      "engine",
+      "printing",
+      "going"
+     ]
+    },
+    {
+     "model": "smol",
+     "pair": 26,
+     "cos_pair": 0.8922175897072699,
+     "rank_w1_in_diff": 2,
+     "rank_w2_in_negdiff": 13,
+     "top_pos": [
+      "terms",
+      "peace",
+      "July",
+      "Peninsula",
+      "November"
+     ],
+     "top_neg": [
+      "player",
+      "scored",
+      "teams",
+      "team",
+      "players"
+     ]
+    },
+    {
+     "model": "smol",
+     "pair": 27,
+     "cos_pair": 0.872826684927857,
+     "rank_w1_in_diff": 104,
+     "rank_w2_in_negdiff": 1,
+     "top_pos": [
+      "subject",
+      "title",
+      "Black",
+      "Supreme",
+      "cover"
+     ],
+     "top_neg": [
+      "knife",
+      "saw",
+      "mill",
+      "spikes",
+      "edge"
+     ]
+    },
+    {
+     "model": "smol",
+     "pair": 28,
+     "cos_pair": 0.785019657097331,
+     "rank_w1_in_diff": 1,
+     "rank_w2_in_negdiff": 1,
+     "top_pos": [
+      "Paris",
+      "Marie",
+      "French",
+      "France",
+      "Chan"
+     ],
+     "top_neg": [
+      "Rome",
+      "Matthews",
+      "bought",
+      "purchased",
+      "inland"
+     ]
+    },
+    {
+     "model": "smol",
+     "pair": 29,
+     "cos_pair": 0.8236732942739808,
+     "rank_w1_in_diff": 846,
+     "rank_w2_in_negdiff": 2,
+     "top_pos": [
+      "yards",
+      "stocks",
+      "London",
+      "Jack",
+      "king"
+     ],
+     "top_neg": [
+      "Berlin",
+      "German",
+      "Nazi",
+      "piano",
+      "Germany"
+     ]
+    }
+   ]
+  }
+ }
+}

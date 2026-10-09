@@ -1,0 +1,56 @@
+{
+ "para_lexical": {
+  "para_cos": 0.4788997576940178,
+  "random_cos": 0.004143693629633615,
+  "frac_prompts_with_no_anchor_word": 0.1,
+  "partner_top1": 0.625
+ },
+ "text->qwen|multihop|jlens-centred-dense": {
+  "top1": 0.12903225806451613,
+  "chance": 0.010752688172043012
+ },
+ "text->qwen|multihop|final-centred-dense": {
+  "top1": 0.2903225806451613,
+  "chance": 0.010752688172043012
+ },
+ "text->qwen|assoc|jlens-centred-dense": {
+  "top1": 0.0784313725490196,
+  "chance": 0.00980392156862745
+ },
+ "text->qwen|assoc|final-centred-dense": {
+  "top1": 0.17647058823529413,
+  "chance": 0.00980392156862745
+ },
+ "text->qwen|para|jlens-centred-dense": {
+  "top1": 0.225,
+  "chance": 0.0125
+ },
+ "text->qwen|para|final-centred-dense": {
+  "top1": 0.4875,
+  "chance": 0.0125
+ },
+ "text->smol|multihop|jlens-centred-dense": {
+  "top1": 0.21505376344086022,
+  "chance": 0.010752688172043012
+ },
+ "text->smol|multihop|final-centred-dense": {
+  "top1": 0.27956989247311825,
+  "chance": 0.010752688172043012
+ },
+ "text->smol|assoc|jlens-centred-dense": {
+  "top1": 0.21568627450980393,
+  "chance": 0.00980392156862745
+ },
+ "text->smol|assoc|final-centred-dense": {
+  "top1": 0.38235294117647056,
+  "chance": 0.00980392156862745
+ },
+ "text->smol|para|jlens-centred-dense": {
+  "top1": 0.4,
+  "chance": 0.0125
+ },
+ "text->smol|para|final-centred-dense": {
+  "top1": 0.4875,
+  "chance": 0.0125
+ }
+}

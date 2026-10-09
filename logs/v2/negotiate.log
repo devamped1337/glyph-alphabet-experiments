@@ -1,0 +1,75 @@
+readout vocab {'qwen': (2199, 896), 'smol': (2199, 960)} 5s
+R1: live=255 fit_on=255 accepted=175 passed=175 probation=0 meaning=0.753 rt=0.827 geom=0.933 read=0.984 (A 0.99 B 0.99) RSA=0.933 kept_rel=['adj->opposite', 'country->capital', 'country->city(non-capital)', 'country->language', 'male->female'] merged=[] dropped=0 8s
+    country->capital {'n_pairs': 24, 'mean_offset_cos_AB': 0.987, 'per_pair_offset_cos_AB': 0.877, 'cross_model_LOO_analogy_acc': 0.771, 'within_A_consistency': 0.915, 'chance_analogy': 0.042}
+    country->language {'n_pairs': 17, 'mean_offset_cos_AB': 0.986, 'per_pair_offset_cos_AB': 0.882, 'cross_model_LOO_analogy_acc': 0.706, 'within_A_consistency': 0.913, 'chance_analogy': 0.059}
+    male->female {'n_pairs': 10, 'mean_offset_cos_AB': 0.877, 'per_pair_offset_cos_AB': 0.512, 'cross_model_LOO_analogy_acc': 0.95, 'within_A_consistency': 0.808, 'chance_analogy': 0.1}
+    adj->comparative {'n_pairs': 6, 'mean_offset_cos_AB': 0.884, 'per_pair_offset_cos_AB': 0.569, 'cross_model_LOO_analogy_acc': 0.25, 'within_A_consistency': 0.568, 'chance_analogy': 0.167}
+    adj->opposite {'n_pairs': 12, 'mean_offset_cos_AB': 0.505, 'per_pair_offset_cos_AB': 0.171, 'cross_model_LOO_analogy_acc': 0.875, 'within_A_consistency': 0.394, 'chance_analogy': 0.083}
+    number->next {'n_pairs': 9, 'mean_offset_cos_AB': 0.47, 'per_pair_offset_cos_AB': 0.114, 'cross_model_LOO_analogy_acc': 0.056, 'within_A_consistency': -0.373, 'chance_analogy': 0.111}
+    country->city(non-capital) {'n_pairs': 6, 'mean_offset_cos_AB': 0.919, 'per_pair_offset_cos_AB': 0.717, 'cross_model_LOO_analogy_acc': 0.667, 'within_A_consistency': 0.787, 'chance_analogy': 0.167}
+R2: live=255 fit_on=175 accepted=186 passed=159 probation=27 meaning=0.773 rt=0.710 geom=0.988 read=0.988 (A 0.99 B 0.99) RSA=0.943 kept_rel=['adj->comparative', 'country->capital', 'country->city(non-capital)', 'country->language', 'male->female'] merged=[] dropped=0 10s
+    country->capital {'n_pairs': 24, 'mean_offset_cos_AB': 0.979, 'per_pair_offset_cos_AB': 0.863, 'cross_model_LOO_analogy_acc': 0.729, 'within_A_consistency': 0.896, 'chance_analogy': 0.042}
+    country->language {'n_pairs': 17, 'mean_offset_cos_AB': 0.983, 'per_pair_offset_cos_AB': 0.87, 'cross_model_LOO_analogy_acc': 0.765, 'within_A_consistency': 0.902, 'chance_analogy': 0.059}
+    male->female {'n_pairs': 10, 'mean_offset_cos_AB': 0.883, 'per_pair_offset_cos_AB': 0.558, 'cross_model_LOO_analogy_acc': 0.95, 'within_A_consistency': 0.841, 'chance_analogy': 0.1}
+    adj->comparative {'n_pairs': 6, 'mean_offset_cos_AB': 0.927, 'per_pair_offset_cos_AB': 0.548, 'cross_model_LOO_analogy_acc': 0.333, 'within_A_consistency': 0.541, 'chance_analogy': 0.167}
+    adj->opposite {'n_pairs': 12, 'mean_offset_cos_AB': 0.473, 'per_pair_offset_cos_AB': 0.205, 'cross_model_LOO_analogy_acc': 0.875, 'within_A_consistency': 0.366, 'chance_analogy': 0.083}
+    number->next {'n_pairs': 9, 'mean_offset_cos_AB': 0.507, 'per_pair_offset_cos_AB': 0.226, 'cross_model_LOO_analogy_acc': 0.056, 'within_A_consistency': -0.314, 'chance_analogy': 0.111}
+    country->city(non-capital) {'n_pairs': 6, 'mean_offset_cos_AB': 0.9, 'per_pair_offset_cos_AB': 0.695, 'cross_model_LOO_analogy_acc': 0.583, 'within_A_consistency': 0.761, 'chance_analogy': 0.167}
+R3: live=255 fit_on=186 accepted=187 passed=173 probation=14 meaning=0.800 rt=0.761 geom=0.988 read=0.992 (A 1.00 B 1.00) RSA=0.944 kept_rel=['adj->comparative', 'country->capital', 'country->city(non-capital)', 'country->language', 'male->female'] merged=[] dropped=56 12s
+    country->capital {'n_pairs': 24, 'mean_offset_cos_AB': 0.98, 'per_pair_offset_cos_AB': 0.869, 'cross_model_LOO_analogy_acc': 0.75, 'within_A_consistency': 0.901, 'chance_analogy': 0.042}
+    country->language {'n_pairs': 17, 'mean_offset_cos_AB': 0.988, 'per_pair_offset_cos_AB': 0.887, 'cross_model_LOO_analogy_acc': 0.765, 'within_A_consistency': 0.904, 'chance_analogy': 0.059}
+    male->female {'n_pairs': 10, 'mean_offset_cos_AB': 0.871, 'per_pair_offset_cos_AB': 0.541, 'cross_model_LOO_analogy_acc': 1.0, 'within_A_consistency': 0.832, 'chance_analogy': 0.1}
+    adj->comparative {'n_pairs': 6, 'mean_offset_cos_AB': 0.903, 'per_pair_offset_cos_AB': 0.577, 'cross_model_LOO_analogy_acc': 0.5, 'within_A_consistency': 0.58, 'chance_analogy': 0.167}
+    adj->opposite {'n_pairs': 12, 'mean_offset_cos_AB': 0.483, 'per_pair_offset_cos_AB': 0.132, 'cross_model_LOO_analogy_acc': 0.833, 'within_A_consistency': 0.358, 'chance_analogy': 0.083}
+    number->next {'n_pairs': 9, 'mean_offset_cos_AB': 0.515, 'per_pair_offset_cos_AB': 0.183, 'cross_model_LOO_analogy_acc': 0.111, 'within_A_consistency': -0.374, 'chance_analogy': 0.111}
+    country->city(non-capital) {'n_pairs': 6, 'mean_offset_cos_AB': 0.927, 'per_pair_offset_cos_AB': 0.72, 'cross_model_LOO_analogy_acc': 0.583, 'within_A_consistency': 0.785, 'chance_analogy': 0.167}
+R4: live=199 fit_on=187 accepted=191 passed=177 probation=14 meaning=0.905 rt=0.950 geom=0.995 read=1.000 (A 1.00 B 1.00) RSA=0.937 kept_rel=['adj->comparative', 'country->capital', 'country->city(non-capital)', 'country->language', 'male->female'] merged=[] dropped=0 13s
+    country->capital {'n_pairs': 10, 'mean_offset_cos_AB': 0.978, 'per_pair_offset_cos_AB': 0.875, 'cross_model_LOO_analogy_acc': 0.75, 'within_A_consistency': 0.909, 'chance_analogy': 0.1}
+    country->language {'n_pairs': 13, 'mean_offset_cos_AB': 0.987, 'per_pair_offset_cos_AB': 0.887, 'cross_model_LOO_analogy_acc': 0.731, 'within_A_consistency': 0.915, 'chance_analogy': 0.077}
+    male->female {'n_pairs': 9, 'mean_offset_cos_AB': 0.871, 'per_pair_offset_cos_AB': 0.554, 'cross_model_LOO_analogy_acc': 1.0, 'within_A_consistency': 0.832, 'chance_analogy': 0.111}
+    adj->comparative {'n_pairs': 5, 'mean_offset_cos_AB': 0.903, 'per_pair_offset_cos_AB': 0.643, 'cross_model_LOO_analogy_acc': 0.6, 'within_A_consistency': 0.611, 'chance_analogy': 0.2}
+    adj->opposite {'n_pairs': 8, 'mean_offset_cos_AB': 0.372, 'per_pair_offset_cos_AB': 0.122, 'cross_model_LOO_analogy_acc': 0.812, 'within_A_consistency': 0.258, 'chance_analogy': 0.125}
+    country->city(non-capital) {'n_pairs': 5, 'mean_offset_cos_AB': 0.916, 'per_pair_offset_cos_AB': 0.712, 'cross_model_LOO_analogy_acc': 0.6, 'within_A_consistency': 0.776, 'chance_analogy': 0.2}
+R5: live=199 fit_on=191 accepted=188 passed=173 probation=15 meaning=0.884 rt=0.940 geom=1.000 read=1.000 (A 1.00 B 1.00) RSA=0.937 kept_rel=['adj->comparative', 'country->capital', 'country->city(non-capital)', 'country->language', 'male->female'] merged=[] dropped=2 15s
+    country->capital {'n_pairs': 10, 'mean_offset_cos_AB': 0.975, 'per_pair_offset_cos_AB': 0.873, 'cross_model_LOO_analogy_acc': 0.75, 'within_A_consistency': 0.911, 'chance_analogy': 0.1}
+    country->language {'n_pairs': 13, 'mean_offset_cos_AB': 0.987, 'per_pair_offset_cos_AB': 0.893, 'cross_model_LOO_analogy_acc': 0.769, 'within_A_consistency': 0.922, 'chance_analogy': 0.077}
+    male->female {'n_pairs': 9, 'mean_offset_cos_AB': 0.834, 'per_pair_offset_cos_AB': 0.526, 'cross_model_LOO_analogy_acc': 1.0, 'within_A_consistency': 0.827, 'chance_analogy': 0.111}
+    adj->comparative {'n_pairs': 5, 'mean_offset_cos_AB': 0.915, 'per_pair_offset_cos_AB': 0.65, 'cross_model_LOO_analogy_acc': 0.6, 'within_A_consistency': 0.649, 'chance_analogy': 0.2}
+    adj->opposite {'n_pairs': 8, 'mean_offset_cos_AB': 0.444, 'per_pair_offset_cos_AB': 0.222, 'cross_model_LOO_analogy_acc': 0.875, 'within_A_consistency': 0.286, 'chance_analogy': 0.125}
+    country->city(non-capital) {'n_pairs': 5, 'mean_offset_cos_AB': 0.916, 'per_pair_offset_cos_AB': 0.713, 'cross_model_LOO_analogy_acc': 0.7, 'within_A_consistency': 0.793, 'chance_analogy': 0.2}
+R6: live=197 fit_on=188 accepted=188 passed=178 probation=10 meaning=0.929 rt=0.954 geom=0.990 read=0.995 (A 0.99 B 1.00) RSA=0.936 kept_rel=['adj->comparative', 'country->capital', 'country->city(non-capital)', 'country->language', 'male->female'] merged=[] dropped=2 17s
+    country->capital {'n_pairs': 10, 'mean_offset_cos_AB': 0.98, 'per_pair_offset_cos_AB': 0.882, 'cross_model_LOO_analogy_acc': 0.75, 'within_A_consistency': 0.91, 'chance_analogy': 0.1}
+    country->language {'n_pairs': 13, 'mean_offset_cos_AB': 0.986, 'per_pair_offset_cos_AB': 0.887, 'cross_model_LOO_analogy_acc': 0.808, 'within_A_consistency': 0.911, 'chance_analogy': 0.077}
+    male->female {'n_pairs': 9, 'mean_offset_cos_AB': 0.877, 'per_pair_offset_cos_AB': 0.556, 'cross_model_LOO_analogy_acc': 1.0, 'within_A_consistency': 0.84, 'chance_analogy': 0.111}
+    adj->comparative {'n_pairs': 5, 'mean_offset_cos_AB': 0.882, 'per_pair_offset_cos_AB': 0.625, 'cross_model_LOO_analogy_acc': 0.5, 'within_A_consistency': 0.575, 'chance_analogy': 0.2}
+    adj->opposite {'n_pairs': 7, 'mean_offset_cos_AB': 0.375, 'per_pair_offset_cos_AB': 0.209, 'cross_model_LOO_analogy_acc': 0.929, 'within_A_consistency': 0.223, 'chance_analogy': 0.143}
+    country->city(non-capital) {'n_pairs': 5, 'mean_offset_cos_AB': 0.886, 'per_pair_offset_cos_AB': 0.692, 'cross_model_LOO_analogy_acc': 0.7, 'within_A_consistency': 0.793, 'chance_analogy': 0.2}
+R7: live=195 fit_on=188 accepted=186 passed=173 probation=13 meaning=0.918 rt=0.964 geom=0.990 read=0.995 (A 0.99 B 1.00) RSA=0.935 kept_rel=['adj->comparative', 'country->capital', 'country->city(non-capital)', 'country->language', 'male->female'] merged=[] dropped=2 19s
+    country->capital {'n_pairs': 10, 'mean_offset_cos_AB': 0.977, 'per_pair_offset_cos_AB': 0.875, 'cross_model_LOO_analogy_acc': 0.9, 'within_A_consistency': 0.906, 'chance_analogy': 0.1}
+    country->language {'n_pairs': 13, 'mean_offset_cos_AB': 0.987, 'per_pair_offset_cos_AB': 0.875, 'cross_model_LOO_analogy_acc': 0.731, 'within_A_consistency': 0.9, 'chance_analogy': 0.077}
+    male->female {'n_pairs': 9, 'mean_offset_cos_AB': 0.864, 'per_pair_offset_cos_AB': 0.543, 'cross_model_LOO_analogy_acc': 1.0, 'within_A_consistency': 0.837, 'chance_analogy': 0.111}
+    adj->comparative {'n_pairs': 5, 'mean_offset_cos_AB': 0.924, 'per_pair_offset_cos_AB': 0.593, 'cross_model_LOO_analogy_acc': 0.6, 'within_A_consistency': 0.602, 'chance_analogy': 0.2}
+    adj->opposite {'n_pairs': 5, 'mean_offset_cos_AB': 0.343, 'per_pair_offset_cos_AB': 0.086, 'cross_model_LOO_analogy_acc': 1.0, 'within_A_consistency': 0.41, 'chance_analogy': 0.2}
+    country->city(non-capital) {'n_pairs': 5, 'mean_offset_cos_AB': 0.925, 'per_pair_offset_cos_AB': 0.734, 'cross_model_LOO_analogy_acc': 0.7, 'within_A_consistency': 0.804, 'chance_analogy': 0.2}
+R8: live=193 fit_on=186 accepted=180 passed=175 probation=5 meaning=0.938 rt=0.959 geom=0.990 read=0.995 (A 1.00 B 0.99) RSA=0.935 kept_rel=['adj->comparative', 'country->capital', 'country->city(non-capital)', 'country->language', 'male->female'] merged=[] dropped=3 20s
+    country->capital {'n_pairs': 10, 'mean_offset_cos_AB': 0.979, 'per_pair_offset_cos_AB': 0.879, 'cross_model_LOO_analogy_acc': 0.8, 'within_A_consistency': 0.911, 'chance_analogy': 0.1}
+    country->language {'n_pairs': 13, 'mean_offset_cos_AB': 0.983, 'per_pair_offset_cos_AB': 0.862, 'cross_model_LOO_analogy_acc': 0.731, 'within_A_consistency': 0.901, 'chance_analogy': 0.077}
+    male->female {'n_pairs': 9, 'mean_offset_cos_AB': 0.887, 'per_pair_offset_cos_AB': 0.577, 'cross_model_LOO_analogy_acc': 1.0, 'within_A_consistency': 0.83, 'chance_analogy': 0.111}
+    adj->comparative {'n_pairs': 5, 'mean_offset_cos_AB': 0.914, 'per_pair_offset_cos_AB': 0.655, 'cross_model_LOO_analogy_acc': 0.7, 'within_A_consistency': 0.612, 'chance_analogy': 0.2}
+    adj->opposite {'n_pairs': 4, 'mean_offset_cos_AB': 0.487, 'per_pair_offset_cos_AB': 0.228, 'cross_model_LOO_analogy_acc': 1.0, 'within_A_consistency': 0.319, 'chance_analogy': 0.25}
+    country->city(non-capital) {'n_pairs': 5, 'mean_offset_cos_AB': 0.909, 'per_pair_offset_cos_AB': 0.708, 'cross_model_LOO_analogy_acc': 0.7, 'within_A_consistency': 0.802, 'chance_analogy': 0.2}
+R9: live=190 fit_on=180 accepted=186 passed=175 probation=11 meaning=0.937 rt=0.984 geom=0.989 read=0.995 (A 1.00 B 0.99) RSA=0.935 kept_rel=['adj->comparative', 'country->capital', 'country->city(non-capital)', 'country->language', 'male->female'] merged=[] dropped=1 22s
+    country->capital {'n_pairs': 10, 'mean_offset_cos_AB': 0.979, 'per_pair_offset_cos_AB': 0.873, 'cross_model_LOO_analogy_acc': 0.7, 'within_A_consistency': 0.908, 'chance_analogy': 0.1}
+    country->language {'n_pairs': 13, 'mean_offset_cos_AB': 0.983, 'per_pair_offset_cos_AB': 0.871, 'cross_model_LOO_analogy_acc': 0.692, 'within_A_consistency': 0.905, 'chance_analogy': 0.077}
+    male->female {'n_pairs': 9, 'mean_offset_cos_AB': 0.86, 'per_pair_offset_cos_AB': 0.532, 'cross_model_LOO_analogy_acc': 1.0, 'within_A_consistency': 0.829, 'chance_analogy': 0.111}
+    adj->comparative {'n_pairs': 5, 'mean_offset_cos_AB': 0.731, 'per_pair_offset_cos_AB': 0.527, 'cross_model_LOO_analogy_acc': 0.7, 'within_A_consistency': 0.525, 'chance_analogy': 0.2}
+    adj->opposite {'n_pairs': 3, 'mean_offset_cos_AB': 0.301, 'per_pair_offset_cos_AB': 0.132, 'cross_model_LOO_analogy_acc': 1.0, 'within_A_consistency': 0.325, 'chance_analogy': 0.333}
+    country->city(non-capital) {'n_pairs': 5, 'mean_offset_cos_AB': 0.926, 'per_pair_offset_cos_AB': 0.726, 'cross_model_LOO_analogy_acc': 0.7, 'within_A_consistency': 0.789, 'chance_analogy': 0.2}
+R10: live=189 fit_on=186 accepted=183 passed=176 probation=7 meaning=0.942 rt=0.979 geom=0.995 read=1.000 (A 1.00 B 1.00) RSA=0.935 kept_rel=['adj->comparative', 'country->capital', 'country->city(non-capital)', 'country->language', 'male->female'] merged=[] dropped=1 23s
+    country->capital {'n_pairs': 10, 'mean_offset_cos_AB': 0.976, 'per_pair_offset_cos_AB': 0.878, 'cross_model_LOO_analogy_acc': 0.7, 'within_A_consistency': 0.916, 'chance_analogy': 0.1}
+    country->language {'n_pairs': 13, 'mean_offset_cos_AB': 0.985, 'per_pair_offset_cos_AB': 0.878, 'cross_model_LOO_analogy_acc': 0.731, 'within_A_consistency': 0.91, 'chance_analogy': 0.077}
+    male->female {'n_pairs': 9, 'mean_offset_cos_AB': 0.843, 'per_pair_offset_cos_AB': 0.54, 'cross_model_LOO_analogy_acc': 1.0, 'within_A_consistency': 0.837, 'chance_analogy': 0.111}
+    adj->comparative {'n_pairs': 5, 'mean_offset_cos_AB': 0.924, 'per_pair_offset_cos_AB': 0.695, 'cross_model_LOO_analogy_acc': 0.8, 'within_A_consistency': 0.69, 'chance_analogy': 0.2}
+    adj->opposite {'n_pairs': 3, 'mean_offset_cos_AB': 0.292, 'per_pair_offset_cos_AB': 0.081, 'cross_model_LOO_analogy_acc': 1.0, 'within_A_consistency': 0.272, 'chance_analogy': 0.333}
+    country->city(non-capital) {'n_pairs': 5, 'mean_offset_cos_AB': 0.863, 'per_pair_offset_cos_AB': 0.673, 'cross_model_LOO_analogy_acc': 0.6, 'within_A_consistency': 0.801, 'chance_analogy': 0.2}
+final accepted 183 operators ['country->capital', 'country->language', 'male->female', 'adj->comparative', 'country->city(non-capital)'] 24s
