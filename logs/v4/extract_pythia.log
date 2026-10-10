@@ -1,0 +1,2 @@
+Loading weights:   0%|          | 0/292 [00:00<?, ?it/s]Loading weights:   0%|          | 1/292 [00:00<01:06,  4.35it/s]Loading weights:  37%|███▋      | 108/292 [00:00<00:00, 389.39it/s]Loading weights:  60%|██████    | 176/292 [00:00<00:00, 475.99it/s]Loading weights:  81%|████████  | 236/292 [00:00<00:00, 514.81it/s]Loading weights: 100%|██████████| 292/292 [00:00<00:00, 469.35it/s]
+pythia [6, 8, 10] 886 671s, sender forward median 183.3 ms

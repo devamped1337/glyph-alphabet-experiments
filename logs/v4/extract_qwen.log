@@ -1,0 +1,2 @@
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<02:33,  1.88it/s]Loading weights:  71%|███████▏  | 207/290 [00:00<00:00, 436.52it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 351.81it/s]
+qwen [6, 8, 10] 886 790s, sender forward median 208.9 ms

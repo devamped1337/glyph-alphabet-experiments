@@ -1,0 +1,5465 @@
+{
+ "frozen": {
+  "li": 0,
+  "dev_glyph_vec_acc_by_li": {
+   "0": 0.707,
+   "1": 0.669,
+   "2": 0.612
+  },
+  "dev_receivers_used": [
+   "qwen"
+  ],
+  "note": "Smol and Pythia dev runs were cut (box stalled ~50 min); layer fraction chosen on the Qwen-receiver dev split only (all 3 senders), before any test run.",
+  "frozen": "FRACS[0]=0.25 depth (qwen L6, smol L8, pythia L6), replace-mode patching at placeholder positions, PCA64 half-whitened, 32-d canonical, final main book version at li=0"
+ },
+ "layer": {
+  "qwen": 6,
+  "smol": 8,
+  "pythia": 6
+ },
+ "book_version": "4.3",
+ "n_entries": 56,
+ "acc": {
+  "qwen|-|text_prose|role": [
+   0.982,
+   0.955,
+   1.0,
+   112
+  ],
+  "qwen|-|text_compact|role": [
+   0.652,
+   0.562,
+   0.741,
+   112
+  ],
+  "qwen|-|text_bag|role": [
+   0.5,
+   0.411,
+   0.598,
+   112
+  ],
+  "qwen|-|none|role": [
+   0.071,
+   0.027,
+   0.125,
+   112
+  ],
+  "qwen|qwen|glyph_id|role": [
+   0.938,
+   0.884,
+   0.973,
+   112
+  ],
+  "qwen|qwen|glyph_vec|role": [
+   0.938,
+   0.893,
+   0.982,
+   112
+  ],
+  "qwen|qwen|glyph_slot_shuffled|role": [
+   0.062,
+   0.027,
+   0.107,
+   112
+  ],
+  "qwen|qwen|glyph_samenorm_shuffled|role": [
+   0.241,
+   0.161,
+   0.321,
+   112
+  ],
+  "qwen|qwen|glyph_raw_unsnapped|role": [
+   0.964,
+   0.92,
+   0.991,
+   112
+  ],
+  "qwen|qwen|receiver_word_state|role": [
+   0.938,
+   0.893,
+   0.982,
+   112
+  ],
+  "qwen|qwen|ablation_nofilter_vec|role": [
+   0.946,
+   0.902,
+   0.982,
+   112
+  ],
+  "qwen|qwen|ablation_twomodel_vec|role": [
+   0.839,
+   0.768,
+   0.902,
+   112
+  ],
+  "qwen|smol|glyph_id|role": [
+   0.938,
+   0.893,
+   0.973,
+   112
+  ],
+  "qwen|smol|glyph_vec|role": [
+   0.938,
+   0.884,
+   0.982,
+   112
+  ],
+  "qwen|smol|glyph_slot_shuffled|role": [
+   0.062,
+   0.018,
+   0.107,
+   112
+  ],
+  "qwen|smol|glyph_samenorm_shuffled|role": [
+   0.205,
+   0.134,
+   0.277,
+   112
+  ],
+  "qwen|smol|glyph_raw_unsnapped|role": [
+   0.589,
+   0.5,
+   0.679,
+   112
+  ],
+  "qwen|smol|receiver_word_state|role": [
+   0.938,
+   0.893,
+   0.973,
+   112
+  ],
+  "qwen|smol|ablation_nofilter_vec|role": [
+   0.946,
+   0.902,
+   0.982,
+   112
+  ],
+  "qwen|smol|ablation_twomodel_vec|role": [
+   0.839,
+   0.768,
+   0.902,
+   112
+  ],
+  "qwen|pythia|glyph_id|role": [
+   0.938,
+   0.884,
+   0.973,
+   112
+  ],
+  "qwen|pythia|glyph_vec|role": [
+   0.938,
+   0.893,
+   0.982,
+   112
+  ],
+  "qwen|pythia|glyph_slot_shuffled|role": [
+   0.062,
+   0.027,
+   0.116,
+   112
+  ],
+  "qwen|pythia|glyph_samenorm_shuffled|role": [
+   0.196,
+   0.125,
+   0.268,
+   112
+  ],
+  "qwen|pythia|glyph_raw_unsnapped|role": [
+   0.946,
+   0.902,
+   0.982,
+   112
+  ],
+  "qwen|pythia|receiver_word_state|role": [
+   0.938,
+   0.893,
+   0.982,
+   112
+  ],
+  "qwen|pythia|ablation_nofilter_vec|role": [
+   0.946,
+   0.902,
+   0.982,
+   112
+  ],
+  "qwen|qwen|text_compact_of_choice|role": [
+   0.652,
+   0.562,
+   0.741,
+   112
+  ],
+  "qwen|smol|text_compact_of_choice|role": [
+   0.652,
+   0.554,
+   0.741,
+   112
+  ],
+  "qwen|pythia|text_compact_of_choice|role": [
+   0.652,
+   0.562,
+   0.741,
+   112
+  ],
+  "qwen|-|text_prose|negation": [
+   1.0,
+   1.0,
+   1.0,
+   56
+  ],
+  "qwen|-|text_compact|negation": [
+   1.0,
+   1.0,
+   1.0,
+   56
+  ],
+  "qwen|-|text_bag|negation": [
+   1.0,
+   1.0,
+   1.0,
+   56
+  ],
+  "qwen|-|none|negation": [
+   0.5,
+   0.375,
+   0.643,
+   56
+  ],
+  "qwen|qwen|glyph_id|negation": [
+   1.0,
+   1.0,
+   1.0,
+   56
+  ],
+  "qwen|qwen|glyph_vec|negation": [
+   1.0,
+   1.0,
+   1.0,
+   56
+  ],
+  "qwen|qwen|glyph_slot_shuffled|negation": [
+   0.0,
+   0.0,
+   0.0,
+   56
+  ],
+  "qwen|qwen|glyph_samenorm_shuffled|negation": [
+   0.5,
+   0.375,
+   0.643,
+   56
+  ],
+  "qwen|qwen|glyph_raw_unsnapped|negation": [
+   1.0,
+   1.0,
+   1.0,
+   56
+  ],
+  "qwen|qwen|receiver_word_state|negation": [
+   1.0,
+   1.0,
+   1.0,
+   56
+  ],
+  "qwen|qwen|ablation_nofilter_vec|negation": [
+   1.0,
+   1.0,
+   1.0,
+   56
+  ],
+  "qwen|qwen|ablation_twomodel_vec|negation": [
+   1.0,
+   1.0,
+   1.0,
+   56
+  ],
+  "qwen|smol|glyph_id|negation": [
+   1.0,
+   1.0,
+   1.0,
+   56
+  ],
+  "qwen|smol|glyph_vec|negation": [
+   1.0,
+   1.0,
+   1.0,
+   56
+  ],
+  "qwen|smol|glyph_slot_shuffled|negation": [
+   0.0,
+   0.0,
+   0.0,
+   56
+  ],
+  "qwen|smol|glyph_samenorm_shuffled|negation": [
+   0.607,
+   0.482,
+   0.75,
+   56
+  ],
+  "qwen|smol|glyph_raw_unsnapped|negation": [
+   1.0,
+   1.0,
+   1.0,
+   56
+  ],
+  "qwen|smol|receiver_word_state|negation": [
+   1.0,
+   1.0,
+   1.0,
+   56
+  ],
+  "qwen|smol|ablation_nofilter_vec|negation": [
+   1.0,
+   1.0,
+   1.0,
+   56
+  ],
+  "qwen|smol|ablation_twomodel_vec|negation": [
+   1.0,
+   1.0,
+   1.0,
+   56
+  ],
+  "qwen|pythia|glyph_id|negation": [
+   1.0,
+   1.0,
+   1.0,
+   56
+  ],
+  "qwen|pythia|glyph_vec|negation": [
+   1.0,
+   1.0,
+   1.0,
+   56
+  ],
+  "qwen|pythia|glyph_slot_shuffled|negation": [
+   0.0,
+   0.0,
+   0.0,
+   56
+  ],
+  "qwen|pythia|glyph_samenorm_shuffled|negation": [
+   0.536,
+   0.411,
+   0.661,
+   56
+  ],
+  "qwen|pythia|glyph_raw_unsnapped|negation": [
+   1.0,
+   1.0,
+   1.0,
+   56
+  ],
+  "qwen|pythia|receiver_word_state|negation": [
+   1.0,
+   1.0,
+   1.0,
+   56
+  ],
+  "qwen|pythia|ablation_nofilter_vec|negation": [
+   1.0,
+   1.0,
+   1.0,
+   56
+  ],
+  "qwen|qwen|text_compact_of_choice|negation": [
+   1.0,
+   1.0,
+   1.0,
+   56
+  ],
+  "qwen|smol|text_compact_of_choice|negation": [
+   1.0,
+   1.0,
+   1.0,
+   56
+  ],
+  "qwen|pythia|text_compact_of_choice|negation": [
+   1.0,
+   1.0,
+   1.0,
+   56
+  ],
+  "qwen|-|text_prose|uncertainty": [
+   0.696,
+   0.571,
+   0.821,
+   56
+  ],
+  "qwen|-|text_compact|uncertainty": [
+   0.5,
+   0.357,
+   0.643,
+   56
+  ],
+  "qwen|-|text_bag|uncertainty": [
+   0.571,
+   0.429,
+   0.696,
+   56
+  ],
+  "qwen|-|none|uncertainty": [
+   0.5,
+   0.357,
+   0.625,
+   56
+  ],
+  "qwen|qwen|glyph_id|uncertainty": [
+   0.625,
+   0.5,
+   0.75,
+   56
+  ],
+  "qwen|qwen|glyph_vec|uncertainty": [
+   0.625,
+   0.5,
+   0.75,
+   56
+  ],
+  "qwen|qwen|glyph_slot_shuffled|uncertainty": [
+   0.375,
+   0.25,
+   0.5,
+   56
+  ],
+  "qwen|qwen|glyph_samenorm_shuffled|uncertainty": [
+   0.464,
+   0.339,
+   0.589,
+   56
+  ],
+  "qwen|qwen|glyph_raw_unsnapped|uncertainty": [
+   0.643,
+   0.518,
+   0.768,
+   56
+  ],
+  "qwen|qwen|receiver_word_state|uncertainty": [
+   0.643,
+   0.518,
+   0.768,
+   56
+  ],
+  "qwen|qwen|ablation_nofilter_vec|uncertainty": [
+   0.625,
+   0.5,
+   0.75,
+   56
+  ],
+  "qwen|qwen|ablation_twomodel_vec|uncertainty": [
+   0.625,
+   0.5,
+   0.75,
+   56
+  ],
+  "qwen|smol|glyph_id|uncertainty": [
+   0.625,
+   0.5,
+   0.75,
+   56
+  ],
+  "qwen|smol|glyph_vec|uncertainty": [
+   0.625,
+   0.5,
+   0.733,
+   56
+  ],
+  "qwen|smol|glyph_slot_shuffled|uncertainty": [
+   0.375,
+   0.25,
+   0.518,
+   56
+  ],
+  "qwen|smol|glyph_samenorm_shuffled|uncertainty": [
+   0.446,
+   0.321,
+   0.571,
+   56
+  ],
+  "qwen|smol|glyph_raw_unsnapped|uncertainty": [
+   0.625,
+   0.5,
+   0.75,
+   56
+  ],
+  "qwen|smol|receiver_word_state|uncertainty": [
+   0.643,
+   0.518,
+   0.768,
+   56
+  ],
+  "qwen|smol|ablation_nofilter_vec|uncertainty": [
+   0.625,
+   0.5,
+   0.75,
+   56
+  ],
+  "qwen|smol|ablation_twomodel_vec|uncertainty": [
+   0.625,
+   0.5,
+   0.75,
+   56
+  ],
+  "qwen|pythia|glyph_id|uncertainty": [
+   0.625,
+   0.5,
+   0.75,
+   56
+  ],
+  "qwen|pythia|glyph_vec|uncertainty": [
+   0.625,
+   0.5,
+   0.75,
+   56
+  ],
+  "qwen|pythia|glyph_slot_shuffled|uncertainty": [
+   0.375,
+   0.25,
+   0.5,
+   56
+  ],
+  "qwen|pythia|glyph_samenorm_shuffled|uncertainty": [
+   0.429,
+   0.304,
+   0.554,
+   56
+  ],
+  "qwen|pythia|glyph_raw_unsnapped|uncertainty": [
+   0.643,
+   0.518,
+   0.768,
+   56
+  ],
+  "qwen|pythia|receiver_word_state|uncertainty": [
+   0.643,
+   0.518,
+   0.768,
+   56
+  ],
+  "qwen|pythia|ablation_nofilter_vec|uncertainty": [
+   0.625,
+   0.482,
+   0.75,
+   56
+  ],
+  "qwen|qwen|text_compact_of_choice|uncertainty": [
+   0.5,
+   0.357,
+   0.643,
+   56
+  ],
+  "qwen|smol|text_compact_of_choice|uncertainty": [
+   0.5,
+   0.375,
+   0.625,
+   56
+  ],
+  "qwen|pythia|text_compact_of_choice|uncertainty": [
+   0.5,
+   0.375,
+   0.625,
+   56
+  ],
+  "qwen|-|text_prose|order": [
+   0.517,
+   0.383,
+   0.633,
+   60
+  ],
+  "qwen|-|text_compact|order": [
+   0.55,
+   0.417,
+   0.683,
+   60
+  ],
+  "qwen|-|text_bag|order": [
+   0.55,
+   0.433,
+   0.683,
+   60
+  ],
+  "qwen|-|none|order": [
+   0.3,
+   0.2,
+   0.417,
+   60
+  ],
+  "qwen|qwen|glyph_id|order": [
+   0.5,
+   0.367,
+   0.617,
+   60
+  ],
+  "qwen|qwen|glyph_vec|order": [
+   0.5,
+   0.367,
+   0.633,
+   60
+  ],
+  "qwen|qwen|glyph_slot_shuffled|order": [
+   0.5,
+   0.383,
+   0.633,
+   60
+  ],
+  "qwen|qwen|glyph_samenorm_shuffled|order": [
+   0.267,
+   0.167,
+   0.367,
+   60
+  ],
+  "qwen|qwen|glyph_raw_unsnapped|order": [
+   0.5,
+   0.383,
+   0.633,
+   60
+  ],
+  "qwen|qwen|receiver_word_state|order": [
+   0.5,
+   0.367,
+   0.633,
+   60
+  ],
+  "qwen|qwen|ablation_nofilter_vec|order": [
+   0.483,
+   0.35,
+   0.6,
+   60
+  ],
+  "qwen|qwen|ablation_twomodel_vec|order": [
+   0.5,
+   0.367,
+   0.617,
+   60
+  ],
+  "qwen|smol|glyph_id|order": [
+   0.5,
+   0.367,
+   0.633,
+   60
+  ],
+  "qwen|smol|glyph_vec|order": [
+   0.5,
+   0.383,
+   0.617,
+   60
+  ],
+  "qwen|smol|glyph_slot_shuffled|order": [
+   0.5,
+   0.383,
+   0.617,
+   60
+  ],
+  "qwen|smol|glyph_samenorm_shuffled|order": [
+   0.25,
+   0.15,
+   0.367,
+   60
+  ],
+  "qwen|smol|glyph_raw_unsnapped|order": [
+   0.483,
+   0.35,
+   0.6,
+   60
+  ],
+  "qwen|smol|receiver_word_state|order": [
+   0.5,
+   0.367,
+   0.617,
+   60
+  ],
+  "qwen|smol|ablation_nofilter_vec|order": [
+   0.483,
+   0.35,
+   0.617,
+   60
+  ],
+  "qwen|smol|ablation_twomodel_vec|order": [
+   0.5,
+   0.367,
+   0.617,
+   60
+  ],
+  "qwen|pythia|glyph_id|order": [
+   0.5,
+   0.367,
+   0.617,
+   60
+  ],
+  "qwen|pythia|glyph_vec|order": [
+   0.5,
+   0.383,
+   0.633,
+   60
+  ],
+  "qwen|pythia|glyph_slot_shuffled|order": [
+   0.5,
+   0.383,
+   0.633,
+   60
+  ],
+  "qwen|pythia|glyph_samenorm_shuffled|order": [
+   0.117,
+   0.05,
+   0.2,
+   60
+  ],
+  "qwen|pythia|glyph_raw_unsnapped|order": [
+   0.533,
+   0.4,
+   0.667,
+   60
+  ],
+  "qwen|pythia|receiver_word_state|order": [
+   0.5,
+   0.367,
+   0.617,
+   60
+  ],
+  "qwen|pythia|ablation_nofilter_vec|order": [
+   0.483,
+   0.35,
+   0.617,
+   60
+  ],
+  "qwen|qwen|text_compact_of_choice|order": [
+   0.55,
+   0.417,
+   0.667,
+   60
+  ],
+  "qwen|smol|text_compact_of_choice|order": [
+   0.55,
+   0.433,
+   0.667,
+   60
+  ],
+  "qwen|pythia|text_compact_of_choice|order": [
+   0.55,
+   0.433,
+   0.683,
+   60
+  ],
+  "qwen|-|text_prose|maths_signed": [
+   0.513,
+   0.359,
+   0.667,
+   39
+  ],
+  "qwen|-|text_compact|maths_signed": [
+   0.026,
+   0.0,
+   0.077,
+   39
+  ],
+  "qwen|-|text_bag|maths_signed": [
+   0.205,
+   0.077,
+   0.333,
+   39
+  ],
+  "qwen|-|none|maths_signed": [
+   0.0,
+   0.0,
+   0.0,
+   39
+  ],
+  "qwen|qwen|glyph_id|maths_signed": [
+   0.051,
+   0.0,
+   0.128,
+   39
+  ],
+  "qwen|qwen|glyph_vec|maths_signed": [
+   0.051,
+   0.0,
+   0.128,
+   39
+  ],
+  "qwen|qwen|glyph_slot_shuffled|maths_signed": [
+   0.029,
+   0.0,
+   0.088,
+   34
+  ],
+  "qwen|qwen|glyph_samenorm_shuffled|maths_signed": [
+   0.0,
+   0.0,
+   0.0,
+   39
+  ],
+  "qwen|qwen|glyph_raw_unsnapped|maths_signed": [
+   0.179,
+   0.077,
+   0.308,
+   39
+  ],
+  "qwen|qwen|receiver_word_state|maths_signed": [
+   0.103,
+   0.026,
+   0.205,
+   39
+  ],
+  "qwen|qwen|ablation_nofilter_vec|maths_signed": [
+   0.077,
+   0.0,
+   0.179,
+   39
+  ],
+  "qwen|qwen|ablation_twomodel_vec|maths_signed": [
+   0.077,
+   0.0,
+   0.179,
+   39
+  ],
+  "qwen|smol|glyph_id|maths_signed": [
+   0.051,
+   0.0,
+   0.128,
+   39
+  ],
+  "qwen|smol|glyph_vec|maths_signed": [
+   0.051,
+   0.0,
+   0.128,
+   39
+  ],
+  "qwen|smol|glyph_slot_shuffled|maths_signed": [
+   0.033,
+   0.0,
+   0.1,
+   30
+  ],
+  "qwen|smol|glyph_samenorm_shuffled|maths_signed": [
+   0.0,
+   0.0,
+   0.0,
+   39
+  ],
+  "qwen|smol|glyph_raw_unsnapped|maths_signed": [
+   0.026,
+   0.0,
+   0.077,
+   39
+  ],
+  "qwen|smol|receiver_word_state|maths_signed": [
+   0.103,
+   0.026,
+   0.205,
+   39
+  ],
+  "qwen|smol|ablation_nofilter_vec|maths_signed": [
+   0.077,
+   0.0,
+   0.154,
+   39
+  ],
+  "qwen|smol|ablation_twomodel_vec|maths_signed": [
+   0.077,
+   0.0,
+   0.179,
+   39
+  ],
+  "qwen|pythia|glyph_id|maths_signed": [
+   0.077,
+   0.0,
+   0.179,
+   39
+  ],
+  "qwen|pythia|glyph_vec|maths_signed": [
+   0.077,
+   0.0,
+   0.179,
+   39
+  ],
+  "qwen|pythia|glyph_slot_shuffled|maths_signed": [
+   0.059,
+   0.0,
+   0.147,
+   34
+  ],
+  "qwen|pythia|glyph_samenorm_shuffled|maths_signed": [
+   0.0,
+   0.0,
+   0.0,
+   39
+  ],
+  "qwen|pythia|glyph_raw_unsnapped|maths_signed": [
+   0.128,
+   0.026,
+   0.256,
+   39
+  ],
+  "qwen|pythia|receiver_word_state|maths_signed": [
+   0.128,
+   0.026,
+   0.231,
+   39
+  ],
+  "qwen|pythia|ablation_nofilter_vec|maths_signed": [
+   0.103,
+   0.026,
+   0.205,
+   39
+  ],
+  "qwen|qwen|text_compact_of_choice|maths_signed": [
+   0.026,
+   0.0,
+   0.077,
+   39
+  ],
+  "qwen|smol|text_compact_of_choice|maths_signed": [
+   0.026,
+   0.0,
+   0.077,
+   39
+  ],
+  "qwen|pythia|text_compact_of_choice|maths_signed": [
+   0.026,
+   0.0,
+   0.077,
+   39
+  ],
+  "qwen|smol|glyph_slot_shuffled_NOT_COVERED|maths_signed": [
+   0.0,
+   0.0,
+   0.0,
+   9
+  ],
+  "qwen|qwen|glyph_slot_shuffled_NOT_COVERED|maths_signed": [
+   0.0,
+   0.0,
+   0.0,
+   5
+  ],
+  "qwen|pythia|glyph_slot_shuffled_NOT_COVERED|maths_signed": [
+   0.0,
+   0.0,
+   0.0,
+   5
+  ],
+  "smol|-|text_prose|role": [
+   0.92,
+   0.866,
+   0.964,
+   112
+  ],
+  "smol|-|text_compact|role": [
+   0.804,
+   0.723,
+   0.875,
+   112
+  ],
+  "smol|-|text_bag|role": [
+   0.5,
+   0.411,
+   0.598,
+   112
+  ],
+  "smol|-|none|role": [
+   0.357,
+   0.277,
+   0.446,
+   112
+  ],
+  "smol|qwen|glyph_id|role": [
+   0.982,
+   0.955,
+   1.0,
+   112
+  ],
+  "smol|qwen|glyph_vec|role": [
+   0.982,
+   0.955,
+   1.0,
+   112
+  ],
+  "smol|qwen|glyph_slot_shuffled|role": [
+   0.018,
+   0.0,
+   0.045,
+   112
+  ],
+  "smol|qwen|glyph_samenorm_shuffled|role": [
+   0.223,
+   0.152,
+   0.304,
+   112
+  ],
+  "smol|qwen|glyph_raw_unsnapped|role": [
+   1.0,
+   1.0,
+   1.0,
+   112
+  ],
+  "smol|qwen|receiver_word_state|role": [
+   0.866,
+   0.795,
+   0.929,
+   112
+  ],
+  "smol|qwen|ablation_nofilter_vec|role": [
+   0.982,
+   0.955,
+   1.0,
+   112
+  ],
+  "smol|qwen|ablation_twomodel_vec|role": [
+   0.946,
+   0.902,
+   0.982,
+   112
+  ],
+  "smol|smol|glyph_id|role": [
+   0.982,
+   0.955,
+   1.0,
+   112
+  ],
+  "smol|smol|glyph_vec|role": [
+   0.982,
+   0.955,
+   1.0,
+   112
+  ],
+  "smol|smol|glyph_slot_shuffled|role": [
+   0.018,
+   0.0,
+   0.045,
+   112
+  ],
+  "smol|smol|glyph_samenorm_shuffled|role": [
+   0.143,
+   0.08,
+   0.206,
+   112
+  ],
+  "smol|smol|glyph_raw_unsnapped|role": [
+   0.839,
+   0.768,
+   0.902,
+   112
+  ],
+  "smol|smol|receiver_word_state|role": [
+   0.866,
+   0.804,
+   0.929,
+   112
+  ],
+  "smol|smol|ablation_nofilter_vec|role": [
+   0.982,
+   0.955,
+   1.0,
+   112
+  ],
+  "smol|smol|ablation_twomodel_vec|role": [
+   0.946,
+   0.902,
+   0.982,
+   112
+  ],
+  "smol|pythia|glyph_id|role": [
+   0.982,
+   0.955,
+   1.0,
+   112
+  ],
+  "smol|pythia|glyph_vec|role": [
+   0.982,
+   0.955,
+   1.0,
+   112
+  ],
+  "smol|pythia|glyph_slot_shuffled|role": [
+   0.018,
+   0.0,
+   0.045,
+   112
+  ],
+  "smol|pythia|glyph_samenorm_shuffled|role": [
+   0.232,
+   0.152,
+   0.321,
+   112
+  ],
+  "smol|pythia|glyph_raw_unsnapped|role": [
+   1.0,
+   1.0,
+   1.0,
+   112
+  ],
+  "smol|pythia|receiver_word_state|role": [
+   0.866,
+   0.804,
+   0.929,
+   112
+  ],
+  "smol|pythia|ablation_nofilter_vec|role": [
+   0.982,
+   0.955,
+   1.0,
+   112
+  ],
+  "smol|qwen|text_compact_of_choice|role": [
+   0.804,
+   0.732,
+   0.875,
+   112
+  ],
+  "smol|smol|text_compact_of_choice|role": [
+   0.804,
+   0.723,
+   0.875,
+   112
+  ],
+  "smol|pythia|text_compact_of_choice|role": [
+   0.804,
+   0.732,
+   0.875,
+   112
+  ],
+  "smol|-|text_prose|negation": [
+   0.607,
+   0.482,
+   0.732,
+   56
+  ],
+  "smol|-|text_compact|negation": [
+   1.0,
+   1.0,
+   1.0,
+   56
+  ],
+  "smol|-|text_bag|negation": [
+   0.589,
+   0.464,
+   0.714,
+   56
+  ],
+  "smol|-|none|negation": [
+   0.5,
+   0.375,
+   0.643,
+   56
+  ],
+  "smol|qwen|glyph_id|negation": [
+   0.607,
+   0.482,
+   0.732,
+   56
+  ],
+  "smol|qwen|glyph_vec|negation": [
+   0.607,
+   0.482,
+   0.732,
+   56
+  ],
+  "smol|qwen|glyph_slot_shuffled|negation": [
+   0.393,
+   0.268,
+   0.518,
+   56
+  ],
+  "smol|qwen|glyph_samenorm_shuffled|negation": [
+   0.518,
+   0.375,
+   0.643,
+   56
+  ],
+  "smol|qwen|glyph_raw_unsnapped|negation": [
+   0.661,
+   0.536,
+   0.786,
+   56
+  ],
+  "smol|qwen|receiver_word_state|negation": [
+   0.554,
+   0.411,
+   0.679,
+   56
+  ],
+  "smol|qwen|ablation_nofilter_vec|negation": [
+   0.589,
+   0.464,
+   0.714,
+   56
+  ],
+  "smol|qwen|ablation_twomodel_vec|negation": [
+   0.589,
+   0.446,
+   0.714,
+   56
+  ],
+  "smol|smol|glyph_id|negation": [
+   0.607,
+   0.482,
+   0.732,
+   56
+  ],
+  "smol|smol|glyph_vec|negation": [
+   0.607,
+   0.482,
+   0.732,
+   56
+  ],
+  "smol|smol|glyph_slot_shuffled|negation": [
+   0.393,
+   0.268,
+   0.518,
+   56
+  ],
+  "smol|smol|glyph_samenorm_shuffled|negation": [
+   0.536,
+   0.411,
+   0.661,
+   56
+  ],
+  "smol|smol|glyph_raw_unsnapped|negation": [
+   0.554,
+   0.429,
+   0.679,
+   56
+  ],
+  "smol|smol|receiver_word_state|negation": [
+   0.554,
+   0.429,
+   0.679,
+   56
+  ],
+  "smol|smol|ablation_nofilter_vec|negation": [
+   0.589,
+   0.464,
+   0.714,
+   56
+  ],
+  "smol|smol|ablation_twomodel_vec|negation": [
+   0.589,
+   0.464,
+   0.714,
+   56
+  ],
+  "smol|pythia|glyph_id|negation": [
+   0.607,
+   0.482,
+   0.732,
+   56
+  ],
+  "smol|pythia|glyph_vec|negation": [
+   0.607,
+   0.482,
+   0.732,
+   56
+  ],
+  "smol|pythia|glyph_slot_shuffled|negation": [
+   0.393,
+   0.268,
+   0.518,
+   56
+  ],
+  "smol|pythia|glyph_samenorm_shuffled|negation": [
+   0.518,
+   0.375,
+   0.643,
+   56
+  ],
+  "smol|pythia|glyph_raw_unsnapped|negation": [
+   0.643,
+   0.518,
+   0.768,
+   56
+  ],
+  "smol|pythia|receiver_word_state|negation": [
+   0.554,
+   0.429,
+   0.679,
+   56
+  ],
+  "smol|pythia|ablation_nofilter_vec|negation": [
+   0.589,
+   0.464,
+   0.714,
+   56
+  ],
+  "smol|qwen|text_compact_of_choice|negation": [
+   1.0,
+   1.0,
+   1.0,
+   56
+  ],
+  "smol|smol|text_compact_of_choice|negation": [
+   1.0,
+   1.0,
+   1.0,
+   56
+  ],
+  "smol|pythia|text_compact_of_choice|negation": [
+   1.0,
+   1.0,
+   1.0,
+   56
+  ],
+  "smol|-|text_prose|uncertainty": [
+   0.5,
+   0.375,
+   0.625,
+   56
+  ],
+  "smol|-|text_compact|uncertainty": [
+   0.5,
+   0.357,
+   0.625,
+   56
+  ],
+  "smol|-|text_bag|uncertainty": [
+   0.5,
+   0.357,
+   0.625,
+   56
+  ],
+  "smol|-|none|uncertainty": [
+   0.5,
+   0.375,
+   0.625,
+   56
+  ],
+  "smol|qwen|glyph_id|uncertainty": [
+   0.5,
+   0.357,
+   0.625,
+   56
+  ],
+  "smol|qwen|glyph_vec|uncertainty": [
+   0.5,
+   0.375,
+   0.625,
+   56
+  ],
+  "smol|qwen|glyph_slot_shuffled|uncertainty": [
+   0.5,
+   0.375,
+   0.643,
+   56
+  ],
+  "smol|qwen|glyph_samenorm_shuffled|uncertainty": [
+   0.5,
+   0.375,
+   0.625,
+   56
+  ],
+  "smol|qwen|glyph_raw_unsnapped|uncertainty": [
+   0.5,
+   0.375,
+   0.643,
+   56
+  ],
+  "smol|qwen|receiver_word_state|uncertainty": [
+   0.5,
+   0.375,
+   0.625,
+   56
+  ],
+  "smol|qwen|ablation_nofilter_vec|uncertainty": [
+   0.5,
+   0.375,
+   0.625,
+   56
+  ],
+  "smol|qwen|ablation_twomodel_vec|uncertainty": [
+   0.5,
+   0.375,
+   0.625,
+   56
+  ],
+  "smol|smol|glyph_id|uncertainty": [
+   0.5,
+   0.375,
+   0.643,
+   56
+  ],
+  "smol|smol|glyph_vec|uncertainty": [
+   0.5,
+   0.375,
+   0.643,
+   56
+  ],
+  "smol|smol|glyph_slot_shuffled|uncertainty": [
+   0.5,
+   0.375,
+   0.625,
+   56
+  ],
+  "smol|smol|glyph_samenorm_shuffled|uncertainty": [
+   0.5,
+   0.375,
+   0.625,
+   56
+  ],
+  "smol|smol|glyph_raw_unsnapped|uncertainty": [
+   0.5,
+   0.357,
+   0.625,
+   56
+  ],
+  "smol|smol|receiver_word_state|uncertainty": [
+   0.5,
+   0.375,
+   0.643,
+   56
+  ],
+  "smol|smol|ablation_nofilter_vec|uncertainty": [
+   0.5,
+   0.375,
+   0.625,
+   56
+  ],
+  "smol|smol|ablation_twomodel_vec|uncertainty": [
+   0.5,
+   0.375,
+   0.625,
+   56
+  ],
+  "smol|pythia|glyph_id|uncertainty": [
+   0.5,
+   0.375,
+   0.625,
+   56
+  ],
+  "smol|pythia|glyph_vec|uncertainty": [
+   0.5,
+   0.375,
+   0.643,
+   56
+  ],
+  "smol|pythia|glyph_slot_shuffled|uncertainty": [
+   0.5,
+   0.357,
+   0.625,
+   56
+  ],
+  "smol|pythia|glyph_samenorm_shuffled|uncertainty": [
+   0.5,
+   0.375,
+   0.625,
+   56
+  ],
+  "smol|pythia|glyph_raw_unsnapped|uncertainty": [
+   0.5,
+   0.357,
+   0.643,
+   56
+  ],
+  "smol|pythia|receiver_word_state|uncertainty": [
+   0.5,
+   0.357,
+   0.625,
+   56
+  ],
+  "smol|pythia|ablation_nofilter_vec|uncertainty": [
+   0.5,
+   0.375,
+   0.625,
+   56
+  ],
+  "smol|qwen|text_compact_of_choice|uncertainty": [
+   0.5,
+   0.375,
+   0.625,
+   56
+  ],
+  "smol|smol|text_compact_of_choice|uncertainty": [
+   0.5,
+   0.375,
+   0.625,
+   56
+  ],
+  "smol|pythia|text_compact_of_choice|uncertainty": [
+   0.5,
+   0.375,
+   0.625,
+   56
+  ],
+  "smol|-|text_prose|order": [
+   0.617,
+   0.5,
+   0.75,
+   60
+  ],
+  "smol|-|text_compact|order": [
+   0.583,
+   0.466,
+   0.7,
+   60
+  ],
+  "smol|-|text_bag|order": [
+   0.583,
+   0.467,
+   0.7,
+   60
+  ],
+  "smol|-|none|order": [
+   0.3,
+   0.2,
+   0.417,
+   60
+  ],
+  "smol|qwen|glyph_id|order": [
+   0.65,
+   0.533,
+   0.767,
+   60
+  ],
+  "smol|qwen|glyph_vec|order": [
+   0.65,
+   0.533,
+   0.75,
+   60
+  ],
+  "smol|qwen|glyph_slot_shuffled|order": [
+   0.35,
+   0.233,
+   0.483,
+   60
+  ],
+  "smol|qwen|glyph_samenorm_shuffled|order": [
+   0.3,
+   0.183,
+   0.417,
+   60
+  ],
+  "smol|qwen|glyph_raw_unsnapped|order": [
+   0.517,
+   0.383,
+   0.633,
+   60
+  ],
+  "smol|qwen|receiver_word_state|order": [
+   0.6,
+   0.483,
+   0.733,
+   60
+  ],
+  "smol|qwen|ablation_nofilter_vec|order": [
+   0.683,
+   0.55,
+   0.8,
+   60
+  ],
+  "smol|qwen|ablation_twomodel_vec|order": [
+   0.617,
+   0.483,
+   0.733,
+   60
+  ],
+  "smol|smol|glyph_id|order": [
+   0.65,
+   0.533,
+   0.767,
+   60
+  ],
+  "smol|smol|glyph_vec|order": [
+   0.65,
+   0.533,
+   0.767,
+   60
+  ],
+  "smol|smol|glyph_slot_shuffled|order": [
+   0.35,
+   0.233,
+   0.467,
+   60
+  ],
+  "smol|smol|glyph_samenorm_shuffled|order": [
+   0.267,
+   0.167,
+   0.383,
+   60
+  ],
+  "smol|smol|glyph_raw_unsnapped|order": [
+   0.617,
+   0.483,
+   0.733,
+   60
+  ],
+  "smol|smol|receiver_word_state|order": [
+   0.6,
+   0.467,
+   0.717,
+   60
+  ],
+  "smol|smol|ablation_nofilter_vec|order": [
+   0.683,
+   0.567,
+   0.783,
+   60
+  ],
+  "smol|smol|ablation_twomodel_vec|order": [
+   0.617,
+   0.5,
+   0.75,
+   60
+  ],
+  "smol|pythia|glyph_id|order": [
+   0.65,
+   0.533,
+   0.767,
+   60
+  ],
+  "smol|pythia|glyph_vec|order": [
+   0.65,
+   0.517,
+   0.767,
+   60
+  ],
+  "smol|pythia|glyph_slot_shuffled|order": [
+   0.35,
+   0.233,
+   0.483,
+   60
+  ],
+  "smol|pythia|glyph_samenorm_shuffled|order": [
+   0.2,
+   0.1,
+   0.317,
+   60
+  ],
+  "smol|pythia|glyph_raw_unsnapped|order": [
+   0.583,
+   0.467,
+   0.7,
+   60
+  ],
+  "smol|pythia|receiver_word_state|order": [
+   0.6,
+   0.467,
+   0.733,
+   60
+  ],
+  "smol|pythia|ablation_nofilter_vec|order": [
+   0.683,
+   0.567,
+   0.8,
+   60
+  ],
+  "smol|qwen|text_compact_of_choice|order": [
+   0.583,
+   0.466,
+   0.717,
+   60
+  ],
+  "smol|smol|text_compact_of_choice|order": [
+   0.583,
+   0.467,
+   0.7,
+   60
+  ],
+  "smol|pythia|text_compact_of_choice|order": [
+   0.583,
+   0.45,
+   0.7,
+   60
+  ],
+  "smol|-|text_prose|maths_signed": [
+   0.513,
+   0.359,
+   0.667,
+   39
+  ],
+  "smol|-|text_compact|maths_signed": [
+   0.026,
+   0.0,
+   0.077,
+   39
+  ],
+  "smol|-|text_bag|maths_signed": [
+   0.256,
+   0.128,
+   0.385,
+   39
+  ],
+  "smol|-|none|maths_signed": [
+   0.0,
+   0.0,
+   0.0,
+   39
+  ],
+  "smol|qwen|glyph_id|maths_signed": [
+   0.154,
+   0.051,
+   0.282,
+   39
+  ],
+  "smol|qwen|glyph_vec|maths_signed": [
+   0.154,
+   0.051,
+   0.282,
+   39
+  ],
+  "smol|qwen|glyph_slot_shuffled|maths_signed": [
+   0.147,
+   0.029,
+   0.265,
+   34
+  ],
+  "smol|qwen|glyph_samenorm_shuffled|maths_signed": [
+   0.0,
+   0.0,
+   0.0,
+   39
+  ],
+  "smol|qwen|glyph_raw_unsnapped|maths_signed": [
+   0.026,
+   0.0,
+   0.077,
+   39
+  ],
+  "smol|qwen|receiver_word_state|maths_signed": [
+   0.103,
+   0.026,
+   0.205,
+   39
+  ],
+  "smol|qwen|ablation_nofilter_vec|maths_signed": [
+   0.154,
+   0.051,
+   0.282,
+   39
+  ],
+  "smol|qwen|ablation_twomodel_vec|maths_signed": [
+   0.282,
+   0.128,
+   0.436,
+   39
+  ],
+  "smol|smol|glyph_id|maths_signed": [
+   0.128,
+   0.026,
+   0.231,
+   39
+  ],
+  "smol|smol|glyph_vec|maths_signed": [
+   0.128,
+   0.026,
+   0.231,
+   39
+  ],
+  "smol|smol|glyph_slot_shuffled|maths_signed": [
+   0.167,
+   0.033,
+   0.3,
+   30
+  ],
+  "smol|smol|glyph_samenorm_shuffled|maths_signed": [
+   0.0,
+   0.0,
+   0.0,
+   39
+  ],
+  "smol|smol|glyph_raw_unsnapped|maths_signed": [
+   0.231,
+   0.103,
+   0.385,
+   39
+  ],
+  "smol|smol|receiver_word_state|maths_signed": [
+   0.103,
+   0.026,
+   0.205,
+   39
+  ],
+  "smol|smol|ablation_nofilter_vec|maths_signed": [
+   0.179,
+   0.077,
+   0.308,
+   39
+  ],
+  "smol|smol|ablation_twomodel_vec|maths_signed": [
+   0.256,
+   0.128,
+   0.41,
+   39
+  ],
+  "smol|pythia|glyph_id|maths_signed": [
+   0.154,
+   0.051,
+   0.282,
+   39
+  ],
+  "smol|pythia|glyph_vec|maths_signed": [
+   0.154,
+   0.051,
+   0.282,
+   39
+  ],
+  "smol|pythia|glyph_slot_shuffled|maths_signed": [
+   0.118,
+   0.029,
+   0.235,
+   34
+  ],
+  "smol|pythia|glyph_samenorm_shuffled|maths_signed": [
+   0.0,
+   0.0,
+   0.0,
+   39
+  ],
+  "smol|pythia|glyph_raw_unsnapped|maths_signed": [
+   0.026,
+   0.0,
+   0.077,
+   39
+  ],
+  "smol|pythia|receiver_word_state|maths_signed": [
+   0.128,
+   0.026,
+   0.231,
+   39
+  ],
+  "smol|pythia|ablation_nofilter_vec|maths_signed": [
+   0.179,
+   0.077,
+   0.308,
+   39
+  ],
+  "smol|qwen|text_compact_of_choice|maths_signed": [
+   0.026,
+   0.0,
+   0.077,
+   39
+  ],
+  "smol|smol|text_compact_of_choice|maths_signed": [
+   0.026,
+   0.0,
+   0.077,
+   39
+  ],
+  "smol|pythia|text_compact_of_choice|maths_signed": [
+   0.051,
+   0.0,
+   0.128,
+   39
+  ],
+  "smol|smol|glyph_slot_shuffled_NOT_COVERED|maths_signed": [
+   0.0,
+   0.0,
+   0.0,
+   9
+  ],
+  "smol|qwen|glyph_slot_shuffled_NOT_COVERED|maths_signed": [
+   0.0,
+   0.0,
+   0.0,
+   5
+  ],
+  "smol|pythia|glyph_slot_shuffled_NOT_COVERED|maths_signed": [
+   0.0,
+   0.0,
+   0.0,
+   5
+  ],
+  "pythia|-|text_prose|role": [
+   1.0,
+   1.0,
+   1.0,
+   112
+  ],
+  "pythia|-|text_compact|role": [
+   0.893,
+   0.83,
+   0.946,
+   112
+  ],
+  "pythia|-|text_bag|role": [
+   0.482,
+   0.393,
+   0.58,
+   112
+  ],
+  "pythia|-|none|role": [
+   0.357,
+   0.259,
+   0.446,
+   112
+  ],
+  "pythia|qwen|glyph_id|role": [
+   0.964,
+   0.929,
+   0.991,
+   112
+  ],
+  "pythia|qwen|glyph_vec|role": [
+   0.964,
+   0.929,
+   0.991,
+   112
+  ],
+  "pythia|qwen|glyph_slot_shuffled|role": [
+   0.036,
+   0.009,
+   0.08,
+   112
+  ],
+  "pythia|qwen|glyph_samenorm_shuffled|role": [
+   0.214,
+   0.143,
+   0.286,
+   112
+  ],
+  "pythia|qwen|glyph_raw_unsnapped|role": [
+   1.0,
+   1.0,
+   1.0,
+   112
+  ],
+  "pythia|qwen|receiver_word_state|role": [
+   1.0,
+   1.0,
+   1.0,
+   112
+  ],
+  "pythia|qwen|ablation_nofilter_vec|role": [
+   0.964,
+   0.929,
+   0.991,
+   112
+  ],
+  "pythia|smol|glyph_id|role": [
+   0.964,
+   0.929,
+   0.991,
+   112
+  ],
+  "pythia|smol|glyph_vec|role": [
+   0.964,
+   0.929,
+   0.991,
+   112
+  ],
+  "pythia|smol|glyph_slot_shuffled|role": [
+   0.036,
+   0.009,
+   0.071,
+   112
+  ],
+  "pythia|smol|glyph_samenorm_shuffled|role": [
+   0.188,
+   0.125,
+   0.259,
+   112
+  ],
+  "pythia|smol|glyph_raw_unsnapped|role": [
+   0.482,
+   0.402,
+   0.572,
+   112
+  ],
+  "pythia|smol|receiver_word_state|role": [
+   1.0,
+   1.0,
+   1.0,
+   112
+  ],
+  "pythia|smol|ablation_nofilter_vec|role": [
+   0.964,
+   0.929,
+   0.991,
+   112
+  ],
+  "pythia|pythia|glyph_id|role": [
+   0.964,
+   0.929,
+   0.991,
+   112
+  ],
+  "pythia|pythia|glyph_vec|role": [
+   0.964,
+   0.929,
+   0.991,
+   112
+  ],
+  "pythia|pythia|glyph_slot_shuffled|role": [
+   0.036,
+   0.009,
+   0.071,
+   112
+  ],
+  "pythia|pythia|glyph_samenorm_shuffled|role": [
+   0.232,
+   0.161,
+   0.321,
+   112
+  ],
+  "pythia|pythia|glyph_raw_unsnapped|role": [
+   1.0,
+   1.0,
+   1.0,
+   112
+  ],
+  "pythia|pythia|receiver_word_state|role": [
+   1.0,
+   1.0,
+   1.0,
+   112
+  ],
+  "pythia|pythia|ablation_nofilter_vec|role": [
+   0.964,
+   0.929,
+   0.991,
+   112
+  ],
+  "pythia|qwen|text_compact_of_choice|role": [
+   0.893,
+   0.83,
+   0.946,
+   112
+  ],
+  "pythia|smol|text_compact_of_choice|role": [
+   0.893,
+   0.83,
+   0.946,
+   112
+  ],
+  "pythia|pythia|text_compact_of_choice|role": [
+   0.893,
+   0.83,
+   0.946,
+   112
+  ],
+  "pythia|-|text_prose|negation": [
+   0.982,
+   0.946,
+   1.0,
+   56
+  ],
+  "pythia|-|text_compact|negation": [
+   0.732,
+   0.607,
+   0.839,
+   56
+  ],
+  "pythia|-|text_bag|negation": [
+   0.5,
+   0.375,
+   0.625,
+   56
+  ],
+  "pythia|-|none|negation": [
+   0.5,
+   0.375,
+   0.625,
+   56
+  ],
+  "pythia|qwen|glyph_id|negation": [
+   0.821,
+   0.714,
+   0.911,
+   56
+  ],
+  "pythia|qwen|glyph_vec|negation": [
+   0.821,
+   0.714,
+   0.911,
+   56
+  ],
+  "pythia|qwen|glyph_slot_shuffled|negation": [
+   0.179,
+   0.089,
+   0.286,
+   56
+  ],
+  "pythia|qwen|glyph_samenorm_shuffled|negation": [
+   0.518,
+   0.393,
+   0.643,
+   56
+  ],
+  "pythia|qwen|glyph_raw_unsnapped|negation": [
+   0.893,
+   0.804,
+   0.964,
+   56
+  ],
+  "pythia|qwen|receiver_word_state|negation": [
+   0.893,
+   0.804,
+   0.964,
+   56
+  ],
+  "pythia|qwen|ablation_nofilter_vec|negation": [
+   0.839,
+   0.732,
+   0.929,
+   56
+  ],
+  "pythia|smol|glyph_id|negation": [
+   0.821,
+   0.714,
+   0.911,
+   56
+  ],
+  "pythia|smol|glyph_vec|negation": [
+   0.821,
+   0.696,
+   0.911,
+   56
+  ],
+  "pythia|smol|glyph_slot_shuffled|negation": [
+   0.179,
+   0.089,
+   0.286,
+   56
+  ],
+  "pythia|smol|glyph_samenorm_shuffled|negation": [
+   0.5,
+   0.357,
+   0.625,
+   56
+  ],
+  "pythia|smol|glyph_raw_unsnapped|negation": [
+   0.875,
+   0.786,
+   0.946,
+   56
+  ],
+  "pythia|smol|receiver_word_state|negation": [
+   0.893,
+   0.804,
+   0.964,
+   56
+  ],
+  "pythia|smol|ablation_nofilter_vec|negation": [
+   0.839,
+   0.732,
+   0.929,
+   56
+  ],
+  "pythia|pythia|glyph_id|negation": [
+   0.821,
+   0.714,
+   0.911,
+   56
+  ],
+  "pythia|pythia|glyph_vec|negation": [
+   0.821,
+   0.714,
+   0.911,
+   56
+  ],
+  "pythia|pythia|glyph_slot_shuffled|negation": [
+   0.179,
+   0.071,
+   0.286,
+   56
+  ],
+  "pythia|pythia|glyph_samenorm_shuffled|negation": [
+   0.5,
+   0.375,
+   0.625,
+   56
+  ],
+  "pythia|pythia|glyph_raw_unsnapped|negation": [
+   0.893,
+   0.804,
+   0.964,
+   56
+  ],
+  "pythia|pythia|receiver_word_state|negation": [
+   0.893,
+   0.804,
+   0.964,
+   56
+  ],
+  "pythia|pythia|ablation_nofilter_vec|negation": [
+   0.839,
+   0.732,
+   0.929,
+   56
+  ],
+  "pythia|qwen|text_compact_of_choice|negation": [
+   0.732,
+   0.607,
+   0.84,
+   56
+  ],
+  "pythia|smol|text_compact_of_choice|negation": [
+   0.732,
+   0.625,
+   0.839,
+   56
+  ],
+  "pythia|pythia|text_compact_of_choice|negation": [
+   0.732,
+   0.625,
+   0.839,
+   56
+  ],
+  "pythia|-|text_prose|uncertainty": [
+   0.571,
+   0.429,
+   0.696,
+   56
+  ],
+  "pythia|-|text_compact|uncertainty": [
+   0.5,
+   0.375,
+   0.625,
+   56
+  ],
+  "pythia|-|text_bag|uncertainty": [
+   0.518,
+   0.392,
+   0.643,
+   56
+  ],
+  "pythia|-|none|uncertainty": [
+   0.5,
+   0.375,
+   0.625,
+   56
+  ],
+  "pythia|qwen|glyph_id|uncertainty": [
+   0.536,
+   0.411,
+   0.679,
+   56
+  ],
+  "pythia|qwen|glyph_vec|uncertainty": [
+   0.536,
+   0.411,
+   0.661,
+   56
+  ],
+  "pythia|qwen|glyph_slot_shuffled|uncertainty": [
+   0.464,
+   0.339,
+   0.607,
+   56
+  ],
+  "pythia|qwen|glyph_samenorm_shuffled|uncertainty": [
+   0.464,
+   0.339,
+   0.589,
+   56
+  ],
+  "pythia|qwen|glyph_raw_unsnapped|uncertainty": [
+   0.696,
+   0.571,
+   0.804,
+   56
+  ],
+  "pythia|qwen|receiver_word_state|uncertainty": [
+   0.554,
+   0.429,
+   0.679,
+   56
+  ],
+  "pythia|qwen|ablation_nofilter_vec|uncertainty": [
+   0.536,
+   0.411,
+   0.661,
+   56
+  ],
+  "pythia|smol|glyph_id|uncertainty": [
+   0.536,
+   0.393,
+   0.661,
+   56
+  ],
+  "pythia|smol|glyph_vec|uncertainty": [
+   0.536,
+   0.411,
+   0.661,
+   56
+  ],
+  "pythia|smol|glyph_slot_shuffled|uncertainty": [
+   0.464,
+   0.339,
+   0.589,
+   56
+  ],
+  "pythia|smol|glyph_samenorm_shuffled|uncertainty": [
+   0.339,
+   0.214,
+   0.464,
+   56
+  ],
+  "pythia|smol|glyph_raw_unsnapped|uncertainty": [
+   0.607,
+   0.464,
+   0.732,
+   56
+  ],
+  "pythia|smol|receiver_word_state|uncertainty": [
+   0.554,
+   0.429,
+   0.679,
+   56
+  ],
+  "pythia|smol|ablation_nofilter_vec|uncertainty": [
+   0.536,
+   0.411,
+   0.661,
+   56
+  ],
+  "pythia|pythia|glyph_id|uncertainty": [
+   0.536,
+   0.411,
+   0.661,
+   56
+  ],
+  "pythia|pythia|glyph_vec|uncertainty": [
+   0.536,
+   0.411,
+   0.661,
+   56
+  ],
+  "pythia|pythia|glyph_slot_shuffled|uncertainty": [
+   0.464,
+   0.339,
+   0.589,
+   56
+  ],
+  "pythia|pythia|glyph_samenorm_shuffled|uncertainty": [
+   0.554,
+   0.429,
+   0.679,
+   56
+  ],
+  "pythia|pythia|glyph_raw_unsnapped|uncertainty": [
+   0.643,
+   0.518,
+   0.768,
+   56
+  ],
+  "pythia|pythia|receiver_word_state|uncertainty": [
+   0.554,
+   0.429,
+   0.679,
+   56
+  ],
+  "pythia|pythia|ablation_nofilter_vec|uncertainty": [
+   0.536,
+   0.411,
+   0.661,
+   56
+  ],
+  "pythia|qwen|text_compact_of_choice|uncertainty": [
+   0.5,
+   0.375,
+   0.625,
+   56
+  ],
+  "pythia|smol|text_compact_of_choice|uncertainty": [
+   0.5,
+   0.375,
+   0.625,
+   56
+  ],
+  "pythia|pythia|text_compact_of_choice|uncertainty": [
+   0.5,
+   0.375,
+   0.643,
+   56
+  ],
+  "pythia|-|text_prose|order": [
+   0.467,
+   0.333,
+   0.583,
+   60
+  ],
+  "pythia|-|text_compact|order": [
+   0.5,
+   0.383,
+   0.617,
+   60
+  ],
+  "pythia|-|text_bag|order": [
+   0.517,
+   0.4,
+   0.65,
+   60
+  ],
+  "pythia|-|none|order": [
+   0.167,
+   0.083,
+   0.267,
+   60
+  ],
+  "pythia|qwen|glyph_id|order": [
+   0.5,
+   0.383,
+   0.617,
+   60
+  ],
+  "pythia|qwen|glyph_vec|order": [
+   0.5,
+   0.367,
+   0.633,
+   60
+  ],
+  "pythia|qwen|glyph_slot_shuffled|order": [
+   0.5,
+   0.367,
+   0.633,
+   60
+  ],
+  "pythia|qwen|glyph_samenorm_shuffled|order": [
+   0.183,
+   0.1,
+   0.283,
+   60
+  ],
+  "pythia|qwen|glyph_raw_unsnapped|order": [
+   0.45,
+   0.333,
+   0.583,
+   60
+  ],
+  "pythia|qwen|receiver_word_state|order": [
+   0.533,
+   0.4,
+   0.65,
+   60
+  ],
+  "pythia|qwen|ablation_nofilter_vec|order": [
+   0.483,
+   0.35,
+   0.617,
+   60
+  ],
+  "pythia|smol|glyph_id|order": [
+   0.5,
+   0.383,
+   0.633,
+   60
+  ],
+  "pythia|smol|glyph_vec|order": [
+   0.5,
+   0.383,
+   0.633,
+   60
+  ],
+  "pythia|smol|glyph_slot_shuffled|order": [
+   0.5,
+   0.383,
+   0.617,
+   60
+  ],
+  "pythia|smol|glyph_samenorm_shuffled|order": [
+   0.233,
+   0.133,
+   0.35,
+   60
+  ],
+  "pythia|smol|glyph_raw_unsnapped|order": [
+   0.517,
+   0.383,
+   0.633,
+   60
+  ],
+  "pythia|smol|receiver_word_state|order": [
+   0.533,
+   0.417,
+   0.667,
+   60
+  ],
+  "pythia|smol|ablation_nofilter_vec|order": [
+   0.483,
+   0.35,
+   0.617,
+   60
+  ],
+  "pythia|pythia|glyph_id|order": [
+   0.5,
+   0.367,
+   0.633,
+   60
+  ],
+  "pythia|pythia|glyph_vec|order": [
+   0.5,
+   0.383,
+   0.617,
+   60
+  ],
+  "pythia|pythia|glyph_slot_shuffled|order": [
+   0.5,
+   0.383,
+   0.617,
+   60
+  ],
+  "pythia|pythia|glyph_samenorm_shuffled|order": [
+   0.2,
+   0.1,
+   0.3,
+   60
+  ],
+  "pythia|pythia|glyph_raw_unsnapped|order": [
+   0.467,
+   0.35,
+   0.583,
+   60
+  ],
+  "pythia|pythia|receiver_word_state|order": [
+   0.533,
+   0.416,
+   0.667,
+   60
+  ],
+  "pythia|pythia|ablation_nofilter_vec|order": [
+   0.483,
+   0.367,
+   0.617,
+   60
+  ],
+  "pythia|qwen|text_compact_of_choice|order": [
+   0.5,
+   0.367,
+   0.617,
+   60
+  ],
+  "pythia|smol|text_compact_of_choice|order": [
+   0.5,
+   0.383,
+   0.633,
+   60
+  ],
+  "pythia|pythia|text_compact_of_choice|order": [
+   0.5,
+   0.367,
+   0.633,
+   60
+  ],
+  "pythia|-|text_prose|maths_signed": [
+   0.026,
+   0.0,
+   0.077,
+   39
+  ],
+  "pythia|-|text_compact|maths_signed": [
+   0.026,
+   0.0,
+   0.077,
+   39
+  ],
+  "pythia|-|text_bag|maths_signed": [
+   0.0,
+   0.0,
+   0.0,
+   39
+  ],
+  "pythia|-|none|maths_signed": [
+   0.0,
+   0.0,
+   0.0,
+   39
+  ],
+  "pythia|qwen|glyph_id|maths_signed": [
+   0.026,
+   0.0,
+   0.077,
+   39
+  ],
+  "pythia|qwen|glyph_vec|maths_signed": [
+   0.026,
+   0.0,
+   0.077,
+   39
+  ],
+  "pythia|qwen|glyph_slot_shuffled|maths_signed": [
+   0.029,
+   0.0,
+   0.088,
+   34
+  ],
+  "pythia|qwen|glyph_samenorm_shuffled|maths_signed": [
+   0.0,
+   0.0,
+   0.0,
+   39
+  ],
+  "pythia|qwen|glyph_raw_unsnapped|maths_signed": [
+   0.026,
+   0.0,
+   0.077,
+   39
+  ],
+  "pythia|qwen|receiver_word_state|maths_signed": [
+   0.026,
+   0.0,
+   0.077,
+   39
+  ],
+  "pythia|qwen|ablation_nofilter_vec|maths_signed": [
+   0.026,
+   0.0,
+   0.077,
+   39
+  ],
+  "pythia|smol|glyph_id|maths_signed": [
+   0.026,
+   0.0,
+   0.077,
+   39
+  ],
+  "pythia|smol|glyph_vec|maths_signed": [
+   0.026,
+   0.0,
+   0.077,
+   39
+  ],
+  "pythia|smol|glyph_slot_shuffled|maths_signed": [
+   0.033,
+   0.0,
+   0.1,
+   30
+  ],
+  "pythia|smol|glyph_samenorm_shuffled|maths_signed": [
+   0.0,
+   0.0,
+   0.0,
+   39
+  ],
+  "pythia|smol|glyph_raw_unsnapped|maths_signed": [
+   0.026,
+   0.0,
+   0.077,
+   39
+  ],
+  "pythia|smol|receiver_word_state|maths_signed": [
+   0.026,
+   0.0,
+   0.077,
+   39
+  ],
+  "pythia|smol|ablation_nofilter_vec|maths_signed": [
+   0.026,
+   0.0,
+   0.077,
+   39
+  ],
+  "pythia|pythia|glyph_id|maths_signed": [
+   0.051,
+   0.0,
+   0.128,
+   39
+  ],
+  "pythia|pythia|glyph_vec|maths_signed": [
+   0.051,
+   0.0,
+   0.128,
+   39
+  ],
+  "pythia|pythia|glyph_slot_shuffled|maths_signed": [
+   0.029,
+   0.0,
+   0.088,
+   34
+  ],
+  "pythia|pythia|glyph_samenorm_shuffled|maths_signed": [
+   0.0,
+   0.0,
+   0.0,
+   39
+  ],
+  "pythia|pythia|glyph_raw_unsnapped|maths_signed": [
+   0.026,
+   0.0,
+   0.077,
+   39
+  ],
+  "pythia|pythia|receiver_word_state|maths_signed": [
+   0.026,
+   0.0,
+   0.077,
+   39
+  ],
+  "pythia|pythia|ablation_nofilter_vec|maths_signed": [
+   0.026,
+   0.0,
+   0.077,
+   39
+  ],
+  "pythia|qwen|text_compact_of_choice|maths_signed": [
+   0.026,
+   0.0,
+   0.077,
+   39
+  ],
+  "pythia|smol|text_compact_of_choice|maths_signed": [
+   0.026,
+   0.0,
+   0.077,
+   39
+  ],
+  "pythia|pythia|text_compact_of_choice|maths_signed": [
+   0.026,
+   0.0,
+   0.077,
+   39
+  ],
+  "pythia|smol|glyph_slot_shuffled_NOT_COVERED|maths_signed": [
+   0.0,
+   0.0,
+   0.0,
+   9
+  ],
+  "pythia|qwen|glyph_slot_shuffled_NOT_COVERED|maths_signed": [
+   0.0,
+   0.0,
+   0.0,
+   5
+  ],
+  "pythia|pythia|glyph_slot_shuffled_NOT_COVERED|maths_signed": [
+   0.0,
+   0.0,
+   0.0,
+   5
+  ]
+ },
+ "acc_pooled": {
+  "qwen|-|text_prose": [
+   0.793,
+   0.749,
+   0.836,
+   323
+  ],
+  "qwen|-|text_compact": [
+   0.591,
+   0.539,
+   0.647,
+   323
+  ],
+  "qwen|-|text_bag": [
+   0.573,
+   0.523,
+   0.628,
+   323
+  ],
+  "qwen|-|none": [
+   0.254,
+   0.21,
+   0.303,
+   323
+  ],
+  "qwen|qwen|glyph_id": [
+   0.706,
+   0.653,
+   0.755,
+   323
+  ],
+  "qwen|qwen|glyph_vec": [
+   0.706,
+   0.656,
+   0.752,
+   323
+  ],
+  "qwen|qwen|glyph_slot_shuffled": [
+   0.186,
+   0.145,
+   0.223,
+   318
+  ],
+  "qwen|qwen|glyph_samenorm_shuffled": [
+   0.3,
+   0.251,
+   0.35,
+   323
+  ],
+  "qwen|qwen|glyph_raw_unsnapped": [
+   0.734,
+   0.687,
+   0.78,
+   323
+  ],
+  "qwen|qwen|receiver_word_state": [
+   0.715,
+   0.672,
+   0.768,
+   323
+  ],
+  "qwen|qwen|ablation_nofilter_vec": [
+   0.709,
+   0.659,
+   0.755,
+   323
+  ],
+  "qwen|qwen|ablation_twomodel_vec": [
+   0.675,
+   0.622,
+   0.724,
+   323
+  ],
+  "qwen|smol|glyph_id": [
+   0.706,
+   0.659,
+   0.755,
+   323
+  ],
+  "qwen|smol|glyph_vec": [
+   0.706,
+   0.656,
+   0.755,
+   323
+  ],
+  "qwen|smol|glyph_slot_shuffled": [
+   0.188,
+   0.143,
+   0.232,
+   314
+  ],
+  "qwen|smol|glyph_samenorm_shuffled": [
+   0.3,
+   0.251,
+   0.353,
+   323
+  ],
+  "qwen|smol|glyph_raw_unsnapped": [
+   0.579,
+   0.526,
+   0.635,
+   323
+  ],
+  "qwen|smol|receiver_word_state": [
+   0.715,
+   0.663,
+   0.759,
+   323
+  ],
+  "qwen|smol|ablation_nofilter_vec": [
+   0.709,
+   0.656,
+   0.759,
+   323
+  ],
+  "qwen|smol|ablation_twomodel_vec": [
+   0.675,
+   0.625,
+   0.724,
+   323
+  ],
+  "qwen|pythia|glyph_id": [
+   0.709,
+   0.663,
+   0.759,
+   323
+  ],
+  "qwen|pythia|glyph_vec": [
+   0.709,
+   0.656,
+   0.759,
+   323
+  ],
+  "qwen|pythia|glyph_slot_shuffled": [
+   0.189,
+   0.148,
+   0.236,
+   318
+  ],
+  "qwen|pythia|glyph_samenorm_shuffled": [
+   0.257,
+   0.207,
+   0.303,
+   323
+  ],
+  "qwen|pythia|glyph_raw_unsnapped": [
+   0.728,
+   0.681,
+   0.78,
+   323
+  ],
+  "qwen|pythia|receiver_word_state": [
+   0.718,
+   0.669,
+   0.768,
+   323
+  ],
+  "qwen|pythia|ablation_nofilter_vec": [
+   0.712,
+   0.659,
+   0.762,
+   323
+  ],
+  "qwen|qwen|text_compact_of_choice": [
+   0.591,
+   0.536,
+   0.644,
+   323
+  ],
+  "qwen|smol|text_compact_of_choice": [
+   0.591,
+   0.536,
+   0.638,
+   323
+  ],
+  "qwen|pythia|text_compact_of_choice": [
+   0.591,
+   0.539,
+   0.638,
+   323
+  ],
+  "qwen|smol|glyph_slot_shuffled_NOT_COVERED": [
+   0.0,
+   0.0,
+   0.0,
+   9
+  ],
+  "qwen|qwen|glyph_slot_shuffled_NOT_COVERED": [
+   0.0,
+   0.0,
+   0.0,
+   5
+  ],
+  "qwen|pythia|glyph_slot_shuffled_NOT_COVERED": [
+   0.0,
+   0.0,
+   0.0,
+   5
+  ],
+  "smol|-|text_prose": [
+   0.687,
+   0.632,
+   0.737,
+   323
+  ],
+  "smol|-|text_compact": [
+   0.65,
+   0.601,
+   0.703,
+   323
+  ],
+  "smol|-|text_bag": [
+   0.502,
+   0.449,
+   0.554,
+   323
+  ],
+  "smol|-|none": [
+   0.353,
+   0.3,
+   0.406,
+   323
+  ],
+  "smol|qwen|glyph_id": [
+   0.672,
+   0.622,
+   0.721,
+   323
+  ],
+  "smol|qwen|glyph_vec": [
+   0.672,
+   0.622,
+   0.718,
+   323
+  ],
+  "smol|qwen|glyph_slot_shuffled": [
+   0.245,
+   0.198,
+   0.296,
+   318
+  ],
+  "smol|qwen|glyph_samenorm_shuffled": [
+   0.31,
+   0.26,
+   0.359,
+   323
+  ],
+  "smol|qwen|glyph_raw_unsnapped": [
+   0.647,
+   0.591,
+   0.7,
+   323
+  ],
+  "smol|qwen|receiver_word_state": [
+   0.607,
+   0.545,
+   0.659,
+   323
+  ],
+  "smol|qwen|ablation_nofilter_vec": [
+   0.675,
+   0.625,
+   0.724,
+   323
+  ],
+  "smol|qwen|ablation_twomodel_vec": [
+   0.666,
+   0.613,
+   0.715,
+   323
+  ],
+  "smol|smol|glyph_id": [
+   0.669,
+   0.613,
+   0.718,
+   323
+  ],
+  "smol|smol|glyph_vec": [
+   0.669,
+   0.616,
+   0.724,
+   323
+  ],
+  "smol|smol|glyph_slot_shuffled": [
+   0.248,
+   0.201,
+   0.296,
+   314
+  ],
+  "smol|smol|glyph_samenorm_shuffled": [
+   0.279,
+   0.229,
+   0.328,
+   323
+  ],
+  "smol|smol|glyph_raw_unsnapped": [
+   0.616,
+   0.566,
+   0.672,
+   323
+  ],
+  "smol|smol|receiver_word_state": [
+   0.607,
+   0.551,
+   0.663,
+   323
+  ],
+  "smol|smol|ablation_nofilter_vec": [
+   0.678,
+   0.628,
+   0.728,
+   323
+  ],
+  "smol|smol|ablation_twomodel_vec": [
+   0.663,
+   0.613,
+   0.715,
+   323
+  ],
+  "smol|pythia|glyph_id": [
+   0.672,
+   0.616,
+   0.721,
+   323
+  ],
+  "smol|pythia|glyph_vec": [
+   0.672,
+   0.628,
+   0.728,
+   323
+  ],
+  "smol|pythia|glyph_slot_shuffled": [
+   0.242,
+   0.198,
+   0.289,
+   318
+  ],
+  "smol|pythia|glyph_samenorm_shuffled": [
+   0.294,
+   0.248,
+   0.347,
+   323
+  ],
+  "smol|pythia|glyph_raw_unsnapped": [
+   0.656,
+   0.601,
+   0.706,
+   323
+  ],
+  "smol|pythia|receiver_word_state": [
+   0.61,
+   0.557,
+   0.659,
+   323
+  ],
+  "smol|pythia|ablation_nofilter_vec": [
+   0.678,
+   0.628,
+   0.728,
+   323
+  ],
+  "smol|qwen|text_compact_of_choice": [
+   0.65,
+   0.598,
+   0.703,
+   323
+  ],
+  "smol|smol|text_compact_of_choice": [
+   0.65,
+   0.601,
+   0.703,
+   323
+  ],
+  "smol|pythia|text_compact_of_choice": [
+   0.653,
+   0.604,
+   0.703,
+   323
+  ],
+  "smol|smol|glyph_slot_shuffled_NOT_COVERED": [
+   0.0,
+   0.0,
+   0.0,
+   9
+  ],
+  "smol|qwen|glyph_slot_shuffled_NOT_COVERED": [
+   0.0,
+   0.0,
+   0.0,
+   5
+  ],
+  "smol|pythia|glyph_slot_shuffled_NOT_COVERED": [
+   0.0,
+   0.0,
+   0.0,
+   5
+  ],
+  "pythia|-|text_prose": [
+   0.706,
+   0.659,
+   0.755,
+   323
+  ],
+  "pythia|-|text_compact": [
+   0.619,
+   0.56,
+   0.669,
+   323
+  ],
+  "pythia|-|text_bag": [
+   0.44,
+   0.387,
+   0.492,
+   323
+  ],
+  "pythia|-|none": [
+   0.328,
+   0.279,
+   0.384,
+   323
+  ],
+  "pythia|qwen|glyph_id": [
+   0.666,
+   0.616,
+   0.715,
+   323
+  ],
+  "pythia|qwen|glyph_vec": [
+   0.666,
+   0.613,
+   0.715,
+   323
+  ],
+  "pythia|qwen|glyph_slot_shuffled": [
+   0.223,
+   0.176,
+   0.267,
+   318
+  ],
+  "pythia|qwen|glyph_samenorm_shuffled": [
+   0.279,
+   0.229,
+   0.325,
+   323
+  ],
+  "pythia|qwen|glyph_raw_unsnapped": [
+   0.709,
+   0.662,
+   0.755,
+   323
+  ],
+  "pythia|qwen|receiver_word_state": [
+   0.7,
+   0.653,
+   0.752,
+   323
+  ],
+  "pythia|qwen|ablation_nofilter_vec": [
+   0.666,
+   0.613,
+   0.712,
+   323
+  ],
+  "pythia|smol|glyph_id": [
+   0.666,
+   0.61,
+   0.715,
+   323
+  ],
+  "pythia|smol|glyph_vec": [
+   0.666,
+   0.616,
+   0.715,
+   323
+  ],
+  "pythia|smol|glyph_slot_shuffled": [
+   0.226,
+   0.182,
+   0.268,
+   314
+  ],
+  "pythia|smol|glyph_samenorm_shuffled": [
+   0.254,
+   0.211,
+   0.297,
+   323
+  ],
+  "pythia|smol|glyph_raw_unsnapped": [
+   0.523,
+   0.471,
+   0.579,
+   323
+  ],
+  "pythia|smol|receiver_word_state": [
+   0.7,
+   0.647,
+   0.746,
+   323
+  ],
+  "pythia|smol|ablation_nofilter_vec": [
+   0.666,
+   0.613,
+   0.715,
+   323
+  ],
+  "pythia|pythia|glyph_id": [
+   0.669,
+   0.616,
+   0.721,
+   323
+  ],
+  "pythia|pythia|glyph_vec": [
+   0.669,
+   0.613,
+   0.721,
+   323
+  ],
+  "pythia|pythia|glyph_slot_shuffled": [
+   0.223,
+   0.179,
+   0.27,
+   318
+  ],
+  "pythia|pythia|glyph_samenorm_shuffled": [
+   0.3,
+   0.251,
+   0.35,
+   323
+  ],
+  "pythia|pythia|glyph_raw_unsnapped": [
+   0.703,
+   0.653,
+   0.752,
+   323
+  ],
+  "pythia|pythia|receiver_word_state": [
+   0.7,
+   0.653,
+   0.749,
+   323
+  ],
+  "pythia|pythia|ablation_nofilter_vec": [
+   0.666,
+   0.61,
+   0.709,
+   323
+  ],
+  "pythia|qwen|text_compact_of_choice": [
+   0.619,
+   0.563,
+   0.669,
+   323
+  ],
+  "pythia|smol|text_compact_of_choice": [
+   0.619,
+   0.567,
+   0.678,
+   323
+  ],
+  "pythia|pythia|text_compact_of_choice": [
+   0.619,
+   0.56,
+   0.672,
+   323
+  ],
+  "pythia|smol|glyph_slot_shuffled_NOT_COVERED": [
+   0.0,
+   0.0,
+   0.0,
+   9
+  ],
+  "pythia|qwen|glyph_slot_shuffled_NOT_COVERED": [
+   0.0,
+   0.0,
+   0.0,
+   5
+  ],
+  "pythia|pythia|glyph_slot_shuffled_NOT_COVERED": [
+   0.0,
+   0.0,
+   0.0,
+   5
+  ]
+ },
+ "snap_acc": {
+  "qwen|t1": [
+   1.0,
+   1.0,
+   1.0,
+   224
+  ],
+  "smol|t1": [
+   1.0,
+   1.0,
+   1.0,
+   224
+  ],
+  "pythia|t1": [
+   1.0,
+   1.0,
+   1.0,
+   224
+  ],
+  "qwen|t2": [
+   1.0,
+   1.0,
+   1.0,
+   60
+  ],
+  "smol|t2": [
+   1.0,
+   1.0,
+   1.0,
+   60
+  ],
+  "pythia|t2": [
+   1.0,
+   1.0,
+   1.0,
+   60
+  ],
+  "qwen|t3": [
+   0.179,
+   0.077,
+   0.308,
+   39
+  ],
+  "smol|t3": [
+   0.179,
+   0.077,
+   0.308,
+   39
+  ],
+  "pythia|t3": [
+   0.179,
+   0.077,
+   0.308,
+   39
+  ]
+ },
+ "slot_shuffled_follows": {
+  "qwen|qwen|role": [
+   0.938,
+   0.893,
+   0.982,
+   112
+  ],
+  "qwen|smol|role": [
+   0.938,
+   0.893,
+   0.982,
+   112
+  ],
+  "qwen|pythia|role": [
+   0.938,
+   0.893,
+   0.973,
+   112
+  ],
+  "qwen|qwen|negation": [
+   1.0,
+   1.0,
+   1.0,
+   56
+  ],
+  "qwen|smol|negation": [
+   1.0,
+   1.0,
+   1.0,
+   56
+  ],
+  "qwen|pythia|negation": [
+   1.0,
+   1.0,
+   1.0,
+   56
+  ],
+  "qwen|qwen|uncertainty": [
+   0.625,
+   0.5,
+   0.75,
+   56
+  ],
+  "qwen|smol|uncertainty": [
+   0.625,
+   0.5,
+   0.75,
+   56
+  ],
+  "qwen|pythia|uncertainty": [
+   0.625,
+   0.5,
+   0.75,
+   56
+  ],
+  "qwen|qwen|order": [
+   0.5,
+   0.383,
+   0.633,
+   60
+  ],
+  "qwen|smol|order": [
+   0.5,
+   0.383,
+   0.633,
+   60
+  ],
+  "qwen|pythia|order": [
+   0.5,
+   0.367,
+   0.617,
+   60
+  ],
+  "qwen|qwen|maths_signed": [
+   0.059,
+   0.0,
+   0.147,
+   34
+  ],
+  "qwen|smol|maths_signed": [
+   0.033,
+   0.0,
+   0.1,
+   30
+  ],
+  "qwen|pythia|maths_signed": [
+   0.088,
+   0.0,
+   0.206,
+   34
+  ],
+  "smol|qwen|role": [
+   0.982,
+   0.955,
+   1.0,
+   112
+  ],
+  "smol|smol|role": [
+   0.982,
+   0.955,
+   1.0,
+   112
+  ],
+  "smol|pythia|role": [
+   0.982,
+   0.955,
+   1.0,
+   112
+  ],
+  "smol|qwen|negation": [
+   0.607,
+   0.482,
+   0.733,
+   56
+  ],
+  "smol|smol|negation": [
+   0.607,
+   0.464,
+   0.714,
+   56
+  ],
+  "smol|pythia|negation": [
+   0.607,
+   0.482,
+   0.732,
+   56
+  ],
+  "smol|qwen|uncertainty": [
+   0.5,
+   0.375,
+   0.625,
+   56
+  ],
+  "smol|smol|uncertainty": [
+   0.5,
+   0.375,
+   0.625,
+   56
+  ],
+  "smol|pythia|uncertainty": [
+   0.5,
+   0.375,
+   0.625,
+   56
+  ],
+  "smol|qwen|order": [
+   0.65,
+   0.517,
+   0.767,
+   60
+  ],
+  "smol|smol|order": [
+   0.65,
+   0.533,
+   0.767,
+   60
+  ],
+  "smol|pythia|order": [
+   0.65,
+   0.517,
+   0.767,
+   60
+  ],
+  "smol|qwen|maths_signed": [
+   0.118,
+   0.029,
+   0.235,
+   34
+  ],
+  "smol|smol|maths_signed": [
+   0.133,
+   0.033,
+   0.267,
+   30
+  ],
+  "smol|pythia|maths_signed": [
+   0.118,
+   0.029,
+   0.235,
+   34
+  ],
+  "pythia|qwen|role": [
+   0.964,
+   0.929,
+   0.991,
+   112
+  ],
+  "pythia|smol|role": [
+   0.964,
+   0.928,
+   0.991,
+   112
+  ],
+  "pythia|pythia|role": [
+   0.964,
+   0.929,
+   0.991,
+   112
+  ],
+  "pythia|qwen|negation": [
+   0.821,
+   0.714,
+   0.911,
+   56
+  ],
+  "pythia|smol|negation": [
+   0.821,
+   0.714,
+   0.911,
+   56
+  ],
+  "pythia|pythia|negation": [
+   0.821,
+   0.714,
+   0.911,
+   56
+  ],
+  "pythia|qwen|uncertainty": [
+   0.536,
+   0.411,
+   0.661,
+   56
+  ],
+  "pythia|smol|uncertainty": [
+   0.536,
+   0.411,
+   0.661,
+   56
+  ],
+  "pythia|pythia|uncertainty": [
+   0.536,
+   0.393,
+   0.661,
+   56
+  ],
+  "pythia|qwen|order": [
+   0.5,
+   0.367,
+   0.633,
+   60
+  ],
+  "pythia|smol|order": [
+   0.5,
+   0.367,
+   0.634,
+   60
+  ],
+  "pythia|pythia|order": [
+   0.5,
+   0.367,
+   0.617,
+   60
+  ],
+  "pythia|qwen|maths_signed": [
+   0.029,
+   0.0,
+   0.088,
+   34
+  ],
+  "pythia|smol|maths_signed": [
+   0.0,
+   0.0,
+   0.0,
+   30
+  ],
+  "pythia|pythia|maths_signed": [
+   0.059,
+   0.0,
+   0.147,
+   34
+  ]
+ },
+ "slot_shuffled_excluded_same_answer": {},
+ "id_vs_vec": {
+  "qwen": {
+   "n": 969,
+   "identical_predictions": 1.0,
+   "max_abs_state_diff_float32": 4.76837158203125e-07,
+   "receipt_ids_match": 1.0
+  },
+  "smol": {
+   "n": 969,
+   "identical_predictions": 1.0,
+   "max_abs_state_diff_float32": 3.814697265625e-06,
+   "receipt_ids_match": 1.0
+  },
+  "pythia": {
+   "n": 969,
+   "identical_predictions": 1.0,
+   "max_abs_state_diff_float32": 9.5367431640625e-07,
+   "receipt_ids_match": 1.0
+  }
+ },
+ "maths_swap_pair_both_correct": {
+  "qwen|-|text_prose": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "qwen|-|text_compact": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "qwen|-|text_bag": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "qwen|-|none": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "qwen|qwen|glyph_id": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "qwen|qwen|glyph_vec": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "qwen|qwen|glyph_slot_shuffled": [
+   0.0,
+   0.0,
+   0.0,
+   14
+  ],
+  "qwen|qwen|glyph_samenorm_shuffled": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "qwen|qwen|glyph_raw_unsnapped": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "qwen|qwen|receiver_word_state": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "qwen|qwen|ablation_nofilter_vec": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "qwen|qwen|ablation_twomodel_vec": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "qwen|smol|glyph_id": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "qwen|smol|glyph_vec": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "qwen|smol|glyph_slot_shuffled": [
+   0.0,
+   0.0,
+   0.0,
+   11
+  ],
+  "qwen|smol|glyph_samenorm_shuffled": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "qwen|smol|glyph_raw_unsnapped": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "qwen|smol|receiver_word_state": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "qwen|smol|ablation_nofilter_vec": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "qwen|smol|ablation_twomodel_vec": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "qwen|pythia|glyph_id": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "qwen|pythia|glyph_vec": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "qwen|pythia|glyph_slot_shuffled": [
+   0.0,
+   0.0,
+   0.0,
+   14
+  ],
+  "qwen|pythia|glyph_samenorm_shuffled": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "qwen|pythia|glyph_raw_unsnapped": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "qwen|pythia|receiver_word_state": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "qwen|pythia|ablation_nofilter_vec": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "qwen|qwen|text_compact_of_choice": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "qwen|smol|text_compact_of_choice": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "qwen|pythia|text_compact_of_choice": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "qwen|smol|glyph_slot_shuffled_NOT_COVERED": [
+   0.0,
+   0.0,
+   0.0,
+   1
+  ],
+  "smol|-|text_prose": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "smol|-|text_compact": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "smol|-|text_bag": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "smol|-|none": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "smol|qwen|glyph_id": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "smol|qwen|glyph_vec": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "smol|qwen|glyph_slot_shuffled": [
+   0.0,
+   0.0,
+   0.0,
+   14
+  ],
+  "smol|qwen|glyph_samenorm_shuffled": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "smol|qwen|glyph_raw_unsnapped": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "smol|qwen|receiver_word_state": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "smol|qwen|ablation_nofilter_vec": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "smol|qwen|ablation_twomodel_vec": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "smol|smol|glyph_id": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "smol|smol|glyph_vec": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "smol|smol|glyph_slot_shuffled": [
+   0.0,
+   0.0,
+   0.0,
+   11
+  ],
+  "smol|smol|glyph_samenorm_shuffled": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "smol|smol|glyph_raw_unsnapped": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "smol|smol|receiver_word_state": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "smol|smol|ablation_nofilter_vec": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "smol|smol|ablation_twomodel_vec": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "smol|pythia|glyph_id": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "smol|pythia|glyph_vec": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "smol|pythia|glyph_slot_shuffled": [
+   0.0,
+   0.0,
+   0.0,
+   14
+  ],
+  "smol|pythia|glyph_samenorm_shuffled": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "smol|pythia|glyph_raw_unsnapped": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "smol|pythia|receiver_word_state": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "smol|pythia|ablation_nofilter_vec": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "smol|qwen|text_compact_of_choice": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "smol|smol|text_compact_of_choice": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "smol|pythia|text_compact_of_choice": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "smol|smol|glyph_slot_shuffled_NOT_COVERED": [
+   0.0,
+   0.0,
+   0.0,
+   1
+  ],
+  "pythia|-|text_prose": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "pythia|-|text_compact": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "pythia|-|text_bag": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "pythia|-|none": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "pythia|qwen|glyph_id": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "pythia|qwen|glyph_vec": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "pythia|qwen|glyph_slot_shuffled": [
+   0.0,
+   0.0,
+   0.0,
+   14
+  ],
+  "pythia|qwen|glyph_samenorm_shuffled": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "pythia|qwen|glyph_raw_unsnapped": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "pythia|qwen|receiver_word_state": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "pythia|qwen|ablation_nofilter_vec": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "pythia|smol|glyph_id": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "pythia|smol|glyph_vec": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "pythia|smol|glyph_slot_shuffled": [
+   0.0,
+   0.0,
+   0.0,
+   11
+  ],
+  "pythia|smol|glyph_samenorm_shuffled": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "pythia|smol|glyph_raw_unsnapped": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "pythia|smol|receiver_word_state": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "pythia|smol|ablation_nofilter_vec": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "pythia|pythia|glyph_id": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "pythia|pythia|glyph_vec": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "pythia|pythia|glyph_slot_shuffled": [
+   0.0,
+   0.0,
+   0.0,
+   14
+  ],
+  "pythia|pythia|glyph_samenorm_shuffled": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "pythia|pythia|glyph_raw_unsnapped": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "pythia|pythia|receiver_word_state": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "pythia|pythia|ablation_nofilter_vec": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "pythia|qwen|text_compact_of_choice": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "pythia|smol|text_compact_of_choice": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "pythia|pythia|text_compact_of_choice": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "pythia|smol|glyph_slot_shuffled_NOT_COVERED": [
+   0.0,
+   0.0,
+   0.0,
+   1
+  ]
+ },
+ "maths_by_sign": {
+  "qwen|-|text_prose|neg": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "qwen|-|text_compact|neg": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "qwen|-|text_bag|neg": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "qwen|-|none|neg": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "qwen|qwen|glyph_id|neg": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "qwen|qwen|glyph_vec|neg": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "qwen|qwen|glyph_slot_shuffled|neg": [
+   0.0,
+   0.0,
+   0.0,
+   16
+  ],
+  "qwen|qwen|glyph_samenorm_shuffled|neg": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "qwen|qwen|glyph_raw_unsnapped|neg": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "qwen|qwen|receiver_word_state|neg": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "qwen|qwen|ablation_nofilter_vec|neg": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "qwen|qwen|ablation_twomodel_vec|neg": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "qwen|smol|glyph_id|neg": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "qwen|smol|glyph_vec|neg": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "qwen|smol|glyph_slot_shuffled|neg": [
+   0.0,
+   0.0,
+   0.0,
+   13
+  ],
+  "qwen|smol|glyph_samenorm_shuffled|neg": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "qwen|smol|glyph_raw_unsnapped|neg": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "qwen|smol|receiver_word_state|neg": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "qwen|smol|ablation_nofilter_vec|neg": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "qwen|smol|ablation_twomodel_vec|neg": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "qwen|pythia|glyph_id|neg": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "qwen|pythia|glyph_vec|neg": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "qwen|pythia|glyph_slot_shuffled|neg": [
+   0.0,
+   0.0,
+   0.0,
+   16
+  ],
+  "qwen|pythia|glyph_samenorm_shuffled|neg": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "qwen|pythia|glyph_raw_unsnapped|neg": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "qwen|pythia|receiver_word_state|neg": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "qwen|pythia|ablation_nofilter_vec|neg": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "qwen|qwen|text_compact_of_choice|neg": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "qwen|smol|text_compact_of_choice|neg": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "qwen|pythia|text_compact_of_choice|neg": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "qwen|-|text_prose|nonneg": [
+   1.0,
+   1.0,
+   1.0,
+   20
+  ],
+  "qwen|-|text_compact|nonneg": [
+   0.05,
+   0.0,
+   0.15,
+   20
+  ],
+  "qwen|-|text_bag|nonneg": [
+   0.4,
+   0.2,
+   0.6,
+   20
+  ],
+  "qwen|-|none|nonneg": [
+   0.0,
+   0.0,
+   0.0,
+   20
+  ],
+  "qwen|qwen|glyph_id|nonneg": [
+   0.1,
+   0.0,
+   0.25,
+   20
+  ],
+  "qwen|qwen|glyph_vec|nonneg": [
+   0.1,
+   0.0,
+   0.25,
+   20
+  ],
+  "qwen|qwen|glyph_slot_shuffled|nonneg": [
+   0.056,
+   0.0,
+   0.167,
+   18
+  ],
+  "qwen|qwen|glyph_samenorm_shuffled|nonneg": [
+   0.0,
+   0.0,
+   0.0,
+   20
+  ],
+  "qwen|qwen|glyph_raw_unsnapped|nonneg": [
+   0.35,
+   0.15,
+   0.55,
+   20
+  ],
+  "qwen|qwen|receiver_word_state|nonneg": [
+   0.2,
+   0.05,
+   0.4,
+   20
+  ],
+  "qwen|qwen|ablation_nofilter_vec|nonneg": [
+   0.15,
+   0.0,
+   0.301,
+   20
+  ],
+  "qwen|qwen|ablation_twomodel_vec|nonneg": [
+   0.15,
+   0.0,
+   0.3,
+   20
+  ],
+  "qwen|smol|glyph_id|nonneg": [
+   0.1,
+   0.0,
+   0.25,
+   20
+  ],
+  "qwen|smol|glyph_vec|nonneg": [
+   0.1,
+   0.0,
+   0.25,
+   20
+  ],
+  "qwen|smol|glyph_slot_shuffled|nonneg": [
+   0.059,
+   0.0,
+   0.176,
+   17
+  ],
+  "qwen|smol|glyph_samenorm_shuffled|nonneg": [
+   0.0,
+   0.0,
+   0.0,
+   20
+  ],
+  "qwen|smol|glyph_raw_unsnapped|nonneg": [
+   0.05,
+   0.0,
+   0.15,
+   20
+  ],
+  "qwen|smol|receiver_word_state|nonneg": [
+   0.2,
+   0.05,
+   0.4,
+   20
+  ],
+  "qwen|smol|ablation_nofilter_vec|nonneg": [
+   0.15,
+   0.0,
+   0.3,
+   20
+  ],
+  "qwen|smol|ablation_twomodel_vec|nonneg": [
+   0.15,
+   0.0,
+   0.35,
+   20
+  ],
+  "qwen|pythia|glyph_id|nonneg": [
+   0.15,
+   0.0,
+   0.3,
+   20
+  ],
+  "qwen|pythia|glyph_vec|nonneg": [
+   0.15,
+   0.0,
+   0.3,
+   20
+  ],
+  "qwen|pythia|glyph_slot_shuffled|nonneg": [
+   0.111,
+   0.0,
+   0.278,
+   18
+  ],
+  "qwen|pythia|glyph_samenorm_shuffled|nonneg": [
+   0.0,
+   0.0,
+   0.0,
+   20
+  ],
+  "qwen|pythia|glyph_raw_unsnapped|nonneg": [
+   0.25,
+   0.1,
+   0.45,
+   20
+  ],
+  "qwen|pythia|receiver_word_state|nonneg": [
+   0.25,
+   0.1,
+   0.45,
+   20
+  ],
+  "qwen|pythia|ablation_nofilter_vec|nonneg": [
+   0.2,
+   0.05,
+   0.4,
+   20
+  ],
+  "qwen|qwen|text_compact_of_choice|nonneg": [
+   0.05,
+   0.0,
+   0.15,
+   20
+  ],
+  "qwen|smol|text_compact_of_choice|nonneg": [
+   0.05,
+   0.0,
+   0.15,
+   20
+  ],
+  "qwen|pythia|text_compact_of_choice|nonneg": [
+   0.05,
+   0.0,
+   0.15,
+   20
+  ],
+  "qwen|smol|glyph_slot_shuffled_NOT_COVERED|neg": [
+   0.0,
+   0.0,
+   0.0,
+   6
+  ],
+  "qwen|qwen|glyph_slot_shuffled_NOT_COVERED|nonneg": [
+   0.0,
+   0.0,
+   0.0,
+   2
+  ],
+  "qwen|smol|glyph_slot_shuffled_NOT_COVERED|nonneg": [
+   0.0,
+   0.0,
+   0.0,
+   3
+  ],
+  "qwen|pythia|glyph_slot_shuffled_NOT_COVERED|nonneg": [
+   0.0,
+   0.0,
+   0.0,
+   2
+  ],
+  "qwen|qwen|glyph_slot_shuffled_NOT_COVERED|neg": [
+   0.0,
+   0.0,
+   0.0,
+   3
+  ],
+  "qwen|pythia|glyph_slot_shuffled_NOT_COVERED|neg": [
+   0.0,
+   0.0,
+   0.0,
+   3
+  ],
+  "smol|-|text_prose|neg": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "smol|-|text_compact|neg": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "smol|-|text_bag|neg": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "smol|-|none|neg": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "smol|qwen|glyph_id|neg": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "smol|qwen|glyph_vec|neg": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "smol|qwen|glyph_slot_shuffled|neg": [
+   0.0,
+   0.0,
+   0.0,
+   16
+  ],
+  "smol|qwen|glyph_samenorm_shuffled|neg": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "smol|qwen|glyph_raw_unsnapped|neg": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "smol|qwen|receiver_word_state|neg": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "smol|qwen|ablation_nofilter_vec|neg": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "smol|qwen|ablation_twomodel_vec|neg": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "smol|smol|glyph_id|neg": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "smol|smol|glyph_vec|neg": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "smol|smol|glyph_slot_shuffled|neg": [
+   0.0,
+   0.0,
+   0.0,
+   13
+  ],
+  "smol|smol|glyph_samenorm_shuffled|neg": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "smol|smol|glyph_raw_unsnapped|neg": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "smol|smol|receiver_word_state|neg": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "smol|smol|ablation_nofilter_vec|neg": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "smol|smol|ablation_twomodel_vec|neg": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "smol|pythia|glyph_id|neg": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "smol|pythia|glyph_vec|neg": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "smol|pythia|glyph_slot_shuffled|neg": [
+   0.0,
+   0.0,
+   0.0,
+   16
+  ],
+  "smol|pythia|glyph_samenorm_shuffled|neg": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "smol|pythia|glyph_raw_unsnapped|neg": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "smol|pythia|receiver_word_state|neg": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "smol|pythia|ablation_nofilter_vec|neg": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "smol|qwen|text_compact_of_choice|neg": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "smol|smol|text_compact_of_choice|neg": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "smol|pythia|text_compact_of_choice|neg": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "smol|-|text_prose|nonneg": [
+   1.0,
+   1.0,
+   1.0,
+   20
+  ],
+  "smol|-|text_compact|nonneg": [
+   0.05,
+   0.0,
+   0.15,
+   20
+  ],
+  "smol|-|text_bag|nonneg": [
+   0.5,
+   0.3,
+   0.701,
+   20
+  ],
+  "smol|-|none|nonneg": [
+   0.0,
+   0.0,
+   0.0,
+   20
+  ],
+  "smol|qwen|glyph_id|nonneg": [
+   0.3,
+   0.1,
+   0.5,
+   20
+  ],
+  "smol|qwen|glyph_vec|nonneg": [
+   0.3,
+   0.1,
+   0.5,
+   20
+  ],
+  "smol|qwen|glyph_slot_shuffled|nonneg": [
+   0.278,
+   0.111,
+   0.5,
+   18
+  ],
+  "smol|qwen|glyph_samenorm_shuffled|nonneg": [
+   0.0,
+   0.0,
+   0.0,
+   20
+  ],
+  "smol|qwen|glyph_raw_unsnapped|nonneg": [
+   0.05,
+   0.0,
+   0.15,
+   20
+  ],
+  "smol|qwen|receiver_word_state|nonneg": [
+   0.2,
+   0.05,
+   0.4,
+   20
+  ],
+  "smol|qwen|ablation_nofilter_vec|nonneg": [
+   0.3,
+   0.149,
+   0.5,
+   20
+  ],
+  "smol|qwen|ablation_twomodel_vec|nonneg": [
+   0.55,
+   0.35,
+   0.8,
+   20
+  ],
+  "smol|smol|glyph_id|nonneg": [
+   0.25,
+   0.05,
+   0.45,
+   20
+  ],
+  "smol|smol|glyph_vec|nonneg": [
+   0.25,
+   0.1,
+   0.45,
+   20
+  ],
+  "smol|smol|glyph_slot_shuffled|nonneg": [
+   0.294,
+   0.118,
+   0.471,
+   17
+  ],
+  "smol|smol|glyph_samenorm_shuffled|nonneg": [
+   0.0,
+   0.0,
+   0.0,
+   20
+  ],
+  "smol|smol|glyph_raw_unsnapped|nonneg": [
+   0.45,
+   0.25,
+   0.65,
+   20
+  ],
+  "smol|smol|receiver_word_state|nonneg": [
+   0.2,
+   0.05,
+   0.4,
+   20
+  ],
+  "smol|smol|ablation_nofilter_vec|nonneg": [
+   0.35,
+   0.15,
+   0.55,
+   20
+  ],
+  "smol|smol|ablation_twomodel_vec|nonneg": [
+   0.5,
+   0.3,
+   0.7,
+   20
+  ],
+  "smol|pythia|glyph_id|nonneg": [
+   0.3,
+   0.1,
+   0.5,
+   20
+  ],
+  "smol|pythia|glyph_vec|nonneg": [
+   0.3,
+   0.1,
+   0.5,
+   20
+  ],
+  "smol|pythia|glyph_slot_shuffled|nonneg": [
+   0.222,
+   0.056,
+   0.389,
+   18
+  ],
+  "smol|pythia|glyph_samenorm_shuffled|nonneg": [
+   0.0,
+   0.0,
+   0.0,
+   20
+  ],
+  "smol|pythia|glyph_raw_unsnapped|nonneg": [
+   0.05,
+   0.0,
+   0.15,
+   20
+  ],
+  "smol|pythia|receiver_word_state|nonneg": [
+   0.25,
+   0.1,
+   0.45,
+   20
+  ],
+  "smol|pythia|ablation_nofilter_vec|nonneg": [
+   0.35,
+   0.15,
+   0.55,
+   20
+  ],
+  "smol|qwen|text_compact_of_choice|nonneg": [
+   0.05,
+   0.0,
+   0.15,
+   20
+  ],
+  "smol|smol|text_compact_of_choice|nonneg": [
+   0.05,
+   0.0,
+   0.15,
+   20
+  ],
+  "smol|pythia|text_compact_of_choice|nonneg": [
+   0.1,
+   0.0,
+   0.25,
+   20
+  ],
+  "smol|smol|glyph_slot_shuffled_NOT_COVERED|neg": [
+   0.0,
+   0.0,
+   0.0,
+   6
+  ],
+  "smol|qwen|glyph_slot_shuffled_NOT_COVERED|nonneg": [
+   0.0,
+   0.0,
+   0.0,
+   2
+  ],
+  "smol|smol|glyph_slot_shuffled_NOT_COVERED|nonneg": [
+   0.0,
+   0.0,
+   0.0,
+   3
+  ],
+  "smol|pythia|glyph_slot_shuffled_NOT_COVERED|nonneg": [
+   0.0,
+   0.0,
+   0.0,
+   2
+  ],
+  "smol|qwen|glyph_slot_shuffled_NOT_COVERED|neg": [
+   0.0,
+   0.0,
+   0.0,
+   3
+  ],
+  "smol|pythia|glyph_slot_shuffled_NOT_COVERED|neg": [
+   0.0,
+   0.0,
+   0.0,
+   3
+  ],
+  "pythia|-|text_prose|neg": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "pythia|-|text_compact|neg": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "pythia|-|text_bag|neg": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "pythia|-|none|neg": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "pythia|qwen|glyph_id|neg": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "pythia|qwen|glyph_vec|neg": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "pythia|qwen|glyph_slot_shuffled|neg": [
+   0.0,
+   0.0,
+   0.0,
+   16
+  ],
+  "pythia|qwen|glyph_samenorm_shuffled|neg": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "pythia|qwen|glyph_raw_unsnapped|neg": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "pythia|qwen|receiver_word_state|neg": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "pythia|qwen|ablation_nofilter_vec|neg": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "pythia|smol|glyph_id|neg": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "pythia|smol|glyph_vec|neg": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "pythia|smol|glyph_slot_shuffled|neg": [
+   0.0,
+   0.0,
+   0.0,
+   13
+  ],
+  "pythia|smol|glyph_samenorm_shuffled|neg": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "pythia|smol|glyph_raw_unsnapped|neg": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "pythia|smol|receiver_word_state|neg": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "pythia|smol|ablation_nofilter_vec|neg": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "pythia|pythia|glyph_id|neg": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "pythia|pythia|glyph_vec|neg": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "pythia|pythia|glyph_slot_shuffled|neg": [
+   0.0,
+   0.0,
+   0.0,
+   16
+  ],
+  "pythia|pythia|glyph_samenorm_shuffled|neg": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "pythia|pythia|glyph_raw_unsnapped|neg": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "pythia|pythia|receiver_word_state|neg": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "pythia|pythia|ablation_nofilter_vec|neg": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "pythia|qwen|text_compact_of_choice|neg": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "pythia|smol|text_compact_of_choice|neg": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "pythia|pythia|text_compact_of_choice|neg": [
+   0.0,
+   0.0,
+   0.0,
+   19
+  ],
+  "pythia|-|text_prose|nonneg": [
+   0.05,
+   0.0,
+   0.15,
+   20
+  ],
+  "pythia|-|text_compact|nonneg": [
+   0.05,
+   0.0,
+   0.15,
+   20
+  ],
+  "pythia|-|text_bag|nonneg": [
+   0.0,
+   0.0,
+   0.0,
+   20
+  ],
+  "pythia|-|none|nonneg": [
+   0.0,
+   0.0,
+   0.0,
+   20
+  ],
+  "pythia|qwen|glyph_id|nonneg": [
+   0.05,
+   0.0,
+   0.15,
+   20
+  ],
+  "pythia|qwen|glyph_vec|nonneg": [
+   0.05,
+   0.0,
+   0.15,
+   20
+  ],
+  "pythia|qwen|glyph_slot_shuffled|nonneg": [
+   0.056,
+   0.0,
+   0.167,
+   18
+  ],
+  "pythia|qwen|glyph_samenorm_shuffled|nonneg": [
+   0.0,
+   0.0,
+   0.0,
+   20
+  ],
+  "pythia|qwen|glyph_raw_unsnapped|nonneg": [
+   0.05,
+   0.0,
+   0.15,
+   20
+  ],
+  "pythia|qwen|receiver_word_state|nonneg": [
+   0.05,
+   0.0,
+   0.15,
+   20
+  ],
+  "pythia|qwen|ablation_nofilter_vec|nonneg": [
+   0.05,
+   0.0,
+   0.15,
+   20
+  ],
+  "pythia|smol|glyph_id|nonneg": [
+   0.05,
+   0.0,
+   0.15,
+   20
+  ],
+  "pythia|smol|glyph_vec|nonneg": [
+   0.05,
+   0.0,
+   0.15,
+   20
+  ],
+  "pythia|smol|glyph_slot_shuffled|nonneg": [
+   0.059,
+   0.0,
+   0.176,
+   17
+  ],
+  "pythia|smol|glyph_samenorm_shuffled|nonneg": [
+   0.0,
+   0.0,
+   0.0,
+   20
+  ],
+  "pythia|smol|glyph_raw_unsnapped|nonneg": [
+   0.05,
+   0.0,
+   0.15,
+   20
+  ],
+  "pythia|smol|receiver_word_state|nonneg": [
+   0.05,
+   0.0,
+   0.15,
+   20
+  ],
+  "pythia|smol|ablation_nofilter_vec|nonneg": [
+   0.05,
+   0.0,
+   0.15,
+   20
+  ],
+  "pythia|pythia|glyph_id|nonneg": [
+   0.1,
+   0.0,
+   0.25,
+   20
+  ],
+  "pythia|pythia|glyph_vec|nonneg": [
+   0.1,
+   0.0,
+   0.25,
+   20
+  ],
+  "pythia|pythia|glyph_slot_shuffled|nonneg": [
+   0.056,
+   0.0,
+   0.167,
+   18
+  ],
+  "pythia|pythia|glyph_samenorm_shuffled|nonneg": [
+   0.0,
+   0.0,
+   0.0,
+   20
+  ],
+  "pythia|pythia|glyph_raw_unsnapped|nonneg": [
+   0.05,
+   0.0,
+   0.15,
+   20
+  ],
+  "pythia|pythia|receiver_word_state|nonneg": [
+   0.05,
+   0.0,
+   0.15,
+   20
+  ],
+  "pythia|pythia|ablation_nofilter_vec|nonneg": [
+   0.05,
+   0.0,
+   0.15,
+   20
+  ],
+  "pythia|qwen|text_compact_of_choice|nonneg": [
+   0.05,
+   0.0,
+   0.15,
+   20
+  ],
+  "pythia|smol|text_compact_of_choice|nonneg": [
+   0.05,
+   0.0,
+   0.15,
+   20
+  ],
+  "pythia|pythia|text_compact_of_choice|nonneg": [
+   0.05,
+   0.0,
+   0.15,
+   20
+  ],
+  "pythia|smol|glyph_slot_shuffled_NOT_COVERED|neg": [
+   0.0,
+   0.0,
+   0.0,
+   6
+  ],
+  "pythia|qwen|glyph_slot_shuffled_NOT_COVERED|nonneg": [
+   0.0,
+   0.0,
+   0.0,
+   2
+  ],
+  "pythia|smol|glyph_slot_shuffled_NOT_COVERED|nonneg": [
+   0.0,
+   0.0,
+   0.0,
+   3
+  ],
+  "pythia|pythia|glyph_slot_shuffled_NOT_COVERED|nonneg": [
+   0.0,
+   0.0,
+   0.0,
+   2
+  ],
+  "pythia|qwen|glyph_slot_shuffled_NOT_COVERED|neg": [
+   0.0,
+   0.0,
+   0.0,
+   3
+  ],
+  "pythia|pythia|glyph_slot_shuffled_NOT_COVERED|neg": [
+   0.0,
+   0.0,
+   0.0,
+   3
+  ]
+ },
+ "bytes": {
+  "t1": {
+   "prose_utf8_bytes": 43.5,
+   "compact_utf8_bytes": 30.0,
+   "prose_tokens": {
+    "qwen": 9.0,
+    "smol": 9.0,
+    "pythia": 9.0
+   },
+   "compact_tokens": {
+    "qwen": 11.214285714285714,
+    "smol": 12.071428571428571,
+    "pythia": 11.928571428571429
+   },
+   "id_bits": 11,
+   "id_bytes_packed_plus_2B_version_header": 4,
+   "id_bits_if_maths_had_4_ops": null,
+   "vector_float32_bytes": 640,
+   "vector_float32_bytes_plus_header": 642
+  },
+  "t2": {
+   "prose_utf8_bytes": 29.766666666666666,
+   "compact_utf8_bytes": 29.766666666666666,
+   "prose_tokens": {
+    "qwen": 6.166666666666667,
+    "smol": 6.533333333333333,
+    "pythia": 6.333333333333333
+   },
+   "compact_tokens": {
+    "qwen": 9.6,
+    "smol": 11.933333333333334,
+    "pythia": 11.533333333333333
+   },
+   "id_bits": 11,
+   "id_bytes_packed_plus_2B_version_header": 4,
+   "id_bits_if_maths_had_4_ops": null,
+   "vector_float32_bytes": 640,
+   "vector_float32_bytes_plus_header": 642
+  },
+  "t3": {
+   "prose_utf8_bytes": 4.0,
+   "compact_utf8_bytes": 9.0,
+   "prose_tokens": {
+    "qwen": 4.0,
+    "smol": 4.0,
+    "pythia": 4.0
+   },
+   "compact_tokens": {
+    "qwen": 6.0,
+    "smol": 6.0,
+    "pythia": 6.0
+   },
+   "id_bits": 6,
+   "id_bytes_packed_plus_2B_version_header": 3,
+   "id_bits_if_maths_had_4_ops": 8,
+   "vector_float32_bytes": 512,
+   "vector_float32_bytes_plus_header": 514
+  }
+ },
+ "slot_sizes": {
+  "t1|mod": 2,
+  "t1|agent": 7,
+  "t1|pol": 2,
+  "t1|act": 5,
+  "t1|patient": 7,
+  "t2|a1": 5,
+  "t2|act1": 4,
+  "t2|ord": 2,
+  "t2|a2": 5,
+  "t2|act2": 4,
+  "t3|left": 6,
+  "t3|op": 1,
+  "t3|right": 5,
+  "t3|eq": 1
+ },
+ "compute_median_ms": {
+  "snap_s": 0.448,
+  "decode_s": 0.134,
+  "receipt_check_s": 0.27,
+  "sender_forward_s": 170.24,
+  "text_receiver_forward_s|qwen": 233.678,
+  "glyph_receiver_forward_s_per_batched_row|qwen": 187.425,
+  "text_receiver_forward_s|smol": 176.763,
+  "glyph_receiver_forward_s_per_batched_row|smol": 134.039,
+  "text_receiver_forward_s|pythia": 169.406,
+  "glyph_receiver_forward_s_per_batched_row|pythia": 112.268
+ },
+ "setup_s": {
+  "extraction_per_model_s(3 models in parallel, 3 threads each)": {
+   "qwen": 789.6563129425049,
+   "smol": 653.2192673683167,
+   "pythia": 670.4058389663696
+  },
+  "negotiation_all_layers_and_ablation_books_s": 106.3
+ },
+ "runtime_test_s": {
+  "qwen": 2998.3549745082855,
+  "smol": 1449.0778455734253,
+  "pythia": 1215.355702638626
+ }
+}

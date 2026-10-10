@@ -1,0 +1,8 @@
++ cd /workspace/glyph-exp
++ R=/workspace/glyph-repo
++ mkdir -p /workspace/glyph-repo/v4 /workspace/glyph-repo/results/v4 /workspace/glyph-repo/logs/v4
++ cp v4/common4.py v4/extract4.py v4/make_artifacts.py v4/negotiate4.py v4/run4.py v4/select4.py v4/spec.py v4/tables4.py v4/tokcheck.py v4/write_results_v4.py v4/after_tables_publish.sh v4/after_test.sh v4/pipeline.sh v4/ptest.sh v4/publish.sh v4/run_extract.sh v4/book_v4.json /workspace/glyph-repo/v4/
++ cp RESULTS_v4.md /workspace/glyph-repo/
++ cp RESULTS_v4.md /workspace/glyph-repo/v4/
++ cp results/v4/dev_qwen.json results/v4/frozen.json results/v4/smoke_smol.json results/v4/tables_v4.json results/v4/test_pythia.json results/v4/test_qwen.json results/v4/test_smol.json /workspace/glyph-repo/results/v4/
++ cp logs/v4/dev_qwen.log logs/v4/dev_smol.log logs/v4/extract_pythia.log logs/v4/extract_qwen.log logs/v4/extract_smol.log logs/v4/negotiate.log logs/v4/publish.log logs/v4/tables.log logs/v4/test_pythia.log logs/v4/test_qwen.log logs/v4/test_smol.log logs/v4/write_results.log /workspace/glyph-repo/logs/v4/
