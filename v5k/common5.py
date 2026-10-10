@@ -25,7 +25,7 @@ def commit():
         import subprocess
         head = subprocess.run(["git", "-C", repo, "rev-parse", "HEAD"], capture_output=True, text=True).stdout.strip()
         here = code_hash(); there = code_hash(os.path.join(repo, "v5k"))
-        if head and here == there and not subprocess.run(["git", "-C", repo, "status", "--porcelain", "v5k"], capture_output=True, text=True).stdout.strip():
+        if head and here == there and not subprocess.run(["git", "-C", repo, "status", "--porcelain", "--untracked-files=no", "v5k"], capture_output=True, text=True).stdout.strip():
             return head
     except Exception: pass
     return "UNCOMMITTED-" + code_hash()[:12]
