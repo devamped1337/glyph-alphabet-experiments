@@ -41,3 +41,5 @@ candidate depths {emb, 0.25, 0.33 of depth}, KP=64, KC=32, seeds {0,1,2}, bases 
 - **Minimal-pair task t5** (status: requested/authorized, approved/not approved, valid now/expired, absent/omitted), plus an UNRECOGNIZED fallback for unknown IDs.
   It is subject to the same prose gate.
 - Box states for t1-t4 are reused (prompts and layers are unchanged). t5 is appended with extract5 ONLY_NEW=1. The laptop extraction restarts from scratch with this code.
+- **Laptop RAM probe (v5.3):** the Qwen fp32 forward pass at batch 8 peaked at 12.6 GB, but the fp32 J-gram backward pass peaked at 17.5 GB (VmHWM), which is over budget.
+  The forward states stay fp32. Qwen's J-gram reloads the weights in **bf16** (recorded in states_qwen.pt `jlens._meta` and in the manifest). SmolLM2's J-gram stays fp32.

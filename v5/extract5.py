@@ -40,6 +40,9 @@ PEAK = [hwm_gb()]
 save(pack(jl), f"states_{key}.pt", {"model": MODELS[key], "stage": "states (before J-gram)"})   # saved before the backward pass so an OOM cannot lose it
 NJ = int(os.environ.get("JPROMPTS", 8)) if OLD is None else 0
 if NJ:
+    JD = os.environ.get("JGRAM_DTYPE", "float32")
+    if JD != "float32":   # RAM: the fp32 backward pass peaked at 17.5 GB on the 17 GB laptop, so the J-gram reloads weights in bf16 (forward states stay fp32)
+        del R.hf; import gc; gc.collect(); R = Runner(key, dtype=getattr(torch, JD))
     tj = time.time(); rng = np.random.default_rng(0); tr = [m for m in M if m["split"] == "train"]
     pick = [tr[i] for i in rng.choice(len(tr), min(NJ, len(tr)), replace=False)]; JB = int(os.environ.get("JBATCH", 2)); G = None
     for b0 in range(0, len(pick), JB):
@@ -48,5 +51,6 @@ if NJ:
     for k in R.L:
         w, V = torch.linalg.eigh(G[k]); jl[k] = {"evecs": V[:, -KP:].flip(1).float(), "evals": w[-KP:].flip(0).float(), "trace": float(w.sum())}
     print("jgram", f"{time.time()-tj:.0f}s, peak RSS {hwm_gb():.2f} GB", flush=True)
-    save(pack(jl), f"states_{key}.pt", {"model": MODELS[key], "stage": "states + J-gram", "peak_rss_gb": PEAK[0]})
+    jl["_meta"] = {"jgram_weights_dtype": os.environ.get("JGRAM_DTYPE", "float32"), "prompts": NJ, "probes": int(os.environ.get("JPROBES", 4)), "jbatch": JB}
+    save(pack(jl), f"states_{key}.pt", {"model": MODELS[key], "stage": "states + J-gram", "peak_rss_gb": PEAK[0], "jgram_weights_dtype": jl["_meta"]["jgram_weights_dtype"]})
 print("done", key, f"{time.time()-t0:.0f}s")

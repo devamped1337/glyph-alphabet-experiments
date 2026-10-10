@@ -75,10 +75,10 @@ def layer_keys(nl): return ["emb"] + [int(round(f * nl)) for f in FRACS]
 
 # ---------- model runner ----------
 class Runner:
-    def __init__(self, key):
-        name, rev = MODELS[key]; self.key = key
+    def __init__(self, key, dtype=torch.float32):
+        name, rev = MODELS[key]; self.key = key; self.dtype = str(dtype).replace("torch.", "")
         self.tok = transformers.AutoTokenizer.from_pretrained(name, revision=rev)
-        self.hf = transformers.AutoModelForCausalLM.from_pretrained(name, revision=rev, dtype=torch.float32, low_cpu_mem_usage=True).eval()
+        self.hf = transformers.AutoModelForCausalLM.from_pretrained(name, revision=rev, dtype=dtype, low_cpu_mem_usage=True).eval()
         for p in self.hf.parameters(): p.requires_grad_(False)
         self.layers = self.hf.model.layers; self.nl = len(self.layers); self.L = layer_keys(self.nl); self.d = self.hf.config.hidden_size
         self.patches = []; self.rec = None; self.grad_taps = None
@@ -129,7 +129,7 @@ class Runner:
             self.grad_taps = {"want": set(k for k in keys if k != "emb")}
             with torch.enable_grad():
                 out = self.hf.model(input_ids=ids, use_cache=False).last_hidden_state
-                v = torch.randn(out.shape, generator=g); taps = [self.grad_taps[k] for k in keys]
+                v = torch.randn(out.shape, generator=g).to(out.dtype); taps = [self.grad_taps[k] for k in keys]
                 grads = torch.autograd.grad((out * v).sum(), taps)
             self.grad_taps = None
             for k, gr in zip(keys, grads): gg = gr.reshape(-1, self.d).double(); G[k] += gg.T @ gg
