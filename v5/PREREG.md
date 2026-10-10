@@ -43,3 +43,5 @@ candidate depths {emb, 0.25, 0.33 of depth}, KP=64, KC=32, seeds {0,1,2}, bases 
 - Box states for t1-t4 are reused (prompts and layers are unchanged). t5 is appended with extract5 ONLY_NEW=1. The laptop extraction restarts from scratch with this code.
 - **Laptop RAM probe (v5.3):** the Qwen fp32 forward pass at batch 8 peaked at 12.6 GB, but the fp32 J-gram backward pass peaked at 17.5 GB (VmHWM), which is over budget.
   The forward states stay fp32. Qwen's J-gram reloads the weights in **bf16** (recorded in states_qwen.pt `jlens._meta` and in the manifest). SmolLM2's J-gram stays fp32.
+- **v5.4 (review):** `del R.hf` did not free the fp32 weights, so the in-process bf16 reload could hold both models at once. The J-gram now runs as a separate process (`jgram5.py`).
+  The running laptop extraction (started on v5.3) is stopped by a watcher as soon as it has saved the fp32 states, before its in-process J-gram step. jgram5 then adds the bf16 J-gram.

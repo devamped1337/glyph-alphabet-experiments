@@ -6,8 +6,9 @@ $PY -c "import sys,torch,transformers; print(sys.version, torch.__version__, tra
 case "$1" in
  1) $PY det5.py run smol 2>&1 | tee logs/det_smol_laptop.log                   # SmolLM2-1.7B: cross-machine determinism partner (~7 GB)
     $PY det5.py run qwen 2>&1 | tee logs/det_qwen_laptop.log                   # Qwen2.5-3B fp32 (~12.5 GB), separate process
-    JGRAM_DTYPE=bfloat16 $PY extract5.py qwen 2>&1 | tee logs/extract_qwen.log ;;
- 1x) JGRAM_DTYPE=bfloat16 $PY extract5.py qwen 2>&1 | tee logs/extract_qwen.log ;;     # extraction only (determinism already done)
+    JPROMPTS=0 $PY extract5.py qwen 2>&1 | tee logs/extract_qwen.log ;;
+ 1x) JPROMPTS=0 $PY extract5.py qwen 2>&1 | tee logs/extract_qwen.log; JGRAM_DTYPE=bfloat16 JBATCH=1 $PY jgram5.py qwen 2>&1 | tee logs/jgram_qwen.log ;;
+ 1j) JGRAM_DTYPE=bfloat16 JBATCH=1 $PY jgram5.py qwen 2>&1 | tee logs/jgram_qwen.log ;;     # extraction only (determinism already done)
  2) export N_DEV=40 DEV_ID_LI=1; $PY run5.py qwen dev 2>&1 | tee logs/dev_qwen.log ;;
  3) export N_TEST=${N_TEST:-80} TEST_SEEDS=0; $PY run5.py qwen test 2>&1 | tee logs/test_qwen.log ;;
 esac

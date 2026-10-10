@@ -40,9 +40,7 @@ PEAK = [hwm_gb()]
 save(pack(jl), f"states_{key}.pt", {"model": MODELS[key], "stage": "states (before J-gram)"})   # saved before the backward pass so an OOM cannot lose it
 NJ = int(os.environ.get("JPROMPTS", 8)) if OLD is None else 0
 if NJ:
-    JD = os.environ.get("JGRAM_DTYPE", "float32")
-    if JD != "float32":   # RAM: the fp32 backward pass peaked at 17.5 GB on the 17 GB laptop, so the J-gram reloads weights in bf16 (forward states stay fp32)
-        del R.hf; import gc; gc.collect(); R = Runner(key, dtype=getattr(torch, JD))
+    if os.environ.get("JGRAM_DTYPE", "float32") != "float32": raise SystemExit("v5.4: run the bf16 J-gram with jgram5.py (separate process), extract5 with JPROMPTS=0")
     tj = time.time(); rng = np.random.default_rng(0); tr = [m for m in M if m["split"] == "train"]
     pick = [tr[i] for i in rng.choice(len(tr), min(NJ, len(tr)), replace=False)]; JB = int(os.environ.get("JBATCH", 2)); G = None
     for b0 in range(0, len(pick), JB):
