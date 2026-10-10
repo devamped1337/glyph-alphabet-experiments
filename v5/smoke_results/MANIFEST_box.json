@@ -1,0 +1,105 @@
+{
+ "states_smol.pt": {
+  "sha256": "02829178d98febb10c6e0949ed7b30d3f3e3ca44fbbf09f1074849c2a7103953",
+  "bytes": 25171461,
+  "commit": "UNCOMMITTED-bbf62fa2a3d3",
+  "code_sha256": "bbf62fa2a3d3b396aa028ab2e4ba9f8736ac38e74450f871a2c02857edd7fa47",
+  "host": "box",
+  "created": "2026-10-10T13:18:37+1100",
+  "model": [
+   "HuggingFaceTB/SmolLM2-1.7B",
+   "effd688a12921b4cc83e3312b6feb579f70f9c71"
+  ]
+ },
+ "states_qwen.pt": {
+  "sha256": "12a0e81ae33930f2d2f43f3bb5de618c1bebc27b96bf8f4772eaf3adc498abe2",
+  "bytes": 25171461,
+  "commit": "UNCOMMITTED-bbf62fa2a3d3",
+  "code_sha256": "bbf62fa2a3d3b396aa028ab2e4ba9f8736ac38e74450f871a2c02857edd7fa47",
+  "host": "box",
+  "created": "2026-10-10T13:18:41+1100",
+  "SMOKE_FAKE": true
+ },
+ "gate5.json": {
+  "sha256": "c4c3ef0ad50cbd9ab08c1e3fefcf46155daeeb65d5a8b2a22764cdb9807c8da0",
+  "bytes": 12804,
+  "commit": "UNCOMMITTED-bbf62fa2a3d3",
+  "code_sha256": "bbf62fa2a3d3b396aa028ab2e4ba9f8736ac38e74450f871a2c02857edd7fa47",
+  "host": "box",
+  "created": "2026-10-10T13:19:28+1100"
+ },
+ "selection5.json": {
+  "sha256": "0c219bd11e22b65bef6b3a5b183acc5ca229677808704468151590f6bf158fc1",
+  "bytes": 108312,
+  "commit": "UNCOMMITTED-bbf62fa2a3d3",
+  "code_sha256": "bbf62fa2a3d3b396aa028ab2e4ba9f8736ac38e74450f871a2c02857edd7fa47",
+  "host": "box",
+  "created": "2026-10-10T13:19:28+1100"
+ },
+ "deliveries_smol.pt": {
+  "sha256": "bbf505072e20403fb8d0924803bd7aa232f2f756395fe1a3e57322b541efd37a",
+  "bytes": 24663296,
+  "commit": "UNCOMMITTED-bbf62fa2a3d3",
+  "code_sha256": "bbf62fa2a3d3b396aa028ab2e4ba9f8736ac38e74450f871a2c02857edd7fa47",
+  "host": "box",
+  "created": "2026-10-10T13:19:29+1100",
+  "receiver": "smol"
+ },
+ "deliveries_qwen.pt": {
+  "sha256": "3f219a91c177fff4cf7e49ecfa4247c07c34ed622acf92a4d2363dd356638395",
+  "bytes": 24663296,
+  "commit": "UNCOMMITTED-bbf62fa2a3d3",
+  "code_sha256": "bbf62fa2a3d3b396aa028ab2e4ba9f8736ac38e74450f871a2c02857edd7fa47",
+  "host": "box",
+  "created": "2026-10-10T13:19:29+1100",
+  "receiver": "qwen"
+ },
+ "book5.json": {
+  "sha256": "de8007a9f71eb980fb6417f9e1af48a14df8dc161a9967bd62fec233a1193b2a",
+  "bytes": 32505,
+  "commit": "UNCOMMITTED-bbf62fa2a3d3",
+  "code_sha256": "bbf62fa2a3d3b396aa028ab2e4ba9f8736ac38e74450f871a2c02857edd7fa47",
+  "host": "box",
+  "created": "2026-10-10T13:19:29+1100"
+ },
+ "smoke_smol.json": {
+  "sha256": "d9fbd69e36e40661b323dcec029b10a79e55abb6146c6f7b651016bae617f97e",
+  "bytes": 120888,
+  "commit": "UNCOMMITTED-bbf62fa2a3d3",
+  "code_sha256": "bbf62fa2a3d3b396aa028ab2e4ba9f8736ac38e74450f871a2c02857edd7fa47",
+  "host": "box",
+  "created": "2026-10-10T13:25:38+1100"
+ },
+ "frozen5.json": {
+  "sha256": "7b101b3d86c15b2acd261ef680037d1ccff78b95d77b86adf7d1b41adc2bec98",
+  "bytes": 223,
+  "commit": "UNCOMMITTED-bbf62fa2a3d3",
+  "code_sha256": "bbf62fa2a3d3b396aa028ab2e4ba9f8736ac38e74450f871a2c02857edd7fa47",
+  "host": "box",
+  "created": "2026-10-10T13:21:58+1100"
+ },
+ "tables5.json": {
+  "sha256": "f01d87d712b1bc02065f7f04c9b551e2fe34831a15eb701d47589e8338b90d26",
+  "bytes": 39051,
+  "commit": "UNCOMMITTED-bbf62fa2a3d3",
+  "code_sha256": "bbf62fa2a3d3b396aa028ab2e4ba9f8736ac38e74450f871a2c02857edd7fa47",
+  "host": "box",
+  "created": "2026-10-10T13:25:41+1100"
+ },
+ "det_state.pt": {
+  "sha256": "c4694b5d5bd97b3cfad068298a423c34a12cf6abe3a9272f6cb03e322134ab3b",
+  "bytes": 42743,
+  "commit": "UNCOMMITTED-bbf62fa2a3d3",
+  "code_sha256": "bbf62fa2a3d3b396aa028ab2e4ba9f8736ac38e74450f871a2c02857edd7fa47",
+  "host": "box",
+  "created": "2026-10-10T13:25:54+1100"
+ },
+ "det_smol_box.pt": {
+  "sha256": "4dbbec5da2359be44285cdfad6f322dac6859ff072fa01d407860fb596ecb5df",
+  "bytes": 50334735,
+  "commit": "UNCOMMITTED-bbf62fa2a3d3",
+  "code_sha256": "bbf62fa2a3d3b396aa028ab2e4ba9f8736ac38e74450f871a2c02857edd7fa47",
+  "host": "box",
+  "created": "2026-10-10T13:26:06+1100"
+ }
+}
