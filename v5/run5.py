@@ -21,6 +21,16 @@ def payload(bname, t, syms):
         if y not in gal: return None
         out.append(str(gal.index(y)))
     return ".".join(out)
+def expand(bname, t, pl):
+    """receiver side: ID payload -> symbols via the local book table; any unknown/malformed ID -> UNRECOGNIZED (no guessing)"""
+    b = D["books"][bname]; parts = pl.split(".")
+    if len(parts) != len(SLOTS[t]): return UNRECOGNIZED
+    out = []
+    for s, p_ in zip(SLOTS[t], parts):
+        gal = [e[2] for e in b["entries"] if e[:2] == (t, s)]
+        if not p_.isdigit() or int(p_) >= len(gal): return UNRECOGNIZED
+        out.append(gal[int(p_)])
+    return out
 TID = {}
 def cand_info(t, q):
     if (t, q) not in TID:
@@ -68,14 +78,17 @@ for n, (mid, q) in enumerate(sel):
     for sk in KEYS:
         S = E["sender"][sk]
         def glyph(cond, dname, C, li, **kw):
-            if C is None: meta.append({"cond": cond + "_NOT_COVERED", "sender": sk, "li": li, "skip": True}); rows.append(None); return
+            if C is None: meta.append({"cond": cond, "sender": sk, "li": li, "covered": 0, **{a: b for a, b in kw.items() if a != "follow_gold"}}); rows.append(None); return
             addrow(cond, patch=(D["keys"][li], pos, H_of(dname, C)), sender=sk, li=li, **kw)
         for li in lis:
             bn = f"{li}|pca|0"; ch = S["choices"][bn]["ch"]; snap_ok = int(ch == [m[s] for s in sl]); pl = payload(bn, t, ch)
             glyph("glyph_id", bn, shared(bn, ch, t), li, basis="pca", seed=0, snap_correct=snap_ok, bytes=len(pl.encode()) if pl else None)
             if pl and (os.environ.get("DEV_ID_LI") is None or phase == "test" or li == int(os.environ["DEV_ID_LI"])):   # (1) the same ID bytes, expanded by the receiver into a prose sentence from its local book table
-                txt = body(t, dict(m, **dict(zip(sl, ch)))); addrow("id_text_expanded", R.ids64(t, q, txt, "prose")[0], sender=sk, li=li, bytes=len(pl.encode()), snap_correct=snap_ok)
+                ex = expand(bn, t, pl); assert ex == ch, (ex, ch)
+                txt = body(t, dict(m, **dict(zip(sl, ex)))); addrow("id_text_expanded", R.ids64(t, q, txt, "prose")[0], sender=sk, li=li, bytes=len(pl.encode()), snap_correct=snap_ok)
                 addrow("id_text_raw", R.ids64(t, q, pl, "prose")[0], sender=sk, li=li, bytes=len(pl.encode()))
+            elif os.environ.get("DEV_ID_LI") is None or phase == "test" or li == int(os.environ["DEV_ID_LI"]):
+                for c_ in ("id_text_expanded", "id_text_raw"): meta.append({"cond": c_, "sender": sk, "li": li, "covered": 0}); rows.append(None)
         if phase == "test":
             li = LI
             for kind in BASES:
@@ -111,11 +124,16 @@ for n, (mid, q) in enumerate(sel):
                 nat = D["books"][bn]["native"]; ks = [(t, s, y) for s, y in zip(sl, ch)]
                 if nat and all(k in nat for k in ks): addrow("receiver_word_state", patch=(D["keys"][li], pos, d["mu"] + torch.stack([nat[k] for k in ks])), sender=sk, li=li)
             for lname, lch in S["loo"].items():   # (2) leave-one-entry-out book
-                if int(lname.split("|")[0]) == li: glyph("glyph_loo", lname, shared(lname, lch, t), li, loo_symbol=lname.split("|")[2], snap_correct=int(lch == [m[s] for s in sl]))
+                if int(lname.split("|")[0]) == li: glyph("glyph_loo", lname, shared(lname + "|" + sk, lch, t), li, loo_symbol=lname.split("|")[2], snap_correct=int(lch == [m[s] for s in sl]))
+    if phase == "test":   # UNRECOGNIZED fallback: an out-of-range ID must expand to UNRECOGNIZED and inject nothing (no model call)
+        bn = f"{LI}|pca|0"; gal0 = [e for e in D["books"][bn]["entries"] if e[:2] == (t, sl[0])]
+        bad = ".".join([str(len(gal0) + 7)] + ["0"] * (len(sl) - 1)); fb = expand(bn, t, bad)
+        meta.append({"cond": "unknown_id_fallback", "payload": bad, "fixed_pred": fb if fb == UNRECOGNIZED else "|".join(fb)}); rows.append(None)
     keep = [i for i, r in enumerate(rows) if r is not None]; ts = time.perf_counter(); preds = run_rows(t, q, [rows[i] for i in keep]); dt = time.perf_counter() - ts
     P = dict(zip(keep, preds))
     for i, mt in enumerate(meta):
         r = {"mid": mid, "t": t, "q": q, "group": m["group"], "gold": gold, "clue": bool(m.get("clue")), **mt}
+        if mt["cond"] == "unknown_id_fallback": r["pred"] = mt["fixed_pred"]; r["correct"] = int(mt["fixed_pred"] == UNRECOGNIZED); r["fallback_check"] = 1
         if i in P:
             r["pred"] = P[i]; r["correct"] = int(P[i] == gold)
             if t == "t3": r.update(score_maths(P[i], gold))

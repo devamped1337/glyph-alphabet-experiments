@@ -62,6 +62,11 @@ def rss_gb():
         for l in open("/proc/self/status"):
             if l.startswith("VmRSS"): return int(l.split()[1]) / 1e6
     except Exception: return resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1e6
+def hwm_gb():
+    try:
+        for l in open("/proc/self/status"):
+            if l.startswith("VmHWM"): return int(l.split()[1]) / 1e6
+    except Exception: return rss_gb()
 def guard(where=""):
     r = rss_gb()
     if r > MAX_RSS_GB: raise MemoryError(f"RSS {r:.1f} GB > {MAX_RSS_GB} GB at {where}")

@@ -20,12 +20,20 @@ def all_entries():
     return E
 def enc(A, k, x): B, sc = A["P"][k]; return ((x @ B) / sc) @ A["Q"][k]
 def dec(A, k, c): B, sc = A["P"][k]; return ((c @ A["Q"][k].T) * sc) @ B.T
+def contains(m, y): return y in [m.get(s) for s in SLOTS[m["t"]]]
 class Layer:
-    """all model-side data at one aligned layer index"""
-    def __init__(self, li):
-        self.li = li; self.Xb = {k: X(k, li) for k in KEYS}; self.Xs = {k: X(k, li, "sender_states") for k in KEYS}
-        self.mu = {k: np.concatenate([self.Xb[k][j, :len(SLOTS[MM[j]["t"]])] for j in TR]).mean(0) for k in KEYS}
+    """all model-side data at one aligned layer index. excl=symbol: a view with EVERY training message containing that symbol removed
+    (mean, prototypes, PCA and adapter rows) for leakage-free leave-one-entry-out."""
+    def __init__(self, li, base=None, excl=None):
+        if base is None: self.Xb = {k: X(k, li) for k in KEYS}; self.Xs = {k: X(k, li, "sender_states") for k in KEYS}
+        else: self.Xb, self.Xs = base.Xb, base.Xs
+        self.li = li; self.excl = excl; self.TR = [j for j in TR if excl is None or not contains(MM[j], excl)]
+        self.mu = {k: np.concatenate([self.Xb[k][j, :len(SLOTS[MM[j]["t"]])] for j in self.TR]).mean(0) for k in KEYS}
         self.probes = {}
+    def native_full(self, k, e):
+        """prototype from ALL training messages (used only for the held-out sender representation / receiver evaluation)"""
+        t, s, y = e; si = SLOTS[t].index(s); v = [self.Xb[k][j, si] for j in TR if MM[j]["t"] == t and MM[j][s] == y]
+        return (np.mean(v, 0) - self.mu[k]) if v else None
     def rows(self, ents, msg_idx):
         es = set(ents); R = []
         for j in msg_idx:
@@ -35,12 +43,12 @@ class Layer:
         return R
     def Z(self, k, R): return np.stack([self.Xb[k][j, si] for j, si in R]) - self.mu[k]
     def native(self, k, e, exclude=None):
-        t, s, y = e; si = SLOTS[t].index(s); v = [self.Xb[k][j, si] for j in TR if MM[j]["t"] == t and MM[j][s] == y]
+        t, s, y = e; si = SLOTS[t].index(s); v = [self.Xb[k][j, si] for j in self.TR if MM[j]["t"] == t and MM[j][s] == y]
         return (np.mean(v, 0) - self.mu[k]) if v else None
     def probe(self, k, t, s, syms):
         key = (k, t, s, tuple(syms))
         if key not in self.probes:
-            si = SLOTS[t].index(s); idx = [j for j in TR if MM[j]["t"] == t and MM[j][s] in syms]
+            si = SLOTS[t].index(s); idx = [j for j in self.TR if MM[j]["t"] == t and MM[j][s] in syms]
             Xs = np.stack([self.Xb[k][j, si] for j in idx]).astype(np.float64) - self.mu[k]; Yo = np.eye(len(syms))[[syms.index(MM[j][s]) for j in idx]] * 2 - 1
             self.probes[key] = np.linalg.solve(Xs.T @ Xs + 10 * np.eye(Xs.shape[1]), Xs.T @ Yo)
         return self.probes[key]
@@ -62,7 +70,7 @@ def gpa(Zp, perm=None):
         C = np.mean([Zp[k] @ Q[k] for k in KEYS], 0)
     return Q
 def fit(L, ents, kind, seed, frac=0.8, exclude_sym=None, shuffle=False):
-    rng = np.random.default_rng(seed); msg = [j for j in TR if rng.random() < frac]
+    rng = np.random.default_rng(seed); msg = [j for j in L.TR if rng.random() < frac]
     R = L.rows(ents, msg)
     if exclude_sym is not None: R = [(j, si) for j, si in R if MM[j][SLOTS[MM[j]["t"]][si]] != exclude_sym]
     Z0 = {k: L.Z(k, R).astype(np.float64) for k in KEYS}; P = {}
@@ -148,18 +156,25 @@ for li in range(NLK):
     # null adapters (pca, seed 0): random orthogonal Q for the sender side; shuffled-pair Procrustes
     Ar = base["A"]; rq = {k: np.linalg.qr(np.random.default_rng(77 + i).standard_normal((KP, KC)))[0] for i, k in enumerate(KEYS)}
     NULLS[li] = {"randorth": {"P": Ar["P"], "Q": rq, "realQ": Ar["Q"]}, "shufpair": fit(L, base["entries"], "pca", 0, shuffle=True)}
-    # LOO: refit without the symbol's rows, rebuild the entry from natives, gate it
+    # LOO (leak-free): drop EVERY training message containing y from mean/PCA/adapters/other prototypes. The held-out entry's code is the
+    # SENDER's representation (its prototype from its own contexts) mapped through the sender adapter; the receiver's prototype of y is used
+    # only to evaluate (gate checks), never to build the transmitted code.
     loo = {}
     for y in LOO_SYMS:
         if os.environ.get("SMOKE") and y not in (ENT[0], PLACES[1]): continue
-        A = fit(L, base["entries"] + [e for e in all_entries() if e[2] == y and e not in base["entries"]], "pca", 0, exclude_sym=y)
-        ents = sorted(set(base["entries"]) | {e for e in all_entries() if e[2] == y}, key=str)
-        ents = [e for e in ents if L.native(KEYS[0], e) is not None and L.native(KEYS[1], e) is not None]
-        res = check(L, ents, A); held = [e for e in ents if e[2] == y]; nat, can, sh = build(L, ents, A)
-        loo[y] = {"entries": ents, "A": A, "native": nat, "can": can, "shared": sh, "mu": L.mu}
+        Lx = Layer(li, base=L, excl=y)
+        keep = [e for e in base["entries"] if e[2] != y and all(Lx.native(k, e) is not None for k in KEYS)]
+        A = fit(Lx, keep, "pca", 0)
+        held = [e for e in all_entries() if e[2] == y and all(L.native_full(k, e) is not None for k in KEYS)]
+        ents = keep + held
+        nat = {k: {**{e: Lx.native(k, e) for e in keep}, **{e: L.native_full(k, e) + L.mu[k] - Lx.mu[k] for e in held}} for k in KEYS}
+        can = {k: {e: enc(A, k, nat[k][e]) for e in ents} for k in KEYS}
+        per_sender = {sk: {e: (np.mean([can[k][e] for k in KEYS], 0) if e not in held else can[sk][e]) for e in ents} for sk in KEYS}
+        res = check(Lx, ents, A, override={k: {e: nat[k][e] for e in held} for k in KEYS})
+        loo[y] = {"entries": ents, "held": held, "A": A, "native": nat, "can": can, "shared_by_sender": per_sender, "mu": Lx.mu}
         GATE["loo"][f"{li}|{y}"] = {"held_entries_pass": {"|".join(e): res[e]["pass"] for e in held},
                                     "held_failed_checks": {"|".join(e): [c for c in ("meaning", "roundtrip", "keeper", "readability", "geometry") if not res[e][c]] for e in held},
-                                    "collateral_rejections": ["|".join(e) for e in ents if e[2] != y and not res[e]["pass"]], "n_rows": A["n_rows"]}
+                                    "collateral_rejections": ["|".join(e) for e in keep if not res[e]["pass"]], "n_rows": A["n_rows"], "n_train_msgs_used": len(Lx.TR)}
     BOOKS[(li, "loo")] = loo
     # planted bad entries: "Zed" = Alice-agent states in model 0 but Bob-agent states in model 1; "Noise" = random vector at the norm of a real entry
     for name in ("Zed", "Noise"):
@@ -174,9 +189,10 @@ for li in range(NLK):
         for sk in KEYS:
             other = [k for k in KEYS if k != sk][0]
             for split in ("dev", "test"):
-                for task, slot in (("t4", "place"), ("t1", "agent")):
+                for task, slot in (("t4", "place"), ("t1", "agent"), ("t5", "status")):
                     gal = [e for e in b["entries"] if e[:2] == (task, slot)]; syms = [e[2] for e in gal]; si = SLOTS[task].index(slot)
-                    idx = [j for j, m in enumerate(MM) if m["t"] == task and m["split"] == split and m[slot] in syms]
+                    idx_all = [j for j, m in enumerate(MM) if m["t"] == task and m["split"] == split]
+                    idx = [j for j in idx_all if MM[j][slot] in syms]
                     if not idx: continue
                     cm = np.zeros((len(syms), len(syms)), int); rows = []
                     for j in idx:
@@ -184,14 +200,20 @@ for li in range(NLK):
                         own = np.argsort(-(unit(np.stack([b["can"][sk][g] for g in gal])) @ unit(c)))
                         cross = int(np.argmax(unit(np.stack([b["can"][other][g] for g in gal])) @ unit(c)))
                         cm[syms.index(m[slot]), own[0]] += 1
-                        sm = string_match(sender_text(task, m), syms)[0] if task == "t4" else None
+                        sm = string_match(sender_text(task, m), syms)[0] if task in ("t4", "t5") else None
                         rows.append({"kind": "clue" if m.get("clue") else "name", "top1": int(syms[own[0]] == m[slot]), "top3": int(m[slot] in [syms[i] for i in own[:3]]),
                                      "top5": int(m[slot] in [syms[i] for i in own[:5]]), "cross_top1": int(syms[cross] == m[slot]),
                                      "same_country_top1": int(COUNTRY.get(syms[own[0]]) == COUNTRY.get(m[slot])) if task == "t4" else None,
                                      "string_baseline": int(sm == m[slot]) if sm else None})
                     out = {"symbols": syms, "confusion": cm.tolist()}
+                    for j in idx_all:      # out-of-book messages: an unsupported delivery counts as a failure end-to-end
+                        if MM[j][slot] not in syms: rows.append({"kind": "clue" if MM[j].get("clue") else "name", "uncovered": 1})
                     for kd in ("name", "clue"):
-                        rr = [r for r in rows if r["kind"] == kd]
+                        ra = [r for r in rows if r["kind"] == kd]
+                        if ra: out[kd + "_coverage"] = {"coverage": boot([0 if r.get("uncovered") else 1 for r in ra]),
+                                                        "end_to_end_top1": boot([0 if r.get("uncovered") else r["top1"] for r in ra]),
+                                                        "end_to_end_string_baseline": boot([0 if r.get("uncovered") else (r["string_baseline"] or 0) for r in ra]) if task in ("t4", "t5") else None}
+                        rr = [r for r in rows if r["kind"] == kd and not r.get("uncovered")]
                         if rr: out[kd] = {f: boot([r[f] for r in rr if r[f] is not None]) for f in ("top1", "top3", "top5", "cross_top1", "same_country_top1", "string_baseline") if rr[0][f] is not None}
                     SEL[f"{li}|{kind}|{seed}|{sk}|{split}|{task}"] = out
     # null-adapter cross-model selection (test, place + agent): sender raw vector vs other model's gallery
@@ -233,7 +255,9 @@ for rk in KEYS:
             D["books"][name] = {"entries": b["entries"], "shared": {e: torch.tensor(b["shared"][e], dtype=torch.float32) for e in b["entries"]},
                                 "native": {e: torch.tensor(b["native"][rk][e], dtype=torch.float32) for e in b["entries"]} if kk[1:] == ("pca", 0) else None}
         else:
-            for y, lb in b.items(): add_dec(f"{kk[0]}|loo|{y}", lb["A"], lb["mu"]); D["books"][f"{kk[0]}|loo|{y}"] = {"entries": lb["entries"], "shared": {e: torch.tensor(lb["shared"][e], dtype=torch.float32) for e in lb["entries"]}, "native": None}
+            for y, lb in b.items():
+                add_dec(f"{kk[0]}|loo|{y}", lb["A"], lb["mu"])
+                for sk in KEYS: D["books"][f"{kk[0]}|loo|{y}|{sk}"] = {"entries": lb["entries"], "shared": {e: torch.tensor(lb["shared_by_sender"][sk][e], dtype=torch.float32) for e in lb["entries"]}, "native": None}
     for li in range(NLK):
         sp = NULLS[li]["shufpair"]; add_dec(f"{li}|null:shufpair", sp, BOOKS[(li, "pca", 0)]["mu"]); add_dec(f"{li}|null:randorth", BOOKS[(li, "pca", 0)]["A"], BOOKS[(li, "pca", 0)]["mu"])
     rng = np.random.default_rng(11)

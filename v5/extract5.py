@@ -10,6 +10,9 @@ if os.environ.get("SMOKE"):
         for sp, k in (("train", n), ("dev", 4), ("test", 4)):
             pool = [m for m in M if m["t"] == t and m["split"] == sp]; keep += [pool[i] for i in sorted(rs.choice(len(pool), min(k, len(pool)), replace=False))]
     M = keep
+OLD = None
+if os.environ.get("ONLY_NEW"):   # append messages missing from an existing states file (prompts/layers unchanged for the old ones)
+    OLD = load(f"states_{key}.pt"); have = set(OLD["mids"]); M = [m for m in M if m["id"] not in have]; print("ONLY_NEW: extracting", len(M), "new messages", flush=True)
 BS = int(os.environ.get("BS", 8)); P = 5
 def sender64(m):
     core = sender_prompt(m["t"], m); cids = R.tok.encode(core, add_special_tokens=False); assert len(cids) <= CTX
@@ -24,20 +27,26 @@ for kind, fn, dst in (("book", book64, book), ("sender", sender64, send)):
     for b0 in range(0, len(M), BS):
         chunk = M[b0:b0 + BS]; built = [fn(m) for m in chunk]
         ts = time.perf_counter(); S = R.read([x[0] for x in built], [pad(x[1]) for x in built], R.L); tfwd.append((time.perf_counter() - ts) / len(chunk))
-        dst[b0:b0 + len(chunk)] = S.half()
+        dst[b0:b0 + len(chunk)] = S.half(); pass
         if b0 % (BS * 25) == 0: print(kind, b0, len(M), f"{time.time()-t0:.0f}s RSS {guard(kind):.1f} GB", flush=True)
-jl = {}
-NJ = int(os.environ.get("JPROMPTS", 8))
+jl = OLD["jlens"] if OLD is not None else {}
+def pack(jl):
+    mids = [m["id"] for m in M]; b, sd = book, send
+    if OLD is not None: mids = OLD["mids"] + mids; b = torch.cat([OLD["book_states"], book]); sd = torch.cat([OLD["sender_states"], send])
+    return {"key": key, "model": MODELS[key], "keys": R.L, "n_layers": R.nl, "d": R.d, "mids": mids, "book_states": b, "sender_states": sd,
+            "jlens": jl, "sender_forward_s_median": float(np.median(tfwd)), "runtime_s": time.time() - t0, "env": env_info(), "peak_rss_gb": PEAK[0],
+            "weights_dtype": "float32", "batch": BS, "appended_from": (OLD or {}).get("env", {}).get("commit")}
+PEAK = [hwm_gb()]
+save(pack(jl), f"states_{key}.pt", {"model": MODELS[key], "stage": "states (before J-gram)"})   # saved before the backward pass so an OOM cannot lose it
+NJ = int(os.environ.get("JPROMPTS", 8)) if OLD is None else 0
 if NJ:
     tj = time.time(); rng = np.random.default_rng(0); tr = [m for m in M if m["split"] == "train"]
     pick = [tr[i] for i in rng.choice(len(tr), min(NJ, len(tr)), replace=False)]; JB = int(os.environ.get("JBATCH", 2)); G = None
     for b0 in range(0, len(pick), JB):
         g = R.jgram([book64(m)[0] for m in pick[b0:b0 + JB]], R.L, int(os.environ.get("JPROBES", 4)), seed=b0)
-        G = g if G is None else {k: G[k] + g[k] for k in G}
+        G = g if G is None else {k: G[k] + g[k] for k in G}; PEAK[0] = hwm_gb()
     for k in R.L:
         w, V = torch.linalg.eigh(G[k]); jl[k] = {"evecs": V[:, -KP:].flip(1).float(), "evals": w[-KP:].flip(0).float(), "trace": float(w.sum())}
-    print("jgram", f"{time.time()-tj:.0f}s", flush=True)
-save({"key": key, "model": MODELS[key], "keys": R.L, "n_layers": R.nl, "d": R.d, "mids": [m["id"] for m in M], "book_states": book, "sender_states": send,
-      "jlens": jl, "sender_forward_s_median": float(np.median(tfwd)), "runtime_s": time.time() - t0, "env": env_info(), "peak_rss_gb": rss_gb()},
-     f"states_{key}.pt", {"model": MODELS[key]})
+    print("jgram", f"{time.time()-tj:.0f}s, peak RSS {hwm_gb():.2f} GB", flush=True)
+    save(pack(jl), f"states_{key}.pt", {"model": MODELS[key], "stage": "states + J-gram", "peak_rss_gb": PEAK[0]})
 print("done", key, f"{time.time()-t0:.0f}s")

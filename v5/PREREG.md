@@ -26,3 +26,18 @@ candidate depths {emb, 0.25, 0.33 of depth}, KP=64, KC=32, seeds {0,1,2}, bases 
 - Qwen receiver test (laptop): N_TEST=80 per task|question, and the jlens/random bases use seed 0 only. The SmolLM2 receiver test (box) keeps N_TEST=250 and seeds {0,1,2}.
   This is a compute limit, not a choice made after seeing results. Qwen-receiver cells have wider CIs.
 - states_qwen.pt was extracted with commit d2108eb (extraction code is unchanged in v5.1).
+
+## Amendment v5.2 (audit of d2108eb; written before any dev or test run)
+- **Ties and wins:** "ties" is no longer "CIs overlap". For each receiver x sender x task|question, A-B is the paired difference over the same queries
+  (unsupported deliveries count as failures), with a cluster bootstrap over message groups (2000 resamples). **Equivalence margin ±0.05:** *equivalent* if the 95% CI
+  lies inside [-0.05, +0.05]; *A better* if the lower bound > 0; *B better* if the upper bound < 0; otherwise *inconclusive*. Primary pairs: glyph_id (pca, seed 0) vs
+  text_prose, id_text_expanded, text_compact, receiver_word_state.
+- **Coverage:** every table reports dictionary coverage, conditional accuracy (among covered deliveries) and end-to-end accuracy (uncovered deliveries = failures).
+  Headline numbers are end-to-end.
+- **LOO is leak-free:** every training message containing the held-out symbol is removed from the mean, the PCA, the adapter fit and the other prototypes. The transmitted code for
+  the held-out entry is the sender's own prototype mapped through the sender adapter. The receiver's prototype is used only in gate evaluation. LOO accuracy is reported
+  separately for held-out entries that passed and that failed the gate.
+- **Maths demos:** demo pairs (9-4, 3-8, 6-1, 2-9, 7-7) and their reversals are excluded from dev/test (assert in spec5.queries).
+- **Minimal-pair task t5** (status: requested/authorized, approved/not approved, valid now/expired, absent/omitted), plus an UNRECOGNIZED fallback for unknown IDs.
+  It is subject to the same prose gate.
+- Box states for t1-t4 are reused (prompts and layers are unchanged). t5 is appended with extract5 ONLY_NEW=1. The laptop extraction restarts from scratch with this code.

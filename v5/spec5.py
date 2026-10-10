@@ -43,11 +43,15 @@ PLACE_FRAMES = ["We flew to {p} last week.", "Our office in {p} is closing.", "S
                 "The wedding was held in {p}.", "Our supplier is based in {p}."]
 PF_SPLIT = {"train": range(0, 8), "dev": range(8, 10), "test": range(10, 22)}
 
-SLOTS = {"t1": ["mod", "agent", "pol", "act", "patient"], "t2": ["a1", "act1", "ord", "a2", "act2"], "t3": ["left", "right"], "t4": ["place"]}
+STATUS = ["requested", "authorized", "approved", "not approved", "valid now", "expired", "absent", "omitted"]   # minimal pairs (tantive-space)
+REC_IDS = ["A17", "B42", "C08", "D93", "E25", "F61", "G34", "H70", "J12", "K88", "L53", "M29", "N46", "P05", "Q77", "R31", "S64", "T19", "U82", "V40",
+           "W57", "X13", "Y96", "Z38", "Q11"]
+UNRECOGNIZED = "UNRECOGNIZED"
+SLOTS = {"t1": ["mod", "agent", "pol", "act", "patient"], "t2": ["a1", "act1", "ord", "a2", "act2"], "t3": ["left", "right"], "t4": ["place"], "t5": ["status"]}
 DOMAIN = {"mod": MOD, "agent": ENT, "pol": POL, "act": ACT, "patient": ENT, "a1": ENT, "act1": ACT, "ord": ORD, "a2": ENT, "act2": ACT,
-          "left": DIG, "right": DIG, "place": PLACES}
+          "left": DIG, "right": DIG, "place": PLACES, "status": STATUS}
 QUESTIONS = {"t1": {"agent": "Who did it?", "patient": "Who was it done to?", "pol": "Did it happen?", "mod": "Is it certain?"},
-             "t2": {"first": "Who acted first?"}, "t3": {"result": None}, "t4": {"where": "Where?"}}
+             "t2": {"first": "Who acted first?"}, "t3": {"result": None}, "t4": {"where": "Where?"}, "t5": {"status": "What is the status?"}}
 SHOT_ENT = ["Victor", "Wendy", "Trent"]; SHOT_ACT = ["met", "sent"]; SHOT_PLACE = ["Oslo", "Lisbon", "Prague"]
 
 def body(t, m):
@@ -55,12 +59,14 @@ def body(t, m):
     if t == "t1": return f"It is {m['mod']} that {m['agent']} {m['pol']} {m['act']} {m['patient']}."
     if t == "t2": return f"{m['a1']} {m['act1']} {m['ord']} {m['a2']} {m['act2']}."
     if t == "t3": return f"{m['left']}-{m['right']}="
+    if t == "t5": return f"Record {m['rec']} is {m['status']}."
     return PLACE_FRAMES[m.get("frame", 0)].format(p=m["place"])
 def sender_text(t, m):
     """the sender's own reading: a paraphrase frame never used to build receiver prompts (t4: frame or clue)"""
     if t == "t1": return f"Word is, and it is {m['mod']}, that {m['agent']} {m['pol']} {m['act']} {m['patient']}."
     if t == "t2": return f"I heard that {m['a1']} {m['act1']} {m['ord']} {m['a2']} {m['act2']}."
     if t == "t3": return ["Compute: {l}-{r}=", "Work out {l}-{r}=", "Quick sum: {l}-{r}=", "Now {l}-{r}="][m["frame"] % 4].format(l=m["left"], r=m["right"])
+    if t == "t5": return f"Update from the registry: record {m['rec']} is now {m['status']}."
     return PLACE_FRAMES[m["frame"]].format(p=m["clue"] if m.get("clue") else m["place"])
 def sender_values(t, m):
     """surface strings whose LAST token is read in sender_text (clue => last token of the clue phrase)"""
@@ -70,27 +76,32 @@ def skel(t, m):
     if t == "t1": return "It is ? that ? ? ? ?."
     if t == "t2": return "? ? ? ? ?."
     if t == "t3": return "?-?="
+    if t == "t5": return f"Record {m['rec']} is ?."
     return PLACE_FRAMES[m.get("frame", 0)].format(p="?")
 def compact(t, m):
     if t == "t1": return f"{m['act']}({m['agent']},{m['patient']},{m['mod']},{'yes' if m['pol'] == 'indeed' else 'not'})"
     if t == "t2": return f"{m['ord']}({m['a1']}.{m['act1']},{m['a2']}.{m['act2']})"
     if t == "t3": return f"sub({m['left']},{m['right']})="
+    if t == "t5": return f"rec({m['rec']},{m['status'].replace(' ', '_')})"
     return f"loc({m['place']})"
 def answer(t, q, m):
     if t == "t1": return {"agent": m["agent"], "patient": m["patient"], "pol": "yes" if m["pol"] == "indeed" else "no", "mod": "yes" if m["mod"] == "known" else "no"}[q]
     if t == "t2": return m["a1"] if m["ord"] == "before" else m["a2"]
     if t == "t3": return str(int(m["left"]) - int(m["right"]))
+    if t == "t5": return m["status"]
     return m["place"]
 def candidates(t, q):
     if t == "t3": return None
     if t == "t4": return PLACES
+    if t == "t5": return STATUS
     return ENT if (t == "t2" or q in ("agent", "patient")) else ["yes", "no"]
 SHOTS = {"t1": [dict(mod="known", agent="Victor", pol="indeed", act="met", patient="Wendy"), dict(mod="suspected", agent="Trent", pol="never", act="sent", patient="Victor"),
                 dict(mod="known", agent="Wendy", pol="never", act="sent", patient="Trent")],
          "t2": [dict(a1="Victor", act1="met", ord="before", a2="Wendy", act2="sent"), dict(a1="Trent", act1="sent", ord="after", a2="Wendy", act2="met"),
                 dict(a1="Wendy", act1="met", ord="after", a2="Victor", act2="sent")],
          "t3": [dict(left="9", right="4"), dict(left="3", right="8"), dict(left="6", right="1"), dict(left="2", right="9"), dict(left="7", right="7")],
-         "t4": [dict(place="Oslo", frame=3), dict(place="Lisbon", frame=5), dict(place="Prague", frame=1)]}
+         "t4": [dict(place="Oslo", frame=3), dict(place="Lisbon", frame=5), dict(place="Prague", frame=1)],
+         "t5": [dict(rec="AA1", status="pending"), dict(rec="BB2", status="rejected")]}
 FILLER = ("Below are short messages, each followed by a question and its answer. Read each message carefully and answer briefly. " * 4)
 def prompt_core(t, q, msg_text, fmt, nshots):
     """few-shot core WITHOUT filler. fmt: prose|compact|glyph|none|idraw. Shots use names/words outside the test vocabulary."""
@@ -140,13 +151,20 @@ def messages():
         for sp, fr in PF_SPLIT.items():
             for f in fr: M.append({"t": "t4", "split": sp, "group": f"t4{p}", "place": p, "frame": f, "clue": None})
         for ci, c in enumerate(CLUES[p]): M.append({"t": "t4", "split": "test", "group": f"t4{p}", "place": p, "frame": 2 + ci, "clue": c})
+    for k, st in enumerate(STATUS):            # t5 appended last so earlier message ids are unchanged
+        for ri, rec in enumerate(REC_IDS):
+            M.append({"t": "t5", "split": "train" if ri < 10 else "dev" if ri < 13 else "test", "group": f"t5{rec}", "rec": rec, "status": st})
+    for m in M:                                 # audit fix: demo (few-shot) maths pairs and their reversals never enter evaluation
+        if m["t"] == "t3" and tuple(sorted((m["left"], m["right"]))) in DEMO_PAIRS and m["split"] != "train": m["split"] = "excluded_demo"
     for i, m in enumerate(M): m["id"] = i
     return M
+DEMO_PAIRS = {tuple(sorted((s["left"], s["right"]))) for s in SHOTS["t3"]}
 def queries(M, split):
-    Q = []
+    assert split in ("dev", "test"); Q = []
     for m in M:
         if m["split"] != split: continue
         for q in QUESTIONS[m["t"]]:
+            assert not (m["t"] == "t3" and tuple(sorted((m["left"], m["right"]))) in DEMO_PAIRS), "demo pair in evaluation"
             Q.append((m["id"], q))
     return Q
 def parse_int(s):
