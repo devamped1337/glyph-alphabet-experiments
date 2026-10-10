@@ -73,13 +73,13 @@ for n, (mid, q) in enumerate(sel):
         for li in lis:
             bn = f"{li}|pca|0"; ch = S["choices"][bn]["ch"]; snap_ok = int(ch == [m[s] for s in sl]); pl = payload(bn, t, ch)
             glyph("glyph_id", bn, shared(bn, ch, t), li, basis="pca", seed=0, snap_correct=snap_ok, bytes=len(pl.encode()) if pl else None)
-            if pl:   # (1) the same ID bytes, expanded by the receiver into a prose sentence from its local book table
+            if pl and (os.environ.get("DEV_ID_LI") is None or phase == "test" or li == int(os.environ["DEV_ID_LI"])):   # (1) the same ID bytes, expanded by the receiver into a prose sentence from its local book table
                 txt = body(t, dict(m, **dict(zip(sl, ch)))); addrow("id_text_expanded", R.ids64(t, q, txt, "prose")[0], sender=sk, li=li, bytes=len(pl.encode()), snap_correct=snap_ok)
                 addrow("id_text_raw", R.ids64(t, q, pl, "prose")[0], sender=sk, li=li, bytes=len(pl.encode()))
         if phase == "test":
             li = LI
             for kind in BASES:
-                for seed in SEEDS:
+                for seed in [int(x) for x in os.environ.get("TEST_SEEDS", ",".join(map(str, SEEDS))).split(",")]:
                     bn = f"{li}|{kind}|{seed}"
                     if (kind, seed) == ("pca", 0) or bn not in S["choices"]: continue
                     ch = S["choices"][bn]["ch"]; glyph("glyph_id", bn, shared(bn, ch, t), li, basis=kind, seed=seed, snap_correct=int(ch == [m[s] for s in sl]))

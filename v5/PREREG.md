@@ -20,3 +20,9 @@ candidate depths {emb, 0.25, 0.33 of depth}, KP=64, KC=32, seeds {0,1,2}, bases 
    Within each machine, a repeat run and a reload from disk must be bitwise equal. If the cross-machine check fails, cross-machine results are flagged, not discarded.
 8. **Selection test.** Confusable places (countries, capitals and other cities in the same slot), name frames and clue phrases:
    top-1/3/5, confusion matrix, same-country rate and a string-match baseline, on the sender's own gallery and the other model's gallery.
+
+## Amendment v5.1 (before any dev or test run; after the laptop measured 2.9 s per 64-token Qwen2.5-3B forward pass on an i5-8350U)
+- Dev: N_DEV=40 per task|question on both receivers. The `id_text_*` dev rows are produced only at depth index 1; `glyph_id` is still produced at every depth.
+- Qwen receiver test (laptop): N_TEST=80 per task|question, and the jlens/random bases use seed 0 only. The SmolLM2 receiver test (box) keeps N_TEST=250 and seeds {0,1,2}.
+  This is a compute limit, not a choice made after seeing results. Qwen-receiver cells have wider CIs.
+- states_qwen.pt was extracted with commit d2108eb (extraction code is unchanged in v5.1).
