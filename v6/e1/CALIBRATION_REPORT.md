@@ -88,7 +88,7 @@ Examples (Qwen2.5-3B, honest entries):
 | F3-01 | 4 days, no permit; 3/day first 5, 6 after, fee 11 | 23 | `4 * 3 + 3 * 6 = 30` / `Answer: 30` | 30 | applied later tier below threshold; omitted fee |
 | F3-04 | 2 days, permit; 9/day first 6, 4 after, fee 12 | 18 | `9 (for the first 2 days) - 0 (Ember permit holder) = 9` | 9 (fallback) | didn't multiply by days |
 | F3-06 | 5 days, permit; 6/day first 4, 3 after, fee 16 | 27 | `6 + 3*2 = 12` / `Answer: 12` | 12 | wrong multipliers |
-| F3-00 (SmolLM2) | as above | 38 | `The total charge in credits is 24 credits.` | 24 (fallback) | no Answer line; omitted tail day and fee |
+| F3-00 (SmolLM2) | as above | 38 | `The total charge in credits is 24 credits.` | 24 (fallback) | no Answer line; omitted fee (24 = 3×8) |
 
 **One design weakness to record (not a bug, and not changed in this run):** the user turn ends with a trailing `Answer:` (`e1.py` line 181), even though the system prompt asks for short worked reasoning. That cue probably pushes the models to answer immediately (replies of ~15–20 tokens) and suppresses the multi-step working F3 needs. **Proposed for a later, separately amended rerun:** drop the trailing `Answer:` from the user turn, ask explicitly for one line per step (base days, extra days, fee), give F3 a larger token budget (e.g. 256), and score the format separately (log the share of rows without an Answer line). These changes must be pre-registered as an amendment before the rerun. The current run stays as frozen.
 
