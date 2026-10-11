@@ -1,5 +1,29 @@
 # Shared glyph alphabet: cross-model experiments
 
+## The concept
+
+*The idea for this project came from the project's human collaborator. The experiments, code and write-ups are in this repository.*
+
+**Why now.** More and more always-on AI agents, built by different companies, talk to each other. Every exchange costs compute: the sender turns its context into long text, and the receiver reads that text back into its own context. One exchange is cheap. Across millions of agents and billions of messages it adds up to real money and real compute.
+
+**The repository, in full.** Each big model gets a small front agent, a *delegate*. Delegates from different labs negotiate, test and maintain a **shared, versioned dictionary**. Each entry in it is an agreed rule for how a piece of communication or context is encoded. A message can then refer to entries ("apply rule F1-03 v2 to this case") instead of spelling everything out. Each delegate delivers new and updated entries to its own big model in a form that model understands, for example plain text or a cached expansion. The big models never share internal states or weights. All coordination happens between the delegates. So the scheme works even across closed labs. Anyone can check whether a model follows an entry correctly, using conformance tests run through public APIs.
+
+**Step two: glyphs (optional, untested).** Once entries are agreed, *open* models could also exchange richer internal representations of an entry, "glyphs": vectors patched into the receiver instead of text. This is still untested in any meaningful form. v5 only tested the embedding layer (the model's input layer), and there it lost to prose. The contextual/J-lens version has not been tried on held-out data.
+
+**Status: what worked, what failed, our mistakes.**
+
+- Worked (small, early): in v4 (tiny models) glyph IDs tied prose on role tasks and beat compact text, at a few bytes per message. Planted bad entries were rejected in v5 (6/6, but from only 2 designs) and in the E1 calibration (12/12).
+- Failed: the v5 embedding-layer glyph channel lost to prose; after snapping, the "transfer" was mostly a lookup into the receiver's own dictionary. The v5k 7B Kaggle run crashed; only a post-hoc partial analysis exists. In v6 E1 calibration the text-repository gate **rejected everything**, honest entries included, so it was not frozen.
+- Our mistakes:
+  - **Embedding-layer selection:** the pre-registered DEV rule picked the embedding layer, so TEST never compared the contextual channel we actually cared about.
+  - **LOO artifact:** the v5 leave-one-out score mostly measured cases where the held-out symbol was irrelevant to the answer. When the held-out symbol *was* the answer, accuracy was about 0.
+  - **E1 calibration rejected everything:** the gate pair (Qwen2.5-3B + SmolLM2-1.7B) was too weak for a 0.90 bar. The first report also contained wrong claims, since corrected.
+  - **E1's sender is given the correct ID:** E1 is only an oracle-ID receiver test. It says nothing about choosing the right entry. Its cached timing is repeat-request caching, and its FLOPs estimate overcounts cached rows.
+
+Details: [RESULTS_v5.md](RESULTS_v5.md) · [RESULTS_v5k_7B_partial.md](RESULTS_v5k_7B_partial.md) · [v6 E1 calibration report](v6/e1/CALIBRATION_REPORT.md) · [PREREG_v6.md](v6/PREREG_v6.md)
+
+---
+
 Small CPU-only experiments asking whether different open LLMs can share a negotiated **model-neutral codebook over early-layer states**
 (the "glyph book", inspired by Anthropic's Jacobian lens / J-lens), and whether handing off glyphs can match or beat text.
 The book is a set of verified entries (task, slot, symbol). Each model reaches the shared canonical space through its own linear adapter (PCA + generalized Procrustes).
