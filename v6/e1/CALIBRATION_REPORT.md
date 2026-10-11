@@ -1,5 +1,24 @@
 # v6 E1 — Calibration report: the behaviour gate did NOT separate
 
+## CORRECTIONS (2026-10-11 21:10 AEDT, after review `reviews/gpt_1.md`; each figure re-checked against `results/`)
+
+The original text below is kept unchanged. Where it conflicts with this section, this section wins.
+
+1. **"No F3 row came close to the 160-token cap (`gen_tokens` ≤ ~25)" is wrong.** No row hit 160, but many replies are longer than 25 tokens. Qwen: 295/800 F3 honest replies exceed 25 tokens (max 100). Smol: 212/800 (max 96). The text "replies are short single-line arithmetic" overstated this, and so did "~15–20 tokens" in the design-weakness paragraph. The conclusion that nothing was truncated still stands (max 100 < 160).
+2. **Fee omission is not the main failure.** It accounts for 141 of 647 Qwen F3 failures (21.8%). Most failures (~500) are other tier and arithmetic errors. The "What actually goes wrong" paragraph overweighted the fee/negation explanation.
+3. **The trailing `Answer:` is a hypothesis, not a finding.** No ablation was run. The proposed prompt fix is to be tested, not assumed.
+4. **"Agreement is capped by the weaker model too" is wrong.** Two models can agree on the same wrong answer, so agreement isn't bounded by either model's accuracy. In this data, though, agreement was low anyway (≤0.58 on every honest entry).
+5. **"SmolLM2 … by itself rules out any honest entry passing" is true, but SmolLM2 isn't the only limiter.** Qwen also fails the bar on all of F2 (0.56–0.89) and all of F3 (0.02–0.38). With Qwen paired with a perfect partner, only F1 (8/24 entries) could pass.
+6. **"Coin-flip":** this report never used that word. Noted anyway: the answers are integers, so chance accuracy is far below 50%, and no chance-level comparison should be read into any figure.
+7. **Honest-entry means verified** (8 entries each, %): F1 Qwen 98.6 / Smol 40.1; F2 74.0 / 46.6; F3 19.1 / 10.8. They match the review.
+
+### Narrowed scope of E1 claims
+
+- **E1 is an oracle-ID receiver test.** The sender is given the correct entry ID. E1 measures how well the receiver uses a correct ID/expansion. It does **not** test ID selection. `sender_s` is string-formatting time only and must not be reported as sender cost.
+- **Cached timing is repeat-request only.** `id_expanded_cached` re-sends the identical prompt right after the cold `id_expanded` call (e1.py ~l.225–227). The E1 analysis must label this "repeat-request cache", not general prefix reuse. Prose/compact conditions did not get matching caching, so a cached-vs-uncached comparison across conditions isn't like-for-like.
+- **FLOPs issue flagged:** `analyze_e1.py` l.38 estimates FLOPs as 2·params·(prompt+gen tokens) even for cached rows. That overstates the cost of the cached condition and makes the FLOPs comparison invalid as it stands. The E1 analysis must report this or fix it with a post-hoc, labelled correction (count only newly processed tokens).
+- The pre-registered E1 main comparison still counts, within the scope above. The run continues untouched. Repairs (prompt, task scaling, caching for prose, FLOPs, rule-only diagnostic probes that skip the arithmetic) are to be pre-registered separately.
+
 Written 2026-10-11 (AEDT), after calibration finished and while the E1 TEST/main stages were still running (that run was not stopped, restarted or changed). Source: `results/gate_frozen.json`, `results/predictions_calib_{qwen3b,smol17}.jsonl`, `data/cases.json`, `e1.py`. Calibration only; this is not the E1 RESULTS write-up.
 
 ## Headline (failure stated plainly)
