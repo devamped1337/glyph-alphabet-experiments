@@ -47,17 +47,26 @@ def run_rows(t, q, rows):
             if r.get("patch"): lk, pos, H = r["patch"]; groups.setdefault((lk, tuple(pos)), []).append((i, H))
         patches = [(lk, torch.tensor([i for i, _ in v]), torch.tensor(pos), torch.stack([H for _, H in v])) for (lk, pos), v in groups.items()]
         if tids is not None:
-            lg = R.logits(ids, patches); preds += [c[int(i)] for i in lg[:, tids].argmax(1)]; continue
-        cur = ids; outs = [[] for _ in ch]; done = [False] * len(ch)
-        for _ in range(3 if t == "t3" else 4):
-            nx = R.logits(cur, patches).argmax(1)
-            for i in range(len(ch)):
-                if nx[i].item() == NL: done[i] = True
-                if not done[i]: outs[i].append(nx[i].item())
-            if all(done): break
-            cur = torch.cat([cur, nx[:, None]], 1)
-        txt = [R.tok.decode(o).strip() for o in outs]
-        preds += txt if t == "t3" else [next((w for w in c if x.startswith(w)), x) for x in txt]
+            try:
+                lg = R.logits(ids, patches); preds += [c[int(i)] for i in lg[:, tids].argmax(1)]
+            except FloatingPointError as e:
+                print(f"  overflow at {t}|{q} B={len(ch)}: {e}; marking __OVERFLOW__", flush=True)
+                preds += ["__OVERFLOW__"] * len(ch)
+            continue
+        try:
+            cur = ids; outs = [[] for _ in ch]; done = [False] * len(ch)
+            for _ in range(3 if t == "t3" else 4):
+                nx = R.logits(cur, patches).argmax(1)
+                for i in range(len(ch)):
+                    if nx[i].item() == NL: done[i] = True
+                    if not done[i]: outs[i].append(nx[i].item())
+                if all(done): break
+                cur = torch.cat([cur, nx[:, None]], 1)
+            txt = [R.tok.decode(o).strip() for o in outs]
+            preds += txt if t == "t3" else [next((w for w in c if x.startswith(w)), x) for x in txt]
+        except FloatingPointError as e:
+            print(f"  overflow decode at {t}|{q}: {e}; marking __OVERFLOW__", flush=True)
+            preds += ["__OVERFLOW__"] * len(ch)
     return preds
 split = phase; Qs = [(i, q) for i, q in queries(M, split) if i in D["msgs"]]
 if COUNTED is not None: Qs = [(i, q) for i, q in Qs if f"{M[i]['t']}|{q}" in COUNTED]

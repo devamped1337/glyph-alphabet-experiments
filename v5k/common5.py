@@ -113,23 +113,56 @@ class Runner:
             i = core.find(v, cur); assert i >= 0, (core, v); a, b = i, i + len(v); cur = b
             cand = [k for k, (x, y) in enumerate(om) if x < b and y > a]; pos.append(off + cand[-1])
         return pos
+    def _patches_for_row(self, patches, i):
+        """remap a batch of patches onto a single-row batch (row i becomes row 0)."""
+        out = []
+        for lk, rows, pos, H in patches:
+            m = rows == i
+            if bool(m.any()): out.append((lk, torch.zeros(int(m.sum()), dtype=torch.long), pos, H[m]))
+        return out
+    def _finite_or_raise(self, t, what):
+        if not torch.isfinite(t).all(): raise FloatingPointError(f"non-finite {what} in {self.dtype} forward ({self.key})")
+        return t
     @torch.no_grad()
     def read(self, batch_ids, batch_pos, keys):
         """batch_ids [B,64]; batch_pos list of position lists (same length P); returns [B, P, len(keys), d] float32"""
-        ids = torch.tensor(batch_ids).to(self.dev); self.rec = (set(keys), {}, None); self.hf(input_ids=ids, use_cache=False); R = {k: v.float().cpu() for k, v in self.rec[1].items()}; self.rec = None
-        bp = torch.tensor(batch_pos); ar = torch.arange(len(batch_ids))[:, None]
-        out = torch.stack([R[k][ar, bp] for k in keys], 2)
-        if not torch.isfinite(out).all(): raise FloatingPointError(f"non-finite hidden state in {self.dtype} forward ({self.key})")
-        return out
+        def once(batch_ids, batch_pos):
+            ids = torch.tensor(batch_ids).to(self.dev); self.rec = (set(keys), {}, None); self.hf(input_ids=ids, use_cache=False); R = {k: v.float().cpu() for k, v in self.rec[1].items()}; self.rec = None
+            bp = torch.tensor(batch_pos); ar = torch.arange(len(batch_ids))[:, None]
+            return self._finite_or_raise(torch.stack([R[k][ar, bp] for k in keys], 2), "hidden state")
+        try:
+            return once(batch_ids, batch_pos)
+        except FloatingPointError:
+            if self.dtype not in ("float16", "bfloat16") or len(batch_ids) <= 1: raise
+            print(f"  non-finite {self.dtype} hidden ({self.key}) B={len(batch_ids)}; retrying per-row", flush=True)
+            return torch.cat([once(batch_ids[i:i+1], batch_pos[i:i+1]) for i in range(len(batch_ids))], 0)
     @torch.no_grad()
     def logits(self, ids, patches=()):
-        """ids [B,T] tensor; patches: list of (layer_key, rows LongTensor, pos LongTensor, H [len(rows), P, d]). Last-position logits [B,V]."""
-        self.patches = list(patches)
+        """ids [B,T] tensor; patches: list of (layer_key, rows LongTensor, pos LongTensor, H [len(rows), P, d]). Last-position logits [B,V].
+        OLMo-2-7B occasionally produces non-finite float16 logits on a rare batch; retry per-row, then one bfloat16 attempt."""
+        def once(ids_b, patches_b):
+            self.patches = list(patches_b)
+            try:
+                lg = self.hf(input_ids=ids_b.to(self.dev), use_cache=False).logits[:, -1].float().cpu()
+                return self._finite_or_raise(lg, "logits")
+            finally: self.patches = []
         try:
-            lg = self.hf(input_ids=ids.to(self.dev), use_cache=False).logits[:, -1].float().cpu()
-            if not torch.isfinite(lg).all(): raise FloatingPointError(f"non-finite logits in {self.dtype} forward ({self.key})")
-            return lg
-        finally: self.patches = []
+            return once(ids, patches)
+        except FloatingPointError:
+            if self.dtype not in ("float16", "bfloat16"): raise
+            B = int(ids.shape[0])
+            if B > 1:
+                print(f"  non-finite {self.dtype} logits ({self.key}) B={B}; retrying per-row", flush=True)
+                return torch.cat([once(ids[i:i+1], self._patches_for_row(patches, i)) for i in range(B)], 0)
+            if self.dtype == "float16":
+                print(f"  non-finite float16 logits ({self.key}); retrying row in bfloat16", flush=True)
+                prev = self.dtype
+                try:
+                    self.hf.to(dtype=torch.bfloat16); self.dtype = "bfloat16"
+                    return once(ids, patches)
+                finally:
+                    self.hf.to(dtype=torch.float16); self.dtype = prev
+            raise
     def jgram(self, batch_ids, keys, nprobe, seed):
         """J-lens-inspired: E_v[(J^T v)(J^T v)^T] with Gaussian cotangents v on the final hidden state (all positions), summed over source positions.
         Its top eigenvectors span the directions at layer k that most move the final residual stream. Returns {k: [d,d] float64}."""
