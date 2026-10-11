@@ -36,3 +36,23 @@ def embed_pick(message, labels, model_name="sentence-transformers/all-MiniLM-L6-
     if _emb is None: _emb = SentenceTransformer(model_name)
     v = _emb.encode([message] + labels, convert_to_tensor=True)
     sc = util.cos_sim(v[0:1], v[1:])[0].tolist(); return max(range(len(sc)), key=lambda i: (sc[i], -i)), sc
+
+# ------------------------------------------------------------------ A2: order-aware regex number matching
+def nums(s): return [int(x) for x in re.findall(r"\d+", s)]
+
+def _lcs(a, b):
+    D = [[0] * (len(b) + 1) for _ in range(len(a) + 1)]
+    for i in range(len(a)):
+        for j in range(len(b)): D[i + 1][j + 1] = D[i][j] + 1 if a[i] == b[j] else max(D[i][j + 1], D[i + 1][j])
+    return D[-1][-1]
+
+def regex_pick(message, labels):
+    """Score each label by the longest common subsequence of the ORDERED digit-numbers in the message and in the
+    label, +0.5 if one sequence is a prefix of the other. Highest score wins; ties go to the first candidate. Uses
+    no model and no words, so it shows how much of selection number matching alone solves. Spelled-out numbers
+    defeat it on purpose."""
+    q = nums(message); sc = []
+    for l in labels:
+        n = nums(l); m = min(len(q), len(n))
+        sc.append(_lcs(q, n) + (0.5 if m and q[:m] == n[:m] else 0))
+    return max(range(len(labels)), key=lambda i: (sc[i], -i)), sc

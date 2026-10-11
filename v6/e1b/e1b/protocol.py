@@ -16,17 +16,20 @@ def framed_id(e):
 
 class Dictionary:
     """Receiver-side delegate's local verified copy."""
-    def __init__(self, book):
-        self.E = book["entries"]
+    def __init__(self, book, accepted=None):
+        """GPT code r1: membership = the published TEST dictionary (book['dictionary']); if `accepted` (the gate
+        decision recorded in B1/accepted.json) is given, non-accepted IDs are rejected. Never uses hidden labels."""
+        self.E = book["entries"]; self.members = set(book.get("dictionary", self.E)); self.accepted = None if accepted is None else set(accepted)
     def resolve(self, msg):
         """Deterministic check before any model call: exists, version, hash. -> (entry|None, reason)."""
         m = MSG_RE.match(msg)
         if not m: return None, "malformed"
         eid, ver, h = m.group(1), int(m.group(2)), m.group(3)
         e = self.E.get(eid)
-        if e is None or e.get("kind") == "planted": return None, "unknown_id"
+        if e is None or eid not in self.members: return None, "unknown_id"
         if e["ver"] != ver: return None, "stale_version"
         if e["hash"][:8] != h: return None, "hash_mismatch"
+        if self.accepted is not None and eid not in self.accepted: return None, "rejected_by_gate"
         return e, "ok"
 
 # ---------------------------------------------------------------- receiver prompts: (prefix_user, suffix_user)

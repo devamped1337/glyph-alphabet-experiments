@@ -123,11 +123,12 @@ def main():
     ap.add_argument("--results-dir", type=Path, required=True)
     ap.add_argument("--prereg", type=Path)
     ap.add_argument("--e1b", action="store_true", help="E1b mode: --results-dir is the v6/e1b directory")
+    ap.add_argument("--inputs-only", action="store_true", help="E1b: validate frozen inputs only (no stage results expected)")
     args = ap.parse_args()
     if args.e1b:
         sys.path.insert(0, str(args.results_dir.resolve()))
         from e1b.validate import run as run_e1b
-        sys.exit(run_e1b(args.results_dir))
+        sys.exit(run_e1b(args.results_dir, inputs_only=args.inputs_only))
 
     files = list(args.results_dir.glob("predictions_*.jsonl"))
     if not files:

@@ -43,7 +43,7 @@ class TestBuilder(unittest.TestCase):
     def test_verify_passes(self): self.assertTrue(verify(BOOK, CFG))
     def test_counts(self):
         self.assertEqual(len(BOOK["cases"]["test"]), (50 * 2 + 10) * 10)
-        self.assertEqual(len(BOOK["cases"]["cache_fixed"]), 100); self.assertEqual(len(BOOK["cases"]["cache_hard"]), 20)
+        self.assertEqual(len(BOOK["cases"]["cache_fixed"]), 100); self.assertEqual(len(BOOK["cases"]["cache_stress"]), 20)
         self.assertEqual(len(BOOK["groups"]["planted_testgate"]), 40); self.assertEqual(len(BOOK["groups"]["sanity"]), 30)
     def _tamper(self, fn):
         B = copy.deepcopy(BOOK); fn(B)
@@ -91,7 +91,7 @@ class TestProtocol(unittest.TestCase):
 class TestCache(unittest.TestCase):
     def _rows(self, drift):
         be = FakeBackend(drift); E = BOOK["entries"]; rows = []
-        for st in ("fixed", "hard"):
+        for st in ("fixed", "stress"):
             for c in BOOK["cases"][f"cache_{st}"][:5]:
                 r = cachediag.run_prompt(be, E[c["entry"]], c, 16); r["set"] = st; rows.append(r)
         return rows
@@ -121,5 +121,127 @@ class TestRetrieval(unittest.TestCase):
     def test_pick(self):
         labs = ["miller pays 6 hauler pays 5", "miller pays 5 hauler pays 6", "x", "y"]
         self.assertIn(retrieval.bm25_pick("miller billed 6 hauler billed 5", labs)[0], (0, 1)); self.assertEqual(len(retrieval.tfidf_pick("a", labs)[1]), 4)
+    def test_regex_order_aware(self):
+        labs = ["miller pays 5 hauler pays 6", "miller pays 6 hauler pays 5", "6 7", "x"]
+        self.assertEqual(retrieval.regex_pick("miller billed 6, hauler billed 5", labs)[0], 1)
+        self.assertEqual(retrieval.regex_pick("miller billed six, hauler billed five", labs)[0], 0)   # spelled -> no signal, tie -> first
+
+class TestA2(unittest.TestCase):
+    def test_hard_share(self):
+        from e1b.cases import entries_for_config
+        E = BOOK["entries"]
+        for c in ("C60", "C100"):
+            for f, ids in entries_for_config(BOOK, CFG, c).items():
+                self.assertGreaterEqual(sum("msg_style" in E[i] for i in ids) / len(ids), 1 / 3)
+    def test_ntype_recorded(self):
+        for v in BOOK["neighbours"].values(): self.assertTrue(all(BOOK["entries"][n]["ntype"] in ("swap", "shift", "swap+shift") for n in v))
+    def test_unstated_probes(self):
+        from e1b.cases import NOT_STATED
+        p = BOOK["probes"]["calib"][BOOK["groups"]["core_F1"][0]]
+        u = [x for x in p if x["kind"] == "unstated"]; self.assertTrue(u)
+        self.assertTrue(all(x["options"]["ABCD".index(x["gold"])] == NOT_STATED for x in u))
+    def test_leak_rule_kind_baseline(self):
+        from e1b.stages import leak_rule
+        obs = {"F1-mem-v0": [1] * 30 + [0] * 30, "F1-mem-v1": [0] * 54 + [1] * 6, "F1-mem-v2": [0] * 54 + [1] * 6}
+        r = leak_rule(obs, CFG); self.assertEqual(r["flagged"], ["F1-mem-v0"]); self.assertEqual(r["kind_level_leak"], [])
+    def test_coldsplit_and_logging(self):
+        be = FakeBackend(); E = BOOK["entries"]; c = BOOK["cases"]["cache_fixed"][0]
+        r = cachediag.run_prompt(be, E[c["entry"]], c, 16)
+        self.assertIn("cold_coldsplit", r["cmp"]); self.assertEqual(r["runs"]["coldsplit"]["mode"], "coldsplit")
+        self.assertEqual(len(r["runs"]["cold1"]["prompt_sha"]), 64); self.assertEqual(len(r["runs"]["cold1"]["system_turn_sha"]), 64)
+        self.assertIn(r["runs"]["cold1"]["answer_gap_source"], ("after_answer_line", "first_token_fallback"))
+
+class TestGPTCounterexamples(unittest.TestCase):
+    """Regression tests for GPT's code review r1 counterexamples (6e2636d)."""
+    def test_gate_perfect_reader_rejects_planted(self):
+        from e1b.analysis import gate_decision
+        E = BOOK["entries"]; d = Path(tempfile.mkdtemp())
+        try:
+            hon = BOOK["groups"]["core_F1"][:10] + BOOK["groups"]["core_F2"][:10]
+            for kind, pl in (("calib", BOOK["groups"]["planted_calib"][:20]), ("testgate", BOOK["groups"]["planted_testgate"][:20])):
+                for m in ("a", "b"):
+                    with open(d / f"{kind}_{m}.jsonl", "w") as f:
+                        for eid in hon + pl:
+                            for p in BOOK["probes"][kind][eid]:   # perfect reader of the SHOWN text
+                                f.write(json.dumps(dict(entry=eid, template=p["template"], letter=p["gold"], gold=p["gold"], honest_gold=p["honest_gold"],
+                                                        correct=True, honest_correct=p["gold"] == p["honest_gold"])) + "\n")
+            (d / "manip.jsonl").write_text("")
+            g = gate_decision(d, ["a", "b"], CFG, E)
+            self.assertEqual(g["calib"]["honest_accept"]["point"], 1.0); self.assertEqual(g["calib"]["planted_reject"]["point"], 1.0)
+            self.assertEqual(g["testgate_vs_repo_target"]["planted_reject"]["point"], 1.0)
+        finally: shutil.rmtree(d)
+    def test_cross_process_reproducible(self):
+        import subprocess, os
+        code = ("import json,hashlib,sys;sys.path.insert(0,%r);from e1b import load_cfg;from e1b.cases import build;"
+                "print(hashlib.sha256(json.dumps(build(load_cfg()),sort_keys=True).encode()).hexdigest())") % str(ROOT)
+        hs = {subprocess.run([sys.executable, "-c", code], env=dict(os.environ, PYTHONHASHSEED=s), capture_output=True, text=True, check=True).stdout
+              for s in ("1", "2", "77")}
+        self.assertEqual(len(hs), 1, hs)
+    def test_verify_catches_role_swap(self):
+        from e1b import sha256_text
+        def swap(B):
+            e = B["entries"][B["groups"]["core_F1"][0]]; a, b = e["sem"]["mem"], e["sem"]["non"]
+            e["text"] = e["text"].replace(f"charged {a} credits", "charged @@ credits").replace(f"charged {b} credits", f"charged {a} credits").replace("charged @@ credits", f"charged {b} credits")
+            e["hash"] = sha256_text(e["text"])
+        B = copy.deepcopy(BOOK); swap(B)
+        with self.assertRaises(AssertionError): verify(B, CFG)
+    def test_validator_empty_results_not_pass(self):
+        from e1b.validate import run
+        d = Path(tempfile.mkdtemp())
+        try:
+            shutil.copy(ROOT / "config_e1b.json", d); (d / "data").mkdir()
+            (d / "data" / "cases_e1b.json").write_text(json.dumps(BOOK))
+            from e1b import sha256_text; (d / "data" / "cases_e1b.sha256").write_text(sha256_text((d / "data" / "cases_e1b.json").read_text()) + "\n")
+            self.assertEqual(run(d), 1); self.assertEqual(run(d, inputs_only=True), 0)
+            (d / "results" / "B1").mkdir(parents=True); self.assertEqual(run(d, inputs_only=True), 1)   # started, no marker -> broken
+            (d / "results" / "B1" / "BUDGET_EXHAUSTED").write_text("x"); self.assertEqual(run(d, inputs_only=True), 0)
+        finally: shutil.rmtree(d)
+    def test_cache_none_is_not_agreement(self):
+        class NoneBE(FakeBackend):
+            def generate(self, *a, **k):
+                r = super().generate(*a, **k); r["text"] = "no answer line"; return r
+        E = BOOK["entries"]; rows = []
+        for st in ("fixed", "stress"):
+            for c in BOOK["cases"][f"cache_{st}"][:3]:
+                r = cachediag.run_prompt(NoneBE(), E[c["entry"]], c, 16); r["set"] = st; rows.append(r)
+        s = cachediag.summarize(rows); self.assertFalse(s["claim_allowed"]); self.assertGreater(s["fixed"]["invalid_runs"], 0)
+    def test_resolve_uses_membership_and_gate(self):
+        E = BOOK["entries"]; h = BOOK["groups"]["core_F1"][0]; n = BOOK["neighbours"][h][0]; p = BOOK["groups"]["planted_calib"][0]
+        D = Dictionary(BOOK)
+        self.assertEqual(D.resolve(framed_id(E[n]))[1], "ok"); self.assertEqual(D.resolve(framed_id(E[p]))[1], "unknown_id")
+        self.assertEqual(Dictionary(BOOK, accepted={h}).resolve(framed_id(E[n]))[1], "rejected_by_gate")
+        self.assertEqual(Dictionary(BOOK, accepted={h}).resolve(framed_id(E[h]))[1], "ok")
+    def test_canaries_per_record(self):
+        from e1b.stages import canary_regressions
+        ref = {"a": dict(pred="6", correct=True), "b": dict(pred="5", correct=False)}
+        now = {"a": dict(pred="7", correct=False), "b": dict(pred="9", correct=True)}   # same total, different records
+        self.assertEqual(canary_regressions(ref, now), ["a", "b"]); self.assertEqual(canary_regressions(ref, ref), [])
+    def test_budget_ledger_cumulative(self):
+        import e1b.stages as S
+        d = Path(tempfile.mkdtemp()); old = S.RES; S.RES = d
+        try:
+            s1 = S.Stage("B0", 1.0, CFG); s1.prior_s = 1000.0; s1.save_ledger()
+            s2 = S.Stage("B0b", 1.0, CFG, alloc="B0"); self.assertGreaterEqual(s2.prior_s, 1000.0)
+            import atexit; atexit.unregister(s1.save_ledger); atexit.unregister(s2.save_ledger)
+        finally: S.RES = old; shutil.rmtree(d, ignore_errors=True)
+    def test_gguf_pin_mismatch_refused(self):
+        from e1b.backends import verify_gguf
+        import hashlib
+        d = Path(tempfile.mkdtemp()); p = d / "x.gguf"; p.write_bytes(b"abc")
+        try:
+            self.assertEqual(verify_gguf(str(p), hashlib.sha256(b"abc").hexdigest()), hashlib.sha256(b"abc").hexdigest())
+            with self.assertRaises(RuntimeError): verify_gguf(str(p), "0" * 64)
+        finally: shutil.rmtree(d)
+    def test_pins_complete(self):
+        for k, m in CFG["models"]["stageB"].items():
+            self.assertEqual(len(m["revision"]), 40); self.assertEqual(len(m["gguf_revision"]), 40)
+            self.assertTrue(m["gguf_sha256"] and all(len(v) == 64 for v in m["gguf_sha256"].values()))
+    def test_pilot_and_neighbours_disjoint_from_test(self):
+        test_e = {c["entry"] for c in BOOK["cases"]["test"]}
+        for f in CFG["families_core"]:
+            for eid in BOOK["groups"][f"pilot_{f}"]:
+                self.assertNotIn(eid, test_e); self.assertEqual(len(BOOK["neighbours"][eid]), 3)
+        for eid in BOOK["groups"]["core_F1"]:
+            for nid in BOOK["neighbours"][eid]: self.assertIn(nid, BOOK["probes"]["calib"])
 
 if __name__ == "__main__": unittest.main()

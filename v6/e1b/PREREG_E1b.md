@@ -253,3 +253,45 @@ Estimated from E1's measured CPU rates (Qwen-3B 2.25 s/call, Smol 1.31 s/call; p
    - **whole-exchange bytes** = payload + identical case text + any sender-side transmission (candidate labels, if they cross the wire).
 
    Both are reported. The ≥30% target applies to **payload bytes**.
+
+### A2: 2026-10-12 (AEDT), made BEFORE any E1b stage was run (code review round 1)
+
+**Sources:** [claude_code_1](reviews/claude_code_1.md) (Claude's code review of `6e2636d`, read only), [gpt_code_1](reviews/gpt_code_1.md) (GPT's code review of `6e2636d`; it ran the tests and built counterexamples) and [grok_code_1](reviews/grok_code_1.md) (Grok: ready to run). Credit: items 1–15 come from Claude, items 16–26 from GPT, and the B3 wording in item 1 from Grok. **No stage had been run when this amendment was written**; the only model execution was a CPU smoke test of the HF cache path with a tiny model (item 6), which is code testing, not a stage. **Binding; takes precedence over the sections it names, and over A1 where the two conflict.**
+
+**Selection (§9 B3)**
+1. **Order-aware regex number-matching baseline**, reported beside TF-IDF, BM25 and MiniLM. It scores each candidate label by the longest common subsequence of the ordered digit-numbers in the message and in the label. Selection is worded as **"selection among compact labelled candidates (4-way)"**, not a repository search (Grok). On the generated data (no model involved), regex alone picks the right entry for **70/70 plain messages** and 11/13 derived ones, but 0/13 reordered and 0/14 spelled. On plain messages, selection can be solved by number matching alone, and that must be reported next to the sender's accuracy.
+2. **Harder original messages for ≥1/3 of TEST entries**, pre-registered by the frozen seed `hard_messages = 61067`. Three styles are cycled: spelled-out numbers, reordered clauses, and a derived (relative) form. Entries are sampled separately inside the C60 block and the C100-only block, so the share holds under either configuration: C60 11/30 per core family, C100 18/50, F3L 4/10. The message reaches the sender and the prose arm identically. Accuracy is also reported per message style.
+3. **Selection accuracy by neighbour type** (swap, shift, swap+shift; the type is recorded on each neighbour), for the sender and each baseline.
+4. **Selection trials per family** are stated: one trial per entry per sender, so C60 = 30 per core family, C100 = 50, F3L = 10.
+
+**Probes and leak flag (§7, §9 B1; replaces A1.5's flat 0.40)**
+5. **Leak flag against each probe kind's measured no-text baseline:** a template is flagged if its no-text accuracy > max(kind baseline, 0.25) + 0.15, with ≥50 no-text observations. A kind whose own pooled baseline exceeds 0.40 is a kind-level leak, and all of its templates are flagged. The B0b re-check uses the same rule. **Plausible distractors:** the entry's other constants first, then truth ±1–3; no more random 2–20 fillers. **A new "unstated" probe kind** (honest gold = "Not stated by the rule") means "Not stated" can no longer always be eliminated. Probes per entry are now 24 (F1/F2: 5 kinds; F3: 6).
+
+**Cache (§8, A1.4)**
+6. **Cold-split arm:** prefix and suffix as two evaluations in a fresh context, with no state restore. It is reported as a diagnostic (cold vs coldsplit, coldsplit vs warm) to separate "batch split" from "state restore" as the source of any change. The claim rule is unchanged (zero changes in cold/cold, warm/warm, cold1–warm1, cold2–warm2). **CPU smoke test of the HF path** (`tools/smoke_hf_cpu.py`; SmolLM2-135M-Instruct, fp32, CPU, no nf4; 10 prompts): all six comparisons were token-identical on 10/10, and warm processed fewer tokens on every prompt. This tests the code only; it says nothing about the Stage B models.
+7. **"Hard" set renamed "multi-step stress prompts"** (pool `cache_stress`).
+8. **Bound reconciled (replaces the §8 figure):** n = 100 sampled fixed prompts per model. "No changed prediction observed in n=100 sampled prompts; 95% upper bound on the per-prompt change probability ≈3.0% (rule of three)." Prompts are clustered within entries (10 entries per family), so the bound assumes independence and is optimistic. The 20 stress prompts are outside the bound.
+9. **Invalid parses (GPT):** `None == None` is not agreement. Any invalid parse in any cache run counts as a change, is reported (`invalid_runs`), and withholds the claim.
+
+**Logging**
+10. Every rendered prompt is logged once per stage and model (`prompts_<model>.jsonl`, keyed by sha256). Rows carry `prompt_sha` and `system_turn_sha`, and each backend load logs the system-turn hash for every system prompt. The validator checks that every logged sha resolves.
+11. `answer_gap_source` is recorded: `after_answer_line`, or `first_token_fallback` when no `Answer:` line appears.
+
+**Smaller items**
+12. **An invalid-reply rate >5%** (probe or arithmetic, either pair model, on B0 qualification) writes `PROMPT_FIX_REQUIRED`. B1 refuses to start (exit 8) until a prompt fix is recorded in a dated amendment (`PROMPT_FIX_AMENDED`).
+13. **The manipulation-check model** is the pair model with the higher B0 core qualification score (probe + arithmetic), recorded in `config_choice.json`. It replaces "the first-listed model".
+14. **mk_case substring skew (noted, not changed):** a case is rejected if its gold string appears anywhere in the entry text, the message or the question, including as a substring (e.g. gold 6 inside "16"). This skews the case distribution slightly away from golds whose digits occur in the rule. It applies equally to every arm.
+15. Code hash re-recorded (`CODE_HASH.txt`).
+
+**Bugs found by GPT, fixed with regression tests (GPT's counterexamples reproduced on `6e2636d` before fixing)**
+16. **CRITICAL: the gate now scores probes against `honest_gold`** (the agreed meaning), not `gold` (the shown, possibly corrupted text). Comprehension and manipulation diagnostics keep using `gold`. On `6e2636d`, a simulated perfect reader of the shown text was accepted on 100% of honest entries with **0% planted rejection**. After the fix it gives 100% acceptance and 100% rejection. The builder now asserts that every planted entry flips enough probes that a perfect reader falls below the 0.90 bar (actual minimum: 5 of 24).
+17. **Cross-process reproducibility:** a set was sorted with random keys, so the book differed between PYTHONHASHSEED=1 and 2 on `6e2636d` (`ce97f620…` vs `3a93398a…`). The distractor code now uses ordered lists, and a test builds the book in three processes with different hash seeds and requires identical sha256.
+18. **`verify()` checks role/number binding:** the rule text is parsed into role → rate (member/non-member, giver/taker, first-days/later-days/fee), the question is parsed into quantities and the asked role, and gold is recomputed from the texts alone. A member/non-member rate swap passed on `6e2636d` and is caught now.
+19. **The validator is stage-aware:** an empty results dir FAILS unless `--inputs-only` is given. A started stage must be complete (`.done`) or carry an explicit stop marker. A complete stage must have its expected files, keys must be unique, and the row counts are checked for B1 calibration and B3.
+20. **Pilot timing** uses dedicated pilot entries, with their own neighbours checked against pilot cases. It never uses TEST entries.
+21. **Neighbours are calibrated** in B1 like any other candidate (calibration probes for every neighbour of every core/F3L entry, plus F3L itself), so a gated B3 treats all candidates consistently. Neighbour acceptance is reported. This adds about 2.5× calibration probes; the B1 projection includes them (C60: 19,392 probe calls for the pair; C100: 29,760).
+22. **`Dictionary.resolve`** uses membership in the published TEST dictionary (core + F3L + neighbours) and the **recorded gate decision** (`B1/accepted.json`). It never uses the hidden `kind` label. The accepted list is the gate decision itself, with no filtering by hidden label.
+23. **Budgets persist cumulatively** across restarts in `results/budget_ledger.json`, keyed by allocation. B0b shares B0's allocation.
+24. **Canaries are compared record by record:** any canary whose prediction changed, or that was correct in B0 and is now wrong, aborts the stage. A matching total no longer passes.
+25. **Dictionary setup** counts the full predefined dictionary for the configuration (entries + all candidates).
+26. **Pins:** HF commit SHAs (`revision`), GGUF repo revisions and GGUF LFS sha256 for all four Stage B models, plus the sha256 of the two Stage A GGUFs, are in `config_e1b.json` (read from the HF API on 2026-10-12). Kaggle downloads use the pinned revisions, and every GGUF is sha256-verified before it is loaded (CPU or GPU). Still to do on Kaggle before B0: memory-test the pinned package versions.

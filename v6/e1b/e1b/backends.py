@@ -38,16 +38,25 @@ class _Base:
                     latency_s=round(time.perf_counter() - t0, 4), first_gap=gaps[0] if gaps else None,
                     answer_gap=ans_gap, out_ids=[int(x) for x in out_ids], warm=warm, batch=1)
 
-    def generate(self, system, prefix_user, suffix_user, max_new, warm=False):
-        """warm=False: fresh context, process prefix+suffix. warm=True: restore cached prefix state, process
-        suffix only (prefix must have been cached via cache_prefix with identical arguments)."""
+    def system_turn_sha(self, system):
+        """A2: hash of the rendered system turn (template + system prompt) for this backend."""
+        import hashlib
+        return hashlib.sha256(self.split_render(system, "", "")[0].encode("utf-8")).hexdigest()
+
+    def generate(self, system, prefix_user, suffix_user, max_new, warm=False, mode=None):
+        """mode 'cold': fresh context, prefix+suffix in ONE evaluation. 'coldsplit' (A2): fresh context, prefix
+        then suffix as TWO evaluations, no state restore. 'warm': restore the cached prefix state, process the
+        suffix only (prefix cached via cache_prefix with identical arguments). warm=True is shorthand for 'warm'."""
+        mode = mode or ("warm" if warm else "cold")
         ptxt, stxt = self.split_render(system, prefix_user, suffix_user)
         pt, st = self.tok(ptxt, first=True), self.tok(stxt, first=False)
         t0 = time.perf_counter()
-        if warm:
+        if mode == "warm":
             key = (system, prefix_user)
             assert key in self._states, "warm run without cached prefix"
             self._restore(self._states[key]); logits = self._feed(st); n_new = len(st)
+        elif mode == "coldsplit":
+            self._reset(); self._feed(pt); logits = self._feed(st); n_new = len(pt) + len(st)
         else:
             self._reset(); logits = self._feed(pt + st); n_new = len(pt) + len(st)
         out, gaps, ans_gap = [], [], None
@@ -58,7 +67,11 @@ class _Base:
             out.append(tok)
             if any(s in self.detok(out[-8:]) for s in self.stop_str): break
             logits = self._feed([tok])
-        r = self._finish(out, gaps, ans_gap if ans_gap is not None else (gaps[0] if gaps else None), t0, n_new, len(pt) + len(st), warm)
+        r = self._finish(out, gaps, ans_gap if ans_gap is not None else (gaps[0] if gaps else None), t0, n_new, len(pt) + len(st), mode == "warm")
+        r["answer_gap_source"] = "after_answer_line" if ans_gap is not None else "first_token_fallback"   # A2
+        r["mode"] = mode; r["rendered_prompt"] = ptxt + stxt
+        import hashlib
+        r["prompt_sha"] = hashlib.sha256((ptxt + stxt).encode("utf-8")).hexdigest(); r["system_turn_sha"] = self.system_turn_sha(system)
         for s in self.stop_str: r["text"] = r["text"].split(s)[0]
         r["text"] = r["text"].strip(); return r
 
@@ -96,22 +109,27 @@ class LlamaCppBackend(_Base):
     def _restore(self, st): self.L.load_state(st)
 
 class HFBackend(_Base):
-    def __init__(self, name, repo, nf4_cfg, revision=None):
+    def __init__(self, name, repo, nf4_cfg, revision=None, device="cuda:0"):
+        """nf4_cfg=None -> no quantization (A2: CPU smoke test of the cache path with a tiny model, fp32)."""
         import torch
-        from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
-        self.torch = torch; self.name = name
-        q = BitsAndBytesConfig(load_in_4bit=True, bnb_4bit_quant_type=nf4_cfg["bnb_4bit_quant_type"],
-                               bnb_4bit_compute_dtype=getattr(torch, nf4_cfg["bnb_4bit_compute_dtype"]),
-                               bnb_4bit_use_double_quant=nf4_cfg["bnb_4bit_use_double_quant"])
+        from transformers import AutoModelForCausalLM, AutoTokenizer
+        self.torch = torch; self.name = name; self.device = device
         self.tk = AutoTokenizer.from_pretrained(repo, revision=revision)
-        self.m = AutoModelForCausalLM.from_pretrained(repo, revision=revision, quantization_config=q, device_map="cuda:0")
+        if nf4_cfg is None:
+            self.m = AutoModelForCausalLM.from_pretrained(repo, revision=revision, torch_dtype=torch.float32).to(device)
+        else:
+            from transformers import BitsAndBytesConfig
+            q = BitsAndBytesConfig(load_in_4bit=True, bnb_4bit_quant_type=nf4_cfg["bnb_4bit_quant_type"],
+                                   bnb_4bit_compute_dtype=getattr(torch, nf4_cfg["bnb_4bit_compute_dtype"]),
+                                   bnb_4bit_use_double_quant=nf4_cfg["bnb_4bit_use_double_quant"])
+            self.m = AutoModelForCausalLM.from_pretrained(repo, revision=revision, quantization_config=q, device_map=device)
         self.m.eval(); self._states = {}; self._past = None
         self.stop_ids = {i for i in [self.tk.eos_token_id] if i is not None}
         for t in ("<|im_end|>", "<|eot_id|>", "<|endoftext|>"):
             i = self.tk.convert_tokens_to_ids(t)
             if isinstance(i, int) and i != self.tk.unk_token_id: self.stop_ids.add(i)
         self.stop_str = []
-        self.info = dict(backend="hf-nf4", repo=repo, revision=revision, nf4=nf4_cfg)
+        self.info = dict(backend="hf-nf4" if nf4_cfg else "hf-fp32", repo=repo, revision=revision, nf4=nf4_cfg, device=device)
     def render(self, system, user):
         msgs = [{"role": "system", "content": system}, {"role": "user", "content": user}]
         try: return self.tk.apply_chat_template(msgs, tokenize=False, add_generation_prompt=True)
@@ -123,7 +141,7 @@ class HFBackend(_Base):
     def _feed(self, toks):
         t = self.torch
         with t.no_grad():
-            ids = t.tensor([toks], device="cuda:0")
+            ids = t.tensor([toks], device=self.device)
             o = self.m(input_ids=ids, past_key_values=self._past, use_cache=True)
             self._past = o.past_key_values
             return o.logits[0, -1].float().cpu().numpy()
@@ -131,6 +149,20 @@ class HFBackend(_Base):
         import copy; return copy.deepcopy(self._past)
     def _restore(self, st):
         import copy; self._past = copy.deepcopy(st)
+
+def verify_gguf(path, want):
+    """A2 (GPT code r1): refuse to load a GGUF whose sha256 differs from the pinned LFS oid in the config."""
+    import hashlib, os
+    h = hashlib.sha256()
+    with open(path, "rb") as f:
+        for blk in iter(lambda: f.read(1 << 24), b""): h.update(blk)
+    got = h.hexdigest()
+    if got != want: raise RuntimeError(f"GGUF sha256 mismatch for {os.path.basename(path)}: {got} != pinned {want}")
+    return got
+
+def verify_gguf_set(d, shas):
+    import os
+    return {f: verify_gguf(os.path.join(d, f), s) for f, s in shas.items()}
 
 def gpu_name():
     try:
@@ -152,4 +184,6 @@ def load_stageB(name, cfg, prefer="nf4", gguf_path=None):
         except NonFinite: raise
         except Exception as ex:
             print(f"[load_stageB] nf4 failed for {name}: {ex!r} -> GGUF/llama.cpp CUDA fallback")
+    import os
+    verify_gguf_set(os.path.dirname(gguf_path), m["gguf_sha256"])   # A2: pinned GGUF verified before GPU use
     return LlamaCppBackend(name, gguf_path, n_ctx=cfg["n_ctx"], n_gpu_layers=-1), "gguf_cuda"

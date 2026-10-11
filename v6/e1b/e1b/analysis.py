@@ -92,8 +92,8 @@ def summarize_A(d, cfg, B):
     for m in models:
         for r in jl(d / f"A2_{m}.jsonl"):
             if not r["with_text"]: nt.setdefault(r["template"], []).append(r["correct"])
-    out["A2_no_text"] = {t: dict(acc=sum(v) / len(v), n=len(v), flagged=(len(v) >= cfg["probe_leak_min_obs"] and sum(v) / len(v) > cfg["probe_leak_flag"]),
-                                 insufficient_obs=len(v) < cfg["probe_leak_min_obs"]) for t, v in nt.items()}
+    from .stages import leak_rule   # A2: flag against each probe kind's measured no-text baseline
+    out["A2_no_text"] = leak_rule(nt, cfg) if nt else {}
     a4 = [r for r in jl(d / "A4_qwen3b.jsonl") if r["gold_changes"]]
     follow = sum(r["follows_planted"] for r in a4) / max(1, len(a4))
     out["A4"] = dict(n_gold_changing=len(a4), follow_rate=follow)
@@ -119,17 +119,19 @@ def gate_decision(d, pair, cfg, E):
         for e in ents:
             accs = {}; lets = {}
             for m in pair:
-                R = [r for r in rows[m] if r["entry"] == e]; accs[m] = sum(r["correct"] for r in R) / len(R)
+                R = [r for r in rows[m] if r["entry"] == e]
+                accs[m] = sum(r.get("honest_correct", r["letter"] == r["honest_gold"]) for r in R) / len(R)   # GPT code r1: vs honest_gold
                 lets[m] = {r["template"]: r["letter"] for r in R}
             ks = lets[pair[0]].keys(); agree = sum(lets[pair[0]][k] is not None and lets[pair[0]][k] == lets[pair[1]].get(k) for k in ks) / len(ks)
             dec[e] = dict(acc=accs, agree=agree, accepted=all(a >= G["probe_bar"] for a in accs.values()) and agree >= G["agree_bar"],
-                          planted=E[e]["kind"] == "planted")
-        H = [v for v in dec.values() if not v["planted"]]; P = [v for v in dec.values() if v["planted"]]
+                          planted=E[e]["kind"] == "planted", neighbour=E[e]["kind"] == "neighbour")   # labels used for METRICS only
+        H = [v for v in dec.values() if not v["planted"] and not v["neighbour"]]; P = [v for v in dec.values() if v["planted"]]
         ha = sum(v["accepted"] for v in H); pr = sum(not v["accepted"] for v in P)
         res[kind] = dict(per_entry=dec, honest_accept=bar_verdict(ha, len(H), G["calib_eligibility" if kind == "calib" else "repo_target"]["honest_accept"]),
-                         planted_reject=bar_verdict(pr, len(P), G["calib_eligibility" if kind == "calib" else "repo_target"]["planted_reject"]))
+                         planted_reject=bar_verdict(pr, len(P), G["calib_eligibility" if kind == "calib" else "repo_target"]["planted_reject"]),
+                         neighbour_accept=dict(n=sum(v["neighbour"] for v in dec.values()), accepted=sum(v["neighbour"] and v["accepted"] for v in dec.values())))
     c = res["calib"]; elig = (c["honest_accept"]["point"] or 0) >= G["calib_eligibility"]["honest_accept"] and (c["planted_reject"]["point"] or 0) >= G["calib_eligibility"]["planted_reject"]
-    accepted = sorted(e for e, v in c["per_entry"].items() if v["accepted"] and not v["planted"])
+    accepted = sorted(e for e, v in c["per_entry"].items() if v["accepted"])   # the gate decision itself; no hidden-label filter
     manip = [r for r in jl(d / "manip.jsonl") if r["gold_changes"]]
     return dict(eligible=elig, accepted=accepted, calib=c, testgate_vs_repo_target=res["testgate"],
                 manipulation=dict(n=len(manip), follow_rate=sum(r["follows_planted"] for r in manip) / max(1, len(manip))),
@@ -164,6 +166,23 @@ def summarize_B2(d, pair, cfg, B):
     return out
 
 # ------------------------------------------------------------------ B3 headline
+def by_ntype(S, E):
+    """A2: per neighbour type, n trials (each trial shows one neighbour of each type), times the sender picked it,
+    and the rate it was avoided; also per-baseline picks of that type."""
+    out = {}
+    for ty in ("swap", "shift", "swap+shift"):
+        n = len(S); picked = sum(s.get("picked_ntype") == ty for s in S.values())
+        bl = {}
+        for bn in ("regex", "tfidf", "bm25", "minilm"):
+            bl[bn] = sum(s["baselines"].get(bn) is not None and s["baselines"][bn] != e and E[s["baselines"][bn]].get("ntype") == ty for e, s in S.items())
+        out[ty] = dict(n_trials=n, sender_picked=picked, sender_avoided_rate=(1 - picked / n) if n else None, baseline_picked=bl)
+    return out
+
+def _group(S, E):
+    g = {}
+    for e, s in S.items(): g.setdefault(E[e].get("msg_style", "plain"), []).append(int(s["correct"]))
+    return g
+
 def summarize_B3(d, pair, cfg, B, gated):
     d = Path(d); E = B["entries"]; out = dict(gated=gated, framing="communication proof of concept; 4-way selection, not repository search")
     if not gated: out["not_checked_repository"] = "B1 failed or not eligible: combined pipeline is NOT a checked repository"
@@ -200,7 +219,7 @@ def summarize_B3(d, pair, cfg, B, gated):
         sel = {e: [s["correct"]] for e, s in S.items() if E[e]["fam"] in core}
         sm, sl, sh = boot_mean(sel, cfg["bootstrap_resamples"], cfg["seeds"]["bootstrap"])
         base = {}
-        for bn in ("tfidf", "bm25", "minilm"):
+        for bn in ("regex", "tfidf", "bm25", "minilm"):
             v = {e: [s["baselines"].get(bn) == e] for e, s in S.items() if E[e]["fam"] in core and s["baselines"].get(bn) is not None}
             if v: base[bn] = boot_mean(v, cfg["bootstrap_resamples"], cfg["seeds"]["bootstrap"])[0]
         best = max(base, key=base.get) if base else None
@@ -209,7 +228,9 @@ def summarize_B3(d, pair, cfg, B, gated):
         params_s, params_r = cfg["models"]["stageB"][snd]["params"], cfg["models"]["stageB"][rcv]["params"]
         sender_rows = list(S.values())
         n_msgs = len(ids)
-        setup_bytes = sum(len(E[x]["text"].encode()) for x in {r.get("selected") for r in ids if r.get("selected")})
+        # GPT code r1: setup = the FULL predefined dictionary for this configuration (entries + all candidates)
+        cfg_ids = {r["entry"] for r in ids}
+        setup_bytes = sum(len(E[x]["text"].encode()) for x in B["dictionary"] if x in cfg_ids or E[x].get("of") in cfg_ids)
         out[f"{snd}->{rcv}"] = dict(
             headline=dict(diff_id_selected_minus_prose=est, ci95=[lo, hi], label=label(lo, hi, cfg["ni_margin"]), margin=-cfg["ni_margin"],
                           n_entries=len(pairs), n_items=sum(len(v) for v in pairs.values()),
@@ -222,6 +243,10 @@ def summarize_B3(d, pair, cfg, B, gated):
                               rejected_by_gate=sum(r.get("reason") == "rejected_by_gate" for r in ids),
                               unresolved=sum(r.get("model_called") is False for r in ids), sender_invalid=sum(r.get("reason") == "sender_invalid" for r in ids)),
             selection=dict(acc=sm, ci95=[sl, sh], chance=0.25, above_chance=sl > 0.25, baselines=base, best_baseline=best,
+                           wording="selection among compact labelled candidates (4-way), not a repository search",
+                           trials_per_family={f: sum(E[e]["fam"] == f for e in S) for f in sorted({E[e]["fam"] for e in S})},
+                           by_neighbour_type=by_ntype(S, E),
+                           by_message_style={st: dict(n=len(v), acc=sum(v) / len(v)) for st, v in _group(S, E).items()},
                            sender_minus_best_baseline=dict(est=be, ci=[bl, bh], beats=(bl is not None and bl > 0)),
                            note="separate secondary claim; not part of the headline"),
             costs=dict(sender=dict(latency_s=sum(r["latency_s"] for r in sender_rows) / len(sender_rows),

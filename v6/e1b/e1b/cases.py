@@ -7,7 +7,7 @@ Entry semantics ("sem") are what a faithful reader of the entry text can conclud
 determinable. Planted (corrupted) entries carry their own rendered text and sem; honest gold always comes
 from the honest entry.
 """
-import random, copy
+import random, copy, math
 from . import sha256_text, norm
 
 NOUNS = ["Brindle", "Corvel", "Dunmar", "Elsworth", "Fenrow", "Galtry", "Hesper", "Iselin", "Jorvik", "Kelmar",
@@ -61,8 +61,17 @@ def render_def(e):
     if f == "F3s": return "Booking charge schedule. " + core
     return "Booking charge schedule. " + F3_FILLER + core + " " + F3_FILLER.split(". ")[1] + "."
 
+WORDS = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve",
+         "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen", "twenty"]
+def spell(n): return WORDS[n] if 0 <= n < len(WORDS) else str(n)
+MSG_STYLES = ["spelled", "reordered", "derived"]
+
 def render_message(e):
-    """Natural-language original message (paraphrase; what the sender reads and the prose arm receives)."""
+    """Natural-language original message (paraphrase; what the sender reads and the prose arm receives).
+    A2: >=1/3 of TEST entries (frozen seed) get a harder style: spelled-out numbers, reordered clauses, or a
+    derived (relative) form."""
+    st = e.get("msg_style", "plain")
+    if st != "plain": return render_message_hard(e, st)
     f, s = e["fam"], e["sem"]
     if f == "F1":
         return (f"Belonging to the {e['g']} scheme gets a customer a rate of {s['mem']} credits for each {e['unit']}; "
@@ -72,6 +81,40 @@ def render_message(e):
                 f"while whoever takes them (the {e['y']}) is billed {s['yr']} credits for each item; neither covers the other's bill.")
     return (f"A stay costs {s['a']} credits a day up to day {s['t']}; from day {s['t']+1} onward each day costs {s['c']} credits. "
             f"There is also a one-off {s['s']}-credit service fee, waived for anyone holding a {e['g']} permit.")
+
+def render_message_hard(e, st):
+    f, s = e["fam"], e["sem"]; N = spell if st == "spelled" else str
+    if f == "F1":
+        a, b, g, u = s["mem"], s["non"], e["g"], e["unit"]
+        if st == "derived":
+            rel = "less" if a < b else "more"
+            return (f"Anybody lacking {g} membership pays {b} credits for each {u}; belonging to the {g} scheme means paying "
+                    f"{abs(a - b)} credits {rel} than that for each {u}.")
+        if st == "reordered":
+            return f"Anybody lacking {g} membership pays {b} credits for each {u}, whereas a customer in the {g} scheme gets a rate of {a} credits for each {u}."
+        return (f"Belonging to the {g} scheme gets a customer a rate of {N(a)} credits for each {u}; "
+                f"anybody lacking {g} membership pays {N(b)} credits for each {u} instead.")
+    if f == "F2":
+        a, b, x, y = s["xr"], s["yr"], e["x"], e["y"]
+        if st == "derived":
+            rel = "less" if b < a else "more"
+            return (f"In a hand-over, whoever gives the items (the {x}) is billed {a} credits for each item, and whoever takes them "
+                    f"(the {y}) is billed {abs(a - b)} credits {rel} per item than the {x}; neither covers the other's bill.")
+        if st == "reordered":
+            return (f"In a hand-over, whoever takes the items (the {y}) is billed {b} credits for each item, while whoever gives them "
+                    f"(the {x}) is billed {a} credits for each item; neither covers the other's bill.")
+        return (f"In a hand-over, whoever gives the items (the {x}) is billed {N(a)} credits for each item, "
+                f"while whoever takes them (the {y}) is billed {N(b)} credits for each item; neither covers the other's bill.")
+    a, t, c, fee, g = s["a"], s["t"], s["c"], s["s"], e["g"]
+    if st == "derived":
+        rel = "less" if c < a else "more"
+        return (f"A stay costs {a} credits a day up to day {t}; from day {t+1} onward each day costs {abs(c - a)} credits {rel} than that. "
+                f"There is also a one-off {fee}-credit service fee, waived for anyone holding a {g} permit.")
+    if st == "reordered":
+        return (f"There is a one-off {fee}-credit service fee, waived for anyone holding a {g} permit. From day {t+1} onward each day "
+                f"costs {c} credits; up to day {t} a stay costs {a} credits a day.")
+    return (f"A stay costs {N(a)} credits a day up to day {N(t)}; from day {N(t+1)} onward each day costs {N(c)} credits. "
+            f"There is also a one-off {N(fee)}-credit service fee, waived for anyone holding a {g} permit.")
 
 def render_label(e):
     """One-line candidate label shown to the sender (compact form; carries the load-bearing constants)."""
@@ -150,10 +193,10 @@ def planted_ok(honest, ctype):
     return True
 
 # ------------------------------------------------------------------ probes (rule comprehension, 4-way)
-PROBE_KINDS = {
-    "F1": ["mem", "non", "higher", "lower"],
-    "F2": ["xr", "yr", "higher", "lower"],
-    "F3s": ["a", "c", "t", "s", "waive"], "F3L": ["a", "c", "t", "s", "waive"],
+PROBE_KINDS = {   # A2: + "unstated" (honest gold = Not stated) so "Not stated" is not always eliminable
+    "F1": ["mem", "non", "higher", "lower", "unstated"],
+    "F2": ["xr", "yr", "higher", "lower", "unstated"],
+    "F3s": ["a", "c", "t", "s", "waive", "unstated"], "F3L": ["a", "c", "t", "s", "waive", "unstated"],
 }
 FRAMES = {  # 5 phrasing variants per kind (F1/F2) -> 20 templates; F3 4 variants x 5 kinds = 20
     "F1": {
@@ -193,6 +236,12 @@ _F3 = {
     "waive": ["Who does not pay the service fee?", "Which bookers are exempt from the fee?",
               "{n} wants to avoid the service fee. Who qualifies?", "The fee is waived for whom?"],
 }
+_F3["unstated"] = ["What is the cancellation charge in credits?", "{n} asks what the late-checkout charge is. How many credits?",
+                    "How many credits does the deposit cost?", "What is the per-night cleaning charge?"]
+FRAMES["F1"]["unstated"] = ["What one-off joining fee does the rule set, in credits?", "{n} asks about the delivery charge per order. How many credits?",
+                            "How many credits does a {g} membership card cost?", "What discount per {unit} applies on holidays?"]
+FRAMES["F2"]["unstated"] = ["How many credits per item does a third-party inspector pay?", "{n} asks about the storage charge per item. How many credits?",
+                            "What insurance charge per hand-over does the rule set?", "How many credits does a late hand-over cost?"]
 FRAMES["F3s"] = _F3; FRAMES["F3L"] = _F3
 
 RESERVE_PREFIXES = ["According to the rule, ", "Going only by the rule: ", "Based on the rule text, "]
@@ -212,6 +261,7 @@ def reserve_templates(fam):
 def _probe_truth(e_ref, sem, kind):
     """Correct answer (string) given the semantics of the text the model reads; e_ref gives names."""
     f = e_ref["fam"]
+    if kind == "unstated": return NOT_STATED
     if f == "F1":
         if kind in ("mem", "non"): return NOT_STATED if sem.get(kind) is None else str(sem[kind])
         m, n = sem.get("mem"), sem.get("non")
@@ -237,16 +287,18 @@ def _probe_options(e_ref, kind, truth, rng):
     elif kind == "waive":
         opts = [f"Holders of a {e_ref['g']} permit", f"People without a {e_ref['g']} permit", "Everyone", NOT_STATED]
     else:
-        nums = {str(v) for k, v in s.items() if isinstance(v, int) and not isinstance(v, bool)}
-        if truth != NOT_STATED: nums.add(truth)
-        nums = sorted(nums, key=lambda z: rng.random())
+        # A2 plausible distractors: the entry's other constants first, then truth +/- 1..2 (never random 2-20)
+        nums = [str(v) for k, v in s.items() if isinstance(v, int) and not isinstance(v, bool) and k != kind]
+        rng.shuffle(nums)
         pick = [truth] if truth != NOT_STATED else []
         for z in nums:
             if len(pick) >= 2: break
             if z not in pick: pick.append(z)
-        while len(pick) < 3:
-            z = str(rng.randint(2, 20))
-            if z not in pick: pick.append(z)
+        base = int(truth) if truth != NOT_STATED else int(nums[0]) if nums else 5
+        for dlt in rng.sample([1, -1, 2, -2, 3], 5):
+            if len(pick) >= 3: break
+            z = str(base + dlt)
+            if z not in pick and base + dlt >= 1: pick.append(z)
         opts = pick[:3] + [NOT_STATED]
     rng.shuffle(opts)
     return opts
@@ -311,7 +363,7 @@ def gold_of(sem, fam, meta):
     return f3_total(sem, meta["d"], meta["perm"])
 
 # ------------------------------------------------------------------ book
-POOLS = ["stageA_A1", "stageA_A4", "stageA_A6", "cache_fixed", "cache_hard", "qualification", "pilot",
+POOLS = ["stageA_A1", "stageA_A4", "stageA_A6", "cache_fixed", "cache_stress", "qualification", "pilot",
          "canary", "manip_B1", "test"]
 
 def build(cfg):
@@ -374,13 +426,24 @@ def build(cfg):
         cases("pilot", f"pilot_{f}", cfg["pilot"]["cases_per_entry"])
     cases("canary", "canary_F1", 5)
     cases("manip_B1", "planted_calib", 5, planted=True)
+    # A2: harder original messages for >= 1/3 of TEST entries per family group, frozen seed, styles cycled
+    hrng = random.Random(cfg["seeds"]["hard_messages"])
+    for g in ["core_F1", "core_F2", "F3L"]:
+        # sampled separately in the C60 block (first 30 per core family) and the C100-only block, so the share
+        # holds under either configuration
+        ids_g = list(B["groups"][g]); cut = cfg["configs"]["C60"]["core_per_family"] if g != "F3L" else len(ids_g); i = 0
+        for blk in (ids_g[:cut], ids_g[cut:]):
+            for eid in sorted(hrng.sample(blk, math.ceil(cfg["hard_message_share"] * len(blk) - 1e-9))):
+                B["entries"][eid]["msg_style"] = MSG_STYLES[i % 3]; i += 1
     for g in ["core_F1", "core_F2", "F3L"]: cases("test", g, cfg["test_cases_per_entry"])
     # --- neighbours for core + F3L (TEST) entries: built AFTER the TEST cases so that each neighbour can be
     # regenerated (same ID slot) until it is distinct and changes gold on >= threshold of that entry's TEST cases
     thr = cfg["neighbour_gold_change_min"]
     by_e = {}
-    for c in B["cases"]["test"]: by_e.setdefault(c["entry"], []).append(c)
-    for gname in [f"core_{f}" for f in core] + ["F3L"]:
+    for c in B["cases"]["test"] + B["cases"]["pilot"]: by_e.setdefault(c["entry"], []).append(c)
+    # GPT code r1: pilot entries get neighbours too (checked against their PILOT cases), so pilot sender timing
+    # never touches TEST entries
+    for gname in [f"core_{f}" for f in core] + ["F3L"] + [f"pilot_{f}" for f in core]:
         for eid in B["groups"][gname]:
             e = B["entries"][eid]; nb = []; labels = {render_label(e)}
             for k in range(cfg["n_neighbours"]):
@@ -390,19 +453,25 @@ def build(cfg):
                     if render_label(n) not in labels and ch >= thr: break
                     ids.used.discard(n["id"])
                 else: raise AssertionError(f"could not build load-bearing neighbour {k} for {eid}")
-                n["kind"] = "neighbour"; n["of"] = eid; add(n); nb.append(n["id"]); labels.add(render_label(n))
+                n["kind"] = "neighbour"; n["of"] = eid; n["ntype"] = ["swap", "shift", "swap+shift"][k if attempt < 100 else attempt % 3]; add(n); nb.append(n["id"]); labels.add(render_label(n))
             B["neighbours"][eid] = nb
-    # cache: 100 fixed sampled at random from cache_fixed candidates; 20 hard = multi-step F3s, fixed rule
+    # GPT code r1: neighbours are calibrated like any other candidate (calibration probes), so a gated pipeline
+    # treats all candidates consistently; the published TEST dictionary = core + F3L entries + their neighbours
+    for gname in [f"core_{f}" for f in core] + ["F3L"]:
+        for eid in B["groups"][gname]:
+            for nid in B["neighbours"][eid]: B["probes"]["calib"][nid] = probes_for(nid, prng)
+    B["dictionary"] = sorted(x for g in [f"core_{f}" for f in core] + ["F3L"] for e in B["groups"][g] for x in [e] + B["neighbours"][e])
+    # cache: 100 fixed sampled at random from cache_fixed candidates; 20 multi-step STRESS prompts (F3s, fixed rule)
     crng = random.Random(cfg["seeds"]["cache_sample"])
     cand = B["cases"]["cache_fixed"]; crng.shuffle(cand)
     B["cases"]["cache_fixed"] = cand[:cfg["cache"]["fixed_per_model"]]
     hard = []
     for eid in B["groups"]["cache_F3s"]:
         e = B["entries"][eid]
-        while sum(1 for h in hard if h["entry"] == eid) < cfg["cache"]["hard_per_model"] // 10:
+        while sum(1 for h in hard if h["entry"] == eid) < cfg["cache"]["stress_per_model"] // 10:
             c = mk_case(e, rng, seen)
             if c["meta"]["d"] > e["sem"]["t"] and not c["meta"]["perm"]: hard.append(c)
-    B["cases"]["cache_hard"] = hard
+    B["cases"]["cache_stress"] = hard
     # --- sanity subset (pre-registered by seed, C60-compatible: drawn from the first 30 per family)
     srng = random.Random(cfg["seeds"]["sanity_subset"]); c60 = cfg["configs"]["C60"]["core_per_family"]
     B["groups"]["sanity"] = [x for f in core for x in srng.sample(B["groups"][f"core_{f}"][:c60], cfg["sanity_subset_per_family"])]
@@ -437,6 +506,8 @@ def verify(B, cfg):
             e = E[c["entry"]]; src = E[e["honest_id"]] if e["kind"] == "planted" else e
             assert str(gold_of(src["sem"], src["fam"], c["meta"])) == c["gold"], f"gold mismatch {pool} {c}"
             assert parse_check_text(src, c), f"entry text does not state its own semantics: {src['id']}"
+            if e["kind"] != "planted":   # GPT code r1: gold recomputed from the TEXTS alone (role-bound rates + question quantities)
+                assert str(gold_from_text(src, c["text"])) == c["gold"], f"text-derived gold mismatch {pool} {c['text']}"
     # 3. entries: hash matches text, ids unique (dict), TEST entries not used elsewhere
     for e in E.values(): assert e["hash"] == sha256_text(e["text"])
     test_entries = {c["entry"] for c in B["cases"]["test"]}
@@ -446,6 +517,7 @@ def verify(B, cfg):
     thr = cfg["neighbour_gold_change_min"]
     by_e = {}
     for c in B["cases"]["test"]: by_e.setdefault(c["entry"], []).append(c)
+    for c in B["cases"]["pilot"]: by_e.setdefault(c["entry"], []).append(c)
     for eid, nbs in B["neighbours"].items():
         cs = by_e[eid]
         for nid in nbs:
@@ -459,13 +531,57 @@ def verify(B, cfg):
             for p in ps: assert len(set(p["options"])) == 4 and p["gold"] in "ABCD"
             if E[eid]["kind"] == "planted":
                 assert any(p["gold"] != p["honest_gold"] for p in ps), f"planted {eid} flips no probe"
+                # GPT code r1: a perfect reader of the SHOWN text must fall below the probe bar vs honest_gold
+                nf = sum(p["gold"] != p["honest_gold"] for p in ps)
+                assert (len(ps) - nf) / len(ps) < cfg["gate"]["probe_bar"], f"planted {eid}: only {nf}/{len(ps)} probes flipped; a perfect reader would pass"
     # 6. probe templates: >= 20 per family
     for f in ("F1", "F2", "F3s", "F3L"): assert len(templates(f)) >= cfg["probes_per_entry_min"]
     # 7. unknown messages all fail the delegate check
     from .protocol import Dictionary
     D = Dictionary(B)
+    assert all(E[x]["kind"] in ("honest", "neighbour") for x in B["dictionary"]), "dictionary holds only honest entries + neighbours"
     for u in B["unknown_msgs"]: assert D.resolve(u["msg"])[0] is None, f"unknown msg resolved: {u}"
     return True
+
+def parse_rule_text(e):
+    """GPT code r1: role -> rate binding parsed from the agreed definition text (not from sem)."""
+    import re
+    T, f = e["text"], e["fam"]
+    if f == "F1":
+        mem = re.search(r"\. (\S+) members are charged (\d+) credits per", T); non = re.search(r"who are not \S+ members are charged (\d+) credits", T)
+        return dict(mem=int(mem.group(2)), non=int(non.group(1)), g=mem.group(1))
+    if f == "F2":
+        m = re.search(r"When a (.+?) hands items to a (.+?), the (.+?) pays (\d+) credits per item and the (.+?) pays (\d+) credits per item", T)
+        assert m.group(1) == m.group(3) and m.group(2) == m.group(5), "role names inconsistent in F2 text"
+        return dict(x=m.group(1), y=m.group(2), xr=int(m.group(4)), yr=int(m.group(6)))
+    a = re.search(r"daily charge is (\d+) credits for each of the first (\d+) days", T)
+    c = re.search(r"beyond the first (\d+) days is charged (\d+) credits", T); s = re.search(r"charged the (\d+)-credit service fee", T)
+    assert a.group(2) == c.group(1)
+    return dict(a=int(a.group(1)), t=int(a.group(2)), c=int(c.group(2)), s=int(s.group(1)))
+
+def parse_question(e, q):
+    """GPT code r1: quantities and roles parsed from the case question text."""
+    import re
+    f = e["fam"]
+    if f == "F1":
+        m = re.match(r"(\S+) (is|is not) a .+? member and buys (\d+) ", q); return dict(n=int(m.group(3)), mem=m.group(2) == "is")
+    if f == "F2":
+        m = re.match(r"(\S+), acting as (.+?), hands (\d+) items to (\S+), the (.+?)\. ", q)
+        if m: roles = {m.group(1): m.group(2), m.group(4): m.group(5)}; n = int(m.group(3))
+        else:
+            m = re.match(r"(\S+) \(the (.+?)\) receives (\d+) items from (\S+) \(the (.+?)\)\. ", q)
+            roles = {m.group(1): m.group(2), m.group(4): m.group(5)}; n = int(m.group(3))
+        who = re.search(r"How many credits does (\S+) pay", q).group(1)
+        return dict(n=n, role=roles[who])
+    m = re.match(r"\S+ books a stay of (\d+) days and (holds|does not hold) a ", q); return dict(d=int(m.group(1)), perm=m.group(2) == "holds")
+
+def gold_from_text(e, q):
+    r, k = parse_rule_text(e), parse_question(e, q)
+    if e["fam"] == "F1": return k["n"] * (r["mem"] if k["mem"] else r["non"])
+    if e["fam"] == "F2":
+        assert k["role"] in (r["x"], r["y"]), "question role not in rule"
+        return k["n"] * (r["xr"] if k["role"] == r["x"] else r["yr"])
+    return f3_total(r, k["d"], k["perm"])
 
 def parse_check_text(e, c):
     """Independent check: the constants in the entry's text are the ones in its sem (honest/neighbour only)."""

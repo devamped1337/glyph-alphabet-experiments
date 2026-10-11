@@ -24,7 +24,7 @@ def fetch_gguf():
         m = cfg["models"]["stageB"][n]
         try:
             files = [m["gguf_file"]] + ([m["gguf_file"].replace("00001-of", "00002-of")] if "00001-of" in m["gguf_file"] else [])
-            for f in files: hf_hub_download(m["gguf_repo"], f, local_dir=os.environ["E1B_GGUF_DIR"])
+            for f in files: hf_hub_download(m["gguf_repo"], f, revision=m["gguf_revision"], local_dir=os.environ["E1B_GGUF_DIR"])   # A2 pinned
         except Exception as ex: print("gguf fetch failed", n, ex)
 bk = "/kaggle/working/glyph/v6/e1b/results/B0/backend.json"
 if os.path.exists(bk) and '"gguf_cuda"' in open(bk).read(): fetch_gguf()

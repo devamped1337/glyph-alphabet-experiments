@@ -6,11 +6,14 @@ C100 only if every stage B1, B2, B3 projects <= headroom x budget; else C60 by t
 def call_counts(cfg, cname, n_models=2):
     c = cfg["configs"][cname]; F = len(cfg["families_core"]); E = c["core_per_family"] * F
     T = cfg["test_cases_per_entry"]; P = c["planted_calib"]; PT = cfg["planted_testgate"]; L = cfg["f3l_entries"]
-    probes = cfg["probes_per_entry_min"]; items = (E + L) * T; sanity = cfg["sanity_subset_per_family"] * F * T
-    cache = cfg["cache"]["fixed_per_model"] + cfg["cache"]["hard_per_model"]
+    from .cases import templates
+    probes = max(len(templates(f)) for f in ("F1", "F2", "F3L")); N = cfg["n_neighbours"]   # A2: actual probes per entry (24)
+    items = (E + L) * T; sanity = cfg["sanity_subset_per_family"] * F * T
+    cache = cfg["cache"]["fixed_per_model"] + cfg["cache"]["stress_per_model"]
     return {
-        "B1": {"probe": n_models * probes * (E + P + E + PT), "receiver": 5 * P},   # calib + testgate + manip (strong model)
-        "B2": {"receiver": n_models * (items * 2 + 2 * sanity + cfg["byte_identity_paired_items"] + 4 * cache) ,
+        # calib (core + planted + F3L + all candidates' neighbours, GPT code r1) + testgate + manip (strong model)
+        "B1": {"probe": n_models * probes * ((E + P + L) + N * (E + L) + E + PT), "receiver": 5 * P},
+        "B2": {"receiver": n_models * (items * 2 + 2 * sanity + cfg["byte_identity_paired_items"] + 5 * cache),   # A2: 5 generations per cache prompt (cold x2, coldsplit, warm x2)
                "receiver_warm": n_models * items * 2},
         "B3": {"sender": n_models * (E + L), "receiver": n_models * items * 2},
     }
