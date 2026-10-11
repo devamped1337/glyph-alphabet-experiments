@@ -1,0 +1,51 @@
+{
+ "frozen": "2026-10-11 AEDT, before any E1 run",
+ "seed": 6061,
+ "book_version": "e1-book-v1",
+ "entries_per_family": 8,
+ "task_families": {
+  "F1": "negation (member / not member pricing)",
+  "F2": "roles + paraphrased case wording",
+  "F3": "long definitions (200+ tokens)"
+ },
+ "calib_corruptions": [
+  "deleted_negation",
+  "mismatched_definition",
+  "changed_constant"
+ ],
+ "planted_per_type_calib": 4,
+ "test_corruptions": [
+  "near_miss_polarity",
+  "swapped_roles",
+  "inverted_comparison",
+  "dropped_clause"
+ ],
+ "planted_per_type_test": 4,
+ "N_calib": 100,
+ "N_test_gate": 40,
+ "N_main_per_entry": 20,
+ "gate_threshold": 0.9,
+ "gate_models": [
+  "qwen3b",
+  "smol17"
+ ],
+ "models": {
+  "qwen3b": {
+   "hf": "Qwen/Qwen2.5-3B-Instruct-GGUF",
+   "path": "/workspace/models/qwen2.5-3b-instruct-q4_k_m.gguf",
+   "quant": "Q4_K_M"
+  },
+  "smol17": {
+   "hf": "bartowski/SmolLM2-1.7B-Instruct-GGUF",
+   "path": "/workspace/models/SmolLM2-1.7B-Instruct-Q4_K_M.gguf",
+   "quant": "Q4_K_M"
+  }
+ },
+ "n_threads": 8,
+ "decoding": "greedy T=0, short worked reasoning (<=160 new tokens); parse last 'Answer: <int>|UNKNOWN' line, else last integer in reply, else UNKNOWN keyword = abstention, else invalid (counted wrong); parse_path logged",
+ "aggregation": "semantic item = one case; message group = one entry (one emitted ID); CIs are cluster bootstrap over message groups (2000 resamples) and paired; primary comparisons per model: id_expanded vs prose, compact, id_raw, placebo_prose (n = 24 groups x 20 items = 480 pairs)",
+ "primary_efficiency_comparison": "receiver latency/tokens of each condition vs id_expanded_cached (valid identical-prefix KV reuse) and id_expanded (cold)",
+ "margin": 0.05,
+ "max_new_tokens": 160,
+ "N_calib_note": "N=100 per entry chosen (prereg \u00a74 preference) before calibration, from smoke timing"
+}
