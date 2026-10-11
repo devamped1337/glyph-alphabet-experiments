@@ -1,8 +1,8 @@
-# E1b PREREG: DRAFT rev 5 (consolidated specification)
+# E1b PREREG: DRAFT rev 6 (consolidated specification)
 
 **Status: DRAFT, 2026-10-12 (AEDT). Not frozen and not tagged. No E1b code exists and nothing has been run.** Written after the E1 results were seen (`RESULTS_E1.md`, `v6/e1/CALIBRATION_REPORT.md`).
 
-**What this revision is:** one consistent specification. Every setting has exactly one value. All superseded text was removed (GPT r2, point 7). The earlier revisions stay in git: rev 1 `ce7cd5d`, rev 2 `283aaad`, rev 3 `1550275`, rev 4 `ee45548`.
+**Rev 6** applies `claude_3.md` (Claude, read rev 5 `eaead82` directly), items (a)–(j); Grok signed off on rev 5 (`grok_3.md`). **What this revision is:** one consistent specification. Every setting has exactly one value. All superseded text was removed (GPT r2, point 7). The earlier revisions stay in git: rev 1 `ce7cd5d`, rev 2 `283aaad`, rev 3 `1550275`, rev 4 `ee45548`.
 
 **Reviews applied** (`v6/e1b/reviews/`): `claude_1.md`, `claude_2.md` (Claude's fetcher served rev 1; judged from the user's description), `gpt_1.md`, `gpt_2.md`, `grok_1.md`, `grok_2.md`. Earlier E1 reviews: `v6/e1/reviews/*`. Disagreements that remain are listed in §12.
 
@@ -14,6 +14,7 @@
 
 - **This is a communication proof of concept** to attract interest and donated compute. It is not a definitive paper. The user has no API budget.
 - **The headline question (B3):** can a sender model pick the right entry ID from 4 confusable neighbours, so that a receiver given only `ID@version#hash` recovers the meaning on held-out cases about as well as when it gets the original message, while transmitting ≥30% fewer bytes?
+- **What the −0.05 margin implies (Claude r3 f):** a wrong pick almost always gives a wrong answer (asserted in §5). So the pipeline can only be within 5 points of the original-message arm if **selection accuracy is about ≥0.95**. A B3 failure will therefore most likely reflect **selection**, not the receiver's handling of the expansion.
 - **Limit:** only open-weight models are used. The closed-lab / public-API version of the repository (delegates of closed models) is **untested**.
 - **Stage A** (box CPU, small models) is **diagnostic only and carries no repository, ID-channel or efficiency claims**. Neither does any amendment based on Stage A (Claude r1).
 
@@ -75,6 +76,7 @@
   - the builder asserts that the **B2/B3 TEST pool shares no case** (normalised text, and (entry, text)) with any other pool, and that no two pools share a case;
   - no duplicates within any pool;
   - every gold answer is independently recomputed from the parsed entry text;
+  - **confusable neighbours are load-bearing (Claude r3 f):** for every core entry, each of its 3 wrong neighbours must change the gold answer on **≥80% of that entry's TEST cases**. Otherwise the neighbour is regenerated before freezing the pools;
   - any violation aborts the build, and the validator re-checks it on all output files.
 
 ## 6. Prompts and parsing
@@ -98,7 +100,7 @@ Estimated from E1's measured CPU rates (Qwen-3B 2.25 s/call, Smol 1.31 s/call; p
 | **Total** | | **4,380** | **≈1.5 h** |
 
 - **A1:** a model "has" a family if direct-text accuracy ≥ **0.70** (Grok r1). This is reported per family.
-- **A2:** each model ≥0.90 on the probes and agreement ≥0.90, per entry. No-entry-text accuracy is reported (chance 0.25). **Probes with pooled no-text accuracy > 0.40 are flagged as leaky.** In Stage A they are reported. In B1 the probe set is regenerated **before** the B1 data is generated, never after.
+- **A2:** each model ≥0.90 on the probes and agreement ≥0.90, per entry. No-entry-text accuracy is reported (chance 0.25). **Leak flag (Claude r3 c): per probe template, pooled across entries, with ≥50 no-text observations per template. A template with no-text accuracy > 0.40 is flagged as leaky.** In Stage A they are reported. In B1 the probe set is regenerated **before** the B1 data is generated, never after.
 - **Stage A → B rule:** the small pair "clears 0.90" if each model and their agreement reach ≥0.90 on ≥**80%** of honest entries **and** A4 shows that the plants change Qwen's answers on ≥70% of the changed-gold cases. If so, the small pair may be calibrated in a **separately pre-registered amendment, still with no repository claims**. Otherwise (expected): go to Stage B. Stage A results are published either way.
 
 ## 8. Cache test (CPU in A5, GPU in B2; each runtime checked separately; GPT r2)
@@ -113,6 +115,7 @@ Estimated from E1's measured CPU rates (Qwen-3B 2.25 s/call, Smol 1.31 s/call; p
 ## 9. Stage B
 
 ### B0: qualification, throughput, pilot (2 GPU-h)
+- **4-bit load test on the assigned GPU (Claude r3 i):** load each model in the pinned nf4 config on the GPU Kaggle actually assigns, and run the canaries. **Pre-registered fallback:** if bitsandbytes nf4 fails to load or run on that GPU (expected risk: P100, compute capability 6.0), use **GGUF Q4_K_M via llama.cpp with CUDA** for **all** Stage B models and stages. Logged and never mixed.
 - Access check → precision canaries (§4) → qualification on the **qualification pool**, per family:
   - **rule probes ≥0.90**;
   - **separately, direct-text arithmetic ≥0.80** (GPT r1, Grok r1).
@@ -123,32 +126,39 @@ Estimated from E1's measured CPU rates (Qwen-3B 2.25 s/call, Smol 1.31 s/call; p
 ### B1: gate (3 GPU-h)
 - **Probes:** ≥20 four-option probes per entry. An entry passes iff **each model ≥0.90 and agreement ≥0.90**. Fixed, with no post-hoc threshold.
 - **Leakage controls:**
-  - no-text probe accuracy reported (target ≈0.25);
+  - no-text probe accuracy reported (target ≈0.25), with the leak flag per probe template (≥50 no-text observations per template, flag at >0.40, as in §7);
   - invented rules only;
   - every planted corruption flips the gold of ≥1 of its probes, asserted in the builder (Claude r1).
 - **Manipulation check:** on the stronger model, scored only on questions whose gold answer changes (GPT r1).
 - **Two bars (GPT r2; Claude r1):**
   - **Calibration eligibility rule:** honest acceptance ≥0.80 **and** planted rejection ≥0.90 on the calibration pool. This decides only whether the gate is used to filter entries in B2/B3.
   - **Repository target:** honest acceptance ≥0.90 **and** planted rejection ≥0.95, reported on the **TEST-gate pool** (unseen corruption types).
+- **TEST-gate pool size (Claude r3 a):** all core honest entries (60 or 100) re-probed with fresh probes, plus **40 planted entries** (4 unseen corruption types × 10). **Precision:** at 40 planted, a point estimate of 0.95 (38/40) has a 95% lower bound of ≈**0.83–0.84** (Wilson 0.835). At 60 honest entries, 0.90 (54/60) has a lower bound of ≈0.80. So the 90/95 target can be "met in sample" but not "met at 95% confidence" at this size. This is stated in advance.
 - **Verdict wording:** "met in sample" (point estimate ≥ bar) is kept distinct from "met at 95% confidence" (CI lower bound ≥ bar), for every bar.
 - **None of these bars is the POC success criterion** (GPT r1).
 - **If B1 fails** (eligibility not met): **B2 and B3 still run, but the combined pipeline is not a checked repository. Gate acceptance, coverage and abstentions are reported alongside every B2/B3 number** (Grok r2 lock 4).
 
 ### B2: oracle-ID receiver comparison (2 GPU-h)
+- **What B2 shows (Claude r3 h):** given byte identity, the id_oracle vs direct_text difference is **zero by construction**, so it is a check, not a finding. B2's content is the **prose comparison** and the **cost table**.
 - The receiver gets the correct `ID@version#hash`. The delegate expands it locally after a **version/hash check in code**. On a mismatch it returns `UNKNOWN` with no model call. Test: 48 unknown, stale or wrong-hash messages; pass = 48/48.
-- **id_oracle vs matched direct_text:** if the expanded id_oracle prompt is **byte-identical** to the direct_text prompt, this is asserted per item (sha256), and only a **60-item paired check** confirms identical outputs (GPT r1). If not identical, both run in full.
+- **id_oracle vs matched direct_text:** if the expanded id_oracle prompt is **byte-identical** to the direct_text prompt, this is asserted by a **sha256 per item on all items**, and outputs are confirmed identical on a **20-item paired check** (Claude r3 d; GPT r1). If not identical, both run in full.
 - **Prose** (the original message) runs on all TEST items.
 - **Sanity controls:** id_raw (ID only) and placebo (answer-determining constants removed) run on a **pre-registered 30-entry sanity subset** (15 F1 + 15 F2, chosen by seed before any data) × 10 cases (Claude r2).
 - **GPU cache test** (§8) and prefix-cached timing for id-expansion and prose, valid only if §8 passes.
-- **Cost (all reported):** newly processed prompt tokens, generated tokens, latency, and **FLOPs = 2·params·(newly processed + generated tokens)**. Cached prefix tokens count 0 only if §8 passes. Uncached cost is always shown.
+- **Cost (all reported):** newly processed prompt tokens, generated tokens, latency, and **FLOPs = 2·params·(newly processed + generated tokens)**. Cached prefix tokens count 0 only if §8 passes. Uncached cost is always shown. **Cached timing is measured at batch size 1 only** (the §8 assumption). The cost table labels it "batch-1". Batched cached throughput is not measured or claimed (Claude r3 b).
 
 ### B3: sender selection and full exchange: HEADLINE (5 GPU-h)
 - The sender reads the natural-language **original message** (never the entry text) and picks one of **4 confusable candidates** (same family and wording, differing in polarity, role direction or a constant). This is **4-way selection, not a repository search** (GPT r1). Both models act as sender; each sender's pick goes to the other model as receiver.
 - **Logged:** exactly what the sender sees: the message, the candidate IDs and the one-line labels (GPT r1).
 - **Primary comparison (GPT r2):** **selected-ID pipeline accuracy** (sender pick → receiver expands the hash-checked entry → answers the TEST case) vs **the receiver given the same original message**. Non-inferiority margin **−0.05 (5 points)**, paired cluster bootstrap over entries (2000 resamples).
-- **Bytes:** transmitted bytes of `ID@version#hash8` with its framing vs the bytes of the original message. Target: **≥30% fewer**.
+- **Message definition (Claude r3 g):**
+  - A "message" carries the **rule** only. The **case text** (the question) reaches the receiver **identically in both arms**: the same bytes, appended after the rule part.
+  - **Byte denominators:** for each arm, **total receiver-input bytes** = the transmitted rule part (`ID@version#hash8` with its framing, vs the original message's UTF-8 bytes) **+** the identical case-text bytes. The saving is reported both on the rule part alone and on the total.
+  - Messages with **slots** (parameters filled per message) are future work.
+  - **The byte saving is near-guaranteed by design** (a ~20-byte ID vs a multi-sentence message), so the ≥30% criterion is a sanity bar, not evidence of a hard result.
+- **Bytes:** transmitted bytes of `ID@version#hash8` with its framing vs the bytes of the original message. Target: **≥30% fewer** total receiver-input bytes.
 - **Costs reported (GPT r2):** sender, candidate preparation (labels, any retrieval), receiver, and **dictionary setup amortised** over the number of messages (reported as break-even message count).
-- **Separate secondary claim:** the sender beats retrieval baselines (BM25 over labels; nearest-label embedding with sentence-transformers `all-MiniLM-L6-v2`) and chance (0.25) on selection accuracy (Claude r1). This is not part of the headline.
+- **Separate secondary claim:** the sender beats retrieval baselines and chance (0.25) on selection accuracy (Claude r1). The baselines are a **lexical TF-IDF and a BM25** match of the message against the candidate labels (Claude r3 j), and nearest-label embedding with sentence-transformers `all-MiniLM-L6-v2`. The sender must beat the best of the three. This is not part of the headline.
 
 ## 10. Success criteria, CI widths and power (Grok r2 lock 2; GPT r2; Claude r2)
 
@@ -168,6 +178,11 @@ Estimated from E1's measured CPU rates (Qwen-3B 2.25 s/call, Smol 1.31 s/call; p
 | 200 (not run) | ±2.67 | ~96% | n/a | n/a |
 
   These figures were re-computed on 2026-10-12 and match GPT r2 and Claude r2.
+- **Joint power for both receiver directions (Claude r3 e):** success requires non-inferiority in **both** directions. The joint power lies between the product (independent directions) and the single-direction value (perfectly correlated directions):
+  - **C100 ≈ 0.55–0.74**;
+  - **C60 ≈ 0.27–0.52**;
+
+  at a true difference of 0.
 - **Per-family** results are descriptive.
 
 ## 11. Run interface, artifacts, validator
@@ -185,19 +200,12 @@ Estimated from E1's measured CPU rates (Qwen-3B 2.25 s/call, Smol 1.31 s/call; p
 
   A non-zero exit means nothing is published.
 
-## 12. Remaining disagreements and items needing sign-off
+## 12. Review status
 
-1. **N: two configurations vs a fixed 60.** Grok r2 asked for "no raising N after seeing numbers" and accepted a fixed 60. This spec follows **GPT r2 and Claude r2**: C60 or C100, chosen by a timing-only formula before B1. Timing data is not outcome data, but Grok has not confirmed this reading.
-2. **TEST bar: 90/95 vs 80/90.** GPT r2 overrides Grok r2's lock of the TEST-pass bar at 0.80/0.90. Here 80/90 is only the calibration eligibility rule, and **90/95 is the reported repository target** on TEST. Grok's sign-off is needed.
-3. **Stage A model set:** Claude r1 wanted Llama-3.2-3B. This spec follows GPT r1 and Grok r1 (Qwen-3B + Smol only).
-4. **Cache rule:** this spec uses "zero changes observed" at n=120 independent prompts (GPT). Claude r1 asked for n=480 with a +0.03 margin, and Grok r1 for no slack. The zero-change rule is stricter than both for making a claim, but at n=120 it cannot show a rate below ≈2.5%.
-5. **Thresholds proposed by the drafter and not yet reviewed:**
-   - the leaky-probe flag at >0.40;
-   - the Stage A exit "≥80% of honest entries" and A4 ≥70%;
-   - 20 canaries;
-   - the 60-item byte-identity check;
-   - the 30-entry sanity subset split;
-   - the ≤80%-of-budget rule for choosing C100;
-   - `all-MiniLM-L6-v2` as the embedding baseline.
-6. **Claude r2 judged rev 3 from a description only**, because its fetcher served stale content. It should re-review this file directly.
-7. **Code not written:** `e1b.py`, `run.sh` and the `--e1b` validator mode are specified, not implemented.
+- **Resolved:** all rev-5 §12 items.
+  - Grok signed off on all of them (`grok_3.md`: "lock it"), including the C60/C100 timing-only choice and the 90/95 TEST target.
+  - GPT backed this approach (`gpt_2.md`).
+  - Claude reviewed rev 5 directly (`claude_3.md`). Its fixes (a)–(j) are applied in rev 6, and none introduces a conflict with GPT or Grok.
+  - The byte-identity check went from 60 to 20 items, plus a per-item sha256 on all items.
+- **Stage A model set** stays Qwen-3B + Smol (GPT r1, Grok r1). Claude did not reopen this in r3.
+- **The code is not written:** `e1b.py`, `run.sh` and the `--e1b` validator mode are specified, not implemented.
