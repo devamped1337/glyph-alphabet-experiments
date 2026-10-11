@@ -32,3 +32,29 @@ Totals:
   - Raw is right on 25/192 uncovered Qwen rows (22 of them Paris) and 31/364 uncovered Smol rows (Paris 13, Berlin 12).
   - Only on Smol t4 does raw clearly track the sender: the two senders' predictions differ on 157/210 messages.
 - **Answer to Grok:** at li=0, the snap discards little sender-specific signal where an entry exists. It does throw away a small amount of usable signal for places that were rejected from the book, mostly Paris and Berlin. Even with that signal, raw t4 accuracy stays far below prose (1.00). This is an embedding-layer result only; contextual layers were not run on TEST.
+
+## Claude round 2: cross-model null_shufpair vs no-message
+
+Recomputed over counted cells at 48a7a6a5. "Cross" means sender ≠ receiver.
+
+| receiver | null_shufpair cross | null_shufpair self | null_randorth cross | none | glyph_id cross | raw unsnapped cross |
+|---|---|---|---|---|---|---|
+| Qwen | 0.228 (147/646) | 0.745 (481/646) | 0.252 | 0.248 (160/646) | 0.726 | 0.745 |
+| Smol | 0.162 (171/1056) | 0.645 (681/1056) | 0.209 | 0.172 (182/1056) | 0.632 | 0.641 |
+
+**CONFIRMED.** On cross-model rows the shuffled-pair null is at or slightly below no-message, which matches Claude's ~0.23/0.15 vs ~0.25/0.16 and GPT's 22.76%/16.19%. The pooled 0.486/0.403 I reported in my round-1 item 7 mixes in the self rows. On those rows the shuffled pair does not scramble the receiver's own states, and they score exactly the same as raw unsnapped. So my item 7 should read: **the real adapter beats every null, and the cross-model nulls sit at the no-message level.**
+
+## Claude round 2: can t5 be encoded at emb with the last token?
+
+I ran the pinned tokenizers (SmolLM2-1.7B @effd688a, Qwen2.5-3B @3aab1f19) on "Message: the permit is {v}." and used the same last-token rule as `Runtime.positions`:
+
+| value | SmolLM2 tokens → last id | Qwen2.5 tokens → last id |
+|---|---|---|
+| approved | " approved" → 8159 | " approved" → 11792 |
+| not approved | " not", " approved" → **8159** | " not", " approved" → **11792** |
+| authorized | " authorized" → 16280 | " authorized" → 18630 |
+| valid now | " valid", " now" → 1209 (" now") | " valid", " now" → 1431 (" now") |
+
+**CONFIRMED for "not approved".** In both tokenizers its last token is the same " approved" token. The emb hook is the output of `embed_tokens`, which is a pure token lookup (both models use RoPE, so nothing positional is added), so the states read for "approved" and "not approved" are **identical vectors**. The sender-side reading cannot tell them apart, so the negation was impossible to encode at li=0.
+
+"authorized" has its own token, so it is not a collision. It was rejected by the gate for other reasons. "valid now" is read only from " now", a generic token, which plausibly explains why glyph fails it (0/24) while id_text_expanded passes. That explanation is an inference, not tested.
