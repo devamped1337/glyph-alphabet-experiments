@@ -1,5 +1,17 @@
 # v5 results: glyph codebook transfer between SmolLM2-1.7B and Qwen2.5-3B
 
+## ERRATA (2026-10-11, from GPT review round 1, reviews/v5/round1/gpt.md)
+
+1. **The frozen depth is the embedding layer.** frozen5.json has li=0. In common5.py, `layer_keys()` returns `["emb", ...]`, and "emb" is the output of `embed_tokens`, before any transformer block. The layer keys in book5.json are qwen `['emb', 9, 12]` and smol `['emb', 6, 8]`. States are read at the last token of each slot value (`Runtime.positions`). So v5 tested a **word-embedding codebook**, not a contextual/J-space channel. For example, the last token of "not approved" at the embedding layer cannot carry the negation. Nothing below shows anything about contextual-layer transfer.
+2. **Rejection count was wrong.** It was **23 of 93** entries, not 22, leaving 70 (gate5.json, book `0|pca|0`). Round 0 rejected 22: 8 t3 operands, **12** places (not 13) and 2 t5 statuses ("authorized", "not approved"). Round 1 rejected Paris, so 13 places were rejected in total. Round 2 rejected none.
+3. **Place (t4) coverage, rebuilt from the predictions plus the book.** Only `t4|place|Lyon` and `t4|place|Spain` survived. Counts are per sender (glyph_id, pca seed 0, li=0), and both senders give identical numbers:
+   - Qwen receiver: 14/110 covered, 13/14 correct among covered (92.9%), 11.8% overall.
+   - SmolLM2 receiver: 28/210 covered, 26/28 correct among covered (92.9%), 12.4% overall.
+   Every correct t4 answer was a covered one. The t4 collapse comes mainly from dictionary rejection, not bad injection. The conditional accuracy covers only two places, so it does not show broad transfer.
+4. **Sender independence is built into the snapped path.** `run5.py:shared()` looks up a fixed shared vector for each chosen book ID (`b["shared"][k]`). When both senders pick the same ID, the receiver gets the identical vector. Matching predictions across senders therefore describe the lookup design. They are not evidence about activation transfer in general.
+5. Also worth knowing: every prompt is padded to exactly 64 tokens (`spec5.CTX = 64`, asserted in `ids64`), so v5 shows no saving in receiver compute. The 6/6 planted rejections are 2 designs (Zed, Noise) × 3 depths. They are not 6 independent bad entries.
+
+
 Data commit: **`48a7a6a5faff09d6de4f8fef8773d9419a248a3e`**. Run code: v5.4 `6e3f6a2`, plus the analysis fix in `48a7a6a5faff09d6de4f8fef8773d9419a248a3e` (see deviation 7).
 Receivers: SmolLM2-1.7B (box, N_TEST=250, seeds 0/1/2) and Qwen2.5-3B (laptop i5-8350U, N_TEST=110, seed 0). Qwen TEST took 43,260 s (12.0 h) and finished cleanly at 14:34 AEDT on 2026-10-11.
 
@@ -7,7 +19,7 @@ Receivers: SmolLM2-1.7B (box, N_TEST=250, seeds 0/1/2) and Qwen2.5-3B (laptop i5
 1. **The glyph never beats prose.** On every counted task the glyph is worse than plain prose (paired 95% CI entirely below 0), except one: SmolLM2 t1|pol, where it is *equivalent*. It is also worse than the same ID expanded to a prose sentence (`id_text_expanded`) on every task except t4, where both fail.
 2. **The glyph beats compact text only where compact text is weak**: Qwen t1|mod +0.19 and t2|first +0.39, SmolLM2 t1|agent +0.19. It is inconclusive on 4 cells and loses badly on t4|where (-0.88) and t5|status (-0.38).
 3. **The "transfer" is a lookup.** The snapped `glyph_id` matches `receiver_word_state` (the receiver's own word state) exactly: paired difference 0.000 on almost every cell. It is also the same for both senders (638/646 identical predictions on Qwen, 1040/1056 on SmolLM2), and the 3 seeds agree to within SD 0.001. After snapping, the result reflects the receiver's dictionary, not information carried from the sender.
-4. **t4|where (places) fails completely**: 0.12 end-to-end on both receivers, against 1.00 for prose. 22 of the 93 entries were rejected in book negotiation, mostly places (round 0 rejected 13 place entries plus 8 t3 operands and 2 t5 statuses; round 1 rejected Paris).
+4. **t4|where (places) fails completely**: 0.12 end-to-end on both receivers, against 1.00 for prose. 23 of the 93 entries were rejected in book negotiation, mostly places (round 0 rejected 12 place entries plus 8 t3 operands and 2 t5 statuses; round 1 rejected Paris). [corrected, see ERRATA]
 5. **The gate rejects planted bad entries (6/6), but it rejects almost every honest held-out entry too.** The LOO gate pass rate is **4/141 = 2.8%**. Pre-registered success required planted rejection *and* LOO passing at a reported rate, so the gate does not work as a selective filter.
 6. Determinism passed: SmolLM2 box vs laptop max |dlogit| 5.8e-5, identical top-1 and top-10, bitwise repeat and reload.
 
