@@ -195,6 +195,8 @@ class TestGPTCounterexamples(unittest.TestCase):
             self.assertEqual(run(d), 1); self.assertEqual(run(d, inputs_only=True), 0)
             (d / "results" / "B1").mkdir(parents=True); self.assertEqual(run(d, inputs_only=True), 1)   # started, no marker -> broken
             (d / "results" / "B1" / "BUDGET_EXHAUSTED").write_text("x"); self.assertEqual(run(d, inputs_only=True), 0)
+            (d / "results" / "A").mkdir(); (d / "results" / "A" / "PROJECTION_EXCEEDS_BUDGET").write_text("x")
+            self.assertEqual(run(d, inputs_only=True), 0)   # Stage A's pre-registered projection stop is an explicit stop marker
         finally: shutil.rmtree(d)
     def test_cache_none_is_not_agreement(self):
         class NoneBE(FakeBackend):

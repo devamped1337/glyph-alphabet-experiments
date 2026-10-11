@@ -8,7 +8,7 @@ from .analysis import jl, flops
 from . import cachediag
 
 STAGES = ("A", "B0", "B0b", "B1", "B2", "B3")
-INCOMPLETE_MARKERS = ("BUDGET_EXHAUSTED", "CANARY_FAIL", "NO_QUALIFYING_PAIR", "PROMPT_FIX_REQUIRED")
+INCOMPLETE_MARKERS = ("PROJECTION_EXCEEDS_BUDGET", "BUDGET_EXHAUSTED", "CANARY_FAIL", "NO_QUALIFYING_PAIR", "PROMPT_FIX_REQUIRED")
 NO_UNIQUE = ("stage_log", "prompts_", "canary_")
 
 def stage_status(d):
