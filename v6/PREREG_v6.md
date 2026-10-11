@@ -107,4 +107,4 @@ If this 7B implementation shows **neither an accuracy nor an efficiency advantag
 ---
 
 ## Amendments
-(none)
+- **2026-10-11 (before any v6 results were seen; no v6 run has started):** `v6/checks/validate_v6.py` (from Grok's review, with checklist `v6/checks/v6_checklist.md`) is a mandatory pre-publication gate. It must be run on the v6 results directory before any RESULTS are written or published. A non-zero exit code means no publishing until the failures are fixed and the validator passes cleanly.

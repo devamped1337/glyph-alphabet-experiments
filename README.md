@@ -17,6 +17,7 @@ See `RESULTS_v4.md` for CIs and caveats.
 - `RESULTS_v3.md` / `v3/`: v3 (closed arithmetic "maths book" with slots)
 - `RESULTS_v4.md` / `v4/`: v4 (three-party book, keeper/delegates, frozen blocks, composition tests, ID vs vector delivery, ablations)
 - `v5/`: v5 code and pre-registration (SmolLM2-1.7B on one machine, Qwen2.5-3B on another; determinism check, ID-as-text control, LOO + planted entries, embedding vs layer patching, null adapters, J-subspace vs PCA vs random, confusable-entry selection). Not run yet.
+- `v6/checks/`: `validate_v6.py` (mandatory pre-publication gate for v6: `python v6/checks/validate_v6.py --results-dir v6/results`, and a non-zero exit means no publishing) and `v6_checklist.md`.
 - `results/`: raw JSON outputs; `logs/`: run logs
 
 Not included: model weights, fitted lens checkpoints (`*.pt`), venv. Lens code: https://github.com/anthropics/jacobian-lens (clone into `jacobian-lens/`).
