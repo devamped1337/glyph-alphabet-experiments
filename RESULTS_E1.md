@@ -24,12 +24,24 @@ The original text below is kept unchanged. Where it conflicts with this section,
 7. **The gate TEST figures are descriptive only.** The gate was not frozen (calibration failed), so the TEST numbers do not validate any gate.
 8. **Validator scope.** `validate_v6.py` PASSED as an engineering check (files, counts, schema, gold). It does not certify any scientific claim in this document.
 
+9. **The Smol win is a floor effect** (Claude, `claude_2.md`). Smol's accuracy is far below the prose ≥0.90 level in every family (F1 ≤34%, F2 ≤41%, F3 ≤10%), so its +0.067 over prose is not counted as evidence for the ID channel. It is reported per family only (see item 1).
+
 ### The next run must
 
-- add a **matched direct-text baseline**: the exact expanded definition text with framing identical to id_expanded;
-- **enforce disjoint and unique cases**: no main case may match any calibration or TEST-gate case (by entry and by text), and no duplicates within main. Assert both in code before the run;
-- **investigate cache determinism** with cold/cold, warm/warm and cold/warm repeats on identical prompts, and fix or document the source (e.g. llama.cpp KV/batch state) before any cached timing or accuracy is reported;
-- **test real sender selection**: the sender must choose the entry ID itself instead of being handed the correct one, and the selection accuracy must be reported along with receiver accuracy.
+Sources: GPT = `v6/e1/reviews/gpt_2.md`, Claude = `claude_2.md`, Grok = `grok_3.md` (and the earlier `grok_1.md`/`grok_2.md`).
+
+1. **Capability precondition** before calibration: a smoke test showing each gate model can do the honest tasks (Claude; cf. Grok 1/2: scale the tasks to the models).
+2. **A stronger gate pair:** ≥7B models from two different families if the 0.90 bar is kept (Claude; Grok 1). Grok 2 offers an alternative: a lower, pre-registered bar for small models, with 0.90 as the later target. One option must be chosen and pre-registered.
+3. **Gate on rule comprehension, not arithmetic:** small-choice questions that check whether the rule was understood (Claude; GPT round 1).
+4. **Manipulation check:** show that planted entries change a strong model's behaviour, and keep the planted corruptions Qwen ignored as a stress test (Claude; Grok 1/2).
+5. **Matched direct-text baseline:** the exact expanded definition text with framing identical to id_expanded (GPT).
+6. **Enforce disjoint and unique cases:** no main case may match any calibration or TEST-gate case (by entry and by text), and no duplicates within main, asserted in code before the run (GPT).
+7. **Investigate cache determinism** with cold/cold, warm/warm and cold/warm repeats on identical prompts, before any cached timing or accuracy is reported (GPT).
+8. **Real prefix cache:** a cached definition prefix reused across *different* cases, with prose given an equivalent cached prefix, replacing the repeat-request best case (Claude; GPT round 1).
+9. **Fix FLOPs** to count only newly processed tokens (Claude; GPT round 1).
+10. **Report per family, with ≥100 entries** (the effective n is message groups, not items) (Claude; GPT per-task table).
+11. **Verify unknown-ID handling in code:** check the entry version and hash before the receiver acts. Smol acted on 42/48 unknown IDs (Claude).
+12. **Real sender selection, as its own experiment:** the sender picks the entry ID instead of being handed it, and selection accuracy is reported (GPT; Claude).
 
 ---
 
