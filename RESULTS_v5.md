@@ -16,9 +16,37 @@
 Data commit: **`48a7a6a5faff09d6de4f8fef8773d9419a248a3e`**. Run code: v5.4 `6e3f6a2`, plus the analysis fix in `48a7a6a5faff09d6de4f8fef8773d9419a248a3e` (see deviation 7).
 Receivers: SmolLM2-1.7B (box, N_TEST=250, seeds 0/1/2) and Qwen2.5-3B (laptop i5-8350U, N_TEST=110, seed 0). Qwen TEST took 43,260 s (12.0 h) and finished cleanly at 14:34 AEDT on 2026-10-11.
 
+## Round-1 checks (Claude review, reviews/v5/round1/claude.md)
+
+Recomputed from the full predictions_qwen.jsonl and predictions_smol.jsonl at 48a7a6a5. All glyph_loo rows have a prediction (0 uncovered).
+
+**1. LOO artifact: CONFIRMED.** The headline LOO numbers mostly measure how often the held-out symbol was irrelevant to the answer. When the held-out symbol is the answer, accuracy is about 0, which is *below* the no-message baseline on every multi-way slot:
+
+| receiver | task | LOO all | answer held out | other symbol held out | none |
+|---|---|---|---|---|---|
+| qwen | t1\|agent | 0.430 (440) | **0.005** (220) | 0.855 (220) | 0.173 |
+| qwen | t2\|first | 0.475 (440) | **0.005** (220) | 0.945 (220) | 0.127 |
+| qwen | t1\|mod | 0.909 (440) | n/a | 0.909 (440) | 0.482 |
+| qwen | t1\|pol | 0.968 (440) | n/a | 0.968 (440) | 0.473 |
+| qwen | t4\|where | 0.064 (220) | 0.064 (220) | n/a | 0.091 |
+| smol | t1\|agent | 0.349 (1000) | **0.002** (500) | 0.696 (500) | 0.060 |
+| smol | t1\|patient | 0.343 (1000) | **0.018** (500) | 0.668 (500) | 0.056 |
+| smol | t1\|pol | 0.796 (1000) | n/a | 0.796 (1000) | 0.508 |
+| smol | t4\|where | 0.031 (420) | 0.031 (420) | n/a | 0.067 |
+
+On the binary slots (mod, pol), the held-out symbol is never the answer, so the LOO number there says nothing about held-out entries. Answer-held-out LOO above "none" on a multi-way slot was Claude's "would change my mind" criterion. It is **not** met: the receiver names the other entity instead of the held-out one.
+
+**2. t5 statuses (8 items).** glyph_id gets 5/8 statuses right, and each status is either 24/24 or 0/24 on both receivers. It fails "authorized", "not approved" (both rejected from the book) and "valid now". id_text_expanded gets 6/8 (it gets "valid now" right). text_prose gets 8/8. The t5 CI of [-0.375, -0.375] is degenerate because the effective n is 8 statuses, not 96 rows.
+
+**3. t4 places.** There are 15 distinct places. SmolLM2 has 14 messages per place; Qwen's are uneven, from 4 to 12. Only Lyon and Spain are in the book (see ERRATA 3).
+
+**4. Glyph vs compact text (counted cells, both senders agree on every cell):** A better 3 (Qwen t1|mod, Qwen t2|first, Smol t1|agent), B better 4 (t4 and t5 on both receivers), inconclusive 3 (Qwen t1|agent, Qwen t1|pol, Smol t1|patient), equivalent 1 (Smol t1|pol). Claude's tally is right. Headline point 2's "inconclusive on 4" should read "3 inconclusive + 1 equivalent".
+
+**5. Claude's question "what layer is li=0?":** li=0 is the **embedding output** (`embed_tokens`, before any transformer block) for **both** models. book5.json has the layer keys qwen `['emb', 9, 12]` and smol `['emb', 6, 8]`.
+
 ## Bottom line
 1. **The glyph never beats prose.** On every counted task the glyph is worse than plain prose (paired 95% CI entirely below 0), except one: SmolLM2 t1|pol, where it is *equivalent*. It is also worse than the same ID expanded to a prose sentence (`id_text_expanded`) on every task except t4. On t4 both score about 0.12 end-to-end, but that number mostly reflects dictionary coverage. Only Lyon and Spain survived negotiation: 14/110 Qwen and 28/210 SmolLM2 place messages were covered, and 92.9% of the covered ones were correct (see ERRATA 3).
-2. **The glyph beats compact text only where compact text is weak**: Qwen t1|mod +0.19 and t2|first +0.39, SmolLM2 t1|agent +0.19. It is inconclusive on 4 cells and loses badly on t4|where (-0.88) and t5|status (-0.38).
+2. **The glyph beats compact text only where compact text is weak**: Qwen t1|mod +0.19 and t2|first +0.39, SmolLM2 t1|agent +0.19. It is inconclusive on 3 cells and equivalent on 1 (Smol t1|pol) [corrected, see Round-1 checks] and loses badly on t4|where (-0.88) and t5|status (-0.38).
 3. **The "transfer" is a lookup.** The snapped `glyph_id` matches `receiver_word_state` (the receiver's own word state) exactly: paired difference 0.000 on almost every cell. It is also the same for both senders (638/646 identical predictions on Qwen, 1040/1056 on SmolLM2), and the 3 seeds agree to within SD 0.001. After snapping, the result reflects the receiver's dictionary, not information carried from the sender.
 4. **t4|where (places) fails completely**: 0.12 end-to-end on both receivers, against 1.00 for prose. 23 of the 93 entries were rejected in book negotiation, mostly places (round 0 rejected 12 place entries plus 8 t3 operands and 2 t5 statuses; round 1 rejected Paris). [corrected, see ERRATA]
 5. **The gate rejects planted bad entries (6/6), but it rejects almost every honest held-out entry too.** The LOO gate pass rate is **4/141 = 2.8%**. Pre-registered success required planted rejection *and* LOO passing at a reported rate, so the gate does not work as a selective filter.
