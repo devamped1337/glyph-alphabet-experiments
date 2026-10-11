@@ -220,4 +220,36 @@ Estimated from E1's measured CPU rates (Qwen-3B 2.25 s/call, Smol 1.31 s/call; p
 
 ## Amendments
 
-_None as of 2026-10-12 (AEDT)._
+### A1: 2026-10-12 (AEDT), made BEFORE any E1b code, data or result existed
+
+**Source:** [gpt_3](reviews/gpt_3.md), GPT's review of rev 5. It arrived just after the freeze commit `cf43e68` (tag `prereg-e1b`). These clarifications were meant to be part of the freeze, so they are recorded here as the first amendment instead of moving the tag. **They are binding and take precedence over the sections they name.**
+
+1. **Runtime projection (replaces the formula in §5):**
+   - The projection for each stage = **measured elapsed wall time per representative call or batch** (sender + receiver, at the batch size actually used) × the number of calls or batches, **plus measured setup time** (model load, canaries, cache warm-up). It is measured on B0 non-TEST pilot cases, not derived from a single tokens/s figure.
+   - **C100 is chosen only if every stage (B1, B2, B3) projects at ≤80% of its budget.** Otherwise C60 is checked by the same rule. If C60 also doesn't fit, report **"insufficient budget"** and stop.
+2. **Accuracy labels (replaces the §10 wording, and applies to every non-inferiority comparison). They are mutually exclusive:**
+   - CI lower bound > −0.05 → **non-inferior**;
+   - CI upper bound < −0.05 → **inferior**;
+   - otherwise → **inconclusive**.
+
+   A missed byte target (§9 B3) is reported **separately** and never merged into the accuracy label. The §10 power table is **per comparison**. The joint power for both directions is noted separately (§10).
+3. **Gate and denominators (§9 B1, B3):**
+   - The **accepted dictionary list is fixed from calibration**. TEST-gate results only evaluate it and never change it.
+   - **All scheduled core TEST cases stay in the headline denominator.** Cases of rejected entries, and abstentions (`UNKNOWN`), are counted as not correct and shown as separate columns.
+   - Any family exclusion is stated in the headline itself, not only in a footnote.
+4. **Cache (§8):**
+   - A pass at batch size 1 supports **batch-1 cached measurements only**.
+   - The claim requires **zero changed predictions in all three comparisons**: cold/cold, warm/warm and cold/warm.
+   - **Pairing:** for each prompt, cold run 1 is paired with warm run 1, and cold run 2 with warm run 2. Both pairs must agree.
+   - The binomial / rule-of-three bound is computed on the **100 randomly sampled fixed-answer prompts only**. The 20 hand-chosen near-tie prompts are reported separately as a stress test and are not covered by the bound.
+5. **Parsing (§6) and the leak flag (§7, §9 B1):**
+   - **Probe replies:** the first standalone letter A–D is taken. No letter, a letter outside A–D, or two or more different letters → **invalid, counted as wrong**.
+   - **Arithmetic replies:** the last `Answer:` line is taken. If there is none, the last integer. `Answer: UNKNOWN` → abstention, counted as not correct and reported separately. Two or more conflicting `Answer:` lines → the last one is used, and the case is flagged. Nothing parseable → invalid, counted as wrong.
+   - **Leak-flag diagnostic pool:** the no-text probe runs in **Stage A (A2)** and in a dedicated **B0 probe-diagnostic pool** (non-TEST, separate from qualification).
+   - **Regeneration procedure (predetermined):** a flagged template is replaced by the next template in the frozen seeded template list. It is re-checked once on the same diagnostic pool and dropped if it is flagged again.
+   - All regeneration finishes **before any B1 data is generated**. **No B1 probe is regenerated after any B1 performance has been seen.**
+6. **Bytes (§9 B3):**
+   - **payload bytes** = the rule part only (`ID@version#hash8` with its framing, vs the original message);
+   - **whole-exchange bytes** = payload + identical case text + any sender-side transmission (candidate labels, if they cross the wire).
+
+   Both are reported. The ≥30% target applies to **payload bytes**.
