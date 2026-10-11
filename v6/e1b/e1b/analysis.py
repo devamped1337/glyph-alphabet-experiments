@@ -246,6 +246,8 @@ def summarize_B3(d, pair, cfg, B, gated):
                            wording="selection among compact labelled candidates (4-way), not a repository search",
                            trials_per_family={f: sum(E[e]["fam"] == f for e in S) for f in sorted({E[e]["fam"] for e in S})},
                            by_neighbour_type=by_ntype(S, E),
+                           regex_frozen_views=__import__("e1b.stages", fromlist=["regex_report"]).regex_report(B, cfg, list(S)),
+                           regex_tie_guesses=sum(bool(s["baselines"].get("regex_tie")) for s in S.values()),
                            by_message_style={st: dict(n=len(v), acc=sum(v) / len(v)) for st, v in _group(S, E).items()},
                            sender_minus_best_baseline=dict(est=be, ci=[bl, bh], beats=(bl is not None and bl > 0)),
                            note="separate secondary claim; not part of the headline"),

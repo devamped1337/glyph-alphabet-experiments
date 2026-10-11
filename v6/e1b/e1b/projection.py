@@ -38,3 +38,8 @@ def choose(cfg, timings):
         if all(v["projected_h"] <= h * v["budget_h"] for v in p.values()):
             return dict(choice=cname, projections=rep, rule=f"every stage <= {h} x budget")
     return dict(choice="INSUFFICIENT_BUDGET", projections=rep, rule=f"every stage <= {h} x budget")
+
+def probe_latency_allowance(cfg, cname):
+    """A3 (gpt_code_2): the max mean probe latency (s/call, ignoring setup and the manipulation check) at which B1
+    fits headroom x budget. C60 ~0.446 s, C100 ~0.290 s with 3 h and 20% headroom."""
+    return cfg["c100_headroom"] * cfg["budgets_gpu_h"]["B1"] * 3600 / call_counts(cfg, cname)["B1"]["probe"]

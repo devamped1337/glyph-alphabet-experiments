@@ -244,4 +244,27 @@ class TestGPTCounterexamples(unittest.TestCase):
         for eid in BOOK["groups"]["core_F1"]:
             for nid in BOOK["neighbours"][eid]: self.assertIn(nid, BOOK["probes"]["calib"])
 
+class TestA3(unittest.TestCase):
+    """gpt_code_2 regressions."""
+    def test_b0b_replacement_full_leak_dropped(self):
+        from e1b.stages import replacement_leaks
+        self.assertTrue(replacement_leaks([1] * 60, 1.0, CFG))     # was kept under the old rule (threshold 115%)
+        self.assertTrue(replacement_leaks([1] * 25 + [0] * 35, 0.30, CFG))   # 0.417 > 0.40 kind-level bar
+        self.assertFalse(replacement_leaks([1] * 15 + [0] * 45, 0.30, CFG))
+        self.assertTrue(replacement_leaks([], 0.25, CFG))
+    def test_b0b_budget_check_in_loop(self):
+        import inspect, e1b.stages as S
+        src = inspect.getsource(S.stage_B0b); self.assertIn("S.check_budget()", src)
+    def test_regex_report_uses_frozen_b3_views(self):
+        from e1b.stages import regex_report
+        r = regex_report(BOOK, CFG)
+        self.assertEqual({k: (v["correct"], v["n"]) for k, v in r.items()},
+                         {"plain": (70, 70), "reordered": (0, 13), "spelled": (5, 14), "derived": (8, 13)})
+        self.assertEqual(r["spelled"]["tie_guess"], 14)
+    def test_probe_latency_allowance(self):
+        self.assertAlmostEqual(projection.probe_latency_allowance(CFG, "C60"), 0.446, 3)
+        self.assertAlmostEqual(projection.probe_latency_allowance(CFG, "C100"), 0.290, 3)
+    def test_unknown_messages_distinct(self):
+        self.assertEqual(len({u["msg"] for u in BOOK["unknown_msgs"]}), CFG["unknown_id_messages"])
+
 if __name__ == "__main__": unittest.main()

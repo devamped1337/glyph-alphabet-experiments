@@ -357,6 +357,14 @@ def leak_rule(obs, cfg):
     return dict(flagged=flagged, kind_baseline=kb, kind_level_leak=kind_leak, insufficient_obs=under,
                 acc={t: sum(v) / len(v) for t, v in obs.items()}, n={t: len(v) for t, v in obs.items()})
 
+def replacement_leaks(v, kind_baseline, cfg):
+    """A3 (gpt_code_2 #2): a replacement template is dropped if its no-text accuracy exceeds the kind-relative
+    threshold OR the absolute kind-level leak bar (0.40). The old rule alone allowed thresholds above 100% when
+    the kind baseline was itself high; no observations counts as a leak (cannot be cleared)."""
+    if not v: return True
+    acc = sum(v) / len(v)
+    return acc > cfg["probe_leak_flag"] or acc > max(kind_baseline, 0.25) + cfg["probe_leak_margin_over_kind"]
+
 def stage_B0b(cfg):
     """Re-check of replacement templates for flagged ones (A1.5), on the same probe-diagnostic pool, pair only."""
     B = get_book(cfg); E = B["entries"]; S = Stage("B0b", cfg["budgets_gpu_h"]["B0"], cfg, alloc="B0")   # counts against the B0 allocation (not a reserve use)
@@ -372,6 +380,8 @@ def stage_B0b(cfg):
             if r is None: continue
             fam = t.split("-")[0]; tpl = [x for x in reserve_templates(fam) if x[0] == r]
             for eid in B["groups"][f"probediag_{fam}"]:
+                if f"{eid}|{r}" in S.done_keys(f"recheck_{m}.jsonl"): continue
+                S.check_budget()   # A3 (gpt_code_2 #2): budget checked inside the inference loop
                 e = E[eid]; p = make_probes(e, e, random.Random(seed_of('recheck', r)), tpl=tpl)[0]
                 S.write(f"recheck_{m}.jsonl", rec(m, "B0b", "recheck", f"{eid}|{r}", entry=eid, **ask_probe(b, e["text"], p, cfg, with_text=False)))
         del b
@@ -381,8 +391,7 @@ def stage_B0b(cfg):
         if p.exists():
             for l in open(p): x = json.loads(l); obs.setdefault(x["template"], []).append(x["correct"])
     kb = ch["leak"].get("kind_baseline", {})   # A2: re-check against the measured kind baseline, same rule as B0
-    def leaks(t, r):
-        v = obs.get(r, []); return (sum(v) / max(1, len(v))) > max(kb.get(_kk(t), 0.25), 0.25) + cfg["probe_leak_margin_over_kind"]
+    def leaks(t, r): return replacement_leaks(obs.get(r, []), kb.get(_kk(t), 0.25), cfg)
     final = {t: (r if r and not leaks(t, r) else None) for t, r in repl.items()}
     json.dump(dict(replacements=final, recheck_acc={k: sum(v) / len(v) for k, v in obs.items()}), open(S.dir / "template_replacements.json", "w"), indent=1)
     S.finish(dict(replacements=final))
@@ -497,6 +506,22 @@ def stage_B2(cfg):
     from .analysis import summarize_B2
     S.finish(summarize_B2(S.dir, pair, cfg, B))
 
+def b3_view(B, eid, cfg):
+    """The frozen per-entry B3 sender view (candidate order from the generator seed). Used by B3 AND by the
+    pre-run regex report, so both use the identical permutation (A3, gpt_code_2 #3)."""
+    return sender_view(B, eid, random.Random(seed_of(cfg["seeds"]["generator"], 'sender', eid)))
+
+def regex_report(B, cfg, ids=None):
+    """Regex baseline on the frozen B3 views, by message style; ties among top scores are resolved by the
+    first-listed candidate, i.e. a guess, and are counted separately (A3)."""
+    E = B["entries"]; ids = ids or [x for g in ("core_F1", "core_F2", "F3L") for x in B["groups"][g]]; out = {}
+    for eid in ids:
+        v = b3_view(B, eid, cfg); i, sc = retrieval.regex_pick(v["message"], v["labels"])
+        d = out.setdefault(E[eid].get("msg_style", "plain"), dict(n=0, correct=0, tie_guess=0, tie_guess_correct=0))
+        tie = sum(s == max(sc) for s in sc) > 1; ok = v["candidates"][i] == eid
+        d["n"] += 1; d["correct"] += ok; d["tie_guess"] += tie; d["tie_guess_correct"] += tie and ok
+    return out
+
 def stage_B3(cfg):
     B = get_book(cfg); E = B["entries"]; S = Stage("B3", cfg["budgets_gpu_h"]["B3"], cfg); pair, cname = _ctx(cfg)
     core = entries_for_config(B, cfg, cname); ids = [x for f in core for x in core[f]] + B["groups"]["F3L"]
@@ -507,10 +532,11 @@ def stage_B3(cfg):
         b, _ = load_B(m, cfg, S); require_canaries(b, m, cfg, B, S); f = f"select_{m}.jsonl"
         for eid in ids:
             if eid in S.done_keys(f): continue
-            S.check_budget(); v = sender_view(B, eid, random.Random(seed_of(cfg["seeds"]["generator"], 'sender', eid)))
+            S.check_budget(); v = b3_view(B, eid, cfg)
             s, p, u = sender_parts(v); t = time.time(); r = b.generate(s, p, u, cfg["sender_max_new_tokens"])
             L, path = parse_letter(r["text"]); pick = v["candidates"]["ABCD".index(L)] if L else None
-            bl = {"regex": v["candidates"][retrieval.regex_pick(v["message"], v["labels"])[0]],
+            ri, rs = retrieval.regex_pick(v["message"], v["labels"])
+            bl = {"regex": v["candidates"][ri], "regex_tie": sum(s == max(rs) for s in rs) > 1,
                   "tfidf": v["candidates"][retrieval.tfidf_pick(v["message"], v["labels"])[0]],
                   "bm25": v["candidates"][retrieval.bm25_pick(v["message"], v["labels"])[0]]}
             try: bl["minilm"] = v["candidates"][retrieval.embed_pick(v["message"], v["labels"], cfg["models"]["embedding_baseline"])[0]]

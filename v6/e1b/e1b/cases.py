@@ -477,8 +477,9 @@ def build(cfg):
     B["groups"]["sanity"] = [x for f in core for x in srng.sample(B["groups"][f"core_{f}"][:c60], cfg["sanity_subset_per_family"])]
     # --- unknown / stale / wrong-hash messages
     urng = random.Random(cfg["seeds"]["generator"] + 3); test_ids = B["groups"]["core_F1"] + B["groups"]["core_F2"]
+    used_e = set()   # A3: one message per entry so all 48 messages are distinct (a duplicate was found by the dry run)
     for i in range(cfg["unknown_id_messages"]):
-        e = B["entries"][urng.choice(test_ids)]; kind = ["unknown", "stale", "wronghash"][i % 3]
+        e = B["entries"][urng.choice([x for x in test_ids if x not in used_e])]; used_e.add(e["id"]); kind = ["unknown", "stale", "wronghash"][i % 3]
         if kind == "unknown": m = f"{e['fam']}-X{i:03d}@v1#{e['hash'][:8]}"
         elif kind == "stale": m = f"{e['id']}@v{e['ver']+1}#{e['hash'][:8]}"
         else: m = f"{e['id']}@v{e['ver']}#{'0' * 8 if e['hash'][:8] != '0' * 8 else '1' * 8}"
@@ -540,6 +541,7 @@ def verify(B, cfg):
     from .protocol import Dictionary
     D = Dictionary(B)
     assert all(E[x]["kind"] in ("honest", "neighbour") for x in B["dictionary"]), "dictionary holds only honest entries + neighbours"
+    assert len({u["msg"] for u in B["unknown_msgs"]}) == len(B["unknown_msgs"]) == cfg["unknown_id_messages"], "unknown-ID messages not distinct"
     for u in B["unknown_msgs"]: assert D.resolve(u["msg"])[0] is None, f"unknown msg resolved: {u}"
     return True
 
