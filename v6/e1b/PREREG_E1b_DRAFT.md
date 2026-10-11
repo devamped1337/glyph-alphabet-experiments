@@ -1,6 +1,6 @@
 # E1b PREREG: DRAFT (not frozen, nothing run)
 
-**Status: DRAFT rev 3, 2026-10-12 (AEDT).** Rev 3 applies `reviews/gpt_1.md` (GPT, on rev 1) and `reviews/grok_1.md` (Grok), and marks reviewer conflicts as **[CONFLICT]**. **The "Rev 3 decisions" section below supersedes any text later in this file that disagrees with it.** Rev 2 was `283aaad`. Previously: Rev 2 applies `v6/e1b/reviews/claude_1.md` (Claude; marked "(Claude r1)" below). Rev 1 was `ce7cd5d`. Not frozen and not tagged. No E1b code has been written and nothing has been run. It is written **after** the E1 results were seen (`RESULTS_E1.md`, `v6/e1/CALIBRATION_REPORT.md`) and responds to them. Numbers marked **[OPEN]** are proposals that need sign-off. Freezing requires resolving every [OPEN] item, a git tag `prereg-e1b`, and a dated entry in `v6/PREREG_v6.md`.
+**Status: DRAFT rev 4, 2026-10-12 (AEDT); waiting for GPT and Claude to respond to rev 3.** Rev 4 applies `reviews/grok_2.md` (Grok's locks). **Precedence: "Rev 4 locks" > "Rev 3 decisions" > the body.** Rev 3 was `1550275`. Previously: **Rev 3** Rev 3 applies `reviews/gpt_1.md` (GPT, on rev 1) and `reviews/grok_1.md` (Grok), and marks reviewer conflicts as **[CONFLICT]**. **The "Rev 3 decisions" section below supersedes any text later in this file that disagrees with it.** Rev 2 was `283aaad`. Previously: Rev 2 applies `v6/e1b/reviews/claude_1.md` (Claude; marked "(Claude r1)" below). Rev 1 was `ce7cd5d`. Not frozen and not tagged. No E1b code has been written and nothing has been run. It is written **after** the E1 results were seen (`RESULTS_E1.md`, `v6/e1/CALIBRATION_REPORT.md`) and responds to them. Numbers marked **[OPEN]** are proposals that need sign-off. Freezing requires resolving every [OPEN] item, a git tag `prereg-e1b`, and a dated entry in `v6/PREREG_v6.md`.
 
 **Purpose.** This is a credible proof of concept that can attract interest and donated compute. It is not a definitive paper. The user has **no API budget**. Structure (agreed by Claude and GPT): **Stage A** (box CPU, small models, diagnostic only) → **Stage B0 → B1 → B2 → B3** (Kaggle GPU, a 7B pair).
 
@@ -8,6 +8,52 @@
 
 Sources: Claude r1 = `v6/e1b/reviews/claude_1.md`; GPT = `v6/e1/reviews/gpt_1.md`, `gpt_2.md`; Claude = `claude_2.md`; Grok = `grok_1–3.md`. Numbers in brackets refer to the "next run must" list in `RESULTS_E1.md`.
 
+
+
+## Rev 4 locks (Grok r2; supersede rev 3 and the body)
+
+Grok accepted all nine rev-3 resolutions as written. GPT and Claude have **not yet** responded to rev 3, so these locks are provisional until they do.
+
+### Locked numbers (previously [OPEN])
+| Item | Locked value |
+|---|---|
+| Core honest entries (B1/B2/B3) | **60** (30 F1 + 30 F2), **fixed**. No increase after any number is seen, including B0 throughput. The rev-3 "raise to 100 by formula" option is **withdrawn**. B0 throughput is used only to confirm the fixed design fits the budget; if it doesn't, stop and report |
+| Planted entries (core) | **24** (12 per core family) |
+| F3L exploratory arm | **10** entries, descriptive only |
+| A5 cache set | **≈100 fixed-answer + 20 hard near-tie prompts per model** (Qwen-3B, Smol) |
+| TEST-pass bar | **≥0.80 honest acceptance and ≥0.90 planted rejection** (unseen corruption types) |
+| Calibration-separation bar (go/no-go) | ≥0.80 / ≥0.90 (rev 3) |
+| Reported gate target | ≥0.90 / ≥0.95 (rev 3) |
+| Per-entry probe threshold | 0.90 per model and agreement, ≥20 probes (rev 2/3) |
+| GPU-hours | pilot+B0 2 / B1 3 / B2 2 / B3 5 / reserve 3 (rev 3). **The reserve never extends N or adds conditions** |
+| Precision | pinned 4-bit nf4, **fail-loud non-finite guard kept** (rev 3) |
+| Stage A cap | 2 h (rev 3) |
+| A1 precondition | 0.70 (Grok r1) |
+| B0 qualification | probes ≥0.90 and direct-text arithmetic ≥0.80 (GPT r1, Grok r1) |
+| `max_new_tokens` (arithmetic) | 192, with length logged (Grok r1) |
+
+### Success criteria, with power stated up front (Grok r2 lock 2)
+- **POC success** requires all three:
+  - (1) B3 selection accuracy beats both chance (0.25) and the better retrieval baseline, judged by a paired cluster-bootstrap CI over entries;
+  - (2) end-to-end id_selected is non-inferior to the matched direct text at **−0.05** on the pooled core families;
+  - (3) the honest cost (newly processed tokens) is reported, with no efficiency claim if the cache check fails.
+- **Expected precision (planning estimate):** with 60 entries × 10 cases, the pooled 95% CI half-width is ≈**±0.049** (scaled from E1's ±0.077 at 24 groups), and ≈±0.069 per family.
+- **Power:** at a true difference of 0, the −0.05 non-inferiority test has **≈50% power**. "Inconclusive" is therefore a likely and pre-declared outcome. It is reported as inconclusive, never as equivalence or failure.
+- The verdict rule (pass / pass, imprecise / fail) applies to every bar.
+
+### TEST disjointness (Grok r2 lock 3)
+- **B2 and B3 use only held-out TEST cases.** The builder asserts in code (by normalised text and by (entry, text)) that the TEST pool shares **no** case with Stage A (all A-steps), the B0 qualification pool, B1 calibration, the B1 TEST-gate pool, or the A5 cache set. It also asserts no duplicates within TEST. The build aborts on any violation, and the validator re-checks this.
+
+### If B1 fails (Grok r2 lock 4; kept from rev 1)
+- **If B1 fails, B2 and B3 still run, but the combined pipeline is not a checked repository.** Gate acceptance, coverage and abstentions are reported **alongside every B2/B3 number**.
+
+### Still [OPEN] after rev 4
+- the no-entry-text probe chance band (0.25 ± 0.08);
+- the 4-bit vs reference agreement threshold (98%, on 50 prompts);
+- the B2 byte-identity paired check size (60 items);
+- the Stage A small-pair numbers: planted count (6), and the exit rule's "≥75% of honest entries";
+- the B3 retrieval-baseline embedding model;
+- GPT's and Claude's responses to rev 3 (any new conflict reopens the affected lock).
 
 ## Rev 3 decisions (supersede the body where they differ)
 
