@@ -1,0 +1,65 @@
+{
+ "prereg": "v6/e1b/PREREG_E1b.md (tag prereg-e1b) + Amendment A1",
+ "seeds": {"generator": 61062, "probes_fresh": 61063, "sanity_subset": 61064, "cache_sample": 61065, "bootstrap": 61066},
+ "families_core": ["F1", "F2"],
+ "family_f3l": "F3L",
+ "family_stageA_extra": "F3s",
+ "configs": {
+  "C60":  {"core_per_family": 30, "planted_calib": 24},
+  "C100": {"core_per_family": 50, "planted_calib": 40}
+ },
+ "f3l_entries": 10,
+ "test_cases_per_entry": 10,
+ "planted_testgate": 40,
+ "corruptions_calib": ["deleted_negation", "mismatched_definition", "changed_constant"],
+ "corruptions_test": ["near_miss_polarity", "swapped_roles", "inverted_comparison", "dropped_clause"],
+ "n_neighbours": 3,
+ "neighbour_gold_change_min": 0.80,
+ "probes_per_entry_min": 20,
+ "probe_leak_flag": 0.40,
+ "probe_leak_min_obs": 50,
+ "gate": {"probe_bar": 0.90, "agree_bar": 0.90,
+          "calib_eligibility": {"honest_accept": 0.80, "planted_reject": 0.90},
+          "repo_target": {"honest_accept": 0.90, "planted_reject": 0.95}},
+ "ni_margin": 0.05,
+ "bytes_target_payload_saving": 0.30,
+ "sanity_subset_per_family": 15,
+ "byte_identity_paired_items": 20,
+ "canaries_per_model": 20,
+ "cache": {"fixed_per_model": 100, "hard_per_model": 20},
+ "unknown_id_messages": 48,
+ "stageA": {
+  "entries_per_family_A1": 4, "cases_A1": 10,
+  "honest_per_family_A2": 6, "planted_A2": 6,
+  "planted_A4": 6, "cases_A4": 10,
+  "core_entries_A6": 12, "cases_A6": 10,
+  "a1_family_floor": 0.70, "exit_entry_share": 0.80, "a4_follow_min": 0.70,
+  "budget_h": 2.0
+ },
+ "qualification": {"entries_per_family": 6, "cases_per_entry": 10, "probe_bar": 0.90, "arith_bar": 0.80},
+ "pilot": {"entries_per_family": 2, "cases_per_entry": 5},
+ "probe_diag": {"entries_per_family": 25},
+ "budgets_gpu_h": {"B0": 2.0, "B1": 3.0, "B2": 2.0, "B3": 5.0, "reserve": 3.0},
+ "c100_headroom": 0.80,
+ "max_new_tokens": 192,
+ "probe_max_new_tokens": 4,
+ "sender_max_new_tokens": 4,
+ "n_ctx": 2048,
+ "bootstrap_resamples": 2000,
+ "models": {
+  "stageA": {
+   "qwen3b": {"gguf": "/workspace/models/qwen2.5-3b-instruct-q4_k_m.gguf", "hf": "Qwen/Qwen2.5-3B-Instruct-GGUF", "params": 3.09e9, "template": "chatml", "lab": "Alibaba"},
+   "smol17": {"gguf": "/workspace/models/SmolLM2-1.7B-Instruct-Q4_K_M.gguf", "hf": "bartowski/SmolLM2-1.7B-Instruct-GGUF", "params": 1.71e9, "template": "chatml", "lab": "HuggingFace"}
+  },
+  "stageB_order": ["qwen7b", "llama8b", "olmo7b", "mistral7b"],
+  "stageB": {
+   "qwen7b":    {"hf": "Qwen/Qwen2.5-7B-Instruct", "gguf_repo": "Qwen/Qwen2.5-7B-Instruct-GGUF", "gguf_file": "qwen2.5-7b-instruct-q4_k_m-00001-of-00002.gguf", "params": 7.6e9, "lab": "Alibaba"},
+   "llama8b":   {"hf": "meta-llama/Llama-3.1-8B-Instruct", "gguf_repo": "bartowski/Meta-Llama-3.1-8B-Instruct-GGUF", "gguf_file": "Meta-Llama-3.1-8B-Instruct-Q4_K_M.gguf", "params": 8.0e9, "lab": "Meta"},
+   "olmo7b":    {"hf": "allenai/OLMo-2-1124-7B-Instruct", "gguf_repo": "bartowski/OLMo-2-1124-7B-Instruct-GGUF", "gguf_file": "OLMo-2-1124-7B-Instruct-Q4_K_M.gguf", "params": 7.3e9, "lab": "AI2"},
+   "mistral7b": {"hf": "mistralai/Mistral-7B-Instruct-v0.3", "gguf_repo": "bartowski/Mistral-7B-Instruct-v0.3-GGUF", "gguf_file": "Mistral-7B-Instruct-v0.3-Q4_K_M.gguf", "params": 7.2e9, "lab": "Mistral"}
+  },
+  "nf4": {"load_in_4bit": true, "bnb_4bit_quant_type": "nf4", "bnb_4bit_compute_dtype": "float16", "bnb_4bit_use_double_quant": false},
+  "embedding_baseline": "sentence-transformers/all-MiniLM-L6-v2"
+ },
+ "n_threads": 8
+}
