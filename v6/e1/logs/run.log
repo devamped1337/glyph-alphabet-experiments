@@ -1,0 +1,224 @@
+start Sun Oct 11 16:22:29 AEDT 2026
+4aa71ba6d58e79903bb98f45e989c293fe3f01ce
+d85bbc3647f0a32751e02e0ad081313f8a2c69c6242c3a4e7a34d8f47d9f53c2  config_e1.json
+1564bd611aed3c637f505b89426c07acac5088bb38d0ad82076bba1039d568af  data/book.json
+972bc376787f387c4833476940346ee9872ae22b91fef11b22a26c7c77113cf3  data/cases.json
+== calib qwen3b Sun Oct 11 16:22:29 AEDT 2026
+calib qwen3b done in 5788s
+== calib smol17 Sun Oct 11 17:58:58 AEDT 2026
+calib smol17 done in 2733s
+== freeze_gate Sun Oct 11 18:44:31 AEDT 2026
+{
+ "threshold": 0.9,
+ "calibrated_best": 0.5,
+ "calib_honest_accept_at_090": 0.0,
+ "calib_planted_reject_at_090": 1.0,
+ "separates": false,
+ "gate_frozen": false,
+ "rule": "entry passes iff each gate model acc>=0.90 vs gold AND inter-model agreement>=0.90"
+}
+== test qwen3b Sun Oct 11 18:44:31 AEDT 2026
+test qwen3b done in 14563s
+== test smol17 Sun Oct 11 22:47:14 AEDT 2026
+test smol17 done in 5275s
+== analyze Mon Oct 12 00:15:09 AEDT 2026
+{
+ "gate_test": {
+  "gate_frozen": false,
+  "valid_accepted": 0,
+  "valid_n": 24,
+  "accept_rate": 0.0,
+  "accept_ci": [
+   0.0,
+   0.138
+  ],
+  "planted_rejected": 16,
+  "planted_n": 16,
+  "reject_rate": 1.0,
+  "reject_ci": [
+   0.8064,
+   1.0
+  ],
+  "outcome": "FAIL",
+  "by_corruption": {
+   "near_miss_polarity": [
+    4,
+    4
+   ],
+   "swapped_roles": [
+    4,
+    4
+   ],
+   "inverted_comparison": [
+    4,
+    4
+   ],
+   "dropped_clause": [
+    4,
+    4
+   ]
+  }
+ },
+ "main": {
+  "qwen3b": {
+   "acc": {
+    "compact": 0.381,
+    "id_expanded": 0.64,
+    "id_expanded_cached": 0.633,
+    "id_raw": 0.01,
+    "placebo_prose": 0.01,
+    "prose": 0.642
+   },
+   "paired": {
+    "id_expanded_minus_compact": {
+     "diff": 0.25833333333333336,
+     "ci95": [
+      0.17291666666666666,
+      0.34791666666666665
+     ],
+     "pairs": 480,
+     "groups": 24,
+     "discordant": 0.3,
+     "verdict": "id_expanded better"
+    },
+    "id_expanded_minus_id_raw": {
+     "diff": 0.6291666666666667,
+     "ci95": [
+      0.4895833333333333,
+      0.7708333333333334
+     ],
+     "pairs": 480,
+     "groups": 24,
+     "discordant": 0.6375,
+     "verdict": "id_expanded better"
+    },
+    "id_expanded_minus_placebo_prose": {
+     "diff": 0.6291666666666667,
+     "ci95": [
+      0.48333333333333334,
+      0.7604166666666666
+     ],
+     "pairs": 480,
+     "groups": 24,
+     "discordant": 0.6375,
+     "verdict": "id_expanded better"
+    },
+    "id_expanded_minus_prose": {
+     "diff": -0.0020833333333333333,
+     "ci95": [
+      -0.075,
+      0.07916666666666666
+     ],
+     "pairs": 480,
+     "groups": 24,
+     "discordant": 0.27291666666666664,
+     "verdict": "inconclusive"
+    }
+   }
+  },
+  "smol17": {
+   "acc": {
+    "compact": 0.098,
+    "id_expanded": 0.285,
+    "id_expanded_cached": 0.317,
+    "id_raw": 0.023,
+    "placebo_prose": 0.008,
+    "prose": 0.219
+   },
+   "paired": {
+    "id_expanded_minus_compact": {
+     "diff": 0.1875,
+     "ci95": [
+      0.12916666666666668,
+      0.2520833333333333
+     ],
+     "pairs": 480,
+     "groups": 24,
+     "discordant": 0.25833333333333336,
+     "verdict": "id_expanded better"
+    },
+    "id_expanded_minus_id_raw": {
+     "diff": 0.2625,
+     "ci95": [
+      0.18958333333333333,
+      0.33541666666666664
+     ],
+     "pairs": 480,
+     "groups": 24,
+     "discordant": 0.2708333333333333,
+     "verdict": "id_expanded better"
+    },
+    "id_expanded_minus_placebo_prose": {
+     "diff": 0.27708333333333335,
+     "ci95": [
+      0.20416666666666666,
+      0.3458333333333333
+     ],
+     "pairs": 480,
+     "groups": 24,
+     "discordant": 0.28541666666666665,
+     "verdict": "id_expanded better"
+    },
+    "id_expanded_minus_prose": {
+     "diff": 0.06666666666666667,
+     "ci95": [
+      0.014583333333333334,
+      0.11875
+     ],
+     "pairs": 480,
+     "groups": 24,
+     "discordant": 0.23333333333333334,
+     "verdict": "id_expanded better"
+    }
+   }
+  }
+ }
+}
+== validate Mon Oct 12 00:15:10 AEDT 2026
+
+=== predictions_main_qwen3b.jsonl (2976 rows) ===
+PASS [predictions_main_qwen3b.jsonl]: required fields present
+PASS [predictions_main_qwen3b.jsonl]: coverage not uniformly 1.0 (or no place task)
+INFO [predictions_main_qwen3b.jsonl]: no LOO rows
+PASS [predictions_main_qwen3b.jsonl]: unknown-ID does not appear to be pure parser
+PASS [predictions_main_qwen3b.jsonl]: no gold leak in sampled prose
+INFO [predictions_main_qwen3b.jsonl]: 96 rows marked rejected/uncovered
+
+=== predictions_testgate_smol17.jsonl (1600 rows) ===
+PASS [predictions_testgate_smol17.jsonl]: required fields present
+PASS [predictions_testgate_smol17.jsonl]: coverage not uniformly 1.0 (or no place task)
+INFO [predictions_testgate_smol17.jsonl]: no LOO rows
+PASS [predictions_testgate_smol17.jsonl]: no gold leak in sampled prose
+INFO [predictions_testgate_smol17.jsonl]: 0 rows marked rejected/uncovered
+
+=== predictions_calib_qwen3b.jsonl (3600 rows) ===
+PASS [predictions_calib_qwen3b.jsonl]: required fields present
+PASS [predictions_calib_qwen3b.jsonl]: coverage not uniformly 1.0 (or no place task)
+INFO [predictions_calib_qwen3b.jsonl]: no LOO rows
+PASS [predictions_calib_qwen3b.jsonl]: no gold leak in sampled prose
+INFO [predictions_calib_qwen3b.jsonl]: 0 rows marked rejected/uncovered
+
+=== predictions_calib_smol17.jsonl (3600 rows) ===
+PASS [predictions_calib_smol17.jsonl]: required fields present
+PASS [predictions_calib_smol17.jsonl]: coverage not uniformly 1.0 (or no place task)
+INFO [predictions_calib_smol17.jsonl]: no LOO rows
+PASS [predictions_calib_smol17.jsonl]: no gold leak in sampled prose
+INFO [predictions_calib_smol17.jsonl]: 0 rows marked rejected/uncovered
+
+=== predictions_main_smol17.jsonl (2976 rows) ===
+PASS [predictions_main_smol17.jsonl]: required fields present
+PASS [predictions_main_smol17.jsonl]: coverage not uniformly 1.0 (or no place task)
+INFO [predictions_main_smol17.jsonl]: no LOO rows
+PASS [predictions_main_smol17.jsonl]: unknown-ID does not appear to be pure parser
+PASS [predictions_main_smol17.jsonl]: no gold leak in sampled prose
+INFO [predictions_main_smol17.jsonl]: 96 rows marked rejected/uncovered
+
+=== predictions_testgate_qwen3b.jsonl (1600 rows) ===
+PASS [predictions_testgate_qwen3b.jsonl]: required fields present
+PASS [predictions_testgate_qwen3b.jsonl]: coverage not uniformly 1.0 (or no place task)
+INFO [predictions_testgate_qwen3b.jsonl]: no LOO rows
+PASS [predictions_testgate_qwen3b.jsonl]: no gold leak in sampled prose
+INFO [predictions_testgate_qwen3b.jsonl]: 0 rows marked rejected/uncovered
+
+VALIDATION PASSED
+done Mon Oct 12 00:15:10 AEDT 2026
