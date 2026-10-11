@@ -1,4 +1,4 @@
-# v6 PREREG: DRAFT, rev 3 (NOT FROZEN)
+# v6 PREREG: DRAFT, rev 3 (SUPERSEDED: frozen as v6/PREREG_v6.md, tag prereg-v6, 2026-10-11)
 
 Sources:
 - Round 2: [Grok](round2/grok.md), [Claude](round2/claude.md), [GPT](round2/gpt.md).
