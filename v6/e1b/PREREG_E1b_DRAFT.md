@@ -1,12 +1,99 @@
 # E1b PREREG: DRAFT (not frozen, nothing run)
 
-**Status: DRAFT rev 2, 2026-10-12 (AEDT).** Rev 2 applies `v6/e1b/reviews/claude_1.md` (Claude; marked "(Claude r1)" below). Rev 1 was `ce7cd5d`. Not frozen and not tagged. No E1b code has been written and nothing has been run. It is written **after** the E1 results were seen (`RESULTS_E1.md`, `v6/e1/CALIBRATION_REPORT.md`) and responds to them. Numbers marked **[OPEN]** are proposals that need sign-off. Freezing requires resolving every [OPEN] item, a git tag `prereg-e1b`, and a dated entry in `v6/PREREG_v6.md`.
+**Status: DRAFT rev 3, 2026-10-12 (AEDT).** Rev 3 applies `reviews/gpt_1.md` (GPT, on rev 1) and `reviews/grok_1.md` (Grok), and marks reviewer conflicts as **[CONFLICT]**. **The "Rev 3 decisions" section below supersedes any text later in this file that disagrees with it.** Rev 2 was `283aaad`. Previously: Rev 2 applies `v6/e1b/reviews/claude_1.md` (Claude; marked "(Claude r1)" below). Rev 1 was `ce7cd5d`. Not frozen and not tagged. No E1b code has been written and nothing has been run. It is written **after** the E1 results were seen (`RESULTS_E1.md`, `v6/e1/CALIBRATION_REPORT.md`) and responds to them. Numbers marked **[OPEN]** are proposals that need sign-off. Freezing requires resolving every [OPEN] item, a git tag `prereg-e1b`, and a dated entry in `v6/PREREG_v6.md`.
 
 **Purpose.** This is a credible proof of concept that can attract interest and donated compute. It is not a definitive paper. The user has **no API budget**. Structure (agreed by Claude and GPT): **Stage A** (box CPU, small models, diagnostic only) → **Stage B0 → B1 → B2 → B3** (Kaggle GPU, a 7B pair).
 
 **Limit stated up front:** every model here is open-weight. The closed-lab / public-API repository claim (delegates of closed models agreeing on a dictionary) is **untested** by this design.
 
 Sources: Claude r1 = `v6/e1b/reviews/claude_1.md`; GPT = `v6/e1/reviews/gpt_1.md`, `gpt_2.md`; Claude = `claude_2.md`; Grok = `grok_1–3.md`. Numbers in brackets refer to the "next run must" list in `RESULTS_E1.md`.
+
+
+## Rev 3 decisions (supersede the body where they differ)
+
+Reviewers: Claude r1 = `reviews/claude_1.md`, GPT r1 = `reviews/gpt_1.md`, Grok r1 = `reviews/grok_1.md`. The proposed resolutions favour the **affordable proof of concept (GPT)** unless that would break validity. Each [CONFLICT] needs the user's sign-off.
+
+**POC focus (GPT r1):** sender selection plus the full exchange (B3 → receiver) is the headline. Everything else is a precondition or a diagnostic.
+
+### [CONFLICT] 1. Third small model in Stage A
+- **GPT:** Qwen-3B + Smol only, no third model.
+- **Claude:** add Llama-3.2-3B for A1–A4 and A6, with Smol for A5 only.
+- **Grok:** Qwen-3B + Smol, Llama-3.2-3B optional.
+- **Proposed:** **Qwen-3B + Smol only** (GPT/Grok). Stage A makes no claims, and Smol being at floor only makes A1–A4 single-model-informative, which is acceptable for a diagnostic. Llama-3.2-3B is added **only if** the measured Stage A projection leaves room within the cap below.
+
+### [CONFLICT] 2. Stage A time cap
+- **GPT:** 2 h.
+- **Rev 2 (from Claude's n=480 cache test):** 5–6 h.
+- **Grok:** no figure.
+- **Proposed:** **2 h cap** (GPT), made possible by the smaller cache test (conflict 4). If the projection after A1 exceeds 2 h: stop and report, do not shrink.
+
+### [CONFLICT] 3. Entry count (B1/B2)
+- **GPT:** 60 honest entries (30 × F1, 30 × F2) × 10 TEST cases; check runtime on non-TEST cases first.
+- **Claude:** ≥100.
+- **Grok:** ≥100 honest + 36 planted.
+- **Proposed:** **60 core entries** (GPT) + 24 planted [OPEN], **with honest power stated** (planning estimates, GPT r1). Scaling E1's ±0.077 at 24 groups gives ≈**±0.049 pooled** and ≈±0.069 per family at 60 groups. At a true difference of 0, a ±0.05 non-inferiority test has only ~50% power, so "inconclusive" is a likely outcome and is pre-declared as such. This lowers power but does not break validity. If the B0 throughput formula allows ≥100 within budget, the entry count is raised to 100 before B1 (decided by formula, not by results).
+
+### [CONFLICT] 4. Cache test size and rule (A5 and B)
+- **GPT:** a small fixed-answer set run cold/cold, warm/warm and cold/warm, plus hard examples; report counts with uncertainty; any unexplained discrepancy → withhold the cache claim and continue uncached; say "no discrepancy observed", not a certified rate.
+- **Claude:** 480 per model, cold/warm ≤ cold/cold + 0.03, log the top-2 logit gap.
+- **Grok:** upper CI of cold/warm ≤ cold/cold with **no slack**, otherwise B is cold-only.
+- **Proposed:** **GPT's design** (≈100 fixed-answer + 20 hard near-tie prompts per model [OPEN]), keeping Claude's logit-gap logging.
+  - The cache claim is allowed **only if zero changed predictions** are observed. It is then worded "no discrepancy observed in n=…, 95% upper bound …" (rule of three).
+  - Any change → cache claim withheld and B runs uncached (consistent with Grok's cold-only fallback).
+  - This is stricter than both Claude's +0.03 and Grok's CI rule, so validity is preserved at lower cost.
+
+### [CONFLICT] 5. GPU-hour split (T4/P100 class)
+- **GPT:** pilot+B0 2 / B1 3 / B2 2 / B3 5 / reserve 3.
+- **Claude/rev 2 and Grok:** B0 2 / B1 4 / B2 6 / B3 3.
+- **Proposed:** **GPT's split** (15 h total either way). B2 shrinks because of the byte-identity assertion (below), and B3 is the headline. **Permitted reserve uses (fixed now):**
+  - (a) re-running a sub-stage after an infrastructure crash with no result seen;
+  - (b) the substitute model's qualification in B0;
+  - (c) completing an interrupted checkpointed stage.
+
+  The reserve is never used to extend N or add conditions after seeing results.
+
+### [CONFLICT] 6. Long definitions (F3)
+- **GPT:** a small exploratory arm.
+- **Claude:** F3L as a separate family at 7B.
+- **Grok:** restore F3 long in B1.
+- **Proposed:** **F3L as a small exploratory arm** (10 entries [OPEN]). It is a separate family, never in the gate primary or the B2/B3 primary, and is reported descriptively. This satisfies Claude's "separate" requirement.
+
+### [CONFLICT] 7. Gate bars
+- **GPT:** target ≥0.90 valid acceptance and ≥0.95 corruption rejection; the 80/90 rule must not become the success criterion.
+- **Grok:** B1 ≥0.80 honest acceptance / ≥0.90 planted rejection at 0.90, with no post-hoc threshold.
+- **Claude:** separate calibration and TEST bars.
+- **Proposed:**
+  - **Calibration-separation (go/no-go for using the gate): ≥0.80 / ≥0.90** (Grok).
+  - **Reported target: ≥0.90 / ≥0.95** (GPT).
+  - TEST-pass bar ≥0.80 / ≥0.90 [OPEN].
+  - The per-entry 0.90 probe threshold stays fixed, with no post-hoc threshold.
+  - **None of these is the POC success criterion**, which is defined in B3/B2.
+
+### [CONFLICT] 8. 7B substitutes
+- **GPT:** OLMo, then Mistral only.
+- **Grok:** OLMo → Mistral → Gemma, and stop if neither of the first two qualifies.
+- **Claude:** silent.
+- **Proposed:** **OLMo-2-7B-Instruct → Mistral-7B-Instruct-v0.3**, then stop and report (GPT). Gemma is dropped. Grok's "stop if neither of the first two qualifies" is read as "stop if no two-lab pair qualifies after the listed substitutes".
+
+### [CONFLICT] 9. Precision
+- **GPT:** a pinned, memory-tested 4-bit bitsandbytes config.
+- **Claude:** fp16 with a fail-loud guard and a reference check, or 8-bit.
+- **Proposed:** **pinned 4-bit nf4 bitsandbytes** (GPT), one model at a time, the same for qualification and TEST. Claude's **fail-loud non-finite guard** and the **reference smoke check** (4-bit vs a higher-precision reference on 50 prompts; agreement ≥98% [OPEN]) are both kept. Precision and the library versions are logged.
+
+### Non-conflicting changes applied (rev 3)
+- **Before Stage A:** freeze the generator code hash and seeds (GPT). **Verify model access** (HF gated licences for Llama) before any GPU stage (GPT).
+- **Qualification (B0):** rule comprehension ≥0.90 **and**, as a separate qualification, arithmetic direct text ≥0.80 (GPT; Grok), on the qualification pool. Models are loaded one after the other (GPT).
+- **Probes:** their output format (a single letter) and token budget (≤4 tokens) are kept separate from the arithmetic format and its 192-token budget (GPT). Generation length is logged for every row (Grok).
+- **Manipulation check:** counted **only on questions whose gold answer changes** under the plant (GPT).
+- **B2 shrink:** if the id_oracle prompt (after local expansion) is byte-identical to the matched direct-text prompt, **assert equality in code** (sha256 per item). Then run only a small paired check (e.g. 60 items [OPEN]) to confirm identical outputs, instead of a full second condition (GPT).
+- **B3:**
+  - log exactly what the sender sees (message, candidate labels or definitions);
+  - include candidate preparation (label generation, BM25/embedding) in the cost;
+  - frame it as **4-way selection, not a repository search**;
+  - the direct-text receiver gets **the same original message** the sender saw (GPT);
+  - the retrieval baseline must be beaten (Claude).
+- **CI widths** throughout are **planning estimates** (GPT). Cases per entry: 10, paired cluster bootstrap over entries (Grok).
+- **Core families:** F1 negation and F2 roles (GPT). F3s (shortened) stays in Stage A only as a diagnostic.
 
 ---
 
