@@ -1,5 +1,38 @@
 # v6 E1 results: text-repository (oracle-ID receiver test)
 
+## CORRECTIONS (2026-10-12 08:20 AEDT, after reviews `v6/e1/reviews/gpt_2.md` and `grok_3.md`; every figure re-checked against `v6/e1/results/` and `v6/e1/data/cases.json`)
+
+The original text below is kept unchanged. Where it conflicts with this section, this section wins.
+
+1. **Per-task breakdown** (main stage, % correct, n=160 per cell, re-computed from `predictions_main_*.jsonl`):
+
+   | Model | Task | id_expanded | prose | Diff |
+   |---|---|---|---|---|
+   | Qwen2.5-3B | F1 negation | 98.8 | 99.4 | −0.6 |
+   | Qwen2.5-3B | F2 roles | 76.3 (122/160) | 61.9 | +14.4 |
+   | Qwen2.5-3B | F3 long definitions | 16.9 | 31.3 (50/160) | −14.4 |
+   | SmolLM2-1.7B | F1 | 34.4 | 30.6 | +3.8 |
+   | SmolLM2-1.7B | F2 | 41.3 (66/160) | 29.4 | +11.9 |
+   | SmolLM2-1.7B | F3 | 10.0 | 5.6 | +4.4 |
+
+   On Qwen, the gain on roles and the loss on long definitions (23 items each way) cancel out, so the pooled tie hides opposite per-task effects.
+2. **Qwen vs prose is "inconclusive", not "equivalent" or "no worse".** The CI is [−0.075, +0.079], which crosses the ±0.05 margin. Read any wording below that implies a tie or equivalence as "inconclusive".
+3. **Smol's advantage over prose may be a presentation effect.** id_expanded and prose differ in framing as well as in content, so the result does not show that the ID channel helps. It needs a direct-text baseline that uses the exact expanded definition with matched framing.
+4. **Cache nondeterminism (observed, unexplained).** Cold `id_expanded` and repeat-request `id_expanded_cached` use byte-identical prompts (0/480 prompt differences) and greedy decoding. Even so, predictions differ on **45/480 (Qwen)** and **104/480 (Smol)**, and correctness flips on **21** and **33** of them. The observations stand as recorded. The cached condition is therefore not a pure timing replay of the cold one, and accuracy differences between them should not be interpreted.
+5. **Overlap disclosure.** For the same entry, **97/480** main case texts also appear in calibration (43 F1, 54 F3, 0 F2). There are **9** further duplicates within main. Matching on case text alone, without the entry, 115/480 also appear in calibration. Main accuracy is therefore not on fully fresh cases. Calibration did not tune any receiver, so this is a disclosure, not leakage into training. The effective sample is smaller than 480.
+6. **Rename "end-to-end" to "oracle-ID receiver accuracy, gate bypassed"** wherever it appears below (Scope 3, the "Main accuracy (end-to-end)" heading, etc.). No sender selection and no gate filtering took place.
+7. **The gate TEST figures are descriptive only.** The gate was not frozen (calibration failed), so the TEST numbers do not validate any gate.
+8. **Validator scope.** `validate_v6.py` PASSED as an engineering check (files, counts, schema, gold). It does not certify any scientific claim in this document.
+
+### The next run must
+
+- add a **matched direct-text baseline**: the exact expanded definition text with framing identical to id_expanded;
+- **enforce disjoint and unique cases**: no main case may match any calibration or TEST-gate case (by entry and by text), and no duplicates within main. Assert both in code before the run;
+- **investigate cache determinism** with cold/cold, warm/warm and cold/warm repeats on identical prompts, and fix or document the source (e.g. llama.cpp KV/batch state) before any cached timing or accuracy is reported;
+- **test real sender selection**: the sender must choose the entry ID itself instead of being handed the correct one, and the selection accuracy must be reported along with receiver accuracy.
+
+---
+
 Pre-registration: [v6/PREREG_v6.md](v6/PREREG_v6.md) (frozen 2026-10-11; tag `prereg-v6`).  
 Calibration failure detail: [v6/e1/CALIBRATION_REPORT.md](v6/e1/CALIBRATION_REPORT.md) (already reported; not rewritten here).  
 Code / data: `v6/e1/` (`e1.py`, `analyze_e1.py`, `config_e1.json`, `data/`, `results/`).  
