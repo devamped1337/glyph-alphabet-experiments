@@ -1,5 +1,7 @@
 # Shared glyph alphabet: cross-model experiments
 
+Compute costs for every run, failed ones included: [COSTS.md](COSTS.md) (no paid compute or paid APIs).
+
 ## The concept
 
 *The idea for this project came from the project's human collaborator. The experiments, code and write-ups are in this repository.*
