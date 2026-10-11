@@ -1,0 +1,20 @@
+saved /kaggle/working/glyph_results/frozen5.json 1294 bytes
+frozen li 0 {0: 0.8504672897196262, 1: 0.8016304347826086, 2: 0.7744565217391305}
+{
+ "qwen7": [
+  "t1|agent",
+  "t1|mod",
+  "t1|patient",
+  "t1|pol",
+  "t2|first",
+  "t4|where",
+  "t5|status"
+ ],
+ "olmo7": [
+  "t1|agent",
+  "t1|patient",
+  "t1|pol",
+  "t4|where",
+  "t5|status"
+ ]
+}

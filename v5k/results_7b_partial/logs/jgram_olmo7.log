@@ -1,0 +1,29 @@
+
+Loading checkpoint shards:   0%|          | 0/6 [00:00<?, ?it/s]
+Loading checkpoint shards:  17%|█▋        | 1/6 [00:18<01:33, 18.75s/it]
+Loading checkpoint shards:  33%|███▎      | 2/6 [00:38<01:17, 19.41s/it]
+Loading checkpoint shards:  50%|█████     | 3/6 [00:58<00:58, 19.47s/it]
+Loading checkpoint shards:  67%|██████▋   | 4/6 [01:17<00:38, 19.47s/it]
+Loading checkpoint shards:  83%|████████▎ | 5/6 [01:37<00:19, 19.50s/it]
+Loading checkpoint shards: 100%|██████████| 6/6 [01:55<00:00, 19.04s/it]
+Loading checkpoint shards: 100%|██████████| 6/6 [01:55<00:00, 19.22s/it]
+olmo7 allenai/OLMo-2-1124-7B 7df9a82518 layers 32 d 4096 patch/read keys ['emb', 8, 11] RSS 2.3 GB
+jgram batch 0 134s RSS 3.2 peak 6.4 GB
+jgram batch 2 140s RSS 4.0 peak 6.4 GB
+jgram batch 4 145s RSS 4.4 peak 6.4 GB
+jgram batch 6 151s RSS 4.4 peak 6.4 GB
+jgram batch 8 156s RSS 4.4 peak 6.4 GB
+jgram batch 10 162s RSS 4.4 peak 6.4 GB
+jgram batch 12 167s RSS 4.4 peak 6.4 GB
+jgram batch 14 173s RSS 4.4 peak 6.4 GB
+jgram batch 16 178s RSS 4.4 peak 6.4 GB
+jgram batch 18 184s RSS 4.4 peak 6.4 GB
+jgram batch 20 189s RSS 4.4 peak 6.4 GB
+jgram batch 22 194s RSS 4.4 peak 6.4 GB
+jgram batch 24 200s RSS 4.4 peak 6.4 GB
+jgram batch 26 205s RSS 4.4 peak 6.4 GB
+jgram batch 28 211s RSS 4.4 peak 6.4 GB
+jgram batch 30 216s RSS 4.4 peak 6.4 GB
+split-half overlap {'emb': 0.5972765684127808, '8': 0.4282841384410858, '11': 0.3245387673377991}
+saved /kaggle/working/glyph_results/states_olmo7.pt 680474451 bytes
+done jgram olmo7 float16 306s peak 6.4 GB

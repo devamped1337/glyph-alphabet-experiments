@@ -1,0 +1,36 @@
+book 0 emb pca 0 72 2 191s
+book 0 emb pca 1 67 2 338s
+book 0 emb pca 2 68 2 493s
+book 0 emb jlens 0 60 1 500s
+book 0 emb jlens 1 62 1 504s
+book 0 emb jlens 2 62 1 509s
+book 0 emb random 0 71 2 526s
+book 0 emb random 1 67 1 534s
+book 0 emb random 2 68 1 547s
+layer 0 done 2347s
+book 1 7 pca 0 61 1 2490s
+book 1 7 pca 1 60 2 2626s
+book 1 7 pca 2 57 3 2818s
+book 1 7 jlens 0 53 1 2823s
+book 1 7 jlens 1 52 1 2826s
+book 1 7 jlens 2 52 1 2828s
+book 1 7 random 0 51 1 2831s
+book 1 7 random 1 52 2 2836s
+book 1 7 random 2 53 1 2842s
+layer 1 done 2190s
+book 2 9 pca 0 60 1 4677s
+book 2 9 pca 1 60 2 4807s
+book 2 9 pca 2 60 1 4898s
+book 2 9 jlens 0 46 2 4915s
+book 2 9 jlens 1 45 2 4919s
+book 2 9 jlens 2 45 2 4922s
+book 2 9 random 0 54 1 4928s
+book 2 9 random 1 54 2 4941s
+book 2 9 random 2 54 1 4946s
+layer 2 done 2078s
+saved /kaggle/working/glyph_results/gate5.json 38430 bytes
+saved /kaggle/working/glyph_results/selection5.json 161958 bytes
+saved /kaggle/working/glyph_results/deliveries_qwen7.pt 137572832 bytes
+saved /kaggle/working/glyph_results/deliveries_olmo7.pt 151546336 bytes
+saved /kaggle/working/glyph_results/book5.json 28223 bytes
+negotiation done 6825s

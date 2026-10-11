@@ -1,0 +1,10 @@
+
+Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]
+Loading checkpoint shards:  25%|██▌       | 1/4 [00:17<00:51, 17.09s/it]
+Loading checkpoint shards:  50%|█████     | 2/4 [00:32<00:32, 16.15s/it]
+Loading checkpoint shards:  75%|███████▌  | 3/4 [00:48<00:15, 15.87s/it]
+Loading checkpoint shards: 100%|██████████| 4/4 [01:02<00:00, 15.44s/it]
+Loading checkpoint shards: 100%|██████████| 4/4 [01:02<00:00, 15.73s/it]
+qwen7 Qwen/Qwen2.5-7B d149729398 layers 28 d 3584 patch/read keys ['emb', 7, 9] RSS 1.8 GB
+{'repeat_bitwise': True, 'reload_bitwise': True, 'batch4_vs_batch1_maxabs': 0.037109375}
+saved /kaggle/working/glyph_results/det_qwen7_kaggle.pt 2436279 bytes

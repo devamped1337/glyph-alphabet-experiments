@@ -1,0 +1,28 @@
+
+Loading checkpoint shards:   0%|          | 0/6 [00:00<?, ?it/s]
+Loading checkpoint shards:  17%|█▋        | 1/6 [00:22<01:50, 22.19s/it]
+Loading checkpoint shards:  33%|███▎      | 2/6 [00:45<01:31, 22.85s/it]
+Loading checkpoint shards:  50%|█████     | 3/6 [01:09<01:09, 23.18s/it]
+Loading checkpoint shards:  67%|██████▋   | 4/6 [01:32<00:46, 23.35s/it]
+Loading checkpoint shards:  83%|████████▎ | 5/6 [01:55<00:23, 23.25s/it]
+Loading checkpoint shards: 100%|██████████| 6/6 [02:18<00:00, 22.94s/it]
+Loading checkpoint shards: 100%|██████████| 6/6 [02:18<00:00, 23.02s/it]
+olmo7 allenai/OLMo-2-1124-7B 7df9a82518 layers 32 d 4096 patch/read keys ['emb', 8, 11] RSS 1.7 GB
+dev olmo7 queries 294 layer index None
+0 294 154s, 1.8s for 14 rows, RSS 2.4 GB
+20 294 170s, 0.8s for 14 rows, RSS 2.4 GB
+40 294 187s, 0.8s for 14 rows, RSS 2.4 GB
+60 294 202s, 0.8s for 14 rows, RSS 2.4 GB
+80 294 217s, 0.8s for 14 rows, RSS 2.4 GB
+100 294 233s, 0.8s for 14 rows, RSS 2.4 GB
+120 294 249s, 0.8s for 14 rows, RSS 2.4 GB
+140 294 265s, 0.8s for 14 rows, RSS 2.4 GB
+160 294 281s, 0.8s for 14 rows, RSS 2.4 GB
+180 294 296s, 0.8s for 14 rows, RSS 2.4 GB
+200 294 313s, 2.4s for 14 rows, RSS 2.4 GB
+220 294 361s, 2.4s for 14 rows, RSS 2.4 GB
+240 294 406s, 0.3s for 6 rows, RSS 2.4 GB
+260 294 413s, 0.3s for 6 rows, RSS 2.4 GB
+280 294 425s, 0.8s for 14 rows, RSS 2.4 GB
+saved /kaggle/working/glyph_results/dev_olmo7.json 838628 bytes
+done olmo7 dev 435s

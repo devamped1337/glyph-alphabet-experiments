@@ -1,0 +1,146 @@
+{
+ "det_state.pt": {
+  "sha256": "622d87683f21878ae9026fac5c113cce15c2d9ec546196adcba938444084eedf",
+  "bytes": 165623,
+  "commit": "bf8d79fb4b79c918dcef1a2885e9e0bea2d42ba7",
+  "code_sha256": "36a3126fb7386ab9186a9e01a36f4eb9215197436b0d68e67405edeb7c88ff1d",
+  "host": "kaggle",
+  "created": "2026-10-11T00:55:32+0000"
+ },
+ "det_qwen7_kaggle.pt": {
+  "sha256": "2bece72c687eece9a95a9294c7198f35b055208cc07c7c1b294d72a088b38a5e",
+  "bytes": 2436279,
+  "commit": "bf8d79fb4b79c918dcef1a2885e9e0bea2d42ba7",
+  "code_sha256": "36a3126fb7386ab9186a9e01a36f4eb9215197436b0d68e67405edeb7c88ff1d",
+  "host": "kaggle",
+  "created": "2026-10-11T00:58:38+0000"
+ },
+ "det_olmo7_kaggle.pt": {
+  "sha256": "b138bb8d83612788eeb6a13978104de35f549b57af8aef328175c5bcf90335d1",
+  "bytes": 1608887,
+  "commit": "bf8d79fb4b79c918dcef1a2885e9e0bea2d42ba7",
+  "code_sha256": "36a3126fb7386ab9186a9e01a36f4eb9215197436b0d68e67405edeb7c88ff1d",
+  "host": "kaggle",
+  "created": "2026-10-11T01:03:38+0000"
+ },
+ "states_qwen7.pt": {
+  "sha256": "4fc55a2b7776c0fceab7ea9cd240ccdf07c8e197d0402231743c64976a6ae56d",
+  "bytes": 595416851,
+  "commit": "bf8d79fb4b79c918dcef1a2885e9e0bea2d42ba7",
+  "code_sha256": "36a3126fb7386ab9186a9e01a36f4eb9215197436b0d68e67405edeb7c88ff1d",
+  "host": "kaggle",
+  "created": "2026-10-11T01:12:51+0000",
+  "model": [
+   "Qwen/Qwen2.5-7B",
+   "d149729398750b98c0af14eb82c78cfe92750796"
+  ],
+  "stage": "states + J-gram (separate process)",
+  "jgram_weights_dtype": "float16",
+  "jgram_peak_rss_gb": 6.18398
+ },
+ "states_olmo7.pt": {
+  "sha256": "d455fae0dd7c2c19c97272634480e1b9137646e21e205d3aebaadd2f9c7956ff",
+  "bytes": 680474451,
+  "commit": "bf8d79fb4b79c918dcef1a2885e9e0bea2d42ba7",
+  "code_sha256": "36a3126fb7386ab9186a9e01a36f4eb9215197436b0d68e67405edeb7c88ff1d",
+  "host": "kaggle",
+  "created": "2026-10-11T01:25:58+0000",
+  "model": [
+   "allenai/OLMo-2-1124-7B",
+   "7df9a82518afdecae4e8c026b27adccc8c1f0032"
+  ],
+  "stage": "states + J-gram (separate process)",
+  "jgram_weights_dtype": "float16",
+  "jgram_peak_rss_gb": 6.350868
+ },
+ "det_report.json": {
+  "sha256": "c20b1d3846870f3cf12bd38608f43ef4847ba7644c39ab70fa6fb39fba9b5692",
+  "bytes": 1296,
+  "commit": "bf8d79fb4b79c918dcef1a2885e9e0bea2d42ba7",
+  "code_sha256": "36a3126fb7386ab9186a9e01a36f4eb9215197436b0d68e67405edeb7c88ff1d",
+  "host": "kaggle",
+  "created": "2026-10-11T01:26:08+0000"
+ },
+ "gate5.json": {
+  "sha256": "9580b61dc0235d99c5673e8133e0bc6a9c68f6c23292afb31de12944440157b6",
+  "bytes": 38430,
+  "commit": "bf8d79fb4b79c918dcef1a2885e9e0bea2d42ba7",
+  "code_sha256": "36a3126fb7386ab9186a9e01a36f4eb9215197436b0d68e67405edeb7c88ff1d",
+  "host": "kaggle",
+  "created": "2026-10-11T03:16:36+0000"
+ },
+ "selection5.json": {
+  "sha256": "d4de8a8be03a9f61f1e6b68aec7a9d4eb21855d16731e91fa9af64c5df457e2a",
+  "bytes": 161958,
+  "commit": "bf8d79fb4b79c918dcef1a2885e9e0bea2d42ba7",
+  "code_sha256": "36a3126fb7386ab9186a9e01a36f4eb9215197436b0d68e67405edeb7c88ff1d",
+  "host": "kaggle",
+  "created": "2026-10-11T03:16:36+0000"
+ },
+ "deliveries_qwen7.pt": {
+  "sha256": "c1bce4c43900949b6953c7bd46ba487c9eb587d61d47e8a9647e18a5f50d5238",
+  "bytes": 137572832,
+  "commit": "bf8d79fb4b79c918dcef1a2885e9e0bea2d42ba7",
+  "code_sha256": "36a3126fb7386ab9186a9e01a36f4eb9215197436b0d68e67405edeb7c88ff1d",
+  "host": "kaggle",
+  "created": "2026-10-11T03:18:16+0000",
+  "receiver": "qwen7"
+ },
+ "deliveries_olmo7.pt": {
+  "sha256": "f1f80956749bf4eb51de831b7eb3c7b5147bf0dd32e4da1724d71a1cab9fa367",
+  "bytes": 151546336,
+  "commit": "bf8d79fb4b79c918dcef1a2885e9e0bea2d42ba7",
+  "code_sha256": "36a3126fb7386ab9186a9e01a36f4eb9215197436b0d68e67405edeb7c88ff1d",
+  "host": "kaggle",
+  "created": "2026-10-11T03:19:57+0000",
+  "receiver": "olmo7"
+ },
+ "book5.json": {
+  "sha256": "6a6b9e1e98e95c86a6ea4d1ba339fc72b84fe1e0c568f3c2cddb18652336673a",
+  "bytes": 28223,
+  "commit": "bf8d79fb4b79c918dcef1a2885e9e0bea2d42ba7",
+  "code_sha256": "36a3126fb7386ab9186a9e01a36f4eb9215197436b0d68e67405edeb7c88ff1d",
+  "host": "kaggle",
+  "created": "2026-10-11T03:19:57+0000"
+ },
+ "dev_qwen7.json": {
+  "sha256": "510abd395bad77f9f2034f7e684b1d088e660b9e964624c5f929e83fb23f94ec",
+  "bytes": 838499,
+  "commit": "bf8d79fb4b79c918dcef1a2885e9e0bea2d42ba7",
+  "code_sha256": "36a3126fb7386ab9186a9e01a36f4eb9215197436b0d68e67405edeb7c88ff1d",
+  "host": "kaggle",
+  "created": "2026-10-11T03:26:04+0000"
+ },
+ "dev_olmo7.json": {
+  "sha256": "f1d32cdce7dce7fd3297503d45e6e797a8a732954bfcbcfc4577ebccff090460",
+  "bytes": 838628,
+  "commit": "bf8d79fb4b79c918dcef1a2885e9e0bea2d42ba7",
+  "code_sha256": "36a3126fb7386ab9186a9e01a36f4eb9215197436b0d68e67405edeb7c88ff1d",
+  "host": "kaggle",
+  "created": "2026-10-11T03:33:26+0000"
+ },
+ "frozen5.json": {
+  "sha256": "f2baf272c9086102dab0dd8a89c4ce207160a9d83681a07b3d2892bbd0cb6f5e",
+  "bytes": 1294,
+  "commit": "bf8d79fb4b79c918dcef1a2885e9e0bea2d42ba7",
+  "code_sha256": "36a3126fb7386ab9186a9e01a36f4eb9215197436b0d68e67405edeb7c88ff1d",
+  "host": "kaggle",
+  "created": "2026-10-11T03:33:34+0000"
+ },
+ "test_qwen7.json": {
+  "sha256": "9207ac978bc7fd372c5eda5dfae8953260155f3a4102d379afdbf0c2dee8c3b4",
+  "bytes": 13762930,
+  "commit": "bf8d79fb4b79c918dcef1a2885e9e0bea2d42ba7",
+  "code_sha256": "36a3126fb7386ab9186a9e01a36f4eb9215197436b0d68e67405edeb7c88ff1d",
+  "host": "kaggle",
+  "created": "2026-10-11T04:29:25+0000"
+ },
+ "test_olmo7.json": {
+  "sha256": "a008bab9abc1ec731ba24c3967b6738f1d93d813778ac191fce6420f23dcec2e",
+  "bytes": 9229415,
+  "commit": "bf8d79fb4b79c918dcef1a2885e9e0bea2d42ba7",
+  "code_sha256": "36a3126fb7386ab9186a9e01a36f4eb9215197436b0d68e67405edeb7c88ff1d",
+  "host": "kaggle",
+  "created": "2026-10-11T05:16:47+0000"
+ }
+}

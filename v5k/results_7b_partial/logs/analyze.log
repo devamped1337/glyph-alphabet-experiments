@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/kaggle/working/glyph-repo/v5k/analyze5.py", line 73, in <module>
+    T["loo_by_gate"] = {k: (cboot([{**x, "e": e2e(x)} for x in v], "e") if isinstance(v, list) else v) for k, v in T["loo_by_gate"].items()}
+                                   ^^^^^^^^^^^^^^^^^^
+TypeError: 'float' object is not a mapping

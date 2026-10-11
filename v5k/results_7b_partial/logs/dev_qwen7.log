@@ -1,0 +1,26 @@
+
+Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]
+Loading checkpoint shards:  25%|██▌       | 1/4 [00:19<00:57, 19.06s/it]
+Loading checkpoint shards:  50%|█████     | 2/4 [00:37<00:37, 18.79s/it]
+Loading checkpoint shards:  75%|███████▌  | 3/4 [00:55<00:18, 18.54s/it]
+Loading checkpoint shards: 100%|██████████| 4/4 [01:09<00:00, 16.48s/it]
+Loading checkpoint shards: 100%|██████████| 4/4 [01:09<00:00, 17.30s/it]
+qwen7 Qwen/Qwen2.5-7B d149729398 layers 28 d 3584 patch/read keys ['emb', 7, 9] RSS 1.8 GB
+dev qwen7 queries 294 layer index None
+0 294 102s, 1.7s for 14 rows, RSS 2.5 GB
+20 294 115s, 0.6s for 14 rows, RSS 2.5 GB
+40 294 128s, 0.7s for 14 rows, RSS 2.5 GB
+60 294 141s, 0.7s for 14 rows, RSS 2.5 GB
+80 294 155s, 0.7s for 14 rows, RSS 2.5 GB
+100 294 169s, 0.7s for 14 rows, RSS 2.5 GB
+120 294 183s, 0.7s for 14 rows, RSS 2.5 GB
+140 294 198s, 0.7s for 14 rows, RSS 2.5 GB
+160 294 213s, 0.8s for 14 rows, RSS 2.5 GB
+180 294 228s, 0.7s for 14 rows, RSS 2.5 GB
+200 294 244s, 2.1s for 14 rows, RSS 2.5 GB
+220 294 287s, 2.2s for 14 rows, RSS 2.5 GB
+240 294 329s, 0.3s for 6 rows, RSS 2.5 GB
+260 294 335s, 0.3s for 6 rows, RSS 2.5 GB
+280 294 346s, 0.7s for 14 rows, RSS 2.5 GB
+saved /kaggle/working/glyph_results/dev_qwen7.json 838499 bytes
+done qwen7 dev 355s

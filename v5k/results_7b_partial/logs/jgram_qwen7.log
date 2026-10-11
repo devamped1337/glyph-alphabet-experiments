@@ -1,0 +1,27 @@
+
+Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]
+Loading checkpoint shards:  25%|██▌       | 1/4 [00:15<00:45, 15.12s/it]
+Loading checkpoint shards:  50%|█████     | 2/4 [00:31<00:31, 15.74s/it]
+Loading checkpoint shards:  75%|███████▌  | 3/4 [00:44<00:14, 14.60s/it]
+Loading checkpoint shards: 100%|██████████| 4/4 [00:59<00:00, 14.74s/it]
+Loading checkpoint shards: 100%|██████████| 4/4 [00:59<00:00, 14.87s/it]
+qwen7 Qwen/Qwen2.5-7B d149729398 layers 28 d 3584 patch/read keys ['emb', 7, 9] RSS 2.3 GB
+jgram batch 0 82s RSS 3.0 peak 6.2 GB
+jgram batch 2 86s RSS 3.6 peak 6.2 GB
+jgram batch 4 91s RSS 3.9 peak 6.2 GB
+jgram batch 6 95s RSS 3.9 peak 6.2 GB
+jgram batch 8 100s RSS 3.9 peak 6.2 GB
+jgram batch 10 104s RSS 3.9 peak 6.2 GB
+jgram batch 12 109s RSS 3.9 peak 6.2 GB
+jgram batch 14 113s RSS 3.9 peak 6.2 GB
+jgram batch 16 118s RSS 3.9 peak 6.2 GB
+jgram batch 18 122s RSS 3.9 peak 6.2 GB
+jgram batch 20 127s RSS 3.9 peak 6.2 GB
+jgram batch 22 131s RSS 3.9 peak 6.2 GB
+jgram batch 24 136s RSS 3.9 peak 6.2 GB
+jgram batch 26 140s RSS 3.9 peak 6.2 GB
+jgram batch 28 145s RSS 3.9 peak 6.2 GB
+jgram batch 30 149s RSS 3.9 peak 6.2 GB
+split-half overlap {'emb': 0.6564562916755676, '7': 0.6581233143806458, '9': 0.6323068141937256}
+saved /kaggle/working/glyph_results/states_qwen7.pt 595416851 bytes
+done jgram qwen7 float16 208s peak 6.2 GB

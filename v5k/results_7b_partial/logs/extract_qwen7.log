@@ -1,0 +1,24 @@
+
+Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]
+Loading checkpoint shards:  25%|██▌       | 1/4 [00:15<00:45, 15.16s/it]
+Loading checkpoint shards:  50%|█████     | 2/4 [00:30<00:30, 15.25s/it]
+Loading checkpoint shards:  75%|███████▌  | 3/4 [00:43<00:14, 14.38s/it]
+Loading checkpoint shards: 100%|██████████| 4/4 [00:48<00:00, 10.71s/it]
+Loading checkpoint shards: 100%|██████████| 4/4 [00:48<00:00, 12.22s/it]
+qwen7 Qwen/Qwen2.5-7B d149729398 layers 28 d 3584 patch/read keys ['emb', 7, 9] RSS 1.8 GB
+book 0 2756 68s RSS 2.8 GB
+book 400 2756 86s RSS 2.8 GB
+book 800 2756 104s RSS 2.9 GB
+book 1200 2756 122s RSS 2.9 GB
+book 1600 2756 141s RSS 2.9 GB
+book 2000 2756 160s RSS 2.9 GB
+book 2400 2756 179s RSS 2.9 GB
+sender 0 2756 196s RSS 2.9 GB
+sender 400 2756 214s RSS 2.9 GB
+sender 800 2756 233s RSS 2.9 GB
+sender 1200 2756 252s RSS 2.9 GB
+sender 1600 2756 271s RSS 2.9 GB
+sender 2000 2756 289s RSS 2.9 GB
+sender 2400 2756 308s RSS 2.9 GB
+saved /kaggle/working/glyph_results/states_qwen7.pt 592661133 bytes
+done qwen7 326s

@@ -1,0 +1,570 @@
+
+Loading checkpoint shards:   0%|          | 0/6 [00:00<?, ?it/s]
+Loading checkpoint shards:  17%|█▋        | 1/6 [00:22<01:51, 22.37s/it]
+Loading checkpoint shards:  33%|███▎      | 2/6 [00:43<01:27, 21.92s/it]
+Loading checkpoint shards:  50%|█████     | 3/6 [01:05<01:05, 21.69s/it]
+Loading checkpoint shards:  67%|██████▋   | 4/6 [01:27<00:43, 21.67s/it]
+Loading checkpoint shards:  83%|████████▎ | 5/6 [01:48<00:21, 21.60s/it]
+Loading checkpoint shards: 100%|██████████| 6/6 [02:08<00:00, 21.10s/it]
+Loading checkpoint shards: 100%|██████████| 6/6 [02:08<00:00, 21.44s/it]
+olmo7 allenai/OLMo-2-1124-7B 7df9a82518 layers 32 d 4096 patch/read keys ['emb', 8, 11] RSS 1.7 GB
+test olmo7 queries 1056 layer index 0
+0 1056 146s, 3.0s for 44 rows, RSS 2.5 GB
+20 1056 195s, 2.4s for 44 rows, RSS 2.5 GB
+40 1056 242s, 2.4s for 44 rows, RSS 2.5 GB
+60 1056 291s, 2.4s for 44 rows, RSS 2.5 GB
+80 1056 338s, 2.4s for 44 rows, RSS 2.5 GB
+100 1056 387s, 2.4s for 44 rows, RSS 2.5 GB
+120 1056 435s, 2.4s for 44 rows, RSS 2.5 GB
+140 1056 483s, 2.4s for 44 rows, RSS 2.5 GB
+160 1056 531s, 2.4s for 44 rows, RSS 2.5 GB
+180 1056 579s, 2.4s for 44 rows, RSS 2.5 GB
+200 1056 627s, 2.4s for 44 rows, RSS 2.5 GB
+220 1056 675s, 2.4s for 44 rows, RSS 2.5 GB
+240 1056 724s, 2.4s for 44 rows, RSS 2.5 GB
+260 1056 772s, 2.4s for 44 rows, RSS 2.5 GB
+280 1056 820s, 2.4s for 44 rows, RSS 2.5 GB
+300 1056 868s, 2.4s for 44 rows, RSS 2.5 GB
+320 1056 916s, 2.4s for 44 rows, RSS 2.5 GB
+340 1056 964s, 2.4s for 44 rows, RSS 2.5 GB
+360 1056 1012s, 2.4s for 44 rows, RSS 2.5 GB
+380 1056 1060s, 2.4s for 44 rows, RSS 2.5 GB
+400 1056 1109s, 2.4s for 44 rows, RSS 2.5 GB
+420 1056 1157s, 2.4s for 44 rows, RSS 2.5 GB
+440 1056 1205s, 2.4s for 44 rows, RSS 2.5 GB
+460 1056 1253s, 2.4s for 44 rows, RSS 2.5 GB
+480 1056 1301s, 2.4s for 44 rows, RSS 2.5 GB
+500 1056 1349s, 2.4s for 44 rows, RSS 2.5 GB
+520 1056 1398s, 2.4s for 44 rows, RSS 2.5 GB
+540 1056 1446s, 2.4s for 44 rows, RSS 2.5 GB
+560 1056 1494s, 2.4s for 44 rows, RSS 2.5 GB
+580 1056 1543s, 2.4s for 44 rows, RSS 2.5 GB
+600 1056 1591s, 2.4s for 44 rows, RSS 2.5 GB
+620 1056 1639s, 2.4s for 44 rows, RSS 2.5 GB
+640 1056 1687s, 2.4s for 44 rows, RSS 2.5 GB
+660 1056 1735s, 2.4s for 44 rows, RSS 2.5 GB
+680 1056 1783s, 2.4s for 44 rows, RSS 2.5 GB
+700 1056 1831s, 2.4s for 44 rows, RSS 2.5 GB
+720 1056 1879s, 2.4s for 44 rows, RSS 2.5 GB
+740 1056 1927s, 2.4s for 44 rows, RSS 2.5 GB
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=6; retrying per-row
+  overflow at t4|where B=6: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=8; retrying per-row
+  overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=8; retrying per-row
+  overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=8; retrying per-row
+  overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=8; retrying per-row
+  overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=6; retrying per-row
+  overflow at t4|where B=6: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=6; retrying per-row
+  overflow at t4|where B=6: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=6; retrying per-row
+  overflow at t4|where B=6: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=6; retrying per-row
+  overflow at t4|where B=6: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=8; retrying per-row
+  overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=8; retrying per-row
+  overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+760 1056 1994s, 4.2s for 40 rows, RSS 2.5 GB
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=8; retrying per-row
+  overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=8; retrying per-row
+  overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=8; retrying per-row
+  overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=8; retrying per-row
+  overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=6; retrying per-row
+  overflow at t4|where B=6: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=8; retrying per-row
+  overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=8; retrying per-row
+  overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=8; retrying per-row
+  overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=6; retrying per-row
+  overflow at t4|where B=6: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=8; retrying per-row
+  overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=8; retrying per-row
+  overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=6; retrying per-row
+  overflow at t4|where B=6: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=6; retrying per-row
+  overflow at t4|where B=6: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=8; retrying per-row
+  overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=6; retrying per-row
+  overflow at t4|where B=6: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=8; retrying per-row
+  overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=8; retrying per-row
+  overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=8; retrying per-row
+  overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=8; retrying per-row
+  overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=6; retrying per-row
+  overflow at t4|where B=6: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+780 1056 2077s, 4.0s for 38 rows, RSS 2.5 GB
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=8; retrying per-row
+  overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=8; retrying per-row
+  overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=8; retrying per-row
+  overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=6; retrying per-row
+  overflow at t4|where B=6: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=6; retrying per-row
+  overflow at t4|where B=6: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=8; retrying per-row
+  overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=6; retrying per-row
+  overflow at t4|where B=6: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=8; retrying per-row
+  overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=6; retrying per-row
+  overflow at t4|where B=6: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=6; retrying per-row
+  overflow at t4|where B=6: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=6; retrying per-row
+  overflow at t4|where B=6: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+800 1056 2141s, 2.2s for 40 rows, RSS 2.5 GB
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=6; retrying per-row
+  overflow at t4|where B=6: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=8; retrying per-row
+  overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=8; retrying per-row
+  overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=8; retrying per-row
+  overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=8; retrying per-row
+  overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=6; retrying per-row
+  overflow at t4|where B=6: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=6; retrying per-row
+  overflow at t4|where B=6: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=8; retrying per-row
+  overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=6; retrying per-row
+  overflow at t4|where B=6: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=8; retrying per-row
+  overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=6; retrying per-row
+  overflow at t4|where B=6: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=8; retrying per-row
+  overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=8; retrying per-row
+  overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=8; retrying per-row
+  overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=8; retrying per-row
+  overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=8; retrying per-row
+  overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+820 1056 2215s, 2.1s for 40 rows, RSS 2.5 GB
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=8; retrying per-row
+  overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=6; retrying per-row
+  overflow at t4|where B=6: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+840 1056 2262s, 2.2s for 40 rows, RSS 2.5 GB
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=8; retrying per-row
+  overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=8; retrying per-row
+  overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=6; retrying per-row
+  overflow at t4|where B=6: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=8; retrying per-row
+  overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=6; retrying per-row
+  overflow at t4|where B=6: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=8; retrying per-row
+  overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=8; retrying per-row
+  overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=6; retrying per-row
+  overflow at t4|where B=6: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=6; retrying per-row
+  overflow at t4|where B=6: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=8; retrying per-row
+  overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=6; retrying per-row
+  overflow at t4|where B=6: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=8; retrying per-row
+  overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=8; retrying per-row
+  overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=8; retrying per-row
+  overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=8; retrying per-row
+  overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+860 1056 2334s, 4.2s for 40 rows, RSS 2.5 GB
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=6; retrying per-row
+  overflow at t4|where B=6: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=8; retrying per-row
+  overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=8; retrying per-row
+  overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=8; retrying per-row
+  overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=8; retrying per-row
+  overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=8; retrying per-row
+  overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=8; retrying per-row
+  overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=8; retrying per-row
+  overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=8; retrying per-row
+  overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=8; retrying per-row
+  overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=8; retrying per-row
+  overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=6; retrying per-row
+  overflow at t4|where B=6: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=6; retrying per-row
+  overflow at t4|where B=6: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=8; retrying per-row
+  overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=8; retrying per-row
+  overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+880 1056 2407s, 2.2s for 40 rows, RSS 2.5 GB
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=6; retrying per-row
+  overflow at t4|where B=6: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=8; retrying per-row
+  overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+900 1056 2453s, 2.2s for 40 rows, RSS 2.5 GB
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=8; retrying per-row
+  overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=6; retrying per-row
+  overflow at t4|where B=6: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=6; retrying per-row
+  overflow at t4|where B=6: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=8; retrying per-row
+  overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+920 1056 2504s, 2.1s for 38 rows, RSS 2.5 GB
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=6; retrying per-row
+  overflow at t4|where B=6: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=8; retrying per-row
+  overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+940 1056 2550s, 2.1s for 38 rows, RSS 2.5 GB
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=6; retrying per-row
+  overflow at t4|where B=6: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=8; retrying per-row
+  overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=8; retrying per-row
+  overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=8; retrying per-row
+  overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=8; retrying per-row
+  overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=8; retrying per-row
+  overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=6; retrying per-row
+  overflow at t4|where B=6: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=8; retrying per-row
+  overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=8; retrying per-row
+  overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=8; retrying per-row
+  overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=8; retrying per-row
+  overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=8; retrying per-row
+  overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=8; retrying per-row
+  overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=8; retrying per-row
+  overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=6; retrying per-row
+  overflow at t4|where B=6: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=6; retrying per-row
+  overflow at t4|where B=6: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t5|status B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=4; retrying per-row
+  overflow at t5|status B=4: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+960 1056 2626s, 3.7s for 36 rows, RSS 2.5 GB
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t5|status B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=4; retrying per-row
+  overflow at t5|status B=4: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t5|status B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=4; retrying per-row
+  overflow at t5|status B=4: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t5|status B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=4; retrying per-row
+  overflow at t5|status B=4: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t5|status B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=4; retrying per-row
+  overflow at t5|status B=4: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t5|status B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=4; retrying per-row
+  overflow at t5|status B=4: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t5|status B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=4; retrying per-row
+  overflow at t5|status B=4: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t5|status B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=4; retrying per-row
+  overflow at t5|status B=4: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t5|status B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=4; retrying per-row
+  overflow at t5|status B=4: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t5|status B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=4; retrying per-row
+  overflow at t5|status B=4: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t5|status B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=4; retrying per-row
+  overflow at t5|status B=4: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=32; retrying per-row
+  overflow at t5|status B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+  non-finite float16 logits (olmo7) B=4; retrying per-row
+  overflow at t5|status B=4: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__
+980 1056 2685s, 1.9s for 36 rows, RSS 2.5 GB
+1000 1056 2725s, 2.0s for 36 rows, RSS 2.5 GB
+1020 1056 2764s, 2.0s for 36 rows, RSS 2.5 GB
+1040 1056 2804s, 2.0s for 36 rows, RSS 2.5 GB
+saved /kaggle/working/glyph_results/test_olmo7.json 9229415 bytes
+done olmo7 test 2834s

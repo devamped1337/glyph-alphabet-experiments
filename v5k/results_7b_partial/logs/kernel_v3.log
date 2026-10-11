@@ -1,0 +1,1214 @@
+[{"stream_name":"stderr","time":9.494379026,"data":"0.00s - Debugger warning: It seems that frozen modules are being used, which may\n"}
+,{"stream_name":"stderr","time":9.49443198,"data":"0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off\n"}
+,{"stream_name":"stderr","time":9.49444072,"data":"0.00s - to python to disable frozen modules.\n"}
+,{"stream_name":"stderr","time":9.494455577,"data":"0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.\n"}
+,{"stream_name":"stderr","time":10.249941556,"data":"0.00s - Debugger warning: It seems that frozen modules are being used, which may\n"}
+,{"stream_name":"stderr","time":10.24999338,"data":"0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off\n"}
+,{"stream_name":"stderr","time":10.25000007,"data":"0.00s - to python to disable frozen modules.\n"}
+,{"stream_name":"stderr","time":10.250004547,"data":"0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.\n"}
+,{"stream_name":"stdout","time":20.273566349,"data":"3.13.15 (main, Aug  6 2026, 11:06:22) [GCC 13.3.0]\n"}
+,{"stream_name":"stdout","time":20.273608942,"data":"torch 2.11.0+cu128 cuda 12.8\n"}
+,{"stream_name":"stdout","time":20.483993427,"data":"['Tesla T4', 'Tesla T4']\n"}
+,{"stream_name":"stdout","time":23.203240998,"data":"     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 44.0/44.0 kB 881.8 kB/s eta 0:00:00\n"}
+,{"stream_name":"stdout","time":23.405607457,"data":"     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 44.0/44.0 kB 881.8 kB/s eta 0:00:00\n"}
+,{"stream_name":"stdout","time":24.956773366,"data":"   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 12.0/12.0 MB 64.2 MB/s eta 0:00:00\n"}
+,{"stream_name":"stdout","time":25.005710051,"data":"   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 374.9/374.9 kB 17.4 MB/s eta 0:00:00\n"}
+,{"stream_name":"stdout","time":25.053279461,"data":"   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 566.4/566.4 kB 23.4 MB/s eta 0:00:00\n"}
+,{"stream_name":"stdout","time":25.131748627,"data":"   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 3.3/3.3 MB 63.9 MB/s eta 0:00:00\n"}
+,{"stream_name":"stdout","time":25.158269078,"data":"   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 12.0/12.0 MB 64.2 MB/s eta 0:00:00\n"}
+,{"stream_name":"stdout","time":25.158306517,"data":"   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 374.9/374.9 kB 17.4 MB/s eta 0:00:00\n"}
+,{"stream_name":"stdout","time":25.158312263,"data":"   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 566.4/566.4 kB 23.4 MB/s eta 0:00:00\n"}
+,{"stream_name":"stdout","time":25.158321313,"data":"   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 3.3/3.3 MB 63.9 MB/s eta 0:00:00\n"}
+,{"stream_name":"stderr","time":44.891037147,"data":"ERROR: pip's dependency resolver does not currently take into account all the packages that are installed. This behaviour is the source of the following dependency conflicts.\n"}
+,{"stream_name":"stderr","time":44.891089994,"data":"gradio 6.26.0 requires huggingface-hub\u003c2.0,\u003e=1.16.0, but you have huggingface-hub 0.36.2 which is incompatible.\n"}
+,{"stream_name":"stderr","time":44.89111342,"data":"diffusers 0.40.0 requires huggingface-hub\u003c2.0,\u003e=1.23.0, but you have huggingface-hub 0.36.2 which is incompatible.\n"}
+,{"stream_name":"stderr","time":45.0950807,"data":"ERROR: pip's dependency resolver does not currently take into account all the packages that are installed. This behaviour is the source of the following dependency conflicts.\n"}
+,{"stream_name":"stderr","time":45.095111102,"data":"gradio 6.26.0 requires huggingface-hub\u003c2.0,\u003e=1.16.0, but you have huggingface-hub 0.36.2 which is incompatible.\n"}
+,{"stream_name":"stderr","time":45.095117303,"data":"diffusers 0.40.0 requires huggingface-hub\u003c2.0,\u003e=1.23.0, but you have huggingface-hub 0.36.2 which is incompatible.\n"}
+,{"stream_name":"stderr","time":45.095121921,"data":"\n"}
+,{"stream_name":"stderr","time":45.095125773,"data":"ERROR: pip's dependency resolver does not currently take into account all the packages that are installed. This behaviour is the source of the following dependency conflicts.\n"}
+,{"stream_name":"stderr","time":45.095130053,"data":"gradio 6.26.0 requires huggingface-hub\u003c2.0,\u003e=1.16.0, but you have huggingface-hub 0.36.2 which is incompatible.\n"}
+,{"stream_name":"stderr","time":45.095134345,"data":"diffusers 0.40.0 requires huggingface-hub\u003c2.0,\u003e=1.23.0, but you have huggingface-hub 0.36.2 which is incompatible.\n"}
+,{"stream_name":"stdout","time":46.611074203,"data":"bf8d79f v5k: survive rare OLMo float16 non-finite logits on Kaggle\n"}
+,{"stream_name":"stdout","time":46.611106404,"data":"\n"}
+,{"stream_name":"stdout","time":51.763600046,"data":"transformers 4.57.1 accelerate 1.10.1\n"}
+,{"stream_name":"stdout","time":51.798860849,"data":"steps already done: []\n"}
+,{"stream_name":"stdout","time":51.798898751,"data":"models: {'qwen7': ('Qwen/Qwen2.5-7B', 'd149729398750b98c0af14eb82c78cfe92750796'), 'olmo7': ('allenai/OLMo-2-1124-7B', '7df9a82518afdecae4e8c026b27adccc8c1f0032')}\n"}
+,{"stream_name":"stdout","time":51.96761767,"data":"GPUs: 2 ['Tesla T4', 'Tesla T4']\n"}
+,{"stream_name":"stdout","time":53.783276626,"data":"[plan] GLYPH_OUT=/kaggle/working/glyph_results  python=/usr/bin/python3  budget=11.0 h  SMOKE=None  GLYPH_MODELS override=no\n"}
+,{"stream_name":"stdout","time":53.887884615,"data":"[plan] cuda=True gpus=2 ['Tesla T4', 'Tesla T4']\n"}
+,{"stream_name":"stdout","time":53.88858331,"data":"[plan] models: {'qwen7': ('Qwen/Qwen2.5-7B', 'd149729398750b98c0af14eb82c78cfe92750796'), 'olmo7': ('allenai/OLMo-2-1124-7B', '7df9a82518afdecae4e8c026b27adccc8c1f0032')}\n"}
+,{"stream_name":"stdout","time":53.889759495,"data":"[plan] todo det_make         ~  1 min  det5.py make  \n"}
+,{"stream_name":"stdout","time":53.890845842,"data":"[plan] todo det_qwen7        ~ 10 min  det5.py run qwen7  \n"}
+,{"stream_name":"stdout","time":53.892035139,"data":"[plan] todo det_olmo7        ~ 10 min  det5.py run olmo7  \n"}
+,{"stream_name":"stdout","time":53.893232889,"data":"[plan] todo extract_qwen7    ~ 25 min  extract5.py qwen7  {'JPROMPTS': '0', 'BS': '16'}\n"}
+,{"stream_name":"stdout","time":53.894430878,"data":"[plan] todo jgram_qwen7      ~ 15 min  jgram5.py qwen7  {'JPROMPTS': '32', 'JPROBES': '8', 'JBATCH': '2'}\n"}
+,{"stream_name":"stdout","time":53.895614415,"data":"[plan] todo free_qwen7       ~  0 min  (free HF cache if disk low)  \n"}
+,{"stream_name":"stdout","time":53.896724746,"data":"[plan] todo extract_olmo7    ~ 25 min  extract5.py olmo7  {'JPROMPTS': '0', 'BS': '16'}\n"}
+,{"stream_name":"stdout","time":53.897847983,"data":"[plan] todo jgram_olmo7      ~ 15 min  jgram5.py olmo7  {'JPROMPTS': '32', 'JPROBES': '8', 'JBATCH': '2'}\n"}
+,{"stream_name":"stdout","time":53.898932674,"data":"[plan] todo free_olmo7       ~  0 min  (free HF cache if disk low)  \n"}
+,{"stream_name":"stdout","time":53.900094516,"data":"[plan] todo det_compare      ~  1 min  det5.py compare  \n"}
+,{"stream_name":"stdout","time":53.901079635,"data":"[plan] todo negotiate        ~ 30 min  negotiate5.py  \n"}
+,{"stream_name":"stdout","time":53.902158806,"data":"[plan] todo dev_qwen7        ~ 45 min  run5.py qwen7 dev  {'N_DEV': '40', 'DEV_ID_LI': '1', 'RB': '32'}\n"}
+,{"stream_name":"stdout","time":53.903033117,"data":"[plan] todo dev_olmo7        ~ 45 min  run5.py olmo7 dev  {'N_DEV': '40', 'DEV_ID_LI': '1', 'RB': '32'}\n"}
+,{"stream_name":"stdout","time":53.903885584,"data":"[plan] todo prereg           ~  1 min  prereg5.py  \n"}
+,{"stream_name":"stdout","time":53.90471071,"data":"[plan] todo test_qwen7       ~ 90 min  run5.py qwen7 test  {'RB': '32', 'TEST_SEEDS': '0,1,2'}\n"}
+,{"stream_name":"stdout","time":53.905501476,"data":"[plan] todo test_olmo7       ~ 90 min  run5.py olmo7 test  {'RB': '32', 'TEST_SEEDS': '0,1,2'}\n"}
+,{"stream_name":"stdout","time":53.906309106,"data":"[plan] todo analyze          ~  2 min  analyze5.py  \n"}
+,{"stream_name":"stdout","time":53.907145533,"data":"[plan] todo jlens_compare    ~  2 min  jlens_compare5k.py  \n"}
+,{"stream_name":"stdout","time":53.908033969,"data":"[plan] 18 of 18 steps to run, ~6.8 h estimated\n"}
+,{"stream_name":"stdout","time":59.746582784,"data":"[plan] GLYPH_OUT=/kaggle/working/glyph_results  python=/usr/bin/python3  budget=11.0 h  SMOKE=None  GLYPH_MODELS override=no\n"}
+,{"stream_name":"stdout","time":59.848870601,"data":"[plan] cuda=True gpus=2 ['Tesla T4', 'Tesla T4']\n"}
+,{"stream_name":"stdout","time":59.850264212,"data":"[plan] models: {'qwen7': ('Qwen/Qwen2.5-7B', 'd149729398750b98c0af14eb82c78cfe92750796'), 'olmo7': ('allenai/OLMo-2-1124-7B', '7df9a82518afdecae4e8c026b27adccc8c1f0032')}\n"}
+,{"stream_name":"stdout","time":59.851564708,"data":"[plan] todo det_make         ~  1 min  det5.py make  \n"}
+,{"stream_name":"stdout","time":59.852670371,"data":"[plan] todo det_qwen7        ~ 10 min  det5.py run qwen7  \n"}
+,{"stream_name":"stdout","time":59.853862109,"data":"[plan] todo det_olmo7        ~ 10 min  det5.py run olmo7  \n"}
+,{"stream_name":"stdout","time":59.854931359,"data":"[plan] todo extract_qwen7    ~ 25 min  extract5.py qwen7  {'JPROMPTS': '0', 'BS': '16'}\n"}
+,{"stream_name":"stdout","time":59.855980556,"data":"[plan] todo jgram_qwen7      ~ 15 min  jgram5.py qwen7  {'JPROMPTS': '32', 'JPROBES': '8', 'JBATCH': '2'}\n"}
+,{"stream_name":"stdout","time":59.857003504,"data":"[plan] todo free_qwen7       ~  0 min  (free HF cache if disk low)  \n"}
+,{"stream_name":"stdout","time":59.857878556,"data":"[plan] todo extract_olmo7    ~ 25 min  extract5.py olmo7  {'JPROMPTS': '0', 'BS': '16'}\n"}
+,{"stream_name":"stdout","time":59.859261799,"data":"[plan] todo jgram_olmo7      ~ 15 min  jgram5.py olmo7  {'JPROMPTS': '32', 'JPROBES': '8', 'JBATCH': '2'}\n"}
+,{"stream_name":"stdout","time":59.86016342,"data":"[plan] todo free_olmo7       ~  0 min  (free HF cache if disk low)  \n"}
+,{"stream_name":"stdout","time":59.861246966,"data":"[plan] todo det_compare      ~  1 min  det5.py compare  \n"}
+,{"stream_name":"stdout","time":59.862175672,"data":"[plan] todo negotiate        ~ 30 min  negotiate5.py  \n"}
+,{"stream_name":"stdout","time":59.863368651,"data":"[plan] todo dev_qwen7        ~ 45 min  run5.py qwen7 dev  {'N_DEV': '40', 'DEV_ID_LI': '1', 'RB': '32'}\n"}
+,{"stream_name":"stdout","time":59.864285198,"data":"[plan] todo dev_olmo7        ~ 45 min  run5.py olmo7 dev  {'N_DEV': '40', 'DEV_ID_LI': '1', 'RB': '32'}\n"}
+,{"stream_name":"stdout","time":59.865234558,"data":"[plan] todo prereg           ~  1 min  prereg5.py  \n"}
+,{"stream_name":"stdout","time":59.866143283,"data":"[plan] todo test_qwen7       ~ 90 min  run5.py qwen7 test  {'RB': '32', 'TEST_SEEDS': '0,1,2'}\n"}
+,{"stream_name":"stdout","time":59.867063943,"data":"[plan] todo test_olmo7       ~ 90 min  run5.py olmo7 test  {'RB': '32', 'TEST_SEEDS': '0,1,2'}\n"}
+,{"stream_name":"stdout","time":59.867943046,"data":"[plan] todo analyze          ~  2 min  analyze5.py  \n"}
+,{"stream_name":"stdout","time":59.86882913,"data":"[plan] todo jlens_compare    ~  2 min  jlens_compare5k.py  \n"}
+,{"stream_name":"stdout","time":59.869646183,"data":"[plan] 18 of 18 steps to run, ~6.8 h estimated\n"}
+,{"stream_name":"stdout","time":59.870437458,"data":"[start] det_make at 00:55:28 (est 1 min, 0.00 h used)\n"}
+,{"stream_name":"stdout","time":63.443251248,"data":"  saved /kaggle/working/glyph_results/det_state.pt 165623 bytes\n"}
+,{"stream_name":"stdout","time":64.183794797,"data":"[end] det_make at 00:55:33 (0.1 min)\n"}
+,{"stream_name":"stdout","time":64.185150046,"data":"[start] det_qwen7 at 00:55:33 (est 10 min, 0.00 h used)\n"}
+,{"stream_name":"stdout","time":64.680825978,"data":"[model] qwen7: Qwen/Qwen2.5-7B@d149729398, 11 files\n"}
+,{"stream_name":"stdout","time":64.765247314,"data":"[model] qwen7: 1/11 config.json 0.00 GB (total 0.0 GB, 0s)\n"}
+,{"stream_name":"stdout","time":64.839101625,"data":"[model] qwen7: 2/11 generation_config.json 0.00 GB (total 0.0 GB, 0s)\n"}
+,{"stream_name":"stdout","time":64.974334032,"data":"[model] qwen7: 3/11 merges.txt 0.00 GB (total 0.0 GB, 0s)\n"}
+,{"stream_name":"stdout","time":90.443296731,"data":"[model] qwen7: 4/11 model-00001-of-00004.safetensors 3.95 GB (total 3.9 GB, 26s)\n"}
+,{"stream_name":"stdout","time":98.471238698,"data":"[model] qwen7: 5/11 model-00002-of-00004.safetensors 3.86 GB (total 7.8 GB, 34s)\n"}
+,{"stream_name":"stdout","time":115.077690563,"data":"[model] qwen7: 6/11 model-00003-of-00004.safetensors 3.86 GB (total 11.7 GB, 50s)\n"}
+,{"stream_name":"stdout","time":131.443780627,"data":"[model] qwen7: 7/11 model-00004-of-00004.safetensors 3.56 GB (total 15.2 GB, 67s)\n"}
+,{"stream_name":"stdout","time":131.515872448,"data":"[model] qwen7: 8/11 model.safetensors.index.json 0.00 GB (total 15.2 GB, 67s)\n"}
+,{"stream_name":"stdout","time":131.636425637,"data":"[model] qwen7: 9/11 tokenizer.json 0.01 GB (total 15.2 GB, 67s)\n"}
+,{"stream_name":"stdout","time":131.709165556,"data":"[model] qwen7: 10/11 tokenizer_config.json 0.00 GB (total 15.2 GB, 67s)\n"}
+,{"stream_name":"stdout","time":131.806248528,"data":"[model] qwen7: 11/11 vocab.json 0.00 GB (total 15.2 GB, 67s)\n"}
+,{"stream_name":"stdout","time":183.496631885,"data":"  \n"}
+,{"stream_name":"stdout","time":200.58364425,"data":"  Loading checkpoint shards:   0%|          | 0/4 [00:00\u003c?, ?it/s]\n"}
+,{"stream_name":"stdout","time":216.081345809,"data":"  Loading checkpoint shards:  25%|██▌       | 1/4 [00:17\u003c00:51, 17.09s/it]\n"}
+,{"stream_name":"stdout","time":231.612495896,"data":"  Loading checkpoint shards:  50%|█████     | 2/4 [00:32\u003c00:32, 16.15s/it]\n"}
+,{"stream_name":"stdout","time":246.406512077,"data":"  Loading checkpoint shards:  75%|███████▌  | 3/4 [00:48\u003c00:15, 15.87s/it]\n"}
+,{"stream_name":"stdout","time":246.407854165,"data":"  Loading checkpoint shards: 100%|██████████| 4/4 [01:02\u003c00:00, 15.44s/it]\n"}
+,{"stream_name":"stdout","time":246.408750962,"data":"  Loading checkpoint shards: 100%|██████████| 4/4 [01:02\u003c00:00, 15.73s/it]\n"}
+,{"stream_name":"stdout","time":246.557953567,"data":"  qwen7 Qwen/Qwen2.5-7B d149729398 layers 28 d 3584 patch/read keys ['emb', 7, 9] RSS 1.8 GB\n"}
+,{"stream_name":"stdout","time":249.715692807,"data":"  {'repeat_bitwise': True, 'reload_bitwise': True, 'batch4_vs_batch1_maxabs': 0.037109375}\n"}
+,{"stream_name":"stdout","time":249.731893618,"data":"  saved /kaggle/working/glyph_results/det_qwen7_kaggle.pt 2436279 bytes\n"}
+,{"stream_name":"stdout","time":253.085236641,"data":"[end] det_qwen7 at 00:58:41 (3.1 min)\n"}
+,{"stream_name":"stdout","time":253.086199593,"data":"[start] det_olmo7 at 00:58:41 (est 10 min, 0.05 h used)\n"}
+,{"stream_name":"stdout","time":253.131799625,"data":"[model] olmo7: allenai/OLMo-2-1124-7B@7df9a82518, 14 files\n"}
+,{"stream_name":"stdout","time":253.209632488,"data":"[model] olmo7: 1/14 config.json 0.00 GB (total 0.0 GB, 0s)\n"}
+,{"stream_name":"stdout","time":253.294433284,"data":"[model] olmo7: 2/14 generation_config.json 0.00 GB (total 0.0 GB, 0s)\n"}
+,{"stream_name":"stdout","time":253.376272168,"data":"[model] olmo7: 3/14 merges.txt 0.00 GB (total 0.0 GB, 0s)\n"}
+,{"stream_name":"stdout","time":274.371041977,"data":"[model] olmo7: 4/14 model-00001-of-00006.safetensors 4.95 GB (total 5.0 GB, 21s)\n"}
+,{"stream_name":"stdout","time":302.128789681,"data":"[model] olmo7: 5/14 model-00002-of-00006.safetensors 4.99 GB (total 9.9 GB, 49s)\n"}
+,{"stream_name":"stdout","time":326.955416817,"data":"[model] olmo7: 6/14 model-00003-of-00006.safetensors 4.92 GB (total 14.9 GB, 74s)\n"}
+,{"stream_name":"stdout","time":354.184516642,"data":"[model] olmo7: 7/14 model-00004-of-00006.safetensors 4.86 GB (total 19.7 GB, 101s)\n"}
+,{"stream_name":"stdout","time":378.413878864,"data":"[model] olmo7: 8/14 model-00005-of-00006.safetensors 4.86 GB (total 24.6 GB, 125s)\n"}
+,{"stream_name":"stdout","time":403.239068996,"data":"[model] olmo7: 9/14 model-00006-of-00006.safetensors 4.61 GB (total 29.2 GB, 150s)\n"}
+,{"stream_name":"stdout","time":403.309737302,"data":"[model] olmo7: 10/14 model.safetensors.index.json 0.00 GB (total 29.2 GB, 150s)\n"}
+,{"stream_name":"stdout","time":403.387425801,"data":"[model] olmo7: 11/14 special_tokens_map.json 0.00 GB (total 29.2 GB, 150s)\n"}
+,{"stream_name":"stdout","time":403.536006308,"data":"[model] olmo7: 12/14 tokenizer.json 0.01 GB (total 29.2 GB, 150s)\n"}
+,{"stream_name":"stdout","time":403.614311556,"data":"[model] olmo7: 13/14 tokenizer_config.json 0.00 GB (total 29.2 GB, 150s)\n"}
+,{"stream_name":"stdout","time":403.704536757,"data":"[model] olmo7: 14/14 vocab.json 0.00 GB (total 29.2 GB, 151s)\n"}
+,{"stream_name":"stdout","time":427.881978493,"data":"  \n"}
+,{"stream_name":"stdout","time":448.126574414,"data":"  Loading checkpoint shards:   0%|          | 0/6 [00:00\u003c?, ?it/s]\n"}
+,{"stream_name":"stdout","time":468.710671562,"data":"  Loading checkpoint shards:  17%|█▋        | 1/6 [00:20\u003c01:41, 20.24s/it]\n"}
+,{"stream_name":"stdout","time":488.684914745,"data":"  Loading checkpoint shards:  33%|███▎      | 2/6 [00:40\u003c01:21, 20.45s/it]\n"}
+,{"stream_name":"stdout","time":508.702364071,"data":"  Loading checkpoint shards:  50%|█████     | 3/6 [01:00\u003c01:00, 20.23s/it]\n"}
+,{"stream_name":"stdout","time":528.239980354,"data":"  Loading checkpoint shards:  67%|██████▋   | 4/6 [01:20\u003c00:40, 20.15s/it]\n"}
+,{"stream_name":"stdout","time":546.848115251,"data":"  Loading checkpoint shards:  83%|████████▎ | 5/6 [01:40\u003c00:19, 19.92s/it]\n"}
+,{"stream_name":"stdout","time":546.84919353,"data":"  Loading checkpoint shards: 100%|██████████| 6/6 [01:58\u003c00:00, 19.48s/it]\n"}
+,{"stream_name":"stdout","time":546.85016781,"data":"  Loading checkpoint shards: 100%|██████████| 6/6 [01:58\u003c00:00, 19.83s/it]\n"}
+,{"stream_name":"stdout","time":547.017737354,"data":"  olmo7 allenai/OLMo-2-1124-7B 7df9a82518 layers 32 d 4096 patch/read keys ['emb', 8, 11] RSS 1.5 GB\n"}
+,{"stream_name":"stdout","time":549.848703069,"data":"  {'repeat_bitwise': True, 'reload_bitwise': True, 'batch4_vs_batch1_maxabs': 0.03125}\n"}
+,{"stream_name":"stdout","time":549.86328982,"data":"  saved /kaggle/working/glyph_results/det_olmo7_kaggle.pt 1608887 bytes\n"}
+,{"stream_name":"stdout","time":554.338376972,"data":"[end] det_olmo7 at 01:03:43 (5.0 min)\n"}
+,{"stream_name":"stdout","time":554.339358801,"data":"[start] extract_qwen7 at 01:03:43 (est 25 min, 0.14 h used)\n"}
+,{"stream_name":"stdout","time":554.383853586,"data":"[model] qwen7: Qwen/Qwen2.5-7B@d149729398, 11 files\n"}
+,{"stream_name":"stdout","time":554.385263434,"data":"[model] qwen7: 1/11 config.json 0.00 GB (total 0.0 GB, 0s)\n"}
+,{"stream_name":"stdout","time":554.386583313,"data":"[model] qwen7: 2/11 generation_config.json 0.00 GB (total 0.0 GB, 0s)\n"}
+,{"stream_name":"stdout","time":554.387751092,"data":"[model] qwen7: 3/11 merges.txt 0.00 GB (total 0.0 GB, 0s)\n"}
+,{"stream_name":"stdout","time":554.388780221,"data":"[model] qwen7: 4/11 model-00001-of-00004.safetensors 3.95 GB (total 3.9 GB, 0s)\n"}
+,{"stream_name":"stdout","time":554.389987961,"data":"[model] qwen7: 5/11 model-00002-of-00004.safetensors 3.86 GB (total 7.8 GB, 0s)\n"}
+,{"stream_name":"stdout","time":554.390973071,"data":"[model] qwen7: 6/11 model-00003-of-00004.safetensors 3.86 GB (total 11.7 GB, 0s)\n"}
+,{"stream_name":"stdout","time":554.392076461,"data":"[model] qwen7: 7/11 model-00004-of-00004.safetensors 3.56 GB (total 15.2 GB, 0s)\n"}
+,{"stream_name":"stdout","time":554.393007492,"data":"[model] qwen7: 8/11 model.safetensors.index.json 0.00 GB (total 15.2 GB, 0s)\n"}
+,{"stream_name":"stdout","time":554.393907136,"data":"[model] qwen7: 9/11 tokenizer.json 0.01 GB (total 15.2 GB, 0s)\n"}
+,{"stream_name":"stdout","time":554.394847937,"data":"[model] qwen7: 10/11 tokenizer_config.json 0.00 GB (total 15.2 GB, 0s)\n"}
+,{"stream_name":"stdout","time":554.395931083,"data":"[model] qwen7: 11/11 vocab.json 0.00 GB (total 15.2 GB, 0s)\n"}
+,{"stream_name":"stdout","time":576.509522593,"data":"  \n"}
+,{"stream_name":"stdout","time":591.66085924,"data":"  Loading checkpoint shards:   0%|          | 0/4 [00:00\u003c?, ?it/s]\n"}
+,{"stream_name":"stdout","time":606.987118396,"data":"  Loading checkpoint shards:  25%|██▌       | 1/4 [00:15\u003c00:45, 15.16s/it]\n"}
+,{"stream_name":"stdout","time":620.309811518,"data":"  Loading checkpoint shards:  50%|█████     | 2/4 [00:30\u003c00:30, 15.25s/it]\n"}
+,{"stream_name":"stdout","time":625.396173075,"data":"  Loading checkpoint shards:  75%|███████▌  | 3/4 [00:43\u003c00:14, 14.38s/it]\n"}
+,{"stream_name":"stdout","time":625.397283827,"data":"  Loading checkpoint shards: 100%|██████████| 4/4 [00:48\u003c00:00, 10.71s/it]\n"}
+,{"stream_name":"stdout","time":625.398366233,"data":"  Loading checkpoint shards: 100%|██████████| 4/4 [00:48\u003c00:00, 12.22s/it]\n"}
+,{"stream_name":"stdout","time":625.553611851,"data":"  qwen7 Qwen/Qwen2.5-7B d149729398 layers 28 d 3584 patch/read keys ['emb', 7, 9] RSS 1.8 GB\n"}
+,{"stream_name":"stdout","time":627.696228429,"data":"  book 0 2756 68s RSS 2.8 GB\n"}
+,{"stream_name":"stdout","time":645.200487766,"data":"  book 400 2756 86s RSS 2.8 GB\n"}
+,{"stream_name":"stdout","time":663.232179891,"data":"  book 800 2756 104s RSS 2.9 GB\n"}
+,{"stream_name":"stdout","time":681.658829394,"data":"  book 1200 2756 122s RSS 2.9 GB\n"}
+,{"stream_name":"stdout","time":700.598044328,"data":"  book 1600 2756 141s RSS 2.9 GB\n"}
+,{"stream_name":"stdout","time":719.922578537,"data":"  book 2000 2756 160s RSS 2.9 GB\n"}
+,{"stream_name":"stdout","time":738.853714682,"data":"  book 2400 2756 179s RSS 2.9 GB\n"}
+,{"stream_name":"stdout","time":755.381925462,"data":"  sender 0 2756 196s RSS 2.9 GB\n"}
+,{"stream_name":"stdout","time":773.775964577,"data":"  sender 400 2756 214s RSS 2.9 GB\n"}
+,{"stream_name":"stdout","time":792.522025116,"data":"  sender 800 2756 233s RSS 2.9 GB\n"}
+,{"stream_name":"stdout","time":811.396211581,"data":"  sender 1200 2756 252s RSS 2.9 GB\n"}
+,{"stream_name":"stdout","time":830.185488367,"data":"  sender 1600 2756 271s RSS 2.9 GB\n"}
+,{"stream_name":"stdout","time":848.819144403,"data":"  sender 2000 2756 289s RSS 2.9 GB\n"}
+,{"stream_name":"stdout","time":867.39009317,"data":"  sender 2400 2756 308s RSS 2.9 GB\n"}
+,{"stream_name":"stdout","time":885.636616238,"data":"  saved /kaggle/working/glyph_results/states_qwen7.pt 592661133 bytes\n"}
+,{"stream_name":"stdout","time":885.637493416,"data":"  done qwen7 326s\n"}
+,{"stream_name":"stdout","time":890.128407031,"data":"[end] extract_qwen7 at 01:09:18 (5.6 min)\n"}
+,{"stream_name":"stdout","time":890.129495441,"data":"[start] jgram_qwen7 at 01:09:18 (est 15 min, 0.23 h used)\n"}
+,{"stream_name":"stdout","time":890.264445094,"data":"[model] qwen7: Qwen/Qwen2.5-7B@d149729398, 11 files\n"}
+,{"stream_name":"stdout","time":890.265756427,"data":"[model] qwen7: 1/11 config.json 0.00 GB (total 0.0 GB, 0s)\n"}
+,{"stream_name":"stdout","time":890.267205773,"data":"[model] qwen7: 2/11 generation_config.json 0.00 GB (total 0.0 GB, 0s)\n"}
+,{"stream_name":"stdout","time":890.268353906,"data":"[model] qwen7: 3/11 merges.txt 0.00 GB (total 0.0 GB, 0s)\n"}
+,{"stream_name":"stdout","time":890.269593031,"data":"[model] qwen7: 4/11 model-00001-of-00004.safetensors 3.95 GB (total 3.9 GB, 0s)\n"}
+,{"stream_name":"stdout","time":890.270757296,"data":"[model] qwen7: 5/11 model-00002-of-00004.safetensors 3.86 GB (total 7.8 GB, 0s)\n"}
+,{"stream_name":"stdout","time":890.27206062,"data":"[model] qwen7: 6/11 model-00003-of-00004.safetensors 3.86 GB (total 11.7 GB, 0s)\n"}
+,{"stream_name":"stdout","time":890.273077946,"data":"[model] qwen7: 7/11 model-00004-of-00004.safetensors 3.56 GB (total 15.2 GB, 0s)\n"}
+,{"stream_name":"stdout","time":890.273979807,"data":"[model] qwen7: 8/11 model.safetensors.index.json 0.00 GB (total 15.2 GB, 0s)\n"}
+,{"stream_name":"stdout","time":890.274843282,"data":"[model] qwen7: 9/11 tokenizer.json 0.01 GB (total 15.2 GB, 0s)\n"}
+,{"stream_name":"stdout","time":890.275695828,"data":"[model] qwen7: 10/11 tokenizer_config.json 0.00 GB (total 15.2 GB, 0s)\n"}
+,{"stream_name":"stdout","time":890.276576736,"data":"[model] qwen7: 11/11 vocab.json 0.00 GB (total 15.2 GB, 0s)\n"}
+,{"stream_name":"stdout","time":911.037841334,"data":"  \n"}
+,{"stream_name":"stdout","time":926.145941257,"data":"  Loading checkpoint shards:   0%|          | 0/4 [00:00\u003c?, ?it/s]\n"}
+,{"stream_name":"stdout","time":942.33988623,"data":"  Loading checkpoint shards:  25%|██▌       | 1/4 [00:15\u003c00:45, 15.12s/it]\n"}
+,{"stream_name":"stdout","time":955.573408989,"data":"  Loading checkpoint shards:  50%|█████     | 2/4 [00:31\u003c00:31, 15.74s/it]\n"}
+,{"stream_name":"stdout","time":970.522080034,"data":"  Loading checkpoint shards:  75%|███████▌  | 3/4 [00:44\u003c00:14, 14.60s/it]\n"}
+,{"stream_name":"stdout","time":970.523345595,"data":"  Loading checkpoint shards: 100%|██████████| 4/4 [00:59\u003c00:00, 14.74s/it]\n"}
+,{"stream_name":"stdout","time":970.524378182,"data":"  Loading checkpoint shards: 100%|██████████| 4/4 [00:59\u003c00:00, 14.87s/it]\n"}
+,{"stream_name":"stdout","time":970.739093596,"data":"  qwen7 Qwen/Qwen2.5-7B d149729398 layers 28 d 3584 patch/read keys ['emb', 7, 9] RSS 2.3 GB\n"}
+,{"stream_name":"stdout","time":976.752719303,"data":"  jgram batch 0 82s RSS 3.0 peak 6.2 GB\n"}
+,{"stream_name":"stdout","time":981.07578884,"data":"  jgram batch 2 86s RSS 3.6 peak 6.2 GB\n"}
+,{"stream_name":"stdout","time":985.616625822,"data":"  jgram batch 4 91s RSS 3.9 peak 6.2 GB\n"}
+,{"stream_name":"stdout","time":990.113797503,"data":"  jgram batch 6 95s RSS 3.9 peak 6.2 GB\n"}
+,{"stream_name":"stdout","time":994.614490277,"data":"  jgram batch 8 100s RSS 3.9 peak 6.2 GB\n"}
+,{"stream_name":"stdout","time":999.045128934,"data":"  jgram batch 10 104s RSS 3.9 peak 6.2 GB\n"}
+,{"stream_name":"stdout","time":1003.504299517,"data":"  jgram batch 12 109s RSS 3.9 peak 6.2 GB\n"}
+,{"stream_name":"stdout","time":1007.997733797,"data":"  jgram batch 14 113s RSS 3.9 peak 6.2 GB\n"}
+,{"stream_name":"stdout","time":1012.469157539,"data":"  jgram batch 16 118s RSS 3.9 peak 6.2 GB\n"}
+,{"stream_name":"stdout","time":1016.933338956,"data":"  jgram batch 18 122s RSS 3.9 peak 6.2 GB\n"}
+,{"stream_name":"stdout","time":1021.508081924,"data":"  jgram batch 20 127s RSS 3.9 peak 6.2 GB\n"}
+,{"stream_name":"stdout","time":1026.033623756,"data":"  jgram batch 22 131s RSS 3.9 peak 6.2 GB\n"}
+,{"stream_name":"stdout","time":1030.541833675,"data":"  jgram batch 24 136s RSS 3.9 peak 6.2 GB\n"}
+,{"stream_name":"stdout","time":1035.03788871,"data":"  jgram batch 26 140s RSS 3.9 peak 6.2 GB\n"}
+,{"stream_name":"stdout","time":1039.496556575,"data":"  jgram batch 28 145s RSS 3.9 peak 6.2 GB\n"}
+,{"stream_name":"stdout","time":1043.988143793,"data":"  jgram batch 30 149s RSS 3.9 peak 6.2 GB\n"}
+,{"stream_name":"stdout","time":1100.137151446,"data":"  split-half overlap {'emb': 0.6564562916755676, '7': 0.6581233143806458, '9': 0.6323068141937256}\n"}
+,{"stream_name":"stdout","time":1103.130452561,"data":"  saved /kaggle/working/glyph_results/states_qwen7.pt 595416851 bytes\n"}
+,{"stream_name":"stdout","time":1103.131897689,"data":"  done jgram qwen7 float16 208s peak 6.2 GB\n"}
+,{"stream_name":"stdout","time":1109.749635932,"data":"[end] jgram_qwen7 at 01:12:58 (3.7 min)\n"}
+,{"stream_name":"stdout","time":1109.750215484,"data":"[start] free_qwen7 at 01:12:58 (est 0 min, 0.29 h used)\n"}
+,{"stream_name":"stdout","time":1109.751292785,"data":"disk ok, keeping cache for qwen7\n"}
+,{"stream_name":"stdout","time":1109.75217256,"data":"[end] free_qwen7 at 01:12:58 (0.0 min)\n"}
+,{"stream_name":"stdout","time":1109.753124052,"data":"[start] extract_olmo7 at 01:12:58 (est 25 min, 0.29 h used)\n"}
+,{"stream_name":"stdout","time":1109.79299465,"data":"[model] olmo7: allenai/OLMo-2-1124-7B@7df9a82518, 14 files\n"}
+,{"stream_name":"stdout","time":1109.794654469,"data":"[model] olmo7: 1/14 config.json 0.00 GB (total 0.0 GB, 0s)\n"}
+,{"stream_name":"stdout","time":1109.795599146,"data":"[model] olmo7: 2/14 generation_config.json 0.00 GB (total 0.0 GB, 0s)\n"}
+,{"stream_name":"stdout","time":1109.796625728,"data":"[model] olmo7: 3/14 merges.txt 0.00 GB (total 0.0 GB, 0s)\n"}
+,{"stream_name":"stdout","time":1109.797804671,"data":"[model] olmo7: 4/14 model-00001-of-00006.safetensors 4.95 GB (total 5.0 GB, 0s)\n"}
+,{"stream_name":"stdout","time":1109.798883566,"data":"[model] olmo7: 5/14 model-00002-of-00006.safetensors 4.99 GB (total 9.9 GB, 0s)\n"}
+,{"stream_name":"stdout","time":1109.80016092,"data":"[model] olmo7: 6/14 model-00003-of-00006.safetensors 4.92 GB (total 14.9 GB, 0s)\n"}
+,{"stream_name":"stdout","time":1109.801354314,"data":"[model] olmo7: 7/14 model-00004-of-00006.safetensors 4.86 GB (total 19.7 GB, 0s)\n"}
+,{"stream_name":"stdout","time":1109.802437434,"data":"[model] olmo7: 8/14 model-00005-of-00006.safetensors 4.86 GB (total 24.6 GB, 0s)\n"}
+,{"stream_name":"stdout","time":1109.803612878,"data":"[model] olmo7: 9/14 model-00006-of-00006.safetensors 4.61 GB (total 29.2 GB, 0s)\n"}
+,{"stream_name":"stdout","time":1109.80443617,"data":"[model] olmo7: 10/14 model.safetensors.index.json 0.00 GB (total 29.2 GB, 0s)\n"}
+,{"stream_name":"stdout","time":1109.805389469,"data":"[model] olmo7: 11/14 special_tokens_map.json 0.00 GB (total 29.2 GB, 0s)\n"}
+,{"stream_name":"stdout","time":1109.806221604,"data":"[model] olmo7: 12/14 tokenizer.json 0.01 GB (total 29.2 GB, 0s)\n"}
+,{"stream_name":"stdout","time":1109.807247194,"data":"[model] olmo7: 13/14 tokenizer_config.json 0.00 GB (total 29.2 GB, 0s)\n"}
+,{"stream_name":"stdout","time":1109.808214235,"data":"[model] olmo7: 14/14 vocab.json 0.00 GB (total 29.2 GB, 0s)\n"}
+,{"stream_name":"stdout","time":1136.135489798,"data":"  \n"}
+,{"stream_name":"stdout","time":1157.275046373,"data":"  Loading checkpoint shards:   0%|          | 0/6 [00:00\u003c?, ?it/s]\n"}
+,{"stream_name":"stdout","time":1177.869933714,"data":"  Loading checkpoint shards:  17%|█▋        | 1/6 [00:21\u003c01:45, 21.15s/it]\n"}
+,{"stream_name":"stdout","time":1198.346144475,"data":"  Loading checkpoint shards:  33%|███▎      | 2/6 [00:41\u003c01:23, 20.82s/it]\n"}
+,{"stream_name":"stdout","time":1218.153215182,"data":"  Loading checkpoint shards:  50%|█████     | 3/6 [01:02\u003c01:01, 20.67s/it]\n"}
+,{"stream_name":"stdout","time":1238.215304019,"data":"  Loading checkpoint shards:  67%|██████▋   | 4/6 [01:22\u003c00:40, 20.32s/it]\n"}
+,{"stream_name":"stdout","time":1257.28293252,"data":"  Loading checkpoint shards:  83%|████████▎ | 5/6 [01:42\u003c00:20, 20.23s/it]\n"}
+,{"stream_name":"stdout","time":1257.284091267,"data":"  Loading checkpoint shards: 100%|██████████| 6/6 [02:01\u003c00:00, 19.83s/it]\n"}
+,{"stream_name":"stdout","time":1257.285077531,"data":"  Loading checkpoint shards: 100%|██████████| 6/6 [02:01\u003c00:00, 20.19s/it]\n"}
+,{"stream_name":"stdout","time":1257.437588075,"data":"  olmo7 allenai/OLMo-2-1124-7B 7df9a82518 layers 32 d 4096 patch/read keys ['emb', 8, 11] RSS 1.7 GB\n"}
+,{"stream_name":"stdout","time":1259.226630838,"data":"  book 0 2756 140s RSS 2.8 GB\n"}
+,{"stream_name":"stdout","time":1282.797285385,"data":"  book 400 2756 164s RSS 2.8 GB\n"}
+,{"stream_name":"stdout","time":1305.902517982,"data":"  book 800 2756 187s RSS 2.8 GB\n"}
+,{"stream_name":"stdout","time":1328.301697548,"data":"  book 1200 2756 209s RSS 2.8 GB\n"}
+,{"stream_name":"stdout","time":1351.028169366,"data":"  book 1600 2756 232s RSS 2.8 GB\n"}
+,{"stream_name":"stdout","time":1374.041046568,"data":"  book 2000 2756 255s RSS 2.8 GB\n"}
+,{"stream_name":"stdout","time":1396.872287978,"data":"  book 2400 2756 278s RSS 2.8 GB\n"}
+,{"stream_name":"stdout","time":1417.003168454,"data":"  sender 0 2756 298s RSS 2.8 GB\n"}
+,{"stream_name":"stdout","time":1439.57562926,"data":"  sender 400 2756 321s RSS 2.8 GB\n"}
+,{"stream_name":"stdout","time":1462.302552398,"data":"  sender 800 2756 343s RSS 2.8 GB\n"}
+,{"stream_name":"stdout","time":1485.123134207,"data":"  sender 1200 2756 366s RSS 2.8 GB\n"}
+,{"stream_name":"stdout","time":1507.749615288,"data":"  sender 1600 2756 389s RSS 2.8 GB\n"}
+,{"stream_name":"stdout","time":1530.386860924,"data":"  sender 2000 2756 411s RSS 2.8 GB\n"}
+,{"stream_name":"stdout","time":1553.041044193,"data":"  sender 2400 2756 434s RSS 2.8 GB\n"}
+,{"stream_name":"stdout","time":1575.155114797,"data":"  saved /kaggle/working/glyph_results/states_olmo7.pt 677325453 bytes\n"}
+,{"stream_name":"stdout","time":1575.156301061,"data":"  done olmo7 456s\n"}
+,{"stream_name":"stdout","time":1579.149632341,"data":"[end] extract_olmo7 at 01:20:48 (7.8 min)\n"}
+,{"stream_name":"stdout","time":1579.150603141,"data":"[start] jgram_olmo7 at 01:20:48 (est 15 min, 0.42 h used)\n"}
+,{"stream_name":"stdout","time":1579.285624933,"data":"[model] olmo7: allenai/OLMo-2-1124-7B@7df9a82518, 14 files\n"}
+,{"stream_name":"stdout","time":1579.286963144,"data":"[model] olmo7: 1/14 config.json 0.00 GB (total 0.0 GB, 0s)\n"}
+,{"stream_name":"stdout","time":1579.288286926,"data":"[model] olmo7: 2/14 generation_config.json 0.00 GB (total 0.0 GB, 0s)\n"}
+,{"stream_name":"stdout","time":1579.289622318,"data":"[model] olmo7: 3/14 merges.txt 0.00 GB (total 0.0 GB, 0s)\n"}
+,{"stream_name":"stdout","time":1579.290844104,"data":"[model] olmo7: 4/14 model-00001-of-00006.safetensors 4.95 GB (total 5.0 GB, 0s)\n"}
+,{"stream_name":"stdout","time":1579.292122512,"data":"[model] olmo7: 5/14 model-00002-of-00006.safetensors 4.99 GB (total 9.9 GB, 0s)\n"}
+,{"stream_name":"stdout","time":1579.293184692,"data":"[model] olmo7: 6/14 model-00003-of-00006.safetensors 4.92 GB (total 14.9 GB, 0s)\n"}
+,{"stream_name":"stdout","time":1579.294334724,"data":"[model] olmo7: 7/14 model-00004-of-00006.safetensors 4.86 GB (total 19.7 GB, 0s)\n"}
+,{"stream_name":"stdout","time":1579.295427054,"data":"[model] olmo7: 8/14 model-00005-of-00006.safetensors 4.86 GB (total 24.6 GB, 0s)\n"}
+,{"stream_name":"stdout","time":1579.296606933,"data":"[model] olmo7: 9/14 model-00006-of-00006.safetensors 4.61 GB (total 29.2 GB, 0s)\n"}
+,{"stream_name":"stdout","time":1579.297738631,"data":"[model] olmo7: 10/14 model.safetensors.index.json 0.00 GB (total 29.2 GB, 0s)\n"}
+,{"stream_name":"stdout","time":1579.298894493,"data":"[model] olmo7: 11/14 special_tokens_map.json 0.00 GB (total 29.2 GB, 0s)\n"}
+,{"stream_name":"stdout","time":1579.300061353,"data":"[model] olmo7: 12/14 tokenizer.json 0.01 GB (total 29.2 GB, 0s)\n"}
+,{"stream_name":"stdout","time":1579.301165631,"data":"[model] olmo7: 13/14 tokenizer_config.json 0.00 GB (total 29.2 GB, 0s)\n"}
+,{"stream_name":"stdout","time":1579.302303506,"data":"[model] olmo7: 14/14 vocab.json 0.00 GB (total 29.2 GB, 0s)\n"}
+,{"stream_name":"stdout","time":1596.807846783,"data":"  \n"}
+,{"stream_name":"stdout","time":1615.573808486,"data":"  Loading checkpoint shards:   0%|          | 0/6 [00:00\u003c?, ?it/s]\n"}
+,{"stream_name":"stdout","time":1635.435613603,"data":"  Loading checkpoint shards:  17%|█▋        | 1/6 [00:18\u003c01:33, 18.75s/it]\n"}
+,{"stream_name":"stdout","time":1654.989646061,"data":"  Loading checkpoint shards:  33%|███▎      | 2/6 [00:38\u003c01:17, 19.41s/it]\n"}
+,{"stream_name":"stdout","time":1674.454392327,"data":"  Loading checkpoint shards:  50%|█████     | 3/6 [00:58\u003c00:58, 19.47s/it]\n"}
+,{"stream_name":"stdout","time":1694.003046481,"data":"  Loading checkpoint shards:  67%|██████▋   | 4/6 [01:17\u003c00:38, 19.47s/it]\n"}
+,{"stream_name":"stdout","time":1712.143964321,"data":"  Loading checkpoint shards:  83%|████████▎ | 5/6 [01:37\u003c00:19, 19.50s/it]\n"}
+,{"stream_name":"stdout","time":1712.145644938,"data":"  Loading checkpoint shards: 100%|██████████| 6/6 [01:55\u003c00:00, 19.04s/it]\n"}
+,{"stream_name":"stdout","time":1712.146142263,"data":"  Loading checkpoint shards: 100%|██████████| 6/6 [01:55\u003c00:00, 19.22s/it]\n"}
+,{"stream_name":"stdout","time":1712.296094935,"data":"  olmo7 allenai/OLMo-2-1124-7B 7df9a82518 layers 32 d 4096 patch/read keys ['emb', 8, 11] RSS 2.3 GB\n"}
+,{"stream_name":"stdout","time":1718.219609479,"data":"  jgram batch 0 134s RSS 3.2 peak 6.4 GB\n"}
+,{"stream_name":"stdout","time":1723.514209927,"data":"  jgram batch 2 140s RSS 4.0 peak 6.4 GB\n"}
+,{"stream_name":"stdout","time":1728.996866454,"data":"  jgram batch 4 145s RSS 4.4 peak 6.4 GB\n"}
+,{"stream_name":"stdout","time":1734.526117172,"data":"  jgram batch 6 151s RSS 4.4 peak 6.4 GB\n"}
+,{"stream_name":"stdout","time":1739.9650032,"data":"  jgram batch 8 156s RSS 4.4 peak 6.4 GB\n"}
+,{"stream_name":"stdout","time":1745.464566896,"data":"  jgram batch 10 162s RSS 4.4 peak 6.4 GB\n"}
+,{"stream_name":"stdout","time":1750.877656215,"data":"  jgram batch 12 167s RSS 4.4 peak 6.4 GB\n"}
+,{"stream_name":"stdout","time":1756.377195151,"data":"  jgram batch 14 173s RSS 4.4 peak 6.4 GB\n"}
+,{"stream_name":"stdout","time":1761.915846555,"data":"  jgram batch 16 178s RSS 4.4 peak 6.4 GB\n"}
+,{"stream_name":"stdout","time":1767.359519591,"data":"  jgram batch 18 184s RSS 4.4 peak 6.4 GB\n"}
+,{"stream_name":"stdout","time":1772.819601817,"data":"  jgram batch 20 189s RSS 4.4 peak 6.4 GB\n"}
+,{"stream_name":"stdout","time":1778.214175735,"data":"  jgram batch 22 194s RSS 4.4 peak 6.4 GB\n"}
+,{"stream_name":"stdout","time":1783.681811709,"data":"  jgram batch 24 200s RSS 4.4 peak 6.4 GB\n"}
+,{"stream_name":"stdout","time":1789.055819377,"data":"  jgram batch 26 205s RSS 4.4 peak 6.4 GB\n"}
+,{"stream_name":"stdout","time":1794.568796738,"data":"  jgram batch 28 211s RSS 4.4 peak 6.4 GB\n"}
+,{"stream_name":"stdout","time":1799.919138465,"data":"  jgram batch 30 216s RSS 4.4 peak 6.4 GB\n"}
+,{"stream_name":"stdout","time":1887.104247564,"data":"  split-half overlap {'emb': 0.5972765684127808, '8': 0.4282841384410858, '11': 0.3245387673377991}\n"}
+,{"stream_name":"stdout","time":1890.12552039,"data":"  saved /kaggle/working/glyph_results/states_olmo7.pt 680474451 bytes\n"}
+,{"stream_name":"stdout","time":1890.12672371,"data":"  done jgram olmo7 float16 306s peak 6.4 GB\n"}
+,{"stream_name":"stdout","time":1894.785714951,"data":"[end] jgram_olmo7 at 01:26:03 (5.3 min)\n"}
+,{"stream_name":"stdout","time":1894.787292879,"data":"[start] free_olmo7 at 01:26:03 (est 0 min, 0.51 h used)\n"}
+,{"stream_name":"stdout","time":1894.788676992,"data":"disk ok, keeping cache for olmo7\n"}
+,{"stream_name":"stdout","time":1894.789774617,"data":"[end] free_olmo7 at 01:26:03 (0.0 min)\n"}
+,{"stream_name":"stdout","time":1894.790881345,"data":"[start] det_compare at 01:26:03 (est 1 min, 0.51 h used)\n"}
+,{"stream_name":"stdout","time":1899.171980458,"data":"  saved /kaggle/working/glyph_results/det_report.json 1296 bytes\n"}
+,{"stream_name":"stdout","time":1899.173653022,"data":"  {\n"}
+,{"stream_name":"stdout","time":1899.175558814,"data":"   \"qwen7\": \"only one machine ran this model\",\n"}
+,{"stream_name":"stdout","time":1899.176788395,"data":"   \"olmo7\": \"only one machine ran this model\"\n"}
+,{"stream_name":"stdout","time":1899.177730385,"data":"  }\n"}
+,{"stream_name":"stdout","time":1900.027457191,"data":"[end] det_compare at 01:26:08 (0.1 min)\n"}
+,{"stream_name":"stdout","time":1900.028646916,"data":"[start] negotiate at 01:26:08 (est 30 min, 0.51 h used)\n"}
+,{"stream_name":"stdout","time":2094.316106776,"data":"  book 0 emb pca 0 72 2 191s\n"}
+,{"stream_name":"stdout","time":2241.348306598,"data":"  book 0 emb pca 1 67 2 338s\n"}
+,{"stream_name":"stdout","time":2396.284952769,"data":"  book 0 emb pca 2 68 2 493s\n"}
+,{"stream_name":"stdout","time":2403.305573238,"data":"  book 0 emb jlens 0 60 1 500s\n"}
+,{"stream_name":"stdout","time":2408.117164741,"data":"  book 0 emb jlens 1 62 1 504s\n"}
+,{"stream_name":"stdout","time":2413.015759402,"data":"  book 0 emb jlens 2 62 1 509s\n"}
+,{"stream_name":"stdout","time":2430.119086891,"data":"  book 0 emb random 0 71 2 526s\n"}
+,{"stream_name":"stdout","time":2437.245173767,"data":"  book 0 emb random 1 67 1 534s\n"}
+,{"stream_name":"stdout","time":2450.331146619,"data":"  book 0 emb random 2 68 1 547s\n"}
+,{"stream_name":"stdout","time":4257.262620027,"data":"  layer 0 done 2347s\n"}
+,{"stream_name":"stdout","time":4393.351320453,"data":"  book 1 7 pca 0 61 1 2490s\n"}
+,{"stream_name":"stdout","time":4529.903117034,"data":"  book 1 7 pca 1 60 2 2626s\n"}
+,{"stream_name":"stdout","time":4721.306527299,"data":"  book 1 7 pca 2 57 3 2818s\n"}
+,{"stream_name":"stdout","time":4726.786662743,"data":"  book 1 7 jlens 0 53 1 2823s\n"}
+,{"stream_name":"stdout","time":4729.313567148,"data":"  book 1 7 jlens 1 52 1 2826s\n"}
+,{"stream_name":"stdout","time":4731.92491356,"data":"  book 1 7 jlens 2 52 1 2828s\n"}
+,{"stream_name":"stdout","time":4734.427019223,"data":"  book 1 7 random 0 51 1 2831s\n"}
+,{"stream_name":"stdout","time":4740.0925753,"data":"  book 1 7 random 1 52 2 2836s\n"}
+,{"stream_name":"stdout","time":4745.589781311,"data":"  book 1 7 random 2 53 1 2842s\n"}
+,{"stream_name":"stdout","time":6448.067916447,"data":"  layer 1 done 2190s\n"}
+,{"stream_name":"stdout","time":6580.599282264,"data":"  book 2 9 pca 0 60 1 4677s\n"}
+,{"stream_name":"stdout","time":6710.603184801,"data":"  book 2 9 pca 1 60 2 4807s\n"}
+,{"stream_name":"stdout","time":6801.892442099,"data":"  book 2 9 pca 2 60 1 4898s\n"}
+,{"stream_name":"stdout","time":6818.753196624,"data":"  book 2 9 jlens 0 46 2 4915s\n"}
+,{"stream_name":"stdout","time":6822.188712725,"data":"  book 2 9 jlens 1 45 2 4919s\n"}
+,{"stream_name":"stdout","time":6825.54493247,"data":"  book 2 9 jlens 2 45 2 4922s\n"}
+,{"stream_name":"stdout","time":6831.216037658,"data":"  book 2 9 random 0 54 1 4928s\n"}
+,{"stream_name":"stdout","time":6844.256966119,"data":"  book 2 9 random 1 54 2 4941s\n"}
+,{"stream_name":"stdout","time":6849.999891158,"data":"  book 2 9 random 2 54 1 4946s\n"}
+,{"stream_name":"stdout","time":8527.30768905,"data":"  layer 2 done 2078s\n"}
+,{"stream_name":"stdout","time":8527.600405554,"data":"  saved /kaggle/working/glyph_results/gate5.json 38430 bytes\n"}
+,{"stream_name":"stdout","time":8527.633052123,"data":"  saved /kaggle/working/glyph_results/selection5.json 161958 bytes\n"}
+,{"stream_name":"stdout","time":8627.843192095,"data":"  saved /kaggle/working/glyph_results/deliveries_qwen7.pt 137572832 bytes\n"}
+,{"stream_name":"stdout","time":8728.349475787,"data":"  saved /kaggle/working/glyph_results/deliveries_olmo7.pt 151546336 bytes\n"}
+,{"stream_name":"stdout","time":8728.357478062,"data":"  saved /kaggle/working/glyph_results/book5.json 28223 bytes\n"}
+,{"stream_name":"stdout","time":8728.358506477,"data":"  negotiation done 6825s\n"}
+,{"stream_name":"stdout","time":8732.329593868,"data":"[end] negotiate at 03:20:01 (113.9 min)\n"}
+,{"stream_name":"stdout","time":8732.330358876,"data":"[start] dev_qwen7 at 03:20:01 (est 45 min, 2.41 h used)\n"}
+,{"stream_name":"stdout","time":8732.478413621,"data":"[model] qwen7: Qwen/Qwen2.5-7B@d149729398, 11 files\n"}
+,{"stream_name":"stdout","time":8732.483041094,"data":"[model] qwen7: 1/11 config.json 0.00 GB (total 0.0 GB, 0s)\n"}
+,{"stream_name":"stdout","time":8732.484162114,"data":"[model] qwen7: 2/11 generation_config.json 0.00 GB (total 0.0 GB, 0s)\n"}
+,{"stream_name":"stdout","time":8732.485074522,"data":"[model] qwen7: 3/11 merges.txt 0.00 GB (total 0.0 GB, 0s)\n"}
+,{"stream_name":"stdout","time":8732.486095682,"data":"[model] qwen7: 4/11 model-00001-of-00004.safetensors 3.95 GB (total 3.9 GB, 0s)\n"}
+,{"stream_name":"stdout","time":8732.487061693,"data":"[model] qwen7: 5/11 model-00002-of-00004.safetensors 3.86 GB (total 7.8 GB, 0s)\n"}
+,{"stream_name":"stdout","time":8732.488190061,"data":"[model] qwen7: 6/11 model-00003-of-00004.safetensors 3.86 GB (total 11.7 GB, 0s)\n"}
+,{"stream_name":"stdout","time":8732.489360133,"data":"[model] qwen7: 7/11 model-00004-of-00004.safetensors 3.56 GB (total 15.2 GB, 0s)\n"}
+,{"stream_name":"stdout","time":8732.490522885,"data":"[model] qwen7: 8/11 model.safetensors.index.json 0.00 GB (total 15.2 GB, 0s)\n"}
+,{"stream_name":"stdout","time":8732.491617142,"data":"[model] qwen7: 9/11 tokenizer.json 0.01 GB (total 15.2 GB, 0s)\n"}
+,{"stream_name":"stdout","time":8732.492489595,"data":"[model] qwen7: 10/11 tokenizer_config.json 0.00 GB (total 15.2 GB, 0s)\n"}
+,{"stream_name":"stdout","time":8732.493442188,"data":"[model] qwen7: 11/11 vocab.json 0.00 GB (total 15.2 GB, 0s)\n"}
+,{"stream_name":"stdout","time":8767.137471666,"data":"  \n"}
+,{"stream_name":"stdout","time":8786.182278586,"data":"  Loading checkpoint shards:   0%|          | 0/4 [00:00\u003c?, ?it/s]\n"}
+,{"stream_name":"stdout","time":8804.800665287,"data":"  Loading checkpoint shards:  25%|██▌       | 1/4 [00:19\u003c00:57, 19.06s/it]\n"}
+,{"stream_name":"stdout","time":8823.031683492,"data":"  Loading checkpoint shards:  50%|█████     | 2/4 [00:37\u003c00:37, 18.79s/it]\n"}
+,{"stream_name":"stdout","time":8836.362225166,"data":"  Loading checkpoint shards:  75%|███████▌  | 3/4 [00:55\u003c00:18, 18.54s/it]\n"}
+,{"stream_name":"stdout","time":8836.363286078,"data":"  Loading checkpoint shards: 100%|██████████| 4/4 [01:09\u003c00:00, 16.48s/it]\n"}
+,{"stream_name":"stdout","time":8836.364177249,"data":"  Loading checkpoint shards: 100%|██████████| 4/4 [01:09\u003c00:00, 17.30s/it]\n"}
+,{"stream_name":"stdout","time":8836.499991617,"data":"  qwen7 Qwen/Qwen2.5-7B d149729398 layers 28 d 3584 patch/read keys ['emb', 7, 9] RSS 1.8 GB\n"}
+,{"stream_name":"stdout","time":8840.569978164,"data":"  dev qwen7 queries 294 layer index None\n"}
+,{"stream_name":"stdout","time":8842.379654458,"data":"  0 294 102s, 1.7s for 14 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":8855.22516396,"data":"  20 294 115s, 0.6s for 14 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":8868.379652629,"data":"  40 294 128s, 0.7s for 14 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":8881.708680685,"data":"  60 294 141s, 0.7s for 14 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":8895.333952996,"data":"  80 294 155s, 0.7s for 14 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":8909.278468577,"data":"  100 294 169s, 0.7s for 14 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":8923.581051811,"data":"  120 294 183s, 0.7s for 14 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":8938.315262263,"data":"  140 294 198s, 0.7s for 14 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":8953.499210935,"data":"  160 294 213s, 0.8s for 14 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":8968.546391543,"data":"  180 294 228s, 0.7s for 14 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":8984.639067998,"data":"  200 294 244s, 2.1s for 14 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":9027.755366273,"data":"  220 294 287s, 2.2s for 14 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":9069.37268284,"data":"  240 294 329s, 0.3s for 6 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":9075.272955038,"data":"  260 294 335s, 0.3s for 6 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":9085.866412172,"data":"  280 294 346s, 0.7s for 14 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":9095.341444886,"data":"  saved /kaggle/working/glyph_results/dev_qwen7.json 838499 bytes\n"}
+,{"stream_name":"stdout","time":9095.342318326,"data":"  done qwen7 dev 355s\n"}
+,{"stream_name":"stdout","time":9099.16217239,"data":"[end] dev_qwen7 at 03:26:08 (6.1 min)\n"}
+,{"stream_name":"stdout","time":9099.163061411,"data":"[start] dev_olmo7 at 03:26:08 (est 45 min, 2.51 h used)\n"}
+,{"stream_name":"stdout","time":9099.300340888,"data":"[model] olmo7: allenai/OLMo-2-1124-7B@7df9a82518, 14 files\n"}
+,{"stream_name":"stdout","time":9099.301627221,"data":"[model] olmo7: 1/14 config.json 0.00 GB (total 0.0 GB, 0s)\n"}
+,{"stream_name":"stdout","time":9099.302601753,"data":"[model] olmo7: 2/14 generation_config.json 0.00 GB (total 0.0 GB, 0s)\n"}
+,{"stream_name":"stdout","time":9099.303629204,"data":"[model] olmo7: 3/14 merges.txt 0.00 GB (total 0.0 GB, 0s)\n"}
+,{"stream_name":"stdout","time":9099.305040661,"data":"[model] olmo7: 4/14 model-00001-of-00006.safetensors 4.95 GB (total 5.0 GB, 0s)\n"}
+,{"stream_name":"stdout","time":9099.306188751,"data":"[model] olmo7: 5/14 model-00002-of-00006.safetensors 4.99 GB (total 9.9 GB, 0s)\n"}
+,{"stream_name":"stdout","time":9099.309595345,"data":"[model] olmo7: 6/14 model-00003-of-00006.safetensors 4.92 GB (total 14.9 GB, 0s)\n"}
+,{"stream_name":"stdout","time":9099.30961594,"data":"[model] olmo7: 7/14 model-00004-of-00006.safetensors 4.86 GB (total 19.7 GB, 0s)\n"}
+,{"stream_name":"stdout","time":9099.31000259,"data":"[model] olmo7: 8/14 model-00005-of-00006.safetensors 4.86 GB (total 24.6 GB, 0s)\n"}
+,{"stream_name":"stdout","time":9099.3112958,"data":"[model] olmo7: 9/14 model-00006-of-00006.safetensors 4.61 GB (total 29.2 GB, 0s)\n"}
+,{"stream_name":"stdout","time":9099.312376805,"data":"[model] olmo7: 10/14 model.safetensors.index.json 0.00 GB (total 29.2 GB, 0s)\n"}
+,{"stream_name":"stdout","time":9099.313482132,"data":"[model] olmo7: 11/14 special_tokens_map.json 0.00 GB (total 29.2 GB, 0s)\n"}
+,{"stream_name":"stdout","time":9099.314608977,"data":"[model] olmo7: 12/14 tokenizer.json 0.01 GB (total 29.2 GB, 0s)\n"}
+,{"stream_name":"stdout","time":9099.31566408,"data":"[model] olmo7: 13/14 tokenizer_config.json 0.00 GB (total 29.2 GB, 0s)\n"}
+,{"stream_name":"stdout","time":9099.316655539,"data":"[model] olmo7: 14/14 vocab.json 0.00 GB (total 29.2 GB, 0s)\n"}
+,{"stream_name":"stdout","time":9112.638576897,"data":"  \n"}
+,{"stream_name":"stdout","time":9134.809624422,"data":"  Loading checkpoint shards:   0%|          | 0/6 [00:00\u003c?, ?it/s]\n"}
+,{"stream_name":"stdout","time":9158.148185485,"data":"  Loading checkpoint shards:  17%|█▋        | 1/6 [00:22\u003c01:50, 22.19s/it]\n"}
+,{"stream_name":"stdout","time":9181.703969518,"data":"  Loading checkpoint shards:  33%|███▎      | 2/6 [00:45\u003c01:31, 22.85s/it]\n"}
+,{"stream_name":"stdout","time":9205.340229073,"data":"  Loading checkpoint shards:  50%|█████     | 3/6 [01:09\u003c01:09, 23.18s/it]\n"}
+,{"stream_name":"stdout","time":9228.393389558,"data":"  Loading checkpoint shards:  67%|██████▋   | 4/6 [01:32\u003c00:46, 23.35s/it]\n"}
+,{"stream_name":"stdout","time":9250.738238673,"data":"  Loading checkpoint shards:  83%|████████▎ | 5/6 [01:55\u003c00:23, 23.25s/it]\n"}
+,{"stream_name":"stdout","time":9250.739281118,"data":"  Loading checkpoint shards: 100%|██████████| 6/6 [02:18\u003c00:00, 22.94s/it]\n"}
+,{"stream_name":"stdout","time":9250.740145977,"data":"  Loading checkpoint shards: 100%|██████████| 6/6 [02:18\u003c00:00, 23.02s/it]\n"}
+,{"stream_name":"stdout","time":9250.888338158,"data":"  olmo7 allenai/OLMo-2-1124-7B 7df9a82518 layers 32 d 4096 patch/read keys ['emb', 8, 11] RSS 1.7 GB\n"}
+,{"stream_name":"stdout","time":9254.971804364,"data":"  dev olmo7 queries 294 layer index None\n"}
+,{"stream_name":"stdout","time":9256.894656527,"data":"  0 294 154s, 1.8s for 14 rows, RSS 2.4 GB\n"}
+,{"stream_name":"stdout","time":9273.030072371,"data":"  20 294 170s, 0.8s for 14 rows, RSS 2.4 GB\n"}
+,{"stream_name":"stdout","time":9289.464959574,"data":"  40 294 187s, 0.8s for 14 rows, RSS 2.4 GB\n"}
+,{"stream_name":"stdout","time":9304.952660278,"data":"  60 294 202s, 0.8s for 14 rows, RSS 2.4 GB\n"}
+,{"stream_name":"stdout","time":9320.244746348,"data":"  80 294 217s, 0.8s for 14 rows, RSS 2.4 GB\n"}
+,{"stream_name":"stdout","time":9335.615626466,"data":"  100 294 233s, 0.8s for 14 rows, RSS 2.4 GB\n"}
+,{"stream_name":"stdout","time":9351.529109752,"data":"  120 294 249s, 0.8s for 14 rows, RSS 2.4 GB\n"}
+,{"stream_name":"stdout","time":9367.575664516,"data":"  140 294 265s, 0.8s for 14 rows, RSS 2.4 GB\n"}
+,{"stream_name":"stdout","time":9383.406123561,"data":"  160 294 281s, 0.8s for 14 rows, RSS 2.4 GB\n"}
+,{"stream_name":"stdout","time":9398.917660695,"data":"  180 294 296s, 0.8s for 14 rows, RSS 2.4 GB\n"}
+,{"stream_name":"stdout","time":9416.058246674,"data":"  200 294 313s, 2.4s for 14 rows, RSS 2.4 GB\n"}
+,{"stream_name":"stdout","time":9463.788819019,"data":"  220 294 361s, 2.4s for 14 rows, RSS 2.4 GB\n"}
+,{"stream_name":"stdout","time":9509.221438741,"data":"  240 294 406s, 0.3s for 6 rows, RSS 2.4 GB\n"}
+,{"stream_name":"stdout","time":9516.038624545,"data":"  260 294 413s, 0.3s for 6 rows, RSS 2.4 GB\n"}
+,{"stream_name":"stdout","time":9527.703162309,"data":"  280 294 425s, 0.8s for 14 rows, RSS 2.4 GB\n"}
+,{"stream_name":"stdout","time":9537.882675344,"data":"  saved /kaggle/working/glyph_results/dev_olmo7.json 838628 bytes\n"}
+,{"stream_name":"stdout","time":9537.883682589,"data":"  done olmo7 dev 435s\n"}
+,{"stream_name":"stdout","time":9541.841889588,"data":"[end] dev_olmo7 at 03:33:30 (7.4 min)\n"}
+,{"stream_name":"stdout","time":9541.842993503,"data":"[start] prereg at 03:33:30 (est 1 min, 2.63 h used)\n"}
+,{"stream_name":"stdout","time":9545.564197884,"data":"  saved /kaggle/working/glyph_results/frozen5.json 1294 bytes\n"}
+,{"stream_name":"stdout","time":9545.56566519,"data":"  frozen li 0 {0: 0.8504672897196262, 1: 0.8016304347826086, 2: 0.7744565217391305}\n"}
+,{"stream_name":"stdout","time":9545.566837576,"data":"  {\n"}
+,{"stream_name":"stdout","time":9545.568087396,"data":"   \"qwen7\": [\n"}
+,{"stream_name":"stdout","time":9545.569143714,"data":"    \"t1|agent\",\n"}
+,{"stream_name":"stdout","time":9545.570123655,"data":"    \"t1|mod\",\n"}
+,{"stream_name":"stdout","time":9545.571150357,"data":"    \"t1|patient\",\n"}
+,{"stream_name":"stdout","time":9545.572251429,"data":"    \"t1|pol\",\n"}
+,{"stream_name":"stdout","time":9545.573328041,"data":"    \"t2|first\",\n"}
+,{"stream_name":"stdout","time":9545.574807823,"data":"    \"t4|where\",\n"}
+,{"stream_name":"stdout","time":9545.575995132,"data":"    \"t5|status\"\n"}
+,{"stream_name":"stdout","time":9545.577135298,"data":"   ],\n"}
+,{"stream_name":"stdout","time":9545.578079734,"data":"   \"olmo7\": [\n"}
+,{"stream_name":"stdout","time":9545.578926985,"data":"    \"t1|agent\",\n"}
+,{"stream_name":"stdout","time":9545.579772303,"data":"    \"t1|patient\",\n"}
+,{"stream_name":"stdout","time":9545.580487046,"data":"    \"t1|pol\",\n"}
+,{"stream_name":"stdout","time":9545.58137514,"data":"    \"t4|where\",\n"}
+,{"stream_name":"stdout","time":9545.582212604,"data":"    \"t5|status\"\n"}
+,{"stream_name":"stdout","time":9545.582995227,"data":"   ]\n"}
+,{"stream_name":"stdout","time":9545.583906068,"data":"  }\n"}
+,{"stream_name":"stdout","time":9546.30543407,"data":"[end] prereg at 03:33:35 (0.1 min)\n"}
+,{"stream_name":"stdout","time":9546.30635806,"data":"[start] test_qwen7 at 03:33:35 (est 90 min, 2.64 h used)\n"}
+,{"stream_name":"stdout","time":9546.436768054,"data":"[model] qwen7: Qwen/Qwen2.5-7B@d149729398, 11 files\n"}
+,{"stream_name":"stdout","time":9546.438122298,"data":"[model] qwen7: 1/11 config.json 0.00 GB (total 0.0 GB, 0s)\n"}
+,{"stream_name":"stdout","time":9546.439413938,"data":"[model] qwen7: 2/11 generation_config.json 0.00 GB (total 0.0 GB, 0s)\n"}
+,{"stream_name":"stdout","time":9546.44087473,"data":"[model] qwen7: 3/11 merges.txt 0.00 GB (total 0.0 GB, 0s)\n"}
+,{"stream_name":"stdout","time":9546.442105542,"data":"[model] qwen7: 4/11 model-00001-of-00004.safetensors 3.95 GB (total 3.9 GB, 0s)\n"}
+,{"stream_name":"stdout","time":9546.44331096,"data":"[model] qwen7: 5/11 model-00002-of-00004.safetensors 3.86 GB (total 7.8 GB, 0s)\n"}
+,{"stream_name":"stdout","time":9546.444581049,"data":"[model] qwen7: 6/11 model-00003-of-00004.safetensors 3.86 GB (total 11.7 GB, 0s)\n"}
+,{"stream_name":"stdout","time":9546.445623012,"data":"[model] qwen7: 7/11 model-00004-of-00004.safetensors 3.56 GB (total 15.2 GB, 0s)\n"}
+,{"stream_name":"stdout","time":9546.446665385,"data":"[model] qwen7: 8/11 model.safetensors.index.json 0.00 GB (total 15.2 GB, 0s)\n"}
+,{"stream_name":"stdout","time":9546.447832613,"data":"[model] qwen7: 9/11 tokenizer.json 0.01 GB (total 15.2 GB, 0s)\n"}
+,{"stream_name":"stdout","time":9546.448931922,"data":"[model] qwen7: 10/11 tokenizer_config.json 0.00 GB (total 15.2 GB, 0s)\n"}
+,{"stream_name":"stdout","time":9546.450003748,"data":"[model] qwen7: 11/11 vocab.json 0.00 GB (total 15.2 GB, 0s)\n"}
+,{"stream_name":"stdout","time":9560.014349072,"data":"  \n"}
+,{"stream_name":"stdout","time":9576.739896191,"data":"  Loading checkpoint shards:   0%|          | 0/4 [00:00\u003c?, ?it/s]\n"}
+,{"stream_name":"stdout","time":9595.217110178,"data":"  Loading checkpoint shards:  25%|██▌       | 1/4 [00:16\u003c00:50, 16.71s/it]\n"}
+,{"stream_name":"stdout","time":9613.069942063,"data":"  Loading checkpoint shards:  50%|█████     | 2/4 [00:35\u003c00:35, 17.76s/it]\n"}
+,{"stream_name":"stdout","time":9623.819817113,"data":"  Loading checkpoint shards:  75%|███████▌  | 3/4 [00:53\u003c00:17, 17.79s/it]\n"}
+,{"stream_name":"stdout","time":9623.82060304,"data":"  Loading checkpoint shards: 100%|██████████| 4/4 [01:03\u003c00:00, 15.02s/it]\n"}
+,{"stream_name":"stdout","time":9623.821345793,"data":"  Loading checkpoint shards: 100%|██████████| 4/4 [01:03\u003c00:00, 15.95s/it]\n"}
+,{"stream_name":"stdout","time":9623.96611448,"data":"  qwen7 Qwen/Qwen2.5-7B d149729398 layers 28 d 3584 patch/read keys ['emb', 7, 9] RSS 1.8 GB\n"}
+,{"stream_name":"stdout","time":9627.788177319,"data":"  test qwen7 queries 1556 layer index 0\n"}
+,{"stream_name":"stdout","time":9630.967746177,"data":"  0 1556 81s, 3.1s for 44 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":9676.014395729,"data":"  20 1556 126s, 2.2s for 44 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":9719.461671757,"data":"  40 1556 170s, 2.2s for 44 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":9763.811377341,"data":"  60 1556 214s, 2.2s for 44 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":9807.503705138,"data":"  80 1556 258s, 2.2s for 44 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":9851.597518574,"data":"  100 1556 302s, 2.2s for 44 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":9895.453094457,"data":"  120 1556 346s, 2.2s for 44 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":9939.323002319,"data":"  140 1556 390s, 2.2s for 44 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":9983.145891642,"data":"  160 1556 433s, 2.2s for 44 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":10027.014318895,"data":"  180 1556 477s, 2.2s for 44 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":10070.879977813,"data":"  200 1556 521s, 2.2s for 44 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":10114.648082173,"data":"  220 1556 565s, 2.2s for 44 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":10158.465158391,"data":"  240 1556 609s, 2.2s for 44 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":10202.314209886,"data":"  260 1556 653s, 2.2s for 44 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":10246.089431792,"data":"  280 1556 696s, 2.2s for 44 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":10289.876937393,"data":"  300 1556 740s, 2.2s for 44 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":10333.604305161,"data":"  320 1556 784s, 2.2s for 44 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":10377.57646649,"data":"  340 1556 828s, 2.2s for 44 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":10421.189882884,"data":"  360 1556 871s, 2.2s for 44 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":10465.047575164,"data":"  380 1556 915s, 2.2s for 44 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":10508.68936571,"data":"  400 1556 959s, 2.2s for 44 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":10552.334448332,"data":"  420 1556 1003s, 2.2s for 44 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":10596.166727161,"data":"  440 1556 1046s, 2.2s for 44 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":10639.89568127,"data":"  460 1556 1090s, 2.2s for 44 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":10683.635363298,"data":"  480 1556 1134s, 2.2s for 44 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":10727.258696819,"data":"  500 1556 1177s, 2.2s for 44 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":10771.058333331,"data":"  520 1556 1221s, 2.2s for 44 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":10814.828558365,"data":"  540 1556 1265s, 2.2s for 44 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":10858.524707804,"data":"  560 1556 1309s, 2.2s for 44 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":10902.23887112,"data":"  580 1556 1352s, 2.2s for 44 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":10945.872957872,"data":"  600 1556 1396s, 2.2s for 44 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":10989.692025767,"data":"  620 1556 1440s, 2.2s for 44 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":11033.427514742,"data":"  640 1556 1484s, 2.2s for 44 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":11077.161214811,"data":"  660 1556 1527s, 2.2s for 44 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":11120.897297489,"data":"  680 1556 1571s, 2.2s for 44 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":11164.683400671,"data":"  700 1556 1615s, 2.2s for 44 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":11208.510075085,"data":"  720 1556 1659s, 2.2s for 44 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":11252.197960841,"data":"  740 1556 1702s, 2.2s for 44 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":11295.900076243,"data":"  760 1556 1746s, 2.2s for 44 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":11339.560393105,"data":"  780 1556 1790s, 2.2s for 44 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":11383.343435772,"data":"  800 1556 1834s, 2.2s for 44 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":11427.0868897,"data":"  820 1556 1877s, 2.2s for 44 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":11470.84242158,"data":"  840 1556 1921s, 2.2s for 44 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":11514.55068066,"data":"  860 1556 1965s, 2.2s for 44 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":11558.298641577,"data":"  880 1556 2009s, 2.2s for 44 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":11602.740915353,"data":"  900 1556 2053s, 2.2s for 44 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":11646.434483254,"data":"  920 1556 2097s, 2.2s for 44 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":11690.246775443,"data":"  940 1556 2140s, 2.2s for 44 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":11733.947092824,"data":"  960 1556 2184s, 2.2s for 44 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":11777.666451671,"data":"  980 1556 2228s, 2.2s for 44 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":11821.237357922,"data":"  1000 1556 2271s, 2.1s for 42 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":11862.744573579,"data":"  1020 1556 2313s, 2.0s for 42 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":11903.690912633,"data":"  1040 1556 2354s, 2.0s for 42 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":11944.719167669,"data":"  1060 1556 2395s, 2.0s for 42 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":11985.892913407,"data":"  1080 1556 2436s, 2.1s for 42 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":12027.615689703,"data":"  1100 1556 2478s, 2.1s for 42 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":12068.590219929,"data":"  1120 1556 2519s, 2.0s for 42 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":12109.680006124,"data":"  1140 1556 2560s, 2.0s for 42 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":12151.229288266,"data":"  1160 1556 2601s, 2.1s for 42 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":12192.486051876,"data":"  1180 1556 2643s, 2.0s for 42 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":12233.431095765,"data":"  1200 1556 2684s, 2.0s for 42 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":12274.637769908,"data":"  1220 1556 2725s, 2.1s for 42 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":12316.293608065,"data":"  1240 1556 2766s, 2.1s for 42 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":12355.35908096,"data":"  1260 1556 2806s, 1.9s for 40 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":12393.254474497,"data":"  1280 1556 2843s, 1.8s for 38 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":12430.778671299,"data":"  1300 1556 2881s, 1.9s for 40 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":12468.642009105,"data":"  1320 1556 2919s, 1.9s for 40 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":12506.379067904,"data":"  1340 1556 2957s, 1.9s for 40 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":12544.027424399,"data":"  1360 1556 2994s, 1.9s for 40 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":12582.019349254,"data":"  1380 1556 3032s, 1.9s for 40 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":12619.352737202,"data":"  1400 1556 3070s, 1.9s for 40 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":12656.721443958,"data":"  1420 1556 3107s, 1.8s for 38 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":12694.102569856,"data":"  1440 1556 3144s, 1.8s for 38 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":12731.661342188,"data":"  1460 1556 3182s, 1.7s for 36 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":12766.275359248,"data":"  1480 1556 3216s, 1.7s for 36 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":12800.858705281,"data":"  1500 1556 3251s, 1.7s for 36 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":12835.387724673,"data":"  1520 1556 3286s, 1.7s for 36 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":12869.862028641,"data":"  1540 1556 3320s, 1.7s for 36 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":12896.783132453,"data":"  saved /kaggle/working/glyph_results/test_qwen7.json 13762930 bytes\n"}
+,{"stream_name":"stdout","time":12896.784099087,"data":"  done qwen7 test 3347s\n"}
+,{"stream_name":"stdout","time":12900.613590554,"data":"[end] test_qwen7 at 04:29:29 (55.9 min)\n"}
+,{"stream_name":"stdout","time":12900.614704574,"data":"[start] test_olmo7 at 04:29:29 (est 90 min, 3.57 h used)\n"}
+,{"stream_name":"stdout","time":12900.730719141,"data":"[model] olmo7: allenai/OLMo-2-1124-7B@7df9a82518, 14 files\n"}
+,{"stream_name":"stdout","time":12900.731489363,"data":"[model] olmo7: 1/14 config.json 0.00 GB (total 0.0 GB, 0s)\n"}
+,{"stream_name":"stdout","time":12900.732830733,"data":"[model] olmo7: 2/14 generation_config.json 0.00 GB (total 0.0 GB, 0s)\n"}
+,{"stream_name":"stdout","time":12900.734051338,"data":"[model] olmo7: 3/14 merges.txt 0.00 GB (total 0.0 GB, 0s)\n"}
+,{"stream_name":"stdout","time":12900.735303934,"data":"[model] olmo7: 4/14 model-00001-of-00006.safetensors 4.95 GB (total 5.0 GB, 0s)\n"}
+,{"stream_name":"stdout","time":12900.736428745,"data":"[model] olmo7: 5/14 model-00002-of-00006.safetensors 4.99 GB (total 9.9 GB, 0s)\n"}
+,{"stream_name":"stdout","time":12900.737671003,"data":"[model] olmo7: 6/14 model-00003-of-00006.safetensors 4.92 GB (total 14.9 GB, 0s)\n"}
+,{"stream_name":"stdout","time":12900.738994072,"data":"[model] olmo7: 7/14 model-00004-of-00006.safetensors 4.86 GB (total 19.7 GB, 0s)\n"}
+,{"stream_name":"stdout","time":12900.740288752,"data":"[model] olmo7: 8/14 model-00005-of-00006.safetensors 4.86 GB (total 24.6 GB, 0s)\n"}
+,{"stream_name":"stdout","time":12900.741245415,"data":"[model] olmo7: 9/14 model-00006-of-00006.safetensors 4.61 GB (total 29.2 GB, 0s)\n"}
+,{"stream_name":"stdout","time":12900.742249699,"data":"[model] olmo7: 10/14 model.safetensors.index.json 0.00 GB (total 29.2 GB, 0s)\n"}
+,{"stream_name":"stdout","time":12900.743191437,"data":"[model] olmo7: 11/14 special_tokens_map.json 0.00 GB (total 29.2 GB, 0s)\n"}
+,{"stream_name":"stdout","time":12900.74424764,"data":"[model] olmo7: 12/14 tokenizer.json 0.01 GB (total 29.2 GB, 0s)\n"}
+,{"stream_name":"stdout","time":12900.74523155,"data":"[model] olmo7: 13/14 tokenizer_config.json 0.00 GB (total 29.2 GB, 0s)\n"}
+,{"stream_name":"stdout","time":12900.746217159,"data":"[model] olmo7: 14/14 vocab.json 0.00 GB (total 29.2 GB, 0s)\n"}
+,{"stream_name":"stdout","time":12914.256581878,"data":"  \n"}
+,{"stream_name":"stdout","time":12936.648835254,"data":"  Loading checkpoint shards:   0%|          | 0/6 [00:00\u003c?, ?it/s]\n"}
+,{"stream_name":"stdout","time":12958.234115978,"data":"  Loading checkpoint shards:  17%|█▋        | 1/6 [00:22\u003c01:51, 22.37s/it]\n"}
+,{"stream_name":"stdout","time":12979.673298315,"data":"  Loading checkpoint shards:  33%|███▎      | 2/6 [00:43\u003c01:27, 21.92s/it]\n"}
+,{"stream_name":"stdout","time":13001.298335937,"data":"  Loading checkpoint shards:  50%|█████     | 3/6 [01:05\u003c01:05, 21.69s/it]\n"}
+,{"stream_name":"stdout","time":13022.787617374,"data":"  Loading checkpoint shards:  67%|██████▋   | 4/6 [01:27\u003c00:43, 21.67s/it]\n"}
+,{"stream_name":"stdout","time":13042.885311061,"data":"  Loading checkpoint shards:  83%|████████▎ | 5/6 [01:48\u003c00:21, 21.60s/it]\n"}
+,{"stream_name":"stdout","time":13042.886237463,"data":"  Loading checkpoint shards: 100%|██████████| 6/6 [02:08\u003c00:00, 21.10s/it]\n"}
+,{"stream_name":"stdout","time":13042.88707976,"data":"  Loading checkpoint shards: 100%|██████████| 6/6 [02:08\u003c00:00, 21.44s/it]\n"}
+,{"stream_name":"stdout","time":13043.058851802,"data":"  olmo7 allenai/OLMo-2-1124-7B 7df9a82518 layers 32 d 4096 patch/read keys ['emb', 8, 11] RSS 1.7 GB\n"}
+,{"stream_name":"stdout","time":13046.932691423,"data":"  test olmo7 queries 1056 layer index 0\n"}
+,{"stream_name":"stdout","time":13049.920486523,"data":"  0 1056 146s, 3.0s for 44 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":13098.895200836,"data":"  20 1056 195s, 2.4s for 44 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":13146.26145955,"data":"  40 1056 242s, 2.4s for 44 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":13194.896040681,"data":"  60 1056 291s, 2.4s for 44 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":13242.740879691,"data":"  80 1056 338s, 2.4s for 44 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":13291.174596548,"data":"  100 1056 387s, 2.4s for 44 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":13339.224749113,"data":"  120 1056 435s, 2.4s for 44 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":13387.481053436,"data":"  140 1056 483s, 2.4s for 44 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":13435.589201539,"data":"  160 1056 531s, 2.4s for 44 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":13483.561314866,"data":"  180 1056 579s, 2.4s for 44 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":13531.680318129,"data":"  200 1056 627s, 2.4s for 44 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":13579.739458748,"data":"  220 1056 675s, 2.4s for 44 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":13627.898200081,"data":"  240 1056 724s, 2.4s for 44 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":13675.946164076,"data":"  260 1056 772s, 2.4s for 44 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":13724.243650141,"data":"  280 1056 820s, 2.4s for 44 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":13772.272466222,"data":"  300 1056 868s, 2.4s for 44 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":13820.482653577,"data":"  320 1056 916s, 2.4s for 44 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":13868.596417775,"data":"  340 1056 964s, 2.4s for 44 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":13916.758454923,"data":"  360 1056 1012s, 2.4s for 44 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":13964.852565176,"data":"  380 1056 1060s, 2.4s for 44 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":14012.933661792,"data":"  400 1056 1109s, 2.4s for 44 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":14061.110442223,"data":"  420 1056 1157s, 2.4s for 44 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":14109.301795503,"data":"  440 1056 1205s, 2.4s for 44 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":14157.40259802,"data":"  460 1056 1253s, 2.4s for 44 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":14205.565105104,"data":"  480 1056 1301s, 2.4s for 44 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":14253.690273746,"data":"  500 1056 1349s, 2.4s for 44 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":14301.926525224,"data":"  520 1056 1398s, 2.4s for 44 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":14350.74489874,"data":"  540 1056 1446s, 2.4s for 44 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":14398.825853368,"data":"  560 1056 1494s, 2.4s for 44 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":14446.891739457,"data":"  580 1056 1543s, 2.4s for 44 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":14494.984205526,"data":"  600 1056 1591s, 2.4s for 44 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":14542.898626049,"data":"  620 1056 1639s, 2.4s for 44 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":14591.211513349,"data":"  640 1056 1687s, 2.4s for 44 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":14639.312867775,"data":"  660 1056 1735s, 2.4s for 44 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":14687.406071836,"data":"  680 1056 1783s, 2.4s for 44 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":14735.48965141,"data":"  700 1056 1831s, 2.4s for 44 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":14783.776940694,"data":"  720 1056 1879s, 2.4s for 44 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":14831.669967565,"data":"  740 1056 1927s, 2.4s for 44 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":14855.078732165,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":14856.840929094,"data":"    overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":14857.171620274,"data":"    non-finite float16 logits (olmo7) B=6; retrying per-row\n"}
+,{"stream_name":"stdout","time":14857.377094235,"data":"    overflow at t4|where B=6: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":14859.116626817,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":14860.835620361,"data":"    overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":14861.277476967,"data":"    non-finite float16 logits (olmo7) B=8; retrying per-row\n"}
+,{"stream_name":"stdout","time":14861.611383236,"data":"    overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":14863.396873311,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":14865.084136183,"data":"    overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":14865.521725362,"data":"    non-finite float16 logits (olmo7) B=8; retrying per-row\n"}
+,{"stream_name":"stdout","time":14865.841797302,"data":"    overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":14867.59172931,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":14869.305614659,"data":"    overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":14869.748387053,"data":"    non-finite float16 logits (olmo7) B=8; retrying per-row\n"}
+,{"stream_name":"stdout","time":14870.051344431,"data":"    overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":14871.78971197,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":14873.522690797,"data":"    overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":14873.962688249,"data":"    non-finite float16 logits (olmo7) B=8; retrying per-row\n"}
+,{"stream_name":"stdout","time":14874.269708947,"data":"    overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":14876.004683921,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":14877.731863522,"data":"    overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":14878.06288068,"data":"    non-finite float16 logits (olmo7) B=6; retrying per-row\n"}
+,{"stream_name":"stdout","time":14878.269077781,"data":"    overflow at t4|where B=6: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":14880.008720012,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":14881.769459169,"data":"    overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":14882.098992444,"data":"    non-finite float16 logits (olmo7) B=6; retrying per-row\n"}
+,{"stream_name":"stdout","time":14882.305089164,"data":"    overflow at t4|where B=6: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":14884.032084642,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":14885.787616131,"data":"    overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":14886.112716613,"data":"    non-finite float16 logits (olmo7) B=6; retrying per-row\n"}
+,{"stream_name":"stdout","time":14886.319652923,"data":"    overflow at t4|where B=6: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":14888.033874351,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":14889.788900438,"data":"    overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":14890.112924335,"data":"    non-finite float16 logits (olmo7) B=6; retrying per-row\n"}
+,{"stream_name":"stdout","time":14890.321355524,"data":"    overflow at t4|where B=6: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":14892.035642524,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":14893.787366171,"data":"    overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":14894.18950254,"data":"    non-finite float16 logits (olmo7) B=8; retrying per-row\n"}
+,{"stream_name":"stdout","time":14894.499643695,"data":"    overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":14896.217697395,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":14897.931995699,"data":"    overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":14898.367791119,"data":"    non-finite float16 logits (olmo7) B=8; retrying per-row\n"}
+,{"stream_name":"stdout","time":14898.673632903,"data":"    overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":14898.6777679,"data":"  760 1056 1994s, 4.2s for 40 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":14900.387635883,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":14902.141698887,"data":"    overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":14902.577614461,"data":"    non-finite float16 logits (olmo7) B=8; retrying per-row\n"}
+,{"stream_name":"stdout","time":14902.882601209,"data":"    overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":14904.582613029,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":14906.335525387,"data":"    overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":14906.770549573,"data":"    non-finite float16 logits (olmo7) B=8; retrying per-row\n"}
+,{"stream_name":"stdout","time":14907.075745532,"data":"    overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":14908.771511122,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":14910.48757469,"data":"    overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":14910.919632216,"data":"    non-finite float16 logits (olmo7) B=8; retrying per-row\n"}
+,{"stream_name":"stdout","time":14911.232221871,"data":"    overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":14912.935481559,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":14914.651960859,"data":"    overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":14915.089462863,"data":"    non-finite float16 logits (olmo7) B=8; retrying per-row\n"}
+,{"stream_name":"stdout","time":14915.390619491,"data":"    overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":14917.090067899,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":14918.838591969,"data":"    overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":14919.163581126,"data":"    non-finite float16 logits (olmo7) B=6; retrying per-row\n"}
+,{"stream_name":"stdout","time":14919.369711452,"data":"    overflow at t4|where B=6: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":14921.07585756,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":14922.812194011,"data":"    overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":14923.242640067,"data":"    non-finite float16 logits (olmo7) B=8; retrying per-row\n"}
+,{"stream_name":"stdout","time":14923.553241274,"data":"    overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":14925.297245116,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":14926.982636893,"data":"    overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":14927.417646821,"data":"    non-finite float16 logits (olmo7) B=8; retrying per-row\n"}
+,{"stream_name":"stdout","time":14927.724628476,"data":"    overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":14929.431638501,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":14931.166961088,"data":"    overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":14931.60362556,"data":"    non-finite float16 logits (olmo7) B=8; retrying per-row\n"}
+,{"stream_name":"stdout","time":14931.905636355,"data":"    overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":14933.620707563,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":14935.384692624,"data":"    overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":14935.71068944,"data":"    non-finite float16 logits (olmo7) B=6; retrying per-row\n"}
+,{"stream_name":"stdout","time":14935.917644008,"data":"    overflow at t4|where B=6: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":14937.62369343,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":14939.344949831,"data":"    overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":14939.777636963,"data":"    non-finite float16 logits (olmo7) B=8; retrying per-row\n"}
+,{"stream_name":"stdout","time":14940.087006254,"data":"    overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":14941.806911517,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":14943.528747357,"data":"    overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":14943.964903157,"data":"    non-finite float16 logits (olmo7) B=8; retrying per-row\n"}
+,{"stream_name":"stdout","time":14944.27120888,"data":"    overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":14945.991387636,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":14947.725527016,"data":"    overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":14948.054631649,"data":"    non-finite float16 logits (olmo7) B=6; retrying per-row\n"}
+,{"stream_name":"stdout","time":14948.260654906,"data":"    overflow at t4|where B=6: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":14949.978608555,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":14951.760488113,"data":"    overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":14952.085431428,"data":"    non-finite float16 logits (olmo7) B=6; retrying per-row\n"}
+,{"stream_name":"stdout","time":14952.292682476,"data":"    overflow at t4|where B=6: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":14954.011049574,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":14955.799434828,"data":"    overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":14956.209618844,"data":"    non-finite float16 logits (olmo7) B=8; retrying per-row\n"}
+,{"stream_name":"stdout","time":14956.509240886,"data":"    overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":14958.234154884,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":14959.955710692,"data":"    overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":14960.277687008,"data":"    non-finite float16 logits (olmo7) B=6; retrying per-row\n"}
+,{"stream_name":"stdout","time":14960.492387442,"data":"    overflow at t4|where B=6: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":14962.218226294,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":14963.93425456,"data":"    overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":14964.371423105,"data":"    non-finite float16 logits (olmo7) B=8; retrying per-row\n"}
+,{"stream_name":"stdout","time":14964.682418619,"data":"    overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":14966.409380589,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":14968.13467974,"data":"    overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":14968.574702315,"data":"    non-finite float16 logits (olmo7) B=8; retrying per-row\n"}
+,{"stream_name":"stdout","time":14968.875524914,"data":"    overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":14970.595255257,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":14972.376244445,"data":"    overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":14972.815632276,"data":"    non-finite float16 logits (olmo7) B=8; retrying per-row\n"}
+,{"stream_name":"stdout","time":14973.121263823,"data":"    overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":14974.836718591,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":14976.569424794,"data":"    overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":14976.999333706,"data":"    non-finite float16 logits (olmo7) B=8; retrying per-row\n"}
+,{"stream_name":"stdout","time":14977.309638591,"data":"    overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":14979.024363337,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":14980.777083947,"data":"    overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":14981.10671361,"data":"    non-finite float16 logits (olmo7) B=6; retrying per-row\n"}
+,{"stream_name":"stdout","time":14981.315108068,"data":"    overflow at t4|where B=6: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":14981.315135707,"data":"  780 1056 2077s, 4.0s for 38 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":14983.047027157,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":14984.80293058,"data":"    overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":14985.240583696,"data":"    non-finite float16 logits (olmo7) B=8; retrying per-row\n"}
+,{"stream_name":"stdout","time":14985.545223008,"data":"    overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":14987.303421386,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":14988.990711237,"data":"    overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":14989.422947143,"data":"    non-finite float16 logits (olmo7) B=8; retrying per-row\n"}
+,{"stream_name":"stdout","time":14989.732688225,"data":"    overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":14991.442614497,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":14993.163611659,"data":"    overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":14993.605576681,"data":"    non-finite float16 logits (olmo7) B=8; retrying per-row\n"}
+,{"stream_name":"stdout","time":14993.905958783,"data":"    overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":14995.61862928,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":14997.349641198,"data":"    overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":14997.667613131,"data":"    non-finite float16 logits (olmo7) B=6; retrying per-row\n"}
+,{"stream_name":"stdout","time":14997.871637468,"data":"    overflow at t4|where B=6: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":14999.580696141,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":15001.386396819,"data":"    overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15001.728729748,"data":"    non-finite float16 logits (olmo7) B=6; retrying per-row\n"}
+,{"stream_name":"stdout","time":15001.930697087,"data":"    overflow at t4|where B=6: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15003.638378428,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":15005.377418917,"data":"    overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15005.815518921,"data":"    non-finite float16 logits (olmo7) B=8; retrying per-row\n"}
+,{"stream_name":"stdout","time":15006.117087611,"data":"    overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15007.818187421,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":15009.53903269,"data":"    overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15009.863038503,"data":"    non-finite float16 logits (olmo7) B=6; retrying per-row\n"}
+,{"stream_name":"stdout","time":15010.068618287,"data":"    overflow at t4|where B=6: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15011.774470742,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":15013.498379943,"data":"    overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15013.9277077,"data":"    non-finite float16 logits (olmo7) B=8; retrying per-row\n"}
+,{"stream_name":"stdout","time":15014.232977294,"data":"    overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15015.932434998,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":15017.718292256,"data":"    overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15018.010641364,"data":"    non-finite float16 logits (olmo7) B=6; retrying per-row\n"}
+,{"stream_name":"stdout","time":15018.214630565,"data":"    overflow at t4|where B=6: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15019.926613488,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":15021.654107307,"data":"    overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15021.977080385,"data":"    non-finite float16 logits (olmo7) B=6; retrying per-row\n"}
+,{"stream_name":"stdout","time":15022.179125023,"data":"    overflow at t4|where B=6: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15023.884934203,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":15025.611012809,"data":"    overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15025.93807158,"data":"    non-finite float16 logits (olmo7) B=6; retrying per-row\n"}
+,{"stream_name":"stdout","time":15026.141622977,"data":"    overflow at t4|where B=6: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15045.212015139,"data":"  800 1056 2141s, 2.2s for 40 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":15053.338896357,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":15055.034577681,"data":"    overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15055.363710171,"data":"    non-finite float16 logits (olmo7) B=6; retrying per-row\n"}
+,{"stream_name":"stdout","time":15055.565989896,"data":"    overflow at t4|where B=6: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15057.281774791,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":15059.022643519,"data":"    overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15059.457631906,"data":"    non-finite float16 logits (olmo7) B=8; retrying per-row\n"}
+,{"stream_name":"stdout","time":15059.759359306,"data":"    overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15061.469611615,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":15063.188716654,"data":"    overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15063.621581949,"data":"    non-finite float16 logits (olmo7) B=8; retrying per-row\n"}
+,{"stream_name":"stdout","time":15063.930627758,"data":"    overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15065.646687835,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":15067.365616334,"data":"    overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15067.797730914,"data":"    non-finite float16 logits (olmo7) B=8; retrying per-row\n"}
+,{"stream_name":"stdout","time":15068.106688543,"data":"    overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15069.81464708,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":15071.559940245,"data":"    overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15071.996546381,"data":"    non-finite float16 logits (olmo7) B=8; retrying per-row\n"}
+,{"stream_name":"stdout","time":15072.299627604,"data":"    overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15074.012910926,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":15075.753896913,"data":"    overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15076.07829036,"data":"    non-finite float16 logits (olmo7) B=6; retrying per-row\n"}
+,{"stream_name":"stdout","time":15076.282809755,"data":"    overflow at t4|where B=6: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15077.998618548,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":15079.723642,"data":"    overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15080.049189308,"data":"    non-finite float16 logits (olmo7) B=6; retrying per-row\n"}
+,{"stream_name":"stdout","time":15080.255438292,"data":"    overflow at t4|where B=6: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15081.966619017,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":15083.735340834,"data":"    overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15084.121641802,"data":"    non-finite float16 logits (olmo7) B=8; retrying per-row\n"}
+,{"stream_name":"stdout","time":15084.428641472,"data":"    overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15086.134345648,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":15087.878617637,"data":"    overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15088.195270327,"data":"    non-finite float16 logits (olmo7) B=6; retrying per-row\n"}
+,{"stream_name":"stdout","time":15088.399023875,"data":"    overflow at t4|where B=6: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15090.110699577,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":15091.860614136,"data":"    overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15092.293026442,"data":"    non-finite float16 logits (olmo7) B=8; retrying per-row\n"}
+,{"stream_name":"stdout","time":15092.607926224,"data":"    overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15094.321615529,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":15096.046414394,"data":"    overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15096.368590557,"data":"    non-finite float16 logits (olmo7) B=6; retrying per-row\n"}
+,{"stream_name":"stdout","time":15096.570638354,"data":"    overflow at t4|where B=6: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15098.284449946,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":15100.012625471,"data":"    overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15100.441649752,"data":"    non-finite float16 logits (olmo7) B=8; retrying per-row\n"}
+,{"stream_name":"stdout","time":15100.743926772,"data":"    overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15102.448721119,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":15104.210743871,"data":"    overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15104.642605731,"data":"    non-finite float16 logits (olmo7) B=8; retrying per-row\n"}
+,{"stream_name":"stdout","time":15104.947124173,"data":"    overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15106.660142673,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":15108.3707145,"data":"    overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15108.798615451,"data":"    non-finite float16 logits (olmo7) B=8; retrying per-row\n"}
+,{"stream_name":"stdout","time":15109.10970905,"data":"    overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15110.830685767,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":15112.560606316,"data":"    overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15112.998165833,"data":"    non-finite float16 logits (olmo7) B=8; retrying per-row\n"}
+,{"stream_name":"stdout","time":15113.302687882,"data":"    overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15115.041105102,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":15116.732027116,"data":"    overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15117.166296076,"data":"    non-finite float16 logits (olmo7) B=8; retrying per-row\n"}
+,{"stream_name":"stdout","time":15117.472633532,"data":"    overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15119.636105925,"data":"  820 1056 2215s, 2.1s for 40 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":15144.806626129,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":15146.580095125,"data":"    overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15146.978637479,"data":"    non-finite float16 logits (olmo7) B=8; retrying per-row\n"}
+,{"stream_name":"stdout","time":15147.281080575,"data":"    overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15149.003914843,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":15150.710946638,"data":"    overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15151.034604554,"data":"    non-finite float16 logits (olmo7) B=6; retrying per-row\n"}
+,{"stream_name":"stdout","time":15151.236915769,"data":"    overflow at t4|where B=6: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15166.250653538,"data":"  840 1056 2262s, 2.2s for 40 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":15178.681862318,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":15180.361038336,"data":"    overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15180.793122444,"data":"    non-finite float16 logits (olmo7) B=8; retrying per-row\n"}
+,{"stream_name":"stdout","time":15181.119640828,"data":"    overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15182.83918496,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":15184.547602567,"data":"    overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15184.98470873,"data":"    non-finite float16 logits (olmo7) B=8; retrying per-row\n"}
+,{"stream_name":"stdout","time":15185.299286536,"data":"    overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15187.025618509,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":15188.738673432,"data":"    overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15189.070627928,"data":"    non-finite float16 logits (olmo7) B=6; retrying per-row\n"}
+,{"stream_name":"stdout","time":15189.269676859,"data":"    overflow at t4|where B=6: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15190.992616432,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":15192.748614813,"data":"    overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15193.183721922,"data":"    non-finite float16 logits (olmo7) B=8; retrying per-row\n"}
+,{"stream_name":"stdout","time":15193.492455391,"data":"    overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15195.202346735,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":15196.94470091,"data":"    overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15197.272619949,"data":"    non-finite float16 logits (olmo7) B=6; retrying per-row\n"}
+,{"stream_name":"stdout","time":15197.476164177,"data":"    overflow at t4|where B=6: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15199.196696639,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":15200.907729172,"data":"    overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15201.367144874,"data":"    non-finite float16 logits (olmo7) B=8; retrying per-row\n"}
+,{"stream_name":"stdout","time":15201.697133114,"data":"    overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15203.412250832,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":15205.126628968,"data":"    overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15205.564892953,"data":"    non-finite float16 logits (olmo7) B=8; retrying per-row\n"}
+,{"stream_name":"stdout","time":15205.878066846,"data":"    overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15207.598610766,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":15209.349063369,"data":"    overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15209.639071954,"data":"    non-finite float16 logits (olmo7) B=6; retrying per-row\n"}
+,{"stream_name":"stdout","time":15209.842631004,"data":"    overflow at t4|where B=6: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15211.557630184,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":15213.29050832,"data":"    overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15213.623459967,"data":"    non-finite float16 logits (olmo7) B=6; retrying per-row\n"}
+,{"stream_name":"stdout","time":15213.828648073,"data":"    overflow at t4|where B=6: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15215.535423276,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":15217.249479772,"data":"    overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15217.687493624,"data":"    non-finite float16 logits (olmo7) B=8; retrying per-row\n"}
+,{"stream_name":"stdout","time":15217.994622656,"data":"    overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15219.711619154,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":15221.454605096,"data":"    overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15221.781330333,"data":"    non-finite float16 logits (olmo7) B=6; retrying per-row\n"}
+,{"stream_name":"stdout","time":15221.983525198,"data":"    overflow at t4|where B=6: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15223.697907391,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":15225.420023043,"data":"    overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15225.85415178,"data":"    non-finite float16 logits (olmo7) B=8; retrying per-row\n"}
+,{"stream_name":"stdout","time":15226.157968383,"data":"    overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15227.86963255,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":15229.584335143,"data":"    overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15230.01919195,"data":"    non-finite float16 logits (olmo7) B=8; retrying per-row\n"}
+,{"stream_name":"stdout","time":15230.330436562,"data":"    overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15232.039988659,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":15233.747697887,"data":"    overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15234.181601082,"data":"    non-finite float16 logits (olmo7) B=8; retrying per-row\n"}
+,{"stream_name":"stdout","time":15234.488094674,"data":"    overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15236.1981677,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":15237.929002241,"data":"    overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15238.366698524,"data":"    non-finite float16 logits (olmo7) B=8; retrying per-row\n"}
+,{"stream_name":"stdout","time":15238.668649815,"data":"    overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15238.668689303,"data":"  860 1056 2334s, 4.2s for 40 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":15240.41720172,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":15242.131058605,"data":"    overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15242.461999618,"data":"    non-finite float16 logits (olmo7) B=6; retrying per-row\n"}
+,{"stream_name":"stdout","time":15242.663057015,"data":"    overflow at t4|where B=6: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15244.371512659,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":15246.081639456,"data":"    overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15246.517619081,"data":"    non-finite float16 logits (olmo7) B=8; retrying per-row\n"}
+,{"stream_name":"stdout","time":15246.817350479,"data":"    overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15248.527623174,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":15250.248043092,"data":"    overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15250.680171491,"data":"    non-finite float16 logits (olmo7) B=8; retrying per-row\n"}
+,{"stream_name":"stdout","time":15250.985613837,"data":"    overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15252.691185984,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":15254.405619097,"data":"    overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15254.842150566,"data":"    non-finite float16 logits (olmo7) B=8; retrying per-row\n"}
+,{"stream_name":"stdout","time":15255.151708374,"data":"    overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15256.860608127,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":15258.566664091,"data":"    overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15258.993617656,"data":"    non-finite float16 logits (olmo7) B=8; retrying per-row\n"}
+,{"stream_name":"stdout","time":15259.300592067,"data":"    overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15261.021232352,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":15262.775637824,"data":"    overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15263.211147697,"data":"    non-finite float16 logits (olmo7) B=8; retrying per-row\n"}
+,{"stream_name":"stdout","time":15263.515106274,"data":"    overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15265.222202921,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":15266.961692039,"data":"    overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15267.396630304,"data":"    non-finite float16 logits (olmo7) B=8; retrying per-row\n"}
+,{"stream_name":"stdout","time":15267.703255136,"data":"    overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15269.399058514,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":15271.161583158,"data":"    overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15271.556682691,"data":"    non-finite float16 logits (olmo7) B=8; retrying per-row\n"}
+,{"stream_name":"stdout","time":15271.863644765,"data":"    overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15273.575615466,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":15275.295941159,"data":"    overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15275.729907049,"data":"    non-finite float16 logits (olmo7) B=8; retrying per-row\n"}
+,{"stream_name":"stdout","time":15276.031507438,"data":"    overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15277.74526258,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":15279.481354359,"data":"    overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15279.917644163,"data":"    non-finite float16 logits (olmo7) B=8; retrying per-row\n"}
+,{"stream_name":"stdout","time":15280.228313042,"data":"    overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15281.943631587,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":15283.646732088,"data":"    overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15284.085380351,"data":"    non-finite float16 logits (olmo7) B=8; retrying per-row\n"}
+,{"stream_name":"stdout","time":15284.397646561,"data":"    overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15286.118618754,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":15287.824423376,"data":"    overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15288.150658213,"data":"    non-finite float16 logits (olmo7) B=6; retrying per-row\n"}
+,{"stream_name":"stdout","time":15288.355717552,"data":"    overflow at t4|where B=6: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15290.072667265,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":15291.842667874,"data":"    overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15292.167618851,"data":"    non-finite float16 logits (olmo7) B=6; retrying per-row\n"}
+,{"stream_name":"stdout","time":15292.375640949,"data":"    overflow at t4|where B=6: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15294.092486418,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":15295.835672394,"data":"    overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15296.269617101,"data":"    non-finite float16 logits (olmo7) B=8; retrying per-row\n"}
+,{"stream_name":"stdout","time":15296.577280889,"data":"    overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15298.299276357,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":15300.012636859,"data":"    overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15300.452688575,"data":"    non-finite float16 logits (olmo7) B=8; retrying per-row\n"}
+,{"stream_name":"stdout","time":15300.759736728,"data":"    overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15311.499628337,"data":"  880 1056 2407s, 2.2s for 40 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":15327.942968351,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":15329.682627606,"data":"    overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15330.005901547,"data":"    non-finite float16 logits (olmo7) B=6; retrying per-row\n"}
+,{"stream_name":"stdout","time":15330.212618009,"data":"    overflow at t4|where B=6: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15331.926648934,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":15333.636022948,"data":"    overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15334.066854152,"data":"    non-finite float16 logits (olmo7) B=8; retrying per-row\n"}
+,{"stream_name":"stdout","time":15334.380712739,"data":"    overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15357.685325894,"data":"  900 1056 2453s, 2.2s for 40 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":15361.417064329,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":15363.158675885,"data":"    overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15363.594963225,"data":"    non-finite float16 logits (olmo7) B=8; retrying per-row\n"}
+,{"stream_name":"stdout","time":15363.900648168,"data":"    overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15365.613611674,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":15367.329934442,"data":"    overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15367.655609505,"data":"    non-finite float16 logits (olmo7) B=6; retrying per-row\n"}
+,{"stream_name":"stdout","time":15367.856070284,"data":"    overflow at t4|where B=6: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15395.255426701,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":15396.930117222,"data":"    overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15397.2597979,"data":"    non-finite float16 logits (olmo7) B=6; retrying per-row\n"}
+,{"stream_name":"stdout","time":15397.465180146,"data":"    overflow at t4|where B=6: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15399.18906194,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":15400.905134389,"data":"    overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15401.356245896,"data":"    non-finite float16 logits (olmo7) B=8; retrying per-row\n"}
+,{"stream_name":"stdout","time":15401.663386219,"data":"    overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15407.977637953,"data":"  920 1056 2504s, 2.1s for 38 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":15428.576085833,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":15430.282109893,"data":"    overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15430.607772513,"data":"    non-finite float16 logits (olmo7) B=6; retrying per-row\n"}
+,{"stream_name":"stdout","time":15430.813745001,"data":"    overflow at t4|where B=6: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15432.526153449,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":15434.2342541,"data":"    overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15434.669690489,"data":"    non-finite float16 logits (olmo7) B=8; retrying per-row\n"}
+,{"stream_name":"stdout","time":15434.976907707,"data":"    overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15454.015695678,"data":"  940 1056 2550s, 2.1s for 38 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":15462.157421481,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":15463.838691803,"data":"    overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15464.160672819,"data":"    non-finite float16 logits (olmo7) B=6; retrying per-row\n"}
+,{"stream_name":"stdout","time":15464.362984923,"data":"    overflow at t4|where B=6: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15466.082606083,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":15467.808122484,"data":"    overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15468.243636425,"data":"    non-finite float16 logits (olmo7) B=8; retrying per-row\n"}
+,{"stream_name":"stdout","time":15468.547511038,"data":"    overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15470.276615246,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":15472.034088015,"data":"    overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15472.470847693,"data":"    non-finite float16 logits (olmo7) B=8; retrying per-row\n"}
+,{"stream_name":"stdout","time":15472.778625336,"data":"    overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15474.501621295,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":15476.249046111,"data":"    overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15476.690621789,"data":"    non-finite float16 logits (olmo7) B=8; retrying per-row\n"}
+,{"stream_name":"stdout","time":15476.993089787,"data":"    overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15478.723891175,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":15480.434925984,"data":"    overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15480.872684232,"data":"    non-finite float16 logits (olmo7) B=8; retrying per-row\n"}
+,{"stream_name":"stdout","time":15481.189983506,"data":"    overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15482.91457329,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":15484.62389197,"data":"    overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15485.060946275,"data":"    non-finite float16 logits (olmo7) B=8; retrying per-row\n"}
+,{"stream_name":"stdout","time":15485.365445454,"data":"    overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15487.086248183,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":15488.807668288,"data":"    overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15489.135395832,"data":"    non-finite float16 logits (olmo7) B=6; retrying per-row\n"}
+,{"stream_name":"stdout","time":15489.338867657,"data":"    overflow at t4|where B=6: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15491.071199673,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":15492.861027418,"data":"    overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15493.257910778,"data":"    non-finite float16 logits (olmo7) B=8; retrying per-row\n"}
+,{"stream_name":"stdout","time":15493.562473721,"data":"    overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15495.28411186,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":15497.036070717,"data":"    overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15497.467256986,"data":"    non-finite float16 logits (olmo7) B=8; retrying per-row\n"}
+,{"stream_name":"stdout","time":15497.772715652,"data":"    overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15499.489863253,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":15501.19763009,"data":"    overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15501.635582629,"data":"    non-finite float16 logits (olmo7) B=8; retrying per-row\n"}
+,{"stream_name":"stdout","time":15501.939940431,"data":"    overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15503.654219588,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":15505.366614293,"data":"    overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15505.797846114,"data":"    non-finite float16 logits (olmo7) B=8; retrying per-row\n"}
+,{"stream_name":"stdout","time":15506.099081059,"data":"    overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15507.808870678,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":15509.530933022,"data":"    overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15509.962653916,"data":"    non-finite float16 logits (olmo7) B=8; retrying per-row\n"}
+,{"stream_name":"stdout","time":15510.269659712,"data":"    overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15511.972733858,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":15513.68263369,"data":"    overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15514.116693597,"data":"    non-finite float16 logits (olmo7) B=8; retrying per-row\n"}
+,{"stream_name":"stdout","time":15514.427965139,"data":"    overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15516.142035367,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":15517.855748157,"data":"    overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15518.286939931,"data":"    non-finite float16 logits (olmo7) B=8; retrying per-row\n"}
+,{"stream_name":"stdout","time":15518.592042283,"data":"    overflow at t4|where B=8: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15520.290632206,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":15522.054633645,"data":"    overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15522.37463008,"data":"    non-finite float16 logits (olmo7) B=6; retrying per-row\n"}
+,{"stream_name":"stdout","time":15522.579983849,"data":"    overflow at t4|where B=6: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15524.331937665,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":15526.00101496,"data":"    overflow at t4|where B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15526.324049556,"data":"    non-finite float16 logits (olmo7) B=6; retrying per-row\n"}
+,{"stream_name":"stdout","time":15526.52811785,"data":"    overflow at t4|where B=6: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15528.230979356,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":15529.941616426,"data":"    overflow at t5|status B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15530.182623065,"data":"    non-finite float16 logits (olmo7) B=4; retrying per-row\n"}
+,{"stream_name":"stdout","time":15530.28563606,"data":"    overflow at t5|status B=4: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15530.291013641,"data":"  960 1056 2626s, 3.7s for 36 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":15531.997749491,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":15533.738785234,"data":"    overflow at t5|status B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15533.977611327,"data":"    non-finite float16 logits (olmo7) B=4; retrying per-row\n"}
+,{"stream_name":"stdout","time":15534.079768095,"data":"    overflow at t5|status B=4: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15535.792881842,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":15537.502884509,"data":"    overflow at t5|status B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15537.743091721,"data":"    non-finite float16 logits (olmo7) B=4; retrying per-row\n"}
+,{"stream_name":"stdout","time":15537.845618761,"data":"    overflow at t5|status B=4: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15539.555680607,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":15541.275652322,"data":"    overflow at t5|status B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15541.51712925,"data":"    non-finite float16 logits (olmo7) B=4; retrying per-row\n"}
+,{"stream_name":"stdout","time":15541.621210323,"data":"    overflow at t5|status B=4: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15543.33069224,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":15545.052686979,"data":"    overflow at t5|status B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15545.289030831,"data":"    non-finite float16 logits (olmo7) B=4; retrying per-row\n"}
+,{"stream_name":"stdout","time":15545.394452114,"data":"    overflow at t5|status B=4: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15547.110614893,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":15548.816135303,"data":"    overflow at t5|status B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15549.058142215,"data":"    non-finite float16 logits (olmo7) B=4; retrying per-row\n"}
+,{"stream_name":"stdout","time":15549.158069119,"data":"    overflow at t5|status B=4: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15550.86961034,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":15552.598555123,"data":"    overflow at t5|status B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15552.838033446,"data":"    non-finite float16 logits (olmo7) B=4; retrying per-row\n"}
+,{"stream_name":"stdout","time":15552.939158381,"data":"    overflow at t5|status B=4: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15554.706758832,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":15556.379681844,"data":"    overflow at t5|status B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15556.621037918,"data":"    non-finite float16 logits (olmo7) B=4; retrying per-row\n"}
+,{"stream_name":"stdout","time":15556.721695147,"data":"    overflow at t5|status B=4: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15558.428180501,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":15560.177493781,"data":"    overflow at t5|status B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15560.421639408,"data":"    non-finite float16 logits (olmo7) B=4; retrying per-row\n"}
+,{"stream_name":"stdout","time":15560.525635163,"data":"    overflow at t5|status B=4: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15562.235311085,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":15563.940601042,"data":"    overflow at t5|status B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15564.177977191,"data":"    non-finite float16 logits (olmo7) B=4; retrying per-row\n"}
+,{"stream_name":"stdout","time":15564.278090797,"data":"    overflow at t5|status B=4: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15565.979164429,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":15567.688682634,"data":"    overflow at t5|status B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15567.929508838,"data":"    non-finite float16 logits (olmo7) B=4; retrying per-row\n"}
+,{"stream_name":"stdout","time":15568.034617468,"data":"    overflow at t5|status B=4: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15569.748693773,"data":"    non-finite float16 logits (olmo7) B=32; retrying per-row\n"}
+,{"stream_name":"stdout","time":15571.512268062,"data":"    overflow at t5|status B=32: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15571.747239063,"data":"    non-finite float16 logits (olmo7) B=4; retrying per-row\n"}
+,{"stream_name":"stdout","time":15571.852817385,"data":"    overflow at t5|status B=4: non-finite logits in float16 forward (olmo7); marking __OVERFLOW__\n"}
+,{"stream_name":"stdout","time":15589.571370395,"data":"  980 1056 2685s, 1.9s for 36 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":15629.030940629,"data":"  1000 1056 2725s, 2.0s for 36 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":15668.568473744,"data":"  1020 1056 2764s, 2.0s for 36 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":15708.103464494,"data":"  1040 1056 2804s, 2.0s for 36 rows, RSS 2.5 GB\n"}
+,{"stream_name":"stdout","time":15738.450113261,"data":"  saved /kaggle/working/glyph_results/test_olmo7.json 9229415 bytes\n"}
+,{"stream_name":"stdout","time":15738.45120804,"data":"  done olmo7 test 2834s\n"}
+,{"stream_name":"stdout","time":15742.14432472,"data":"[end] test_olmo7 at 05:16:50 (47.4 min)\n"}
+,{"stream_name":"stdout","time":15742.145246307,"data":"[start] analyze at 05:16:50 (est 2 min, 4.36 h used)\n"}
+,{"stream_name":"stdout","time":17252.083015311,"data":"  Traceback (most recent call last):\n"}
+,{"stream_name":"stdout","time":17252.084212468,"data":"    File \"/kaggle/working/glyph-repo/v5k/analyze5.py\", line 73, in \u003cmodule\u003e\n"}
+,{"stream_name":"stdout","time":17252.085105892,"data":"      T[\"loo_by_gate\"] = {k: (cboot([{**x, \"e\": e2e(x)} for x in v], \"e\") if isinstance(v, list) else v) for k, v in T[\"loo_by_gate\"].items()}\n"}
+,{"stream_name":"stdout","time":17252.086032098,"data":"                                     ^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":17252.086903506,"data":"  TypeError: 'float' object is not a mapping\n"}
+,{"stream_name":"stdout","time":17252.787690876,"data":"[FAILED] analyze exit 1 after 25.2 min. Last output:\n"}
+,{"stream_name":"stdout","time":17252.788169524,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stdout","time":17252.789248321,"data":"  File \"/kaggle/working/glyph-repo/v5k/analyze5.py\", line 73, in \u003cmodule\u003e\n"}
+,{"stream_name":"stdout","time":17252.790162497,"data":"    T[\"loo_by_gate\"] = {k: (cboot([{**x, \"e\": e2e(x)} for x in v], \"e\") if isinstance(v, list) else v) for k, v in T[\"loo_by_gate\"].items()}\n"}
+,{"stream_name":"stdout","time":17252.791032815,"data":"                                   ^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":17252.792262709,"data":"TypeError: 'float' object is not a mapping\n"}
+,{"stream_name":"stdout","time":17252.79313165,"data":"\n"}
+,{"stream_name":"stdout","time":17253.419448573,"data":"driver exit 1 4.78 h\n"}
+,{"stream_name":"stdout","time":17253.419485655,"data":"{'step': 'det_compare', 'minutes': 0.08736026684443156, 'end': '2026-10-11T01:26:08+0000'}\n"}
+,{"stream_name":"stdout","time":17253.419491544,"data":"{'step': 'det_make', 'minutes': 0.07224050362904867, 'end': '2026-10-11T00:55:33+0000'}\n"}
+,{"stream_name":"stdout","time":17253.419496037,"data":"{'step': 'det_olmo7', 'minutes': 5.020874790350596, 'end': '2026-10-11T01:03:43+0000'}\n"}
+,{"stream_name":"stdout","time":17253.419500188,"data":"{'step': 'det_qwen7', 'minutes': 3.148351295789083, 'end': '2026-10-11T00:58:41+0000'}\n"}
+,{"stream_name":"stdout","time":17253.419504244,"data":"{'step': 'dev_olmo7', 'minutes': 7.377726006507873, 'end': '2026-10-11T03:33:30+0000'}\n"}
+,{"stream_name":"stdout","time":17253.41950814,"data":"{'step': 'dev_qwen7', 'minutes': 6.113871252536773, 'end': '2026-10-11T03:26:08+0000'}\n"}
+,{"stream_name":"stdout","time":17253.419512022,"data":"{'step': 'extract_olmo7', 'minutes': 7.823335452874502, 'end': '2026-10-11T01:20:48+0000'}\n"}
+,{"stream_name":"stdout","time":17253.419516257,"data":"{'step': 'extract_qwen7', 'minutes': 5.5964966734250385, 'end': '2026-10-11T01:09:18+0000'}\n"}
+,{"stream_name":"stdout","time":17253.419520385,"data":"{'step': 'free_olmo7', 'minutes': 8.861223856608073e-07, 'end': '2026-10-11T01:26:03+0000'}\n"}
+,{"stream_name":"stdout","time":17253.419524444,"data":"{'step': 'free_qwen7', 'minutes': 1.1682510375976563e-06, 'end': '2026-10-11T01:12:58+0000'}\n"}
+,{"stream_name":"stdout","time":17253.419552067,"data":"{'step': 'jgram_olmo7', 'minutes': 5.260584147771199, 'end': '2026-10-11T01:26:03+0000'}\n"}
+,{"stream_name":"stdout","time":17253.419559896,"data":"{'step': 'jgram_qwen7', 'minutes': 3.660321374734243, 'end': '2026-10-11T01:12:58+0000'}\n"}
+,{"stream_name":"stdout","time":17253.419563938,"data":"{'step': 'negotiate', 'minutes': 113.87169893185298, 'end': '2026-10-11T03:20:01+0000'}\n"}
+,{"stream_name":"stdout","time":17253.419567807,"data":"{'step': 'prereg', 'minutes': 0.07464872598648072, 'end': '2026-10-11T03:33:35+0000'}\n"}
+,{"stream_name":"stdout","time":17253.419571618,"data":"{'step': 'test_olmo7', 'minutes': 47.3591477115949, 'end': '2026-10-11T05:16:50+0000'}\n"}
+,{"stream_name":"stdout","time":17253.419576381,"data":"{'step': 'test_qwen7', 'minutes': 55.90481712420782, 'end': '2026-10-11T04:29:29+0000'}\n"}
+,{"stream_name":"stderr","time":17254.976824646,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stderr","time":17254.977762218,"data":"  File \"\u003cstring\u003e\", line 1, in \u003cmodule\u003e\n"}
+,{"stream_name":"stderr","time":17254.977790262,"data":"    import sys;import papermill as pm;pm.execute_notebook(\"__notebook__.ipynb\",\"__notebook__.ipynb\",progress_bar=False,log_output=True,stdout_file=sys.stdout,stderr_file=sys.stderr,allow_errors=False,timeout=43200)\n"}
+,{"stream_name":"stderr","time":17254.977804453,"data":"                                      ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stderr","time":17254.977809913,"data":"  File \"/usr/local/lib/python3.13/dist-packages/papermill/execute.py\", line 131, in execute_notebook\n"}
+,{"stream_name":"stderr","time":17254.977815353,"data":"    raise_for_execution_errors(nb, output_path)\n"}
+,{"stream_name":"stderr","time":17254.977819683,"data":"    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stderr","time":17254.977823879,"data":"  File \"/usr/local/lib/python3.13/dist-packages/papermill/execute.py\", line 251, in raise_for_execution_errors\n"}
+,{"stream_name":"stderr","time":17254.977828743,"data":"    raise error\n"}
+,{"stream_name":"stderr","time":17254.977832563,"data":"papermill.exceptions.PapermillExecutionError: \n"}
+,{"stream_name":"stderr","time":17254.977836464,"data":"---------------------------------------------------------------------------\n"}
+,{"stream_name":"stderr","time":17254.977840961,"data":"Exception encountered at \"In [5]\":\n"}
+,{"stream_name":"stderr","time":17254.977845023,"data":"---------------------------------------------------------------------------\n"}
+,{"stream_name":"stderr","time":17254.977849035,"data":"RuntimeError                              Traceback (most recent call last)\n"}
+,{"stream_name":"stderr","time":17254.977854973,"data":"/tmp/ipykernel_23/3431149687.py in \u003ccell line: 0\u003e()\n"}
+,{"stream_name":"stderr","time":17254.977863027,"data":"      4 print(\"driver exit\", rc, f\"{(time.time()-T0)/3600:.2f} h\")\n"}
+,{"stream_name":"stderr","time":17254.977865916,"data":"      5 for f in sorted(glob.glob(OUT + \"/.stages/*.done\")): print(json.load(open(f)))\n"}
+,{"stream_name":"stderr","time":17254.977868695,"data":"----\u003e 6 if rc == 1: raise RuntimeError(\"a pipeline step FAILED, see the [FAILED] block above (full logs in glyph_results/logs/)\")\n"}
+,{"stream_name":"stderr","time":17254.977871626,"data":"      7 if rc == 2: print(\"BUDGET STOP: Save Version now, then resume (Add Input -\u003e this notebook's output)\")\n"}
+,{"stream_name":"stderr","time":17254.977874464,"data":"\n"}
+,{"stream_name":"stderr","time":17254.977877018,"data":"RuntimeError: a pipeline step FAILED, see the [FAILED] block above (full logs in glyph_results/logs/)\n"}
+,{"stream_name":"stderr","time":17254.977879788,"data":"\n"}
+,{"stream_name":"stderr","time":17257.844750574,"data":"/usr/local/lib/python3.13/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\\|'\n"}
+,{"stream_name":"stderr","time":17257.844790062,"data":"  cells[i][c] = re.sub('\\\\\\\\\\|', '|', cell)\n"}
+,{"stream_name":"stderr","time":17258.198127292,"data":"/usr/local/lib/python3.13/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\\_'\n"}
+,{"stream_name":"stderr","time":17258.198159876,"data":"  text = re.sub(r'_', '\\_', text) # Escape underscores in display text\n"}
+,{"stream_name":"stderr","time":17259.342095098,"data":"[NbConvertApp] Converting notebook __notebook__.ipynb to notebook\n"}
+,{"stream_name":"stderr","time":17259.584250727,"data":"[NbConvertApp] Writing 106370 bytes to __notebook__.ipynb\n"}
+,{"stream_name":"stderr","time":17262.554810216,"data":"[NbConvertApp] Converting notebook __notebook__.ipynb to html\n"}
+,{"stream_name":"stderr","time":17263.194962628,"data":"[NbConvertApp] Writing 386526 bytes to __results__.html\n"}
+]

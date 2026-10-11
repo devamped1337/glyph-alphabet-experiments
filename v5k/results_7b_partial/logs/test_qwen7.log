@@ -1,0 +1,89 @@
+
+Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]
+Loading checkpoint shards:  25%|██▌       | 1/4 [00:16<00:50, 16.71s/it]
+Loading checkpoint shards:  50%|█████     | 2/4 [00:35<00:35, 17.76s/it]
+Loading checkpoint shards:  75%|███████▌  | 3/4 [00:53<00:17, 17.79s/it]
+Loading checkpoint shards: 100%|██████████| 4/4 [01:03<00:00, 15.02s/it]
+Loading checkpoint shards: 100%|██████████| 4/4 [01:03<00:00, 15.95s/it]
+qwen7 Qwen/Qwen2.5-7B d149729398 layers 28 d 3584 patch/read keys ['emb', 7, 9] RSS 1.8 GB
+test qwen7 queries 1556 layer index 0
+0 1556 81s, 3.1s for 44 rows, RSS 2.5 GB
+20 1556 126s, 2.2s for 44 rows, RSS 2.5 GB
+40 1556 170s, 2.2s for 44 rows, RSS 2.5 GB
+60 1556 214s, 2.2s for 44 rows, RSS 2.5 GB
+80 1556 258s, 2.2s for 44 rows, RSS 2.5 GB
+100 1556 302s, 2.2s for 44 rows, RSS 2.5 GB
+120 1556 346s, 2.2s for 44 rows, RSS 2.5 GB
+140 1556 390s, 2.2s for 44 rows, RSS 2.5 GB
+160 1556 433s, 2.2s for 44 rows, RSS 2.5 GB
+180 1556 477s, 2.2s for 44 rows, RSS 2.5 GB
+200 1556 521s, 2.2s for 44 rows, RSS 2.5 GB
+220 1556 565s, 2.2s for 44 rows, RSS 2.5 GB
+240 1556 609s, 2.2s for 44 rows, RSS 2.5 GB
+260 1556 653s, 2.2s for 44 rows, RSS 2.5 GB
+280 1556 696s, 2.2s for 44 rows, RSS 2.5 GB
+300 1556 740s, 2.2s for 44 rows, RSS 2.5 GB
+320 1556 784s, 2.2s for 44 rows, RSS 2.5 GB
+340 1556 828s, 2.2s for 44 rows, RSS 2.5 GB
+360 1556 871s, 2.2s for 44 rows, RSS 2.5 GB
+380 1556 915s, 2.2s for 44 rows, RSS 2.5 GB
+400 1556 959s, 2.2s for 44 rows, RSS 2.5 GB
+420 1556 1003s, 2.2s for 44 rows, RSS 2.5 GB
+440 1556 1046s, 2.2s for 44 rows, RSS 2.5 GB
+460 1556 1090s, 2.2s for 44 rows, RSS 2.5 GB
+480 1556 1134s, 2.2s for 44 rows, RSS 2.5 GB
+500 1556 1177s, 2.2s for 44 rows, RSS 2.5 GB
+520 1556 1221s, 2.2s for 44 rows, RSS 2.5 GB
+540 1556 1265s, 2.2s for 44 rows, RSS 2.5 GB
+560 1556 1309s, 2.2s for 44 rows, RSS 2.5 GB
+580 1556 1352s, 2.2s for 44 rows, RSS 2.5 GB
+600 1556 1396s, 2.2s for 44 rows, RSS 2.5 GB
+620 1556 1440s, 2.2s for 44 rows, RSS 2.5 GB
+640 1556 1484s, 2.2s for 44 rows, RSS 2.5 GB
+660 1556 1527s, 2.2s for 44 rows, RSS 2.5 GB
+680 1556 1571s, 2.2s for 44 rows, RSS 2.5 GB
+700 1556 1615s, 2.2s for 44 rows, RSS 2.5 GB
+720 1556 1659s, 2.2s for 44 rows, RSS 2.5 GB
+740 1556 1702s, 2.2s for 44 rows, RSS 2.5 GB
+760 1556 1746s, 2.2s for 44 rows, RSS 2.5 GB
+780 1556 1790s, 2.2s for 44 rows, RSS 2.5 GB
+800 1556 1834s, 2.2s for 44 rows, RSS 2.5 GB
+820 1556 1877s, 2.2s for 44 rows, RSS 2.5 GB
+840 1556 1921s, 2.2s for 44 rows, RSS 2.5 GB
+860 1556 1965s, 2.2s for 44 rows, RSS 2.5 GB
+880 1556 2009s, 2.2s for 44 rows, RSS 2.5 GB
+900 1556 2053s, 2.2s for 44 rows, RSS 2.5 GB
+920 1556 2097s, 2.2s for 44 rows, RSS 2.5 GB
+940 1556 2140s, 2.2s for 44 rows, RSS 2.5 GB
+960 1556 2184s, 2.2s for 44 rows, RSS 2.5 GB
+980 1556 2228s, 2.2s for 44 rows, RSS 2.5 GB
+1000 1556 2271s, 2.1s for 42 rows, RSS 2.5 GB
+1020 1556 2313s, 2.0s for 42 rows, RSS 2.5 GB
+1040 1556 2354s, 2.0s for 42 rows, RSS 2.5 GB
+1060 1556 2395s, 2.0s for 42 rows, RSS 2.5 GB
+1080 1556 2436s, 2.1s for 42 rows, RSS 2.5 GB
+1100 1556 2478s, 2.1s for 42 rows, RSS 2.5 GB
+1120 1556 2519s, 2.0s for 42 rows, RSS 2.5 GB
+1140 1556 2560s, 2.0s for 42 rows, RSS 2.5 GB
+1160 1556 2601s, 2.1s for 42 rows, RSS 2.5 GB
+1180 1556 2643s, 2.0s for 42 rows, RSS 2.5 GB
+1200 1556 2684s, 2.0s for 42 rows, RSS 2.5 GB
+1220 1556 2725s, 2.1s for 42 rows, RSS 2.5 GB
+1240 1556 2766s, 2.1s for 42 rows, RSS 2.5 GB
+1260 1556 2806s, 1.9s for 40 rows, RSS 2.5 GB
+1280 1556 2843s, 1.8s for 38 rows, RSS 2.5 GB
+1300 1556 2881s, 1.9s for 40 rows, RSS 2.5 GB
+1320 1556 2919s, 1.9s for 40 rows, RSS 2.5 GB
+1340 1556 2957s, 1.9s for 40 rows, RSS 2.5 GB
+1360 1556 2994s, 1.9s for 40 rows, RSS 2.5 GB
+1380 1556 3032s, 1.9s for 40 rows, RSS 2.5 GB
+1400 1556 3070s, 1.9s for 40 rows, RSS 2.5 GB
+1420 1556 3107s, 1.8s for 38 rows, RSS 2.5 GB
+1440 1556 3144s, 1.8s for 38 rows, RSS 2.5 GB
+1460 1556 3182s, 1.7s for 36 rows, RSS 2.5 GB
+1480 1556 3216s, 1.7s for 36 rows, RSS 2.5 GB
+1500 1556 3251s, 1.7s for 36 rows, RSS 2.5 GB
+1520 1556 3286s, 1.7s for 36 rows, RSS 2.5 GB
+1540 1556 3320s, 1.7s for 36 rows, RSS 2.5 GB
+saved /kaggle/working/glyph_results/test_qwen7.json 13762930 bytes
+done qwen7 test 3347s

@@ -1,0 +1,26 @@
+
+Loading checkpoint shards:   0%|          | 0/6 [00:00<?, ?it/s]
+Loading checkpoint shards:  17%|█▋        | 1/6 [00:21<01:45, 21.15s/it]
+Loading checkpoint shards:  33%|███▎      | 2/6 [00:41<01:23, 20.82s/it]
+Loading checkpoint shards:  50%|█████     | 3/6 [01:02<01:01, 20.67s/it]
+Loading checkpoint shards:  67%|██████▋   | 4/6 [01:22<00:40, 20.32s/it]
+Loading checkpoint shards:  83%|████████▎ | 5/6 [01:42<00:20, 20.23s/it]
+Loading checkpoint shards: 100%|██████████| 6/6 [02:01<00:00, 19.83s/it]
+Loading checkpoint shards: 100%|██████████| 6/6 [02:01<00:00, 20.19s/it]
+olmo7 allenai/OLMo-2-1124-7B 7df9a82518 layers 32 d 4096 patch/read keys ['emb', 8, 11] RSS 1.7 GB
+book 0 2756 140s RSS 2.8 GB
+book 400 2756 164s RSS 2.8 GB
+book 800 2756 187s RSS 2.8 GB
+book 1200 2756 209s RSS 2.8 GB
+book 1600 2756 232s RSS 2.8 GB
+book 2000 2756 255s RSS 2.8 GB
+book 2400 2756 278s RSS 2.8 GB
+sender 0 2756 298s RSS 2.8 GB
+sender 400 2756 321s RSS 2.8 GB
+sender 800 2756 343s RSS 2.8 GB
+sender 1200 2756 366s RSS 2.8 GB
+sender 1600 2756 389s RSS 2.8 GB
+sender 2000 2756 411s RSS 2.8 GB
+sender 2400 2756 434s RSS 2.8 GB
+saved /kaggle/working/glyph_results/states_olmo7.pt 677325453 bytes
+done olmo7 456s
