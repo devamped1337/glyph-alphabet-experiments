@@ -1,0 +1,4 @@
+Loading weights:   0%|          | 0/218 [00:00<?, ?it/s]Loading weights:   0%|          | 1/218 [00:00<00:24,  8.87it/s]Loading weights:  22%|██▏       | 49/218 [00:00<00:00, 254.89it/s]Loading weights:  35%|███▌      | 77/218 [00:00<00:00, 256.24it/s]Loading weights:  50%|█████     | 110/218 [00:00<00:00, 278.33it/s]Loading weights:  63%|██████▎   | 138/218 [00:00<00:00, 264.03it/s]Loading weights:  76%|███████▌  | 165/218 [00:00<00:00, 246.75it/s]Loading weights:  87%|████████▋ | 190/218 [00:00<00:00, 232.04it/s]Loading weights: 100%|██████████| 218/218 [00:00<00:00, 242.22it/s]
+smol HuggingFaceTB/SmolLM2-1.7B effd688a12 layers 24 d 2048 patch/read keys ['emb', 6, 8] RSS 7.1 GB
+{'repeat_bitwise': True, 'reload_bitwise': True, 'batch4_vs_batch1_maxabs': 3.4332275390625e-05}
+saved /workspace/glyph-exp/v5/results/det_smol_box.pt 50334799 bytes

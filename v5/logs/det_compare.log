@@ -1,0 +1,31 @@
+saved /workspace/glyph-exp/v5/results/det_report.json 1513 bytes
+{
+ "smol": {
+  "files": [
+   "det_smol_box.pt",
+   "det_smol_laptop.pt"
+  ],
+  "base": {
+   "maxabs": 5.817413330078125e-05,
+   "top1_same": 1,
+   "top10_same_set": 1
+  },
+  "emb": {
+   "maxabs": 3.5762786865234375e-05,
+   "top1_same": 1,
+   "top10_same_set": 1
+  },
+  "6": {
+   "maxabs": 3.218650817871094e-05,
+   "top1_same": 1,
+   "top10_same_set": 1
+  },
+  "8": {
+   "maxabs": 5.340576171875e-05,
+   "top1_same": 1,
+   "top10_same_set": 1
+  },
+  "PASS": true
+ },
+ "qwen": "only one machine ran this model"
+}

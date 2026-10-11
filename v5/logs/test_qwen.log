@@ -1,0 +1,38 @@
+Loading weights:   0%|          | 0/434 [00:00<?, ?it/s]Loading weights:   4%|▎         | 16/434 [00:00<00:03, 124.31it/s]Loading weights:   7%|▋         | 29/434 [00:00<00:03, 104.76it/s]Loading weights:   9%|▉         | 40/434 [00:00<00:05, 77.82it/s] Loading weights:  12%|█▏        | 53/434 [00:00<00:04, 77.33it/s]Loading weights:  15%|█▍        | 64/434 [00:00<00:05, 69.64it/s]Loading weights:  18%|█▊        | 76/434 [00:00<00:04, 71.81it/s]Loading weights:  21%|██        | 89/434 [00:01<00:04, 83.63it/s]Loading weights:  23%|██▎       | 100/434 [00:01<00:03, 87.46it/s]Loading weights:  26%|██▌       | 113/434 [00:01<00:03, 90.05it/s]Loading weights:  30%|███       | 131/434 [00:01<00:03, 96.47it/s]Loading weights:  33%|███▎      | 143/434 [00:01<00:03, 95.96it/s]Loading weights:  35%|███▌      | 153/434 [00:01<00:02, 95.59it/s]Loading weights:  38%|███▊      | 163/434 [00:01<00:03, 84.45it/s]Loading weights:  40%|███▉      | 172/434 [00:02<00:03, 80.61it/s]Loading weights:  42%|████▏     | 184/434 [00:02<00:02, 85.48it/s]Loading weights:  45%|████▌     | 196/434 [00:02<00:02, 87.30it/s]Loading weights:  48%|████▊     | 208/434 [00:02<00:02, 89.04it/s]Loading weights:  50%|█████     | 217/434 [00:02<00:02, 82.04it/s]Loading weights:  52%|█████▏    | 227/434 [00:02<00:02, 84.43it/s]Loading weights:  54%|█████▍    | 236/434 [00:02<00:02, 71.44it/s]Loading weights:  58%|█████▊    | 251/434 [00:02<00:02, 83.77it/s]Loading weights:  60%|█████▉    | 260/434 [00:03<00:02, 80.07it/s]Loading weights:  62%|██████▏   | 269/434 [00:03<00:02, 77.05it/s]Loading weights:  65%|██████▍   | 280/434 [00:03<00:02, 73.58it/s]Loading weights:  68%|██████▊   | 293/434 [00:03<00:01, 74.59it/s]Loading weights:  70%|███████   | 305/434 [00:03<00:01, 77.97it/s]Loading weights:  73%|███████▎  | 316/434 [00:03<00:01, 71.71it/s]Loading weights:  76%|███████▌  | 328/434 [00:04<00:01, 72.94it/s]Loading weights:  78%|███████▊  | 340/434 [00:04<00:01, 71.68it/s]Loading weights:  81%|████████  | 352/434 [00:04<00:01, 65.78it/s]Loading weights:  84%|████████▍ | 364/434 [00:04<00:00, 72.21it/s]Loading weights:  87%|████████▋ | 377/434 [00:04<00:00, 72.22it/s]Loading weights:  89%|████████▉ | 388/434 [00:04<00:00, 78.69it/s]Loading weights:  92%|█████████▏| 400/434 [00:05<00:00, 50.84it/s]Loading weights:  95%|█████████▍| 412/434 [00:05<00:00, 59.93it/s]Loading weights:  98%|█████████▊| 424/434 [00:05<00:00, 65.44it/s]Loading weights: 100%|██████████| 434/434 [00:05<00:00, 78.45it/s]
+qwen Qwen/Qwen2.5-3B 3aab1f1954 layers 36 d 2048 patch/read keys ['emb', 9, 12] RSS 12.5 GB
+test qwen queries 646 layer index 0
+0 646 71s, 57.5s for 30 rows, RSS 12.8 GB
+20 646 1367s, 65.6s for 30 rows, RSS 12.8 GB
+40 646 2700s, 67.2s for 30 rows, RSS 12.8 GB
+60 646 4030s, 69.3s for 30 rows, RSS 12.8 GB
+80 646 5417s, 69.1s for 30 rows, RSS 12.8 GB
+100 646 6811s, 66.7s for 30 rows, RSS 12.8 GB
+120 646 8216s, 70.8s for 30 rows, RSS 12.8 GB
+140 646 9636s, 74.0s for 30 rows, RSS 12.8 GB
+160 646 11081s, 73.6s for 30 rows, RSS 12.8 GB
+180 646 12555s, 72.2s for 30 rows, RSS 12.8 GB
+200 646 14113s, 73.0s for 30 rows, RSS 12.8 GB
+220 646 15529s, 69.3s for 30 rows, RSS 12.8 GB
+240 646 16958s, 72.4s for 30 rows, RSS 12.8 GB
+260 646 18421s, 72.5s for 30 rows, RSS 12.8 GB
+280 646 19883s, 72.8s for 30 rows, RSS 12.8 GB
+300 646 21341s, 73.6s for 30 rows, RSS 12.8 GB
+320 646 22799s, 72.7s for 30 rows, RSS 12.8 GB
+340 646 24206s, 67.7s for 28 rows, RSS 12.8 GB
+360 646 25561s, 67.6s for 28 rows, RSS 12.8 GB
+380 646 26992s, 68.9s for 28 rows, RSS 12.8 GB
+400 646 28439s, 69.1s for 28 rows, RSS 12.8 GB
+420 646 29860s, 70.6s for 28 rows, RSS 12.8 GB
+440 646 31319s, 60.9s for 24 rows, RSS 12.8 GB
+460 646 32539s, 58.9s for 24 rows, RSS 12.8 GB
+480 646 33775s, 58.6s for 24 rows, RSS 12.8 GB
+500 646 34987s, 58.7s for 24 rows, RSS 12.8 GB
+520 646 36206s, 65.5s for 26 rows, RSS 12.8 GB
+540 646 37406s, 59.4s for 24 rows, RSS 12.8 GB
+560 646 38550s, 54.5s for 22 rows, RSS 12.8 GB
+580 646 39643s, 54.8s for 22 rows, RSS 12.8 GB
+600 646 40741s, 54.9s for 22 rows, RSS 12.8 GB
+620 646 41854s, 54.8s for 22 rows, RSS 12.8 GB
+640 646 42981s, 58.2s for 22 rows, RSS 12.8 GB
+saved /mnt/c/Users/Admin/glyph/v5/results/test_qwen.json 3610352 bytes
+done qwen test 43260s

@@ -1,0 +1,47 @@
+{
+ "det_smol_laptop.pt": {
+  "sha256": "8214a92df95f731dc259d5972cdbc6e57331bf4f9942248e6c5e8f16f6bb6931",
+  "bytes": 50334829,
+  "commit": "d2108eb68f35ca12882488dfde95830126a73a52",
+  "code_sha256": "e2ccc4ca9a8ce8c0738af4d41624bf636bd34f3fe0d42cdfc5bbb12103b14b62",
+  "host": "laptop",
+  "created": "2026-10-10T13:40:18+1100"
+ },
+ "det_qwen_laptop.pt": {
+  "sha256": "89355ef190f78c5b2cede08354e55aa1d36bc337f824a91ec215bda73838ea81",
+  "bytes": 155585645,
+  "commit": "d2108eb68f35ca12882488dfde95830126a73a52",
+  "code_sha256": "e2ccc4ca9a8ce8c0738af4d41624bf636bd34f3fe0d42cdfc5bbb12103b14b62",
+  "host": "laptop",
+  "created": "2026-10-10T13:41:35+1100"
+ },
+ "states_qwen.pt": {
+  "sha256": "3fe4df7dc5c99ba7531c3e7e5a5b60df163ff8e206d5e25b6d1824d15085007c",
+  "bytes": 338668101,
+  "commit": "6e3f6a24214d2ae9dc81c95d22c03a0408c061d4",
+  "code_sha256": "0a282829f40ceaaa677e263f4dc24c6a7b3b87904c1fe75343b2443134ad646e",
+  "host": "laptop",
+  "created": "2026-10-10T18:38:51+1100",
+  "model": [
+   "Qwen/Qwen2.5-3B",
+   "3aab1f1954e9cc14eb9509a215f9e5ca08227a9b"
+  ],
+  "stage": "states (before J-gram)"
+ },
+ "dev_qwen.json": {
+  "sha256": "4a96b5744c7253092d4497019bc642ea793d60db16427a8be40bad1384be1aef",
+  "bytes": 841785,
+  "commit": "6e3f6a24214d2ae9dc81c95d22c03a0408c061d4",
+  "code_sha256": "a3c7730517e7faed609a1e70859cc32fb9444298b5cd6b069881bcb55c013e35",
+  "host": "laptop",
+  "created": "2026-10-11T01:47:06+1100"
+ },
+ "test_qwen.json": {
+  "sha256": "cdc4523df1d6599474aac809606d35c1f545bb8dac2ac99db6a73102124212cb",
+  "bytes": 3610352,
+  "commit": "6e3f6a24214d2ae9dc81c95d22c03a0408c061d4",
+  "code_sha256": "56d6a8255439528a0a5e0d547451c70b1081fb860fb4605624716d0e93bda5b0",
+  "host": "laptop",
+  "created": "2026-10-11T14:34:26+1100"
+ }
+}

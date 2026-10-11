@@ -1,0 +1,19 @@
+saved /workspace/glyph-exp/v5/results/frozen5.json 1272 bytes
+frozen li 0 {0: 0.75, 1: 0.7164948453608248, 2: 0.6726804123711341}
+{
+ "smol": [
+  "t1|agent",
+  "t1|patient",
+  "t1|pol",
+  "t4|where",
+  "t5|status"
+ ],
+ "qwen": [
+  "t1|agent",
+  "t1|mod",
+  "t1|pol",
+  "t2|first",
+  "t4|where",
+  "t5|status"
+ ]
+}

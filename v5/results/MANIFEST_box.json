@@ -1,0 +1,114 @@
+{
+ "det_state.pt": {
+  "sha256": "c4694b5d5bd97b3cfad068298a423c34a12cf6abe3a9272f6cb03e322134ab3b",
+  "bytes": 42743,
+  "commit": "d2108eb68f35ca12882488dfde95830126a73a52",
+  "code_sha256": "1842de05e6d9d6e198e4f4cff7b4f63e68cda5529fb63a64a0e9a70d43a8f669",
+  "host": "box",
+  "created": "2026-10-10T13:29:32+1100"
+ },
+ "det_smol_box.pt": {
+  "sha256": "ea2e6ea244fd21c77d606bdecd6fd2c963572d31b76e36f28123f203421bbc11",
+  "bytes": 50334799,
+  "commit": "d2108eb68f35ca12882488dfde95830126a73a52",
+  "code_sha256": "1842de05e6d9d6e198e4f4cff7b4f63e68cda5529fb63a64a0e9a70d43a8f669",
+  "host": "box",
+  "created": "2026-10-10T13:29:44+1100"
+ },
+ "states_smol.pt": {
+  "sha256": "572e04c24bb2c12d991fdd190d03fbb12ad50807d4494b8f73070403a1ddd612",
+  "bytes": 340243397,
+  "commit": "a2ac8f7c2a2b364fbbc27d5ee8adca199a17f2ff",
+  "code_sha256": "31ca5199c3323da6b8436f91e5df8b358ae68da1a5e295415283a28a434c9cfb",
+  "host": "box",
+  "created": "2026-10-10T14:25:02+1100",
+  "model": [
+   "HuggingFaceTB/SmolLM2-1.7B",
+   "effd688a12921b4cc83e3312b6feb579f70f9c71"
+  ],
+  "stage": "states (before J-gram)"
+ },
+ "det_report.json": {
+  "sha256": "fc639c9fe66027ab24160d485eeaa2972d8cdacbaa159c3ce65b4566593f0000",
+  "bytes": 1513,
+  "commit": "6e3f6a24214d2ae9dc81c95d22c03a0408c061d4",
+  "code_sha256": "a831412e081db6b06ab1fd8c2c79aaa7ff0d2bbc9d679b5b5d2cd924fa6b7bff",
+  "host": "box",
+  "created": "2026-10-10T20:22:35+1100"
+ },
+ "gate5.json": {
+  "sha256": "af26ee41d170c7b4049f1e464aad0cdb84112baa7e1a6de03342df6ba77cf9ca",
+  "bytes": 34957,
+  "commit": "6e3f6a24214d2ae9dc81c95d22c03a0408c061d4",
+  "code_sha256": "a831412e081db6b06ab1fd8c2c79aaa7ff0d2bbc9d679b5b5d2cd924fa6b7bff",
+  "host": "box",
+  "created": "2026-10-10T20:44:24+1100"
+ },
+ "selection5.json": {
+  "sha256": "f6761af30ed85215aad3798c66d02c0d4cd1901dd102709b791caf40a5c1b85c",
+  "bytes": 130253,
+  "commit": "6e3f6a24214d2ae9dc81c95d22c03a0408c061d4",
+  "code_sha256": "a831412e081db6b06ab1fd8c2c79aaa7ff0d2bbc9d679b5b5d2cd924fa6b7bff",
+  "host": "box",
+  "created": "2026-10-10T20:44:24+1100"
+ },
+ "deliveries_smol.pt": {
+  "sha256": "e210cc2d23a9c6e3bc44eeb5bff7f60f3bf0c7a927601d8669f1a090671f69cb",
+  "bytes": 86711359,
+  "commit": "6e3f6a24214d2ae9dc81c95d22c03a0408c061d4",
+  "code_sha256": "a831412e081db6b06ab1fd8c2c79aaa7ff0d2bbc9d679b5b5d2cd924fa6b7bff",
+  "host": "box",
+  "created": "2026-10-10T20:44:45+1100",
+  "receiver": "smol"
+ },
+ "deliveries_qwen.pt": {
+  "sha256": "7933080159e2f7eb4296b3b1e22ff11a64881dfc0703b17ff34c2376dd961aa8",
+  "bytes": 86711359,
+  "commit": "6e3f6a24214d2ae9dc81c95d22c03a0408c061d4",
+  "code_sha256": "a831412e081db6b06ab1fd8c2c79aaa7ff0d2bbc9d679b5b5d2cd924fa6b7bff",
+  "host": "box",
+  "created": "2026-10-10T20:45:06+1100",
+  "receiver": "qwen"
+ },
+ "book5.json": {
+  "sha256": "b1656e33f7f3313a7487afedbd528ee610743d3f81c5a794ae2d92d31242e700",
+  "bytes": 20307,
+  "commit": "6e3f6a24214d2ae9dc81c95d22c03a0408c061d4",
+  "code_sha256": "a831412e081db6b06ab1fd8c2c79aaa7ff0d2bbc9d679b5b5d2cd924fa6b7bff",
+  "host": "box",
+  "created": "2026-10-10T20:45:06+1100"
+ },
+ "dev_smol.json": {
+  "sha256": "8c9e63cd8625af152d944d278df84ad5713ea717481dbbbcd9eebd272682dd79",
+  "bytes": 841693,
+  "commit": "6e3f6a24214d2ae9dc81c95d22c03a0408c061d4",
+  "code_sha256": "a831412e081db6b06ab1fd8c2c79aaa7ff0d2bbc9d679b5b5d2cd924fa6b7bff",
+  "host": "box",
+  "created": "2026-10-10T21:05:28+1100"
+ },
+ "frozen5.json": {
+  "sha256": "995d0ce93387267b480337809e3862a070370197b0c8dd76175f42117d9b1c2f",
+  "bytes": 1272,
+  "commit": "UNCOMMITTED-e40d229850c4",
+  "code_sha256": "e40d229850c4d9df0231a19dde53ebfd71b11d23b7c8aceb0340fce807bca2ce",
+  "host": "box",
+  "created": "2026-10-11T02:33:06+1100",
+  "stage": "prereg v5.5"
+ },
+ "test_smol.json": {
+  "sha256": "158870e16354748aa38da3742744098d0a81ec806851eeacab92862a898c3aa0",
+  "bytes": 7791500,
+  "commit": "UNCOMMITTED-e40d229850c4",
+  "code_sha256": "e40d229850c4d9df0231a19dde53ebfd71b11d23b7c8aceb0340fce807bca2ce",
+  "host": "box",
+  "created": "2026-10-11T05:03:51+1100"
+ },
+ "tables5.json": {
+  "sha256": "ab5ddd3be8970092cb832a492875a57d11c7abe6cb8637b0afadc71788e67a43",
+  "bytes": 105581,
+  "commit": "UNCOMMITTED-c499d9313e99",
+  "code_sha256": "c499d9313e99a3dd73d8783f6c1d3f5ec0f6929dc3003a8f732d319a51b093f7",
+  "host": "box",
+  "created": "2026-10-11T15:23:05+1100"
+ }
+}

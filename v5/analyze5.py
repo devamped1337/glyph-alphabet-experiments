@@ -70,7 +70,7 @@ for nm in names:
             if r["cond"] != "glyph_loo": continue
             ok = all(GATE["loo"].get(f"{r['li']}|{r['loo_symbol']}", {}).get("held_entries_pass", {}).values()) if GATE["loo"].get(f"{r['li']}|{r['loo_symbol']}") else None
             T["loo_by_gate"].setdefault(f"{rk}|{r['t']}|{r['q']}|{r['sender']}|{'gate_pass' if ok else 'gate_fail'}", []).append(r)
-        T["loo_by_gate"] = {k: (cboot([{**x, "e": e2e(x)} for x in v], "e") if isinstance(v, list) else v) for k, v in T["loo_by_gate"].items()}
+        T["loo_by_gate"] = {k: (cboot([{**x, "e": e2e(x)} for x in v], "e") if isinstance(v, list) and v and isinstance(v[0], dict) else v) for k, v in T["loo_by_gate"].items()}
     for bas in BASES:
         for sk in MODELS:
             per = {s: [e2e(r) for r in R if r["cond"] == "glyph_id" and r.get("basis") == bas and r.get("seed") == s and r.get("sender") == sk and e2e(r) is not None] for s in SEEDS}

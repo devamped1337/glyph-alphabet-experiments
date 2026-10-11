@@ -45,3 +45,9 @@ candidate depths {emb, 0.25, 0.33 of depth}, KP=64, KC=32, seeds {0,1,2}, bases 
   The forward states stay fp32. Qwen's J-gram reloads the weights in **bf16** (recorded in states_qwen.pt `jlens._meta` and in the manifest). SmolLM2's J-gram stays fp32.
 - **v5.4 (review):** `del R.hf` did not free the fp32 weights, so the in-process bf16 reload could hold both models at once. The J-gram now runs as a separate process (`jgram5.py`).
   The running laptop extraction (started on v5.3) is stopped by a watcher as soon as it has saved the fp32 states, before its in-process J-gram step. jgram5 then adds the bf16 J-gram.
+
+## Amendment v5.5 (after Qwen DEV, before any TEST; 2026-10-11)
+- Measured on laptop i5-8350U from `dev_qwen.json`: `query_s_mean` = 43.365 s/query, `runtime_s` = 12762.9 s, peak RSS 12.8 GB, N_DEV=40 over 8 task|questions.
+- After rule A on DEV: Qwen counts 6 task|questions (smol counts 5). Frozen depth index **li=0** (dev glyph_id pca/seed0 means: li0=0.75, li1=0.716, li2=0.673).
+- Qwen receiver TEST (laptop): set **N_TEST=110** per counted task|question so wall time ≈ 8 h (110 × 6 × 43.365 s ≈ 8.00 h). Still TEST_SEEDS=0. SmolLM2 receiver TEST (box) unchanged (N_TEST=250, seeds {0,1,2}).
+- **Dropped J-lens comparison:** Qwen J-gram was infeasible on the laptop (bf16 too slow / fp32 OOM; see v5.4). `states_qwen.pt` has no J-lens basis; negotiate built only **pca** and **random** books (no `jlens` entries in gate5/deliveries). The pre-registered `jlens` basis vs `pca`/`random` comparison is therefore **not run** for this v5 execution and is recorded as dropped (compute/extraction limit, not a result-driven choice).

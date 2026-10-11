@@ -1,0 +1,17 @@
+stage box1 started Sat Oct 10 13:29:30 AEDT 2026
+laptop: code at /mnt/c/Users/Admin/glyph/v5 (commit d2108eb); launcher: wsl -e bash .../launch.sh N ; status: lstat.sh N
+power: old standby-ac=0, hibernate-ac=0 (saved C:\Users\Admin\glyph_power_old.txt); set both to 0
+closed on laptop: msedge x17, claude x8, steam x1, steamwebhelper x7
+det smol box vs laptop: PASS (max 5.8e-5)
+laptop L1 started 13:32 (det smol, det qwen done 13:41; extract qwen running)
+v5.1 commit a66e640 (run5/laptop/box amended); tarball /workspace/glyph-v5-code-a66e640.tar.gz to deploy before L2. box1 done 13:55.
+v5.2 commit a2ac8f7c2a2b364fbbc27d5ee8adca199a17f2ff; box t5 append started Sat Oct 10 14:23:02 AEDT 2026
+v5.3 commit ead176a deployed on laptop; L1x (qwen extract, bf16 jgram) started 14:33, ETA ~19:00. box states_smol has t5 appended. Next: copy states_qwen+MANIFEST_laptop+det_qwen_laptop to box, then box.sh 2.
+v5.4 6e3f6a24214d2ae9dc81c95d22c03a0408c061d4: watcher kills v5.3 extract after fp32 states save, then jgram5 bf16
+orchestrator: nohup bash v5/orchestrate.sh (resumable, markers logs/box*.done)
+Sat Oct 10 20:22:59 AEDT 2026 Qwen J-gram killed after 98 min with no batch done (bf16 ~single-core); states_qwen.pt (fp32, no jlens) copied via 4x90MB parts, sha 3fe4df7d OK; orchestrator restarted without jgram check; box stage 2 running (det compare PASS smol). det_qwen_laptop.pt not yet copied (laptop briefly unreachable; parts in C:\Users\Admin\glyph\v5\results\parts). >100MB files need split.
+Sat Oct 10 22:14 AEDT 2026 box stage 2 DONE (box2.done 21:05). deliveries_qwen.pt + MANIFEST_box.json copied to laptop (3x40MB parts, sha256 79330801 OK). v5.4 6e3f6a2 deployed. Qwen laptop stage 2 (run5.py qwen dev) launched detached pid~14198; box orchestrator waiting for dev_qwen.json.
+Sun Oct 11 01:38 AEDT 2026 Qwen laptop stage 2 (run5.py qwen dev) still running pid 14198 (~780% CPU, RSS ~12.8 GB). Progress 260/294 queries (~34s/14 rows typical; brief slowdown 200–220). No dev_qwen.json yet. Box orchestrator still waiting for it. Next handoff check ~1h.
+Sun Oct 11 02:33 AEDT 2026 Qwen laptop DEV DONE (dev_qwen.json 01:47, query_s_mean=43.365s). Copied to box. PREREG v5.5: N_TEST=110 (6 counted qwen tasks ≈8h), J-lens comparison DROPPED. frozen5.json li=0. Copied frozen5+MANIFEST_box to laptop; Qwen test launched N_TEST=110 TEST_SEEDS=0. Box orchestrator should run stage 3 (smol test).
+Sun Oct 11 02:34 AEDT 2026 Qwen test RUNNING laptop pid 14865 (N_TEST=110 TEST_SEEDS=0). Box stage 3 RUNNING smol test (1056 queries, li=0). Next: wait for test_qwen.json + test_smol.json then box stage 4 analyze.
+Sun Oct 11 07:17 AEDT 2026 box still waiting for test_qwen.json (orchestrate_v5.sh pid live; box3.done 05:03; no test_qwen.json yet). Qwen test was launched 02:34 with N_TEST=110 (~8h estimate → ~10:34). Next scheduled check: v5 handoff 5 at 10:47. Kaggle v5k notebook ready on branch kaggle (https://github.com/devamped1337/glyph-alphabet-experiments/blob/kaggle/kaggle/glyph_7b_kaggle.ipynb); CPU smoke ALL STEPS DONE; user still needs Kaggle account + phone verify for GPU.

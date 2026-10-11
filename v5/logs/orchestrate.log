@@ -1,0 +1,11 @@
+2026-10-10 16:09:18 waiting for states_qwen.pt (with J-gram) + MANIFEST_laptop.json
+2026-10-10 20:22:02 waiting for states_qwen.pt (with J-gram) + MANIFEST_laptop.json
+2026-10-10 20:22:32 box stage 2 start
+2026-10-10 21:05:30 box stage 2 end rc=0
+2026-10-10 21:05:30 waiting for dev_qwen.json
+2026-10-11 02:32:31 box stage 3 start
+2026-10-11 05:03:53 box stage 3 end
+2026-10-11 05:03:53 waiting for test_qwen.json
+2026-10-11 15:14:53 box stage 4 start
+2026-10-11 15:16:46 box stage 4 end
+2026-10-11 15:16:46 ALL_BOX_STAGES_DONE

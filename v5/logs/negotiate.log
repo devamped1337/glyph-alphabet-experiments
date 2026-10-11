@@ -1,0 +1,36 @@
+book 0 emb pca 0 70 2 108s
+book 0 emb pca 1 71 2 203s
+book 0 emb pca 2 70 2 296s
+skip 0 jlens 0 (no J-lens subspace in states)
+skip 0 jlens 1 (no J-lens subspace in states)
+skip 0 jlens 2 (no J-lens subspace in states)
+book 0 emb random 0 68 1 298s
+book 0 emb random 1 69 1 300s
+book 0 emb random 2 70 1 301s
+layer 0 done 899s
+book 1 6 pca 0 66 2 918s
+book 1 6 pca 1 62 3 935s
+book 1 6 pca 2 64 2 948s
+skip 1 jlens 0 (no J-lens subspace in states)
+skip 1 jlens 1 (no J-lens subspace in states)
+skip 1 jlens 2 (no J-lens subspace in states)
+book 1 6 random 0 58 1 949s
+book 1 6 random 1 54 1 950s
+book 1 6 random 2 54 1 951s
+layer 1 done 206s
+book 2 8 pca 0 65 3 1127s
+book 2 8 pca 1 67 3 1143s
+book 2 8 pca 2 66 2 1156s
+skip 2 jlens 0 (no J-lens subspace in states)
+skip 2 jlens 1 (no J-lens subspace in states)
+skip 2 jlens 2 (no J-lens subspace in states)
+book 2 8 random 0 54 1 1157s
+book 2 8 random 1 56 1 1158s
+book 2 8 random 2 54 1 1159s
+layer 2 done 199s
+saved /workspace/glyph-exp/v5/results/gate5.json 34957 bytes
+saved /workspace/glyph-exp/v5/results/selection5.json 130253 bytes
+saved /workspace/glyph-exp/v5/results/deliveries_smol.pt 86711359 bytes
+saved /workspace/glyph-exp/v5/results/deliveries_qwen.pt 86711359 bytes
+saved /workspace/glyph-exp/v5/results/book5.json 20307 bytes
+negotiation done 1348s

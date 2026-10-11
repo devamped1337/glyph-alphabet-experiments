@@ -10,6 +10,6 @@ case "$1" in
  1x) JPROMPTS=0 $PY extract5.py qwen 2>&1 | tee logs/extract_qwen.log; JGRAM_DTYPE=bfloat16 JBATCH=1 $PY jgram5.py qwen 2>&1 | tee logs/jgram_qwen.log ;;
  1j) JGRAM_DTYPE=bfloat16 JBATCH=1 $PY jgram5.py qwen 2>&1 | tee logs/jgram_qwen.log ;;     # extraction only (determinism already done)
  2) export N_DEV=40 DEV_ID_LI=1; $PY run5.py qwen dev 2>&1 | tee logs/dev_qwen.log ;;
- 3) export N_TEST=${N_TEST:-80} TEST_SEEDS=0; $PY run5.py qwen test 2>&1 | tee logs/test_qwen.log ;;
+ 3) export N_TEST=${N_TEST:-110} TEST_SEEDS=0; $PY run5.py qwen test 2>&1 | tee logs/test_qwen.log ;;
 esac
 ( cd results && sha256sum *.pt *.json > SHA256SUMS_laptop.txt ); echo LAPTOP_STAGE_$1_DONE

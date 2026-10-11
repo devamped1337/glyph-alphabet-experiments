@@ -1,0 +1,36 @@
+saved /workspace/glyph-exp/v5/results/det_state.pt 42743 bytes
+Loading weights:   0%|          | 0/218 [00:00<?, ?it/s]Loading weights:   0%|          | 1/218 [00:00<00:24,  8.87it/s]Loading weights:  22%|██▏       | 49/218 [00:00<00:00, 254.89it/s]Loading weights:  35%|███▌      | 77/218 [00:00<00:00, 256.24it/s]Loading weights:  50%|█████     | 110/218 [00:00<00:00, 278.33it/s]Loading weights:  63%|██████▎   | 138/218 [00:00<00:00, 264.03it/s]Loading weights:  76%|███████▌  | 165/218 [00:00<00:00, 246.75it/s]Loading weights:  87%|████████▋ | 190/218 [00:00<00:00, 232.04it/s]Loading weights: 100%|██████████| 218/218 [00:00<00:00, 242.22it/s]
+smol HuggingFaceTB/SmolLM2-1.7B effd688a12 layers 24 d 2048 patch/read keys ['emb', 6, 8] RSS 7.1 GB
+{'repeat_bitwise': True, 'reload_bitwise': True, 'batch4_vs_batch1_maxabs': 3.4332275390625e-05}
+saved /workspace/glyph-exp/v5/results/det_smol_box.pt 50334799 bytes
+Loading weights:   0%|          | 0/218 [00:00<?, ?it/s]Loading weights:  15%|█▍        | 32/218 [00:00<00:00, 311.38it/s]Loading weights:  31%|███       | 68/218 [00:00<00:00, 332.64it/s]Loading weights:  50%|█████     | 110/218 [00:00<00:00, 367.05it/s]Loading weights:  67%|██████▋   | 147/218 [00:00<00:00, 356.93it/s]Loading weights:  84%|████████▍ | 183/218 [00:00<00:00, 310.62it/s]Loading weights:  99%|█████████▊| 215/218 [00:00<00:00, 303.52it/s]Loading weights: 100%|██████████| 218/218 [00:00<00:00, 324.28it/s]
+smol HuggingFaceTB/SmolLM2-1.7B effd688a12 layers 24 d 2048 patch/read keys ['emb', 6, 8] RSS 7.1 GB
+book 0 2556 5s RSS 7.5 GB
+book 200 2556 66s RSS 7.5 GB
+book 400 2556 133s RSS 7.5 GB
+book 600 2556 201s RSS 7.5 GB
+book 800 2556 268s RSS 7.5 GB
+book 1000 2556 329s RSS 7.5 GB
+book 1200 2556 391s RSS 7.5 GB
+book 1400 2556 447s RSS 7.5 GB
+book 1600 2556 509s RSS 7.5 GB
+book 1800 2556 563s RSS 7.5 GB
+book 2000 2556 620s RSS 7.5 GB
+book 2200 2556 673s RSS 7.5 GB
+book 2400 2556 727s RSS 7.5 GB
+sender 0 2556 768s RSS 7.5 GB
+sender 200 2556 832s RSS 7.5 GB
+sender 400 2556 895s RSS 7.5 GB
+sender 600 2556 958s RSS 7.5 GB
+sender 800 2556 1021s RSS 7.5 GB
+sender 1000 2556 1092s RSS 7.5 GB
+sender 1200 2556 1150s RSS 7.5 GB
+sender 1400 2556 1214s RSS 7.5 GB
+sender 1600 2556 1274s RSS 7.5 GB
+sender 1800 2556 1331s RSS 7.5 GB
+sender 2000 2556 1386s RSS 7.5 GB
+sender 2200 2556 1447s RSS 7.5 GB
+sender 2400 2556 1508s RSS 7.5 GB
+jgram 20s
+saved /workspace/glyph-exp/v5/results/states_smol.pt 315666629 bytes
+done smol 1571s

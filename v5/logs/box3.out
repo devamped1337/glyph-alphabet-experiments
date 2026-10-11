@@ -1,0 +1,77 @@
+saved /workspace/glyph-exp/v5/results/frozen5.json 1272 bytes
+frozen li 0 {0: 0.75, 1: 0.7164948453608248, 2: 0.6726804123711341}
+{
+ "smol": [
+  "t1|agent",
+  "t1|patient",
+  "t1|pol",
+  "t4|where",
+  "t5|status"
+ ],
+ "qwen": [
+  "t1|agent",
+  "t1|mod",
+  "t1|pol",
+  "t2|first",
+  "t4|where",
+  "t5|status"
+ ]
+}
+Loading weights:   0%|          | 0/218 [00:00<?, ?it/s]Loading weights:   0%|          | 1/218 [00:00<01:50,  1.97it/s]Loading weights:  18%|█▊        | 39/218 [00:00<00:02, 78.74it/s]Loading weights:  26%|██▌       | 56/218 [00:00<00:01, 92.84it/s]Loading weights:  33%|███▎      | 71/218 [00:00<00:01, 85.40it/s]Loading weights:  38%|███▊      | 83/218 [00:01<00:01, 91.10it/s]Loading weights:  44%|████▎     | 95/218 [00:01<00:01, 78.17it/s]Loading weights:  48%|████▊     | 105/218 [00:01<00:01, 81.49it/s]Loading weights:  54%|█████▎    | 117/218 [00:01<00:01, 86.44it/s]Loading weights:  58%|█████▊    | 127/218 [00:01<00:01, 88.67it/s]Loading weights:  63%|██████▎   | 137/218 [00:01<00:00, 89.99it/s]Loading weights:  67%|██████▋   | 147/218 [00:02<00:01, 59.52it/s]Loading weights:  72%|███████▏  | 156/218 [00:02<00:01, 54.36it/s]Loading weights:  76%|███████▌  | 165/218 [00:02<00:01, 51.45it/s]Loading weights:  80%|███████▉  | 174/218 [00:02<00:01, 42.57it/s]Loading weights:  83%|████████▎ | 180/218 [00:02<00:00, 43.03it/s]Loading weights:  85%|████████▍ | 185/218 [00:03<00:01, 26.53it/s]Loading weights:  88%|████████▊ | 192/218 [00:03<00:00, 27.42it/s]Loading weights:  92%|█████████▏| 201/218 [00:03<00:00, 34.14it/s]Loading weights:  96%|█████████▋| 210/218 [00:03<00:00, 40.11it/s]Loading weights: 100%|██████████| 218/218 [00:03<00:00, 55.92it/s]
+smol HuggingFaceTB/SmolLM2-1.7B effd688a12 layers 24 d 2048 patch/read keys ['emb', 6, 8] RSS 7.1 GB
+test smol queries 1056 layer index 0
+0 1056 18s, 10.0s for 38 rows, RSS 7.4 GB
+20 1056 211s, 9.7s for 38 rows, RSS 7.4 GB
+40 1056 391s, 8.9s for 38 rows, RSS 7.4 GB
+60 1056 567s, 8.7s for 38 rows, RSS 7.4 GB
+80 1056 740s, 8.7s for 38 rows, RSS 7.4 GB
+100 1056 914s, 8.7s for 38 rows, RSS 7.4 GB
+120 1056 1092s, 8.5s for 38 rows, RSS 7.4 GB
+140 1056 1275s, 9.6s for 38 rows, RSS 7.4 GB
+160 1056 1460s, 8.4s for 38 rows, RSS 7.4 GB
+180 1056 1642s, 8.9s for 38 rows, RSS 7.4 GB
+200 1056 1823s, 9.1s for 38 rows, RSS 7.4 GB
+220 1056 2007s, 9.6s for 38 rows, RSS 7.4 GB
+240 1056 2186s, 9.0s for 38 rows, RSS 7.4 GB
+260 1056 2376s, 10.3s for 38 rows, RSS 7.4 GB
+280 1056 2563s, 9.0s for 38 rows, RSS 7.4 GB
+300 1056 2745s, 9.1s for 38 rows, RSS 7.4 GB
+320 1056 2925s, 9.1s for 38 rows, RSS 7.4 GB
+340 1056 3102s, 8.8s for 38 rows, RSS 7.4 GB
+360 1056 3278s, 8.9s for 38 rows, RSS 7.4 GB
+380 1056 3454s, 9.3s for 38 rows, RSS 7.4 GB
+400 1056 3633s, 8.5s for 38 rows, RSS 7.4 GB
+420 1056 3806s, 8.8s for 38 rows, RSS 7.4 GB
+440 1056 3982s, 8.6s for 38 rows, RSS 7.4 GB
+460 1056 4153s, 8.2s for 38 rows, RSS 7.4 GB
+480 1056 4325s, 8.5s for 38 rows, RSS 7.4 GB
+500 1056 4504s, 8.9s for 38 rows, RSS 7.4 GB
+520 1056 4683s, 8.5s for 38 rows, RSS 7.4 GB
+540 1056 4858s, 8.9s for 38 rows, RSS 7.4 GB
+560 1056 5039s, 8.5s for 38 rows, RSS 7.4 GB
+580 1056 5224s, 9.4s for 38 rows, RSS 7.4 GB
+600 1056 5409s, 9.2s for 38 rows, RSS 7.4 GB
+620 1056 5590s, 9.7s for 38 rows, RSS 7.4 GB
+640 1056 5778s, 8.9s for 38 rows, RSS 7.4 GB
+660 1056 5965s, 9.5s for 38 rows, RSS 7.4 GB
+680 1056 6149s, 8.9s for 38 rows, RSS 7.4 GB
+700 1056 6333s, 9.1s for 38 rows, RSS 7.4 GB
+720 1056 6514s, 8.9s for 38 rows, RSS 7.4 GB
+740 1056 6691s, 9.2s for 38 rows, RSS 7.4 GB
+760 1056 6855s, 8.1s for 34 rows, RSS 7.4 GB
+780 1056 7010s, 7.6s for 32 rows, RSS 7.4 GB
+800 1056 7168s, 7.9s for 32 rows, RSS 7.4 GB
+820 1056 7321s, 8.2s for 34 rows, RSS 7.4 GB
+840 1056 7478s, 7.7s for 32 rows, RSS 7.4 GB
+860 1056 7634s, 8.3s for 34 rows, RSS 7.4 GB
+880 1056 7795s, 8.2s for 34 rows, RSS 7.4 GB
+900 1056 7950s, 7.7s for 32 rows, RSS 7.4 GB
+920 1056 8103s, 7.3s for 32 rows, RSS 7.4 GB
+940 1056 8258s, 7.3s for 32 rows, RSS 7.4 GB
+960 1056 8413s, 7.0s for 30 rows, RSS 7.4 GB
+980 1056 8554s, 7.2s for 30 rows, RSS 7.4 GB
+1000 1056 8695s, 7.0s for 30 rows, RSS 7.4 GB
+1020 1056 8834s, 6.8s for 30 rows, RSS 7.4 GB
+1040 1056 8973s, 6.5s for 30 rows, RSS 7.4 GB
+saved /workspace/glyph-exp/v5/results/test_smol.json 7791500 bytes
+done smol test 9075s

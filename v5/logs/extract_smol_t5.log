@@ -1,0 +1,7 @@
+Loading weights:   0%|          | 0/218 [00:00<?, ?it/s]Loading weights:  14%|█▍        | 30/218 [00:00<00:00, 268.82it/s]Loading weights:  26%|██▌       | 57/218 [00:00<00:00, 251.01it/s]Loading weights:  39%|███▊      | 84/218 [00:00<00:00, 243.85it/s]Loading weights:  50%|█████     | 109/218 [00:00<00:00, 245.08it/s]Loading weights:  61%|██████▏   | 134/218 [00:00<00:00, 234.22it/s]Loading weights:  72%|███████▏  | 158/218 [00:00<00:00, 215.29it/s]Loading weights:  83%|████████▎ | 181/218 [00:00<00:00, 215.26it/s]Loading weights:  93%|█████████▎| 203/218 [00:00<00:00, 210.94it/s]Loading weights: 100%|██████████| 218/218 [00:00<00:00, 228.85it/s]
+smol HuggingFaceTB/SmolLM2-1.7B effd688a12 layers 24 d 2048 patch/read keys ['emb', 6, 8] RSS 7.1 GB
+ONLY_NEW: extracting 200 new messages
+book 0 200 6s RSS 7.5 GB
+sender 0 200 62s RSS 7.5 GB
+saved /workspace/glyph-exp/v5/results/states_smol.pt 340243397 bytes
+done smol 118s

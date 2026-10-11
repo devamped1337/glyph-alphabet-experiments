@@ -1,0 +1,20 @@
+Loading weights:   0%|          | 0/218 [00:00<?, ?it/s]Loading weights:   0%|          | 1/218 [00:00<01:29,  2.43it/s]Loading weights:  18%|█▊        | 39/218 [00:00<00:01, 91.12it/s]Loading weights:  26%|██▌       | 56/218 [00:00<00:01, 110.02it/s]Loading weights:  33%|███▎      | 73/218 [00:00<00:01, 106.78it/s]Loading weights:  40%|███▉      | 87/218 [00:00<00:01, 101.54it/s]Loading weights:  46%|████▌     | 100/218 [00:01<00:01, 98.70it/s]Loading weights:  51%|█████▏    | 112/218 [00:01<00:01, 90.99it/s]Loading weights:  56%|█████▌    | 122/218 [00:01<00:01, 90.51it/s]Loading weights:  61%|██████    | 132/218 [00:01<00:00, 89.66it/s]Loading weights:  65%|██████▌   | 142/218 [00:01<00:00, 89.32it/s]Loading weights:  71%|███████   | 154/218 [00:01<00:00, 95.66it/s]Loading weights:  75%|███████▌  | 164/218 [00:01<00:00, 90.16it/s]Loading weights:  80%|███████▉  | 174/218 [00:02<00:00, 76.46it/s]Loading weights:  84%|████████▍ | 183/218 [00:02<00:00, 55.31it/s]Loading weights:  88%|████████▊ | 192/218 [00:02<00:00, 58.63it/s]Loading weights:  93%|█████████▎| 202/218 [00:02<00:00, 66.76it/s]Loading weights: 100%|██████████| 218/218 [00:02<00:00, 82.32it/s]
+smol HuggingFaceTB/SmolLM2-1.7B effd688a12 layers 24 d 2048 patch/read keys ['emb', 6, 8] RSS 7.1 GB
+dev smol queries 294 layer index None
+0 294 10s, 3.5s for 14 rows, RSS 7.3 GB
+20 294 77s, 3.1s for 14 rows, RSS 7.3 GB
+40 294 143s, 3.4s for 14 rows, RSS 7.3 GB
+60 294 209s, 3.1s for 14 rows, RSS 7.3 GB
+80 294 274s, 3.3s for 14 rows, RSS 7.3 GB
+100 294 338s, 3.1s for 14 rows, RSS 7.3 GB
+120 294 402s, 3.6s for 14 rows, RSS 7.3 GB
+140 294 467s, 3.2s for 14 rows, RSS 7.3 GB
+160 294 531s, 3.0s for 14 rows, RSS 7.3 GB
+180 294 596s, 3.2s for 14 rows, RSS 7.3 GB
+200 294 668s, 9.6s for 14 rows, RSS 7.3 GB
+220 294 865s, 9.6s for 14 rows, RSS 7.3 GB
+240 294 1056s, 3.2s for 14 rows, RSS 7.3 GB
+260 294 1118s, 2.9s for 14 rows, RSS 7.3 GB
+280 294 1180s, 3.0s for 14 rows, RSS 7.3 GB
+saved /workspace/glyph-exp/v5/results/dev_smol.json 841693 bytes
+done smol dev 1219s
