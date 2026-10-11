@@ -1,5 +1,7 @@
 # E1b PREREG: DRAFT rev 6 (consolidated specification)
 
+> **Superseded:** frozen as [PREREG_E1b.md](PREREG_E1b.md) (tag `prereg-e1b`, 2026-10-12). This draft is kept for history only.
+
 **Status: DRAFT, 2026-10-12 (AEDT). Not frozen and not tagged. No E1b code exists and nothing has been run.** Written after the E1 results were seen (`RESULTS_E1.md`, `v6/e1/CALIBRATION_REPORT.md`).
 
 **Rev 6** applies `claude_3.md` (Claude, read rev 5 `eaead82` directly), items (a)–(j); Grok signed off on rev 5 (`grok_3.md`). **What this revision is:** one consistent specification. Every setting has exactly one value. All superseded text was removed (GPT r2, point 7). The earlier revisions stay in git: rev 1 `ce7cd5d`, rev 2 `283aaad`, rev 3 `1550275`, rev 4 `ee45548`.
