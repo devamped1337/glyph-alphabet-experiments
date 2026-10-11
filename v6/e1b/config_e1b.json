@@ -80,7 +80,7 @@
   "a1_family_floor": 0.7,
   "exit_entry_share": 0.8,
   "a4_follow_min": 0.7,
-  "budget_h": 2.0
+  "budget_h": 5.5
  },
  "qualification": {
   "entries_per_family": 6,
