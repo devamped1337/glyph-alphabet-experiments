@@ -1,5 +1,7 @@
 # v5 results: glyph codebook transfer between SmolLM2-1.7B and Qwen2.5-3B
 
+> Reviews: [round 1, all four](reviews/v5/round1/ALL_FOUR.md) · [round 2 request](reviews/v5/ROUND2_REQUEST.md)
+
 ## ERRATA (2026-10-11, from GPT review round 1, reviews/v5/round1/gpt.md)
 
 1. **The frozen depth is the embedding layer, and the pre-registered rule chose it correctly** (amended after GPT's follow-up, reviews/v5/round1/gpt_followup.md). frozen5.json has li=0, which common5.py maps to "emb" (`embed_tokens` output). States are read at the last token of each slot value. The contextual depths did run on DEV and did worse. Pooled DEV glyph_id on counted tasks: emb 0.750, ~25% depth 0.716, ~33% depth 0.673 (n=776 each, recomputed from dev_qwen.json + dev_smol.json). Rule B therefore picked emb as written. TEST then measured only the **embedding-codebook** channel, and that channel lost to prose. The contextual candidates did worse on DEV but were never compared on TEST, and the J-lens basis was dropped untested. **The broader contextual/J-space idea is unresolved, not refuted.** Coverage was poor for places (only Lyon and Spain survived) and for some statuses ("authorized" and "not approved" were rejected). **Recommendation for the next PREREG:** give the contextual channel its own fixed comparison on TEST, with the embedding channel as the baseline, instead of letting a single DEV argmax choose between them.
