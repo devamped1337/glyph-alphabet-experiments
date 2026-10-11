@@ -7,12 +7,17 @@ MARGIN = 0.05
 def cboot(rows, f="correct", n=2000, seed=0):
     g = {}
     for r in rows:
+        if not isinstance(r, dict): continue
         if r.get(f) is not None: g.setdefault(r["group"], []).append(r[f])
     if not g: return None
     G = list(g.values()); s = np.array([sum(x) for x in G], float); c = np.array([len(x) for x in G], float)
     idx = np.random.default_rng(seed).integers(0, len(G), (n, len(G))); b = s[idx].sum(1) / c[idx].sum(1)
     return [float(s.sum() / c.sum()), float(np.quantile(b, .025)), float(np.quantile(b, .975)), int(c.sum()), len(G)]
 def e2e(r): return 0 if r.get("covered") == 0 else r.get("correct")
+def is_overflow(r): return isinstance(r, dict) and r.get("pred") == "__OVERFLOW__"
+def row_dicts(v):
+    """keep only mapping rows (skip already-bootstrapped float lists / non-dicts)"""
+    return [x for x in v if isinstance(x, dict)] if isinstance(v, list) else []
 def paired(A, B, n=2000, seed=0):
     """A, B: {(mid,q): (group, value)}; paired cluster bootstrap of mean(A-B) over the common items"""
     ks = sorted(set(A) & set(B))
@@ -26,7 +31,7 @@ def paired(A, B, n=2000, seed=0):
 names = sys.argv[1:] or [f"test_{rk}.json" for rk in MODELS]
 FZ = load("frozen5.json") if os.path.exists(os.path.join(OUT, "frozen5.json")) else None
 GATE = load("gate5.json") if os.path.exists(os.path.join(OUT, "gate5.json")) else None
-T = {"cells": {}, "dropped": {}, "paired": {}, "seeds": {}, "loo_by_gate": {}, "fallback": {}, "margin": MARGIN}
+T = {"cells": {}, "dropped": {}, "paired": {}, "seeds": {}, "loo_by_gate": {}, "fallback": {}, "overflow": {}, "margin": MARGIN}
 f = lambda x: "-" if not x else f"{x[0]:.3f} [{x[1]:.3f}, {x[2]:.3f}] ({x[3]}/{x[4]})"
 md = ["# v5 tables (generated)", "", "mean [95% cluster-bootstrap CI] (n queries / n groups). cond acc = among covered deliveries; e2e = unsupported deliveries count as failures.", ""]
 if FZ:
@@ -35,8 +40,10 @@ if FZ:
 for nm in names:
     if not os.path.exists(os.path.join(OUT, nm)): continue
     d = load(nm); rk = d["receiver"]; R = d["rows"]
-    fb = [r for r in R if r["cond"] == "unknown_id_fallback"]; T["fallback"][rk] = {"n": len(fb), "all_UNRECOGNIZED": all(r["correct"] for r in fb)}
-    R = [r for r in R if r["cond"] != "unknown_id_fallback"]
+    n_ov = sum(1 for r in R if is_overflow(r)); T["overflow"][rk] = {"n": n_ov, "of": len(R)}
+    if n_ov: print(f"  {rk}: skipping {n_ov}/{len(R)} __OVERFLOW__ rows", flush=True)
+    fb = [r for r in R if r["cond"] == "unknown_id_fallback" and not is_overflow(r)]; T["fallback"][rk] = {"n": len(fb), "all_UNRECOGNIZED": all(r["correct"] for r in fb)}
+    R = [r for r in R if r["cond"] != "unknown_id_fallback" and not is_overflow(r)]
     cells = {}
     for r in R: cells.setdefault((f"{r['t']}|{r['q']}", r["cond"], r.get("sender", "-"), r.get("basis", "-"), str(r.get("seed", "-"))), []).append(r)
     md += [f"## receiver {rk} ({nm})", "", "| task | cond | sender | basis | seed | coverage | cond acc | e2e acc | follows | magnitude | sign |", "|---|---|---|---|---|---|---|---|---|---|---|"]
@@ -64,19 +71,21 @@ for nm in names:
             for bn, B in (("text_prose", vec("text_prose")), ("id_text_expanded", vec("id_text_expanded", sk)), ("text_compact", vec("text_compact")), ("receiver_word_state", vec("receiver_word_state", sk))):
                 p = paired(A, sel(B))
                 if p: T["paired"][f"{rk}|{tq}|{sk}|glyph_id-vs-{bn}"] = p; md.append(f"| {tq} | {sk} | glyph_id | {bn} | {p['diff']:+.3f} [{p['lo']:+.3f}, {p['hi']:+.3f}] (n={p['n']}) | {p['verdict']} |")
-    # LOO by gate verdict
+    # LOO by gate verdict (collect rows only; bootstrap once after all receivers)
     if GATE:
         for r in R:
             if r["cond"] != "glyph_loo": continue
             ok = all(GATE["loo"].get(f"{r['li']}|{r['loo_symbol']}", {}).get("held_entries_pass", {}).values()) if GATE["loo"].get(f"{r['li']}|{r['loo_symbol']}") else None
             T["loo_by_gate"].setdefault(f"{rk}|{r['t']}|{r['q']}|{r['sender']}|{'gate_pass' if ok else 'gate_fail'}", []).append(r)
-        T["loo_by_gate"] = {k: (cboot([{**x, "e": e2e(x)} for x in v], "e") if isinstance(v, list) else v) for k, v in T["loo_by_gate"].items()}
     for bas in BASES:
         for sk in MODELS:
             per = {s: [e2e(r) for r in R if r["cond"] == "glyph_id" and r.get("basis") == bas and r.get("seed") == s and r.get("sender") == sk and e2e(r) is not None] for s in SEEDS}
             ms = [float(np.mean(v)) for v in per.values() if v]
             if ms: T["seeds"][f"{rk}|{sk}|{bas}"] = {"per_seed_e2e": ms, "mean": float(np.mean(ms)), "sd": float(np.std(ms, ddof=1)) if len(ms) > 1 else None}
     md.append("")
+# bootstrap LOO buckets once (values may be row lists; skip non-mapping leftovers)
+T["loo_by_gate"] = {k: cboot([{**x, "e": e2e(x)} for x in row_dicts(v)], "e") for k, v in T["loo_by_gate"].items() if row_dicts(v)}
 md += ["## LOO by gate verdict (e2e)", "", "```", json.dumps(T["loo_by_gate"], indent=0), "```", "", "## seeds", "```", json.dumps(T["seeds"], indent=0), "```",
+       "", "## overflow rows skipped", "```", json.dumps(T["overflow"]), "```",
        "", "## UNRECOGNIZED fallback", "```", json.dumps(T["fallback"]), "```"]
 save(T, "tables5.json"); open(os.path.join(OUT, "TABLES_v5.md"), "w").write("\n".join(md)); print("\n".join(md[:60]))

@@ -139,13 +139,30 @@ class Runner:
     @torch.no_grad()
     def logits(self, ids, patches=()):
         """ids [B,T] tensor; patches: list of (layer_key, rows LongTensor, pos LongTensor, H [len(rows), P, d]). Last-position logits [B,V].
-        OLMo-2-7B occasionally produces non-finite float16 logits on a rare batch; retry per-row, then one bfloat16 attempt."""
+        OLMo-2-7B occasionally produces non-finite float16 logits on a rare batch; retry per-row, and for each failing
+        float16 row try one bfloat16 forward before raising (so B>1 does not skip the bf16 path)."""
         def once(ids_b, patches_b):
             self.patches = list(patches_b)
             try:
                 lg = self.hf(input_ids=ids_b.to(self.dev), use_cache=False).logits[:, -1].float().cpu()
                 return self._finite_or_raise(lg, "logits")
             finally: self.patches = []
+        def once_bf16(ids_b, patches_b):
+            """float16 row failed: try the same row in bfloat16, then restore float16 weights."""
+            print(f"  non-finite float16 logits ({self.key}); retrying row in bfloat16", flush=True)
+            prev = self.dtype
+            try:
+                self.hf.to(dtype=torch.bfloat16); self.dtype = "bfloat16"
+                return once(ids_b, patches_b)
+            finally:
+                self.hf.to(dtype=torch.float16); self.dtype = prev
+        def once_row(ids_b, patches_b):
+            try:
+                return once(ids_b, patches_b)
+            except FloatingPointError:
+                if self.dtype == "float16":
+                    return once_bf16(ids_b, patches_b)
+                raise
         try:
             return once(ids, patches)
         except FloatingPointError:
@@ -153,15 +170,9 @@ class Runner:
             B = int(ids.shape[0])
             if B > 1:
                 print(f"  non-finite {self.dtype} logits ({self.key}) B={B}; retrying per-row", flush=True)
-                return torch.cat([once(ids[i:i+1], self._patches_for_row(patches, i)) for i in range(B)], 0)
+                return torch.cat([once_row(ids[i:i+1], self._patches_for_row(patches, i)) for i in range(B)], 0)
             if self.dtype == "float16":
-                print(f"  non-finite float16 logits ({self.key}); retrying row in bfloat16", flush=True)
-                prev = self.dtype
-                try:
-                    self.hf.to(dtype=torch.bfloat16); self.dtype = "bfloat16"
-                    return once(ids, patches)
-                finally:
-                    self.hf.to(dtype=torch.float16); self.dtype = prev
+                return once_bf16(ids, patches)
             raise
     def jgram(self, batch_ids, keys, nprobe, seed):
         """J-lens-inspired: E_v[(J^T v)(J^T v)^T] with Gaussian cotangents v on the final hidden state (all positions), summed over source positions.
