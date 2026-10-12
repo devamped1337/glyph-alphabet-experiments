@@ -350,3 +350,13 @@ Estimated from E1's measured CPU rates (Qwen-3B 2.25 s/call, Smol 1.31 s/call; p
   - With 20 probes: P(≥18/20) is 0.677 / 0.839 / 0.925 / 0.979.
 - **(b)** Reserve probe templates for kinds other than the flagged ones.
 - **(c)** The B0 batch-size selection rule. Proposed: the largest size whose outputs match batch-1 on ≥ 99% of non-TEST items in the real nf4 GPU config, frozen before B1.
+
+### A6: 2026-10-12 (AEDT), Llama-3.1-8B replaced by OLMo-2-7B for access reasons; made BEFORE any B0 data was seen
+
+**Status:** frozen; approved by the user. B0 has not been run, so no Stage B output of any kind existed when this was decided.
+
+1. **Reason: access only.** `meta-llama/Llama-3.1-8B-Instruct` is gated and needs a Hugging Face account and token, which the user cannot obtain. The swap is not based on any model performance or result.
+2. **Change:** `llama8b` is removed from `stageB_order`, which becomes `qwen7b, olmo7b, mistral7b`. The pair is therefore Qwen2.5-7B-Instruct (Alibaba) + `allenai/OLMo-2-1124-7B-Instruct` (AI2), the substitute already pinned in A2 (revision `470b1fba1ae01581f270116362ee4aa1b97f4c84`, GGUF pins unchanged). Mistral remains the next substitute under §9 B0 (b). The `llama8b` config entry is kept for the record only.
+3. **Anonymous access checked on 2026-10-12:** config.json, tokenizer and weight shards of the pinned OLMo-2 revision download with no token (HF API `gated: false`).
+4. **Consequences required by the swap:** OLMo-2 (`model_type olmo2`) needs `transformers>=4.47`, so the Kaggle pin moves from 4.46.3 to **4.47.1** (bitsandbytes, accelerate and other pins unchanged; versions are still logged). The HF token is optional in the notebook. The chat template is the model's own (`<|system|>/<|user|>/<|assistant|>`, eos `<|endoftext|>`, pad `<|pad|>`), already mapped as `olmo2` in `backends.py`.
+5. **Nothing else changes:** nf4 config (fp16 compute), neutral greedy generation settings (`repetition_penalty=1.0` explicit, all knobs pinned), bars, budgets (B0 2 GPU-h), pools, seeds, analysis and the GGUF fallback rule are as frozen. Non-finite logits stay fail-loud (§4).

@@ -30,11 +30,11 @@ class DryRun(unittest.TestCase):
             try: S.STAGES["B0"](cfg)
             except SystemExit as e: self.assertIn(e.code, (5, 6, None))
             # force a pair + C60 to exercise B1-B3
-            json.dump(dict(pair=["qwen7b", "llama8b"], choice=dict(choice="C60"), leak=dict(flagged=[])), open(S.RES / "B0" / "config_choice.json", "w"))
+            json.dump(dict(pair=["qwen7b", "olmo7b"], choice=dict(choice="C60"), leak=dict(flagged=[])), open(S.RES / "B0" / "config_choice.json", "w"))
             # canary refs: per-case dicts as written by the real B0 (gpt_code_2 #1); the fake B0 wrote them for the models it loaded
             ref = json.load(open(S.RES / "B0" / "canaries_ref.json"))
             self.assertTrue(ref and all(isinstance(v, dict) and all({"pred", "correct"} <= set(x) for x in v.values()) for v in ref.values()), ref)
-            fake_ref = next(iter(ref.values())); json.dump({"qwen7b": fake_ref, "llama8b": fake_ref}, open(S.RES / "B0" / "canaries_ref.json", "w"))
+            fake_ref = next(iter(ref.values())); json.dump({"qwen7b": fake_ref, "olmo7b": fake_ref}, open(S.RES / "B0" / "canaries_ref.json", "w"))
             for q in (S.RES / "B0").glob("qualification_*.json"): q.unlink()   # fake models fail qualification; test the headline path
             for st in ("B1", "B2", "B3"):
                 try: S.STAGES[st](cfg)
