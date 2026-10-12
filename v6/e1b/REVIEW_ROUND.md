@@ -1,30 +1,30 @@
-# E1b review round 1
+# E1b review round 2 (B0)
 
-- **Pinned commit:** `fde7bb8315624767a8d7baad220b0f309ac8becd` (code hash `96a59725…`)
-- **Scope:** A5 DRAFT resolution + the batching fixes. Nothing is frozen and nothing has been run on Kaggle.
+- **Pinned commit:** `7873596fdc127486d83c90baa65d1718585dec39` (code hash `ee9439a3…`)
+- **Scope:** B0 run 2 results only. Stage B has stopped under the frozen prereg. No new run is proposed here.
 
-## Changed since the last review (Stage A, `73a528b`)
-- [AMENDMENT_A5_DRAFT.md](https://github.com/devamped1337/glyph-alphabet-experiments/blob/fde7bb8315624767a8d7baad220b0f309ac8becd/v6/e1b/AMENDMENT_A5_DRAFT.md):
-  - §5b collects the Claude/Grok/GPT reviews of the draft;
-  - §5d is the DRAFT resolution.
-- Reviews: [claude_A5](https://github.com/devamped1337/glyph-alphabet-experiments/blob/fde7bb8315624767a8d7baad220b0f309ac8becd/v6/e1b/reviews/claude_A5.md), [grok_A5](https://github.com/devamped1337/glyph-alphabet-experiments/blob/fde7bb8315624767a8d7baad220b0f309ac8becd/v6/e1b/reviews/grok_A5.md), [gpt_A5](https://github.com/devamped1337/glyph-alphabet-experiments/blob/fde7bb8315624767a8d7baad220b0f309ac8becd/v6/e1b/reviews/gpt_A5.md). GPT's counts are verified (13/33/20 of 40), and our earlier "16" is reconciled.
-- [Exploratory abstention test](https://github.com/devamped1337/glyph-alphabet-experiments/blob/fde7bb8315624767a8d7baad220b0f309ac8becd/v6/e1b/exploratory/abstention_test/README.md): the explicit instruction gave 0/23 abstentions, numeric stayed at 17/17, no over-abstention. No claims.
-- Batching ([stages.py](https://github.com/devamped1337/glyph-alphabet-experiments/blob/fde7bb8315624767a8d7baad220b0f309ac8becd/v6/e1b/e1b/stages.py) `batched_generate`, [backends.py](https://github.com/devamped1337/glyph-alphabet-experiments/blob/fde7bb8315624767a8d7baad220b0f309ac8becd/v6/e1b/e1b/backends.py) `generate_batch`):
-  - compute-once for byte-identical prompts (`shared_n`);
-  - deterministic batch composition (length, sha) with `batch_index/pos/n` logged;
-  - padding asserts and pad-token logging.
-- **Bug fix (GPT):** batched HF generate no longer inherits generation_config (`NEUTRAL_GEN`, repetition_penalty=1.0).
-- **Tests:** [smoke_hf_batch.py](https://github.com/devamped1337/glyph-alphabet-experiments/blob/fde7bb8315624767a8d7baad220b0f309ac8becd/v6/e1b/tools/smoke_hf_batch.py) with a penalised config gives batched == batch-1 on 8/8 + 6/6; 51 unit tests OK; the dry run passes.
+## What ran
+- [B0_REPORT.md](https://github.com/devamped1337/glyph-alphabet-experiments/blob/7873596fdc127486d83c90baa65d1718585dec39/v6/e1b/B0_REPORT.md) at the pinned commit.
+- Amendment A7 (GPU preflight, bitsandbytes 0.47, Mistral removed, nf4 on T4). Run 1 (CPU GGUF fallback) is archived and superseded.
+- Validity: GPU preflight PASSED for both models; backend `nf4`; E1b VALIDATION PASSED on Kaggle and locally; markers `.done` and `NO_QUALIFYING_PAIR`.
+
+## Headline numbers (frozen bars)
+| model | F1 probe / arith | F2 probe / arith | result |
+|---|---|---|---|
+| qwen7b | 0.924 / 1.000 | 0.924 / 1.000 | **QUALIFIED** |
+| olmo7b | 0.840 / 1.000 | 0.736 / 0.883 | **FAILED** (no family passes) |
+
+Pair: none. Only one lab qualified → Stage B stops (A7 §2/§3). Reserve used 1.38 GPU-h; 1.62 GPU-h remain.
+
+OLMo's main miss is the abstention diagnostic: unstated probes 11/24 and 9/24 vs Qwen 24/24. Same gap-filling pattern as Stage A. Sensitivity (descriptive only): without unstated, OLMo F1 would be 0.917 but F2 still fails; that does not change the frozen decision.
 
 ## Questions for reviewers
-1. Does the §5d DRAFT resolution reflect your position? Raise only errors in it.
-2. Batching review: are padding, positions, per-row stop and NEUTRAL_GEN sufficient, and is anything missing before B0?
-3. Which explicitly-wrong-rule plants should be strengthened, and to what bar? Is it changed_constant only (11/13 weak), with f/n >= 0.30 as Claude proposed?
-4. Open items: reserve probe templates per kind, and the B0 batch-size rule (largest size with >=99% batch-1 agreement on non-TEST items).
+1. Do you accept the stop: no qualifying two-lab 7B pair under the free-access constraints already locked (no HF gate, no Mistral/European, Llama gated)?
+2. Any error in the validity checks, gold labels, or parsing that would reopen run 2 before we treat B0 as closed?
+3. If a later amendment names a different second model, what must that amendment state so it is not a silent post-hoc swap after seeing these numbers?
 
-## Settled (don't reopen)
-- Proceed to B0 uncached. The cache claim stays withheld, and the GPU cache path is tested separately.
-- *-unstated probes are excluded from the leak rule and kept as an abstention diagnostic. Leak checks stay on the other kinds.
-- UNKNOWN-implying plants are reported separately and revisited after B. TEST plants stay untouched.
-- B1 reports planted rejection per corruption type. The P4 entry bar is decided after B0 and before B1.
-- The 0.90 bar is unchanged. The frozen PREREG and A1-A4 stand.
+## Settled (don't reopen here)
+- A5 resolution and batching fixes from review round 1.
+- `*-unstated` stays an abstention diagnostic excluded from the leak rule only; it still counts in qualification.
+- B1–B3 do not run without a qualifying pair and a new amendment/prereg that cites these B0 results.
+- Claude is out of free-tier credit for now; Grok and GPT are the active external reviewers.
