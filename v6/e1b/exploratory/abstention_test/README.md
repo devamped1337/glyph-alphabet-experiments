@@ -18,7 +18,7 @@
 
 By corruption type (variant): deleted_negation 0/10, mismatched_definition 0/10, near_miss_polarity 0/3 abstained;
 changed_constant 4/4, swapped_roles 10/10, inverted_comparison 3/3 followed. 10/23 UNKNOWN-gold items were
-answered with the honest answer. 0/40 predictions changed from the baseline.
+answered with the honest answer. 3/40 predictions changed from the baseline (all non-abstaining; follow/abstain outcomes are identical).
 
 Validity: 40/40 parsed via the Answer line, 0 None, max 126 generated tokens (<192, so nothing was truncated), max prompt 160 tokens.
 Over-abstention on honest entries was not measured beyond the 17 numeric controls.
