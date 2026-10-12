@@ -4,3 +4,9 @@
 eb6108a123ad3f4259f7e87d48a67bbcc74d501a9cdded727c79d10cd31e9e58  config_e1b.json
 code hash OK 682b727b8198697da74f6bb641eddd66948614351e3f03fff8b3d9e80279962d
 [A] projection 4.99 h > 2.0 h -> stop and report (no shrinking)
+== A start Mon Oct 12 10:24:51 AEDT 2026
+aa9ef296b74a2df1d8549eb0bde9ac7d56394066
+4611e220af6378169a81ebf6da253b9184d3128a3c6a9a59fc8b540f914fb0ef
+9de5200297dbf289a96326029c2c8e7bf4b9bf47f18b76fb3810b93b641cd06f  config_e1b.json
+code hash OK 4611e220af6378169a81ebf6da253b9184d3128a3c6a9a59fc8b540f914fb0ef
+[A] BUDGET EXHAUSTED -> stop and report

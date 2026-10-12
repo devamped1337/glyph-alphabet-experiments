@@ -1,36 +1,138 @@
-# E1b Stage A report: stopped by the pre-registered runtime projection (diagnostic only, no claims)
+# E1b Stage A report: stopped on BUDGET_EXHAUSTED (diagnostic only, no claims)
 
-**Run:** 2026-10-12, 09:56–10:20 AEDT, on the box CPU (8 threads, llama.cpp, Q4_K_M GGUFs, sha256-verified against the pins). Detached job with per-row checkpoints. Commit `931b3df`, **code hash `682b727b…`** (PREREG_E1b + A1–A3). No Kaggle, no paid APIs, no Stage B.
+**Run:** 2026-10-12, 09:56–15:31 AEDT, on the box CPU (8 threads, llama.cpp, Q4_K_M GGUFs). Detached job with per-row checkpoints. **No Kaggle, no paid APIs, no Stage B started.**
+
+| Field | Value |
+|---|---|
+| First attempt commit / code hash | `931b3df` / `682b727b…` (stopped by projection after A1) |
+| Resume commit / code hash | `aa9ef296…` / `4611e220…` (Amendment A4: 5.5 h box-CPU) |
+| Config sha256 | `9de5200297dbf289a96326029c2c8e7bf4b9bf47f18b76fb3810b93b641cd06f` |
+| Models | qwen3b = Qwen2.5-3B-Instruct Q4_K_M; smol17 = SmolLM2-1.7B-Instruct Q4_K_M |
+| Budget | Amendment A4: **5.5 h** box-CPU (`stageA.budget_h`) |
+| Ledger | `results/budget_ledger.json` → **19807.5 s ≈ 5.502 h** |
+| Stop marker | `results/A/BUDGET_EXHAUSTED` — *A exceeded 5.50 h; stopped, not shrunk* |
+| Process | PID 2521170 confirmed **dead** after exit |
+
+Wall-clock: first start 09:56 AEDT → stop 15:31 AEDT (~5.58 h calendar, including the projection stop / A4 resume). Cumulative charged time is the ledger (5.502 h).
 
 ## Outcome
-Stage A ran **A1** (capability smoke, 120 cases per model). It then **stopped at the pre-registered projection check (§7): projected 4.99 h > the 2 h cap → "stop and report, no shrinking"** (marker `results/A/PROJECTION_EXCEEDS_BUDGET`, exit 3). Nothing after A1 ran: A2 probes, A3 prompt ablation, A4 manipulation check, A5 cache, A6 cost.
 
-- **Measured per-call time:** Qwen2.5-3B **7.68 s**, SmolLM2-1.7B **4.08 s**. E1 measured 2.25 s and 1.31 s, but E1 replies were much shorter. With `max_new_tokens = 192` and no 3-line cap (the A1 prompt fix), mean generation is 99 and 76 tokens.
-- **The stop is robust, not a projection artefact.** The remaining arithmetic calls alone are 120 (A3) + 600 (A5: 5 runs × 120 prompts) + 480 (A6) per model. That is ≈3.9 h before any probes, on top of the 0.4 h already used.
-- **Consequences under the frozen plan:**
-  - **The A exit rule was not evaluated** (no A2 probes), so there is **no "go to B" from Stage A**.
-  - **The A5 cache diagnostic did not run**, so no CPU cache claim is possible.
-  - Continuing would need a dated amendment: either a larger Stage A budget or a smaller pre-registered workload. That is the user's call; per §2, budgets are not raised silently.
+Stage A completed **A1–A5 for both models**, **A4 for qwen3b only** (by design), and **partial A6 for qwen3b only (218/480)**. It did **not** finish A6 smol17, did not write `.done`, and stopped with `BUDGET_EXHAUSTED`.
+
+| Step | qwen3b | smol17 |
+|---|---|---|
+| A1 capability | 120/120 | 120/120 |
+| A2 probes | 1152/1152 | 1152/1152 |
+| A3 prompt ablation | 120/120 | 120/120 |
+| A4 manipulation | 60/60 | n/a (Qwen only) |
+| A5 CPU cache | 120/120 | 120/120 |
+| A6 cost | **218/480 partial** | **missing** |
+| `summary.json` | written post-hoc from `summarize_A` | (same file) |
+
+**Exit rule (§7 / `analysis.summarize_A`):** small pair may calibrate only if honest probe pass-share ≥ 0.80 **and** A4 follow ≥ 0.70. Measured: **honest_pass_share = 0/18 = 0.00**, **a4_follow = 0.425**. → **`small_pair_may_calibrate = false`**. Per the prereg: **go to Stage B (7B)**; do not calibrate the 3B/1.7B pair. **This publish task did not start Stage B.**
+
+Stage A remains **diagnostic only**: no repository, ID-channel, or efficiency claims.
 
 ## A1 capability smoke (direct text, 40 cases per family per model)
+
 | Family | Qwen2.5-3B | SmolLM2-1.7B |
 |---|---|---|
-| F1 negation | **40/40** (1.00) | 37/40 (0.93) |
-| F2 roles | 29/40 (0.73) | 20/40 (0.50) |
-| F3s short schedule | 33/40 (0.83) | 13/40 (0.33) |
-| **All** | 102/120 (0.85) | 70/120 (0.58) |
+| F1 negation | **40/40** (1.00) | 37/40 (0.925) |
+| F2 roles | 29/40 (0.725) | 20/40 (0.50) |
+| F3s short schedule | 33/40 (0.825) | 13/40 (0.325) |
+| **All** | 102/120 (0.85) | 70/120 (0.583) |
 
-Against the §7 capability floor of 0.70 (Grok r1), Qwen clears it on every family. Smol fails it on F2 and F3s. This is reported only; there are no repository claims in Stage A.
+Against the §7 capability floor of 0.70: Qwen clears every family; Smol fails F2 and F3s. Reported only.
 
-## Was the run real? Checks done before reporting
-- **No truncated prompts:** the longest prompt is 158 tokens (n_ctx 2048).
-- **Replies hitting the 192-token limit:** 3 (Qwen; 1 correct, 2 wrong), 0 for Smol.
-- **Parser:** 232/240 replies parsed from the `Answer:` line, 8 by the last-integer fallback. No mismatch between the parsed prediction and the final `Answer:` value.
-  - **Parser note:** one Smol reply wrote `Answer: 12 * 3 = 36 credits`. The frozen rule (A1.5) takes the first integer after `Answer:`, which is 12, so it was scored wrong even though the final number is right. This is the frozen rule working as written, not a bug; it affects 1/240.
-- **Gold:** all 240 golds were recomputed from the entry text and question text alone (role-bound parser, A2.18). 0 mismatches.
-- **Validator** (`validate_v6.py --e1b`): PASSED for Stage A, status `incomplete:PROJECTION_EXCEEDS_BUDGET`.
-  - **Code bug fixed after the run:** the validator did not list Stage A's own stop marker `PROJECTION_EXCEEDS_BUDGET` as an explicit stop, so it would have called the stage "broken". The marker was added, with a regression test.
-  - The fix touches only `e1b/validate.py`, not any code used by the run. The code hash is re-recorded (see `CODE_HASH.txt`); the run itself used `682b727b`.
+## A2 probes (24 entries × 24 probes × with/without text; bar 0.90 acc + 0.90 agree per honest entry)
+
+With-text accuracy (pooled):
+
+| Slice | Qwen2.5-3B | SmolLM2-1.7B |
+|---|---|---|
+| Honest (432 probes) | 0.863 | 0.477 |
+| Planted (144 probes) | 0.674 | 0.347 |
+| F1 / F2 / F3s (with-text) | 0.810 / 0.769 / 0.896 | 0.440 / 0.412 / 0.500 |
+
+**Honest entry exit (need each model ≥0.90 and agree ≥0.90):** **0/18 pass** (share 0.00; need ≥0.80).
+
+Qwen is often 21/24 = 0.875 (just under the bar). Highest Qwen honest entries: F3s-9760 1.00, F1-9694 / F2-5247 0.917. Smol never reaches 0.90 on any honest entry (max ≈0.583). Agreement on honest entries ranges ≈0.25–0.625.
+
+Invalid letter rate: **0** for both models (all 1152+1152 parse_path=`letter`).
+
+### A2 no-text / leak flags (`stages.leak_rule`)
+
+- **Template-level flagged list:** empty (most templates have &lt;50 no-text observations → listed under `insufficient_obs`).
+- **Kind-level leaks** (pooled no-text baseline &gt; 0.40): **`F1-unstated` (0.625), `F2-unstated` (0.542), `F3s-unstated` (0.729)**.
+- Other kind baselines are near chance (~0.10–0.29). Full structure in `results/A/summary.json` → `A2_no_text`.
+
+## A3 prompt ablation (trailing Answer line)
+
+| Model | F1 | F2 | F3s | paired Δ (A1−A3) | missing Answer-line rate (A1 fixed → A3 trailing) |
+|---|---|---|---|---|---|
+| Qwen | 40/40 | 32/40 | 33/40 | −0.025 | 0.017 → 0.000 |
+| Smol | 25/40 | 17/40 | 12/40 | +0.133 | 0.050 → 0.008 |
+
+## A4 manipulation (Qwen only; scored on gold-changing cases)
+
+- Rows: 60; **gold_changes = 40**; **follows_planted = 17/40 = 0.425** (need ≥0.70 for the Stage A exit conjunction).
+- By corruption (follow / gold-changing): changed_constant 4/4, swapped_roles 10/10, inverted_comparison 3/3, deleted_negation 0/10, mismatched_definition 0/10, near_miss_polarity 0/3.
+
+## A5 CPU cache diagnostic
+
+`cachediag.summarize` on both models:
+
+| Model | claim_allowed | fixed cold↔cold predΔ | fixed warm↔warm predΔ | fixed cold↔warm predΔ | stress cold↔warm predΔ | invalid_runs |
+|---|---|---|---|---|---|---|
+| Qwen | **false** | 0/100 | 0/100 | **6/100** | 0/20 (1 tokenΔ) | 0 |
+| Smol | **false** | 0/100 | 0/100 | **16/100** | **4/20** | 0 |
+
+Pattern: cold/cold and warm/warm are stable; cold vs warm (and cold vs coldsplit) diverge, while coldsplit matches warm → prefix/suffix split vs one-shot cold is the change source, not warm restore vs warm. **Cache claim WITHHELD** for both; wording in summary: use uncached runs for any later claim in this runtime.
+
+Logit gaps (all A5 runs, `first_gap`): Qwen mean ≈1.90 (min≈0.062); Smol mean ≈0.46 (min≈0.004); Smol has many near-ties (100/600 runs with first_gap &lt; 0.1). Stress set = the 20 hand-chosen near-tie prompts (reported separately from the rule-of-three bound on the 100 fixed prompts).
+
+E1 cache baseline (recorded in summary for comparison): Qwen changed 45 / flipped 21 of 480; Smol changed 104 / flipped 33 of 480.
+
+## A6 cost (partial — no cost claim)
+
+- **qwen3b:** 218 rows (direct_text cold/warm 59+59; prose cold/warm 50+50). Incomplete vs scheduled 480.
+- **smol17:** file absent.
+- **No A6 cost / efficiency claim.** `A6_valid` follows A5 `claim_allowed` → false for both in summary.
+
+## Exit verdict
+
+```
+honest_pass_share = 0.00   (need >= 0.80)
+a4_follow         = 0.425  (need >= 0.70)
+small_pair_may_calibrate = false
+```
+
+**Verdict: go to Stage B (7B).** The small pair does not clear the Stage A exit bar. Stage A results are published either way. **Stage B / Kaggle were not started by this report.**
+
+## Was the run real? Verification before reporting
+
+| Check | Result |
+|---|---|
+| Process dead | PID 2521170 not running; stage_log ends with `budget_exhausted` at 15:31 AEDT |
+| BUDGET_EXHAUSTED | Present; text matches ledger stop; ledger 19807.5 s ≥ 5.5 h |
+| Prompt truncation | **0** rows with `prompt_tokens >= n_ctx` (2048). Max prompt_tokens observed: **161** (A3_smol17) |
+| Gen hitting 192-token cap | A1 Qwen 3/120 (1 correct); A3 Qwen 3/120 (3 correct); others 0 |
+| Parser (arithmetic) | Re-parse of `raw` via frozen `parse_answer` matches logged `pred`/`parse_path` on all A1/A3/A4/A6 rows. Paths mostly `answer_line`; A1 Qwen 2× `last_integer`, A1 Smol 6×, A3 Smol 1× |
+| A1.5 first-integer quirk | **1** Smol A1 row: `Answer: 12 * 3 = 36 credits` → pred=12 (frozen rule), gold=36, scored wrong. Known frozen behaviour, not a parser bug |
+| Parser (A2) | 100% `letter`; 0 invalid |
+| Gold recompute | `gold_from_text(entry, case)` on all non-planted A1/A3/A6 rows: **0 mismatches** (240+240+218). A4 is all planted (skipped by design). A2 `correct` ↔ `letter==gold`: 0 mismatches |
+| Validator | `python validate_v6.py --e1b --results-dir v6/e1b` → **PASSED**, status `incomplete:BUDGET_EXHAUSTED`. Marker was already in `INCOMPLETE_MARKERS` (no validate fix this round; code hash unchanged `4611e220…`) |
+| Leak / cache | From helpers above; claim_allowed false both models; kind-level unstated leaks flagged |
 
 ## Files
-`results/A/A1_qwen3b.jsonl`, `A1_smol17.jsonl` (per-case rows with raw replies, parse path, tokens, latency, logit gaps, prompt sha), `prompts_*.jsonl` (rendered prompts), `stage_log.jsonl` (environment, loads, system-turn hashes, projection), `PROJECTION_EXCEEDS_BUDGET`, `logs/A.log`.
+
+`results/A/A1_*.jsonl`, `A2_*.jsonl`, `A3_*.jsonl`, `A4_qwen3b.jsonl`, `A5_*.jsonl`, `A6_qwen3b.jsonl` (partial), `prompts_*.jsonl`, `stage_log.jsonl`, `BUDGET_EXHAUSTED`, `summary.json` (from `e1b.analysis.summarize_A`), `results/budget_ledger.json`, `logs/A.log`, this report.
+
+## Failures / incompleteness (published openly)
+
+- Budget exhausted before A6 finished; no A6_smol17; no `.done`.
+- Small-pair Stage A exit **failed** (0/18 honest entries; A4 follow 0.425).
+- Smol below capability floor on F2/F3s.
+- Cache claim withheld (cold↔warm prediction changes).
+- Kind-level no-text leaks on all three `*-unstated` probe kinds.
+- One known A1.5 Answer-line multi-integer scoring quirk (Smol).
