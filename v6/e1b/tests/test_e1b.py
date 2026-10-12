@@ -3,7 +3,7 @@ import sys, json, copy, random, unittest, tempfile, shutil
 from pathlib import Path
 import numpy as np
 ROOT = Path(__file__).resolve().parent.parent; sys.path.insert(0, str(ROOT))
-from e1b import load_cfg
+from e1b import load_cfg, sha256_text
 from e1b.cases import build, verify
 from e1b.parsing import parse_letter, parse_answer, score_answer
 from e1b.protocol import Dictionary, framed_id, receiver_parts, sender_view
@@ -283,5 +283,50 @@ class TestBatched(unittest.TestCase):
         if not os.path.exists(py): self.skipTest("no torch/transformers env for the HF batch smoke")
         r = subprocess.run([py, str(ROOT / "tools" / "smoke_hf_batch.py")], capture_output=True, text=True)
         self.assertEqual(r.returncode, 0, r.stdout[-2000:] + r.stderr[-2000:])
+
+class TestBatchHygiene(unittest.TestCase):
+    """Claude A5 review: deterministic batch composition + logging, compute-once for identical prompts."""
+    class Rec(FakeBackend):
+        def __init__(self): super().__init__(); self.calls = []
+        def generate_batch(self, jobs, max_new):
+            self.calls.append([sha256_text("\x1f".join(j)) for j in jobs]); return [self.generate(*j, max_new) for j in jobs]
+    def _jobs(self):
+        from e1b.protocol import receiver_parts
+        E = BOOK["entries"]; cs = BOOK["cases"]["pilot"][:6]
+        return [receiver_parts("direct_text", E[c["entry"]], c)[:3] for c in cs], cs
+    def test_compute_once_identical_prompts(self):
+        from e1b.stages import ask_arith_many
+        E = BOOK["entries"]; c = BOOK["cases"]["pilot"][0]; be = self.Rec()
+        rows = ask_arith_many(be, "m", [("id_oracle", E[c["entry"]], c, None), ("direct_text", E[c["entry"]], c, None)], CFG)
+        self.assertEqual(sum(len(x) for x in be.calls), 1)
+        self.assertEqual(rows[0]["raw"], rows[1]["raw"]); self.assertEqual([r["shared_n"] for r in rows], [2, 2])
+        self.assertEqual([r["cond"] for r in rows], ["id_oracle", "direct_text"])
+    def test_deterministic_composition_and_order(self):
+        from e1b.stages import batched_generate
+        jobs, _ = self._jobs(); cfg = dict(CFG, stageB_batch_size=4)
+        a, b = self.Rec(), self.Rec()
+        ra = batched_generate(a, jobs, 8, cfg); rb = batched_generate(b, list(reversed(jobs)), 8, cfg)
+        self.assertEqual(a.calls, b.calls)                      # same composition regardless of input order
+        self.assertEqual([len(x) for x in a.calls], [4, 2])
+        self.assertEqual([r["prompt_sha"] for r in ra], [r["prompt_sha"] for r in reversed(rb)])  # input order kept
+        for r in ra: self.assertTrue({"batch_index", "batch_pos", "batch_n"} <= set(r))
+        self.assertEqual(sorted({r["batch_index"] for r in ra}), [0, 1])
+    def test_row_logs_batch_fields(self):
+        from e1b.stages import ask_probe_many
+        e = BOOK["groups"]["qual_F1"][0]; p = BOOK["probes"]["calib"][e][0]
+        r = ask_probe_many(FakeBackend(), [(BOOK["entries"][e]["text"], p)], CFG)[0]
+        self.assertIn("batch_index", r); self.assertEqual(r["shared_n"], 1)
+
+class TestNeutralGen(unittest.TestCase):
+    """GPT A5 review: batched HF generate must not inherit generation_config penalties/sampling defaults."""
+    def test_neutral_params_pinned(self):
+        from e1b.backends import NEUTRAL_GEN
+        self.assertEqual(NEUTRAL_GEN["repetition_penalty"], 1.0); self.assertEqual(NEUTRAL_GEN["top_k"], 0)
+        self.assertEqual(NEUTRAL_GEN["top_p"], 1.0); self.assertEqual(NEUTRAL_GEN["temperature"], 1.0)
+        src = open(ROOT / "e1b" / "backends.py").read().split("def generate_batch")[2]
+        self.assertIn("do_sample=False", src); self.assertIn("**NEUTRAL_GEN", src)
+    def test_hf_penalty_config_overridden(self):
+        try: import transformers  # noqa
+        except ImportError: self.skipTest("no transformers here; covered by tools/smoke_hf_batch.py --penalty")
 
 if __name__ == "__main__": unittest.main()

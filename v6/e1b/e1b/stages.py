@@ -89,7 +89,8 @@ def log_prompt(r, model):
     k = (str(d), model, r["prompt_sha"])
     if k not in _seen_prompts:
         _seen_prompts.add(k)
-        with open(d / f"prompts_{model}.jsonl", "a") as f:
+        Path(d).mkdir(parents=True, exist_ok=True)
+    with open(d / f"prompts_{model}.jsonl", "a") as f:
             f.write(json.dumps(dict(prompt_sha=r["prompt_sha"], system_turn_sha=r["system_turn_sha"], prompt=r["rendered_prompt"])) + "\n")
 
 # ------------------------------------------------------------------ generic calls
@@ -98,10 +99,44 @@ def ask_arith(be, model, cond, entry, case, cfg, msg=None, ablate=False, warm=Fa
     r = be.generate(sysm, pre, suf, cfg["max_new_tokens"], warm=warm)
     return _arith_row(r, model, cond, entry, case, sysm, pre, suf, payload, extra)
 
+def _job_len(be, job):
+    """Sort key for batch composition: prompt length in tokens when the backend can tokenize, else characters."""
+    if hasattr(be, "split_render") and hasattr(be, "tok"):
+        try:
+            pt, st = be.split_render(*job); return len(be.tok(pt, True)) + len(be.tok(st, False))
+        except Exception: pass
+    return len("".join(job))
+
+def batched_generate(be, jobs, max_new, cfg):
+    """Claude A5 review, code hygiene (no rule change). (a) Compute once: byte-identical (system, prefix, suffix) jobs
+    are generated once and the result reused (e.g. B2 id_oracle vs direct_text); reused rows carry shared_n > 1.
+    (b) Deterministic batch composition: unique jobs sorted by (prompt length, content sha), chunked by
+    stageB_batch_size; rows log batch_index (per backend, monotonic), batch_pos and batch_n. Output order = input order."""
+    import copy
+    uniq, where = [], {}
+    for j in jobs:
+        k = sha256_text("\x1f".join(j))
+        if k not in where: where[k] = len(uniq); uniq.append((k, j))
+    order = sorted(range(len(uniq)), key=lambda i: (_job_len(be, uniq[i][1]), uniq[i][0]))
+    res = [None] * len(uniq); n = max(1, bs(cfg))
+    for ch in chunks(order, n):
+        bi = getattr(be, "_batch_counter", 0); be._batch_counter = bi + 1
+        out = be.generate_batch([uniq[i][1] for i in ch], max_new)
+        assert len(out) == len(ch), "generate_batch returned the wrong number of rows"
+        for pos, (i, r) in enumerate(zip(ch, out)):
+            r = dict(r); r.update(batch_index=bi, batch_pos=pos, batch_n=len(ch)); res[i] = r
+    cnt = {}
+    for j in jobs:
+        k = sha256_text("\x1f".join(j)); cnt[k] = cnt.get(k, 0) + 1
+    outs = []
+    for j in jobs:
+        k = sha256_text("\x1f".join(j)); r = copy.deepcopy(res[where[k]]); r["shared_n"] = cnt[k]; outs.append(r)
+    return outs
+
 def ask_arith_many(be, model, reqs, cfg):
     """Batched receiver calls (PREREG §9; A5). reqs = [(cond, entry, case, extra)]; same prompts/parser as ask_arith."""
     parts = [receiver_parts(c, e, k) for c, e, k, _ in reqs]
-    rs = be.generate_batch([(s, p, u) for s, p, u, _ in parts], cfg["max_new_tokens"])
+    rs = batched_generate(be, [(s, p, u) for s, p, u, _ in parts], cfg["max_new_tokens"], cfg)
     return [_arith_row(r, model, c, e, k, *parts[i], x) for i, (r, (c, e, k, x)) in enumerate(zip(rs, reqs))]
 
 def _arith_row(r, model, cond, entry, case, sysm, pre, suf, payload, extra):
@@ -111,6 +146,7 @@ def _arith_row(r, model, cond, entry, case, sysm, pre, suf, payload, extra):
                correct=score_answer(p, case["gold"]), content_sha=sha256_text(sysm + pre + suf), model_called=True,
                **{k: r[k] for k in ("prompt_tokens", "new_prompt_tokens", "gen_tokens", "latency_s", "first_gap", "answer_gap",
                                     "answer_gap_source", "warm", "batch", "mode", "prompt_sha", "system_turn_sha")},
+               **{k: r[k] for k in ("batch_index", "batch_pos", "batch_n", "shared_n") if k in r},
                **bytes_record(cond, payload, case))
     out.update(extra or {}); return out
 
@@ -120,7 +156,7 @@ def ask_probe(be, entry_text, probe, cfg, with_text=True):
 
 def ask_probe_many(be, reqs, cfg):
     """Batched probe calls. reqs = [(entry_text, probe)] with entry text shown."""
-    rs = be.generate_batch([probe_parts(t, p, True) for t, p in reqs], cfg["probe_max_new_tokens"])
+    rs = batched_generate(be, [probe_parts(t, p, True) for t, p in reqs], cfg["probe_max_new_tokens"], cfg)
     return [_probe_row(be, r, p, True) for r, (_, p) in zip(rs, reqs)]
 
 def _probe_row(be, r, probe, with_text):
@@ -129,7 +165,8 @@ def _probe_row(be, r, probe, with_text):
                 gold=probe["gold"], honest_gold=probe["honest_gold"], correct=(L == probe["gold"]),
                 honest_correct=(L == probe["honest_gold"]),   # GPT code r1: the GATE scores this; `correct` (shown text) is for diagnostics
                 latency_s=r["latency_s"], gen_tokens=r["gen_tokens"], new_prompt_tokens=r["new_prompt_tokens"], first_gap=r["first_gap"], batch=r.get("batch", 1),
-                prompt_sha=r.get("prompt_sha"), system_turn_sha=r.get("system_turn_sha"))
+                prompt_sha=r.get("prompt_sha"), system_turn_sha=r.get("system_turn_sha"),
+                **{k: r[k] for k in ("batch_index", "batch_pos", "batch_n", "shared_n") if k in r})
 
 # ------------------------------------------------------------------ Stage A (box CPU, diagnostic only)
 def stage_A(cfg):

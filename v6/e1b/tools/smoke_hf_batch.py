@@ -14,6 +14,8 @@ ap = argparse.ArgumentParser(); ap.add_argument("--repo", default="HuggingFaceTB
 ap.add_argument("--device", default="cpu"); ap.add_argument("--bs", type=int, default=8); ap.add_argument("--max_new", type=int, default=48)
 a = ap.parse_args(); cfg = load_cfg(); B = build(cfg); E = B["entries"]
 be = HFBackend("smoke", a.repo, None, device=a.device)
+# GPT A5: emulate Qwen2.5-7B's shipped generation_config; batched output must still equal batch-1 (no penalty)
+be.m.generation_config.repetition_penalty = 1.05; be.m.generation_config.top_k = 20; be.m.generation_config.top_p = 0.8
 rec = [receiver_parts("direct_text", E[c["entry"]], c)[:3] for c in B["cases"]["pilot"][:a.bs]]
 prb = [probe_parts(E[e]["text"], B["probes"]["calib"][e][i], True) for i, e in enumerate(B["groups"]["qual_F1"][:a.bs])]
 res = {}

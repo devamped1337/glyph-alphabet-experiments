@@ -102,6 +102,61 @@
   - **Caveat:** fp16/nf4 on GPU with padding may not be bit-identical to batch-1. Proposal for reviewers: B0 re-runs this check on the Kaggle GPU in nf4 and reports any differences, and the batch size is frozen in the post-B0 amendment.
   - The code hash is re-recorded. Nothing has been run on Kaggle.
 
+### 5b. Review of this draft (2026-10-12): Claude, Grok, GPT
+
+- **Claude ([claude_A5](reviews/claude_A5.md)):**
+  - rebuild the weak calibration plants with f/n >= 0.30 (>=3 per type, TEST untouched);
+  - withdraws P6 (keep the frozen leak rule, add reporting only);
+  - settle P1/P4 after B0 and before B1;
+  - review batching hygiene;
+  - add reserve probe templates;
+  - choose the B0 batch size by >=99% batch-1 agreement.
+  - P4 table verified (n=20: 0.677/0.839/0.925/0.979; the current n=24 gives 0.564/0.766/0.884/0.966).
+- **Grok ([grok_A5](reviews/grok_A5.md)):**
+  - don't rebuild now; after B, rebuild only the UNKNOWN-implying plants, and only if the 7B pair shows the same pattern;
+  - drop unstated from the leak check, because the prompt test didn't remove the structural guess (0/23).
+- **Open disagreements, broken by GPT:**
+  - Rebuild: Claude says now, Grok says after B.
+  - Unstated: Claude says frozen rule + B0b, Grok says exclude. Both routes end with unstated out of the gate.
+- **GPT ([gpt_A5](reviews/gpt_A5.md)):**
+  - unstated becomes an abstention diagnostic, excluded from the leak rule;
+  - strengthen only explicitly-wrong-rule plants;
+  - found the generation-config bug.
+  - Counts verified: 13 / 33 / 20 of 40. Our earlier 16 = 13 on the 40 + 3 on the 6 A2 plants (see gpt_A5.md).
+
+### 5c. Code-hygiene fixes implemented (no rule change)
+- `stages.batched_generate`: B1 probes, B2 and B3 receiver calls now go through it.
+  - **Compute-once:** byte-identical prompts are generated once and reused (B2 id_oracle vs direct_text); rows log `shared_n`.
+  - **Deterministic batch composition:** unique jobs are sorted by (prompt token length, content sha) and chunked by `stageB_batch_size`, so composition doesn't depend on input order. Rows log `batch_index`, `batch_pos` and `batch_n`, and come back in input order.
+- `HFBackend.generate_batch`:
+  - **Padding asserts:** left padding; the mask covers exactly the real tokens; the real tokens are unchanged by padding.
+  - **Pad token logging:** the pad token id and its source are logged in `info`.
+  - **Positions:** derived by HF from the attention mask; equality with batch-1 is checked by the smoke test.
+  - **Per-row stop:** unchanged.
+- **GPT's bug (fixed):** `generate_batch` now passes `NEUTRAL_GEN` (repetition_penalty=1.0, temperature/top_p/top_k neutral, no other processors) plus `do_sample=False`, so it no longer inherits the model's `generation_config`.
+- **Tests:**
+  - `tests/test_e1b.py`: TestBatchHygiene, TestNeutralGen.
+  - `tools/smoke_hf_batch.py` now sets a Qwen-7B-like penalised generation_config (repetition_penalty 1.05, top_k 20, top_p 0.8) and still gets batched == batch-1 tokens on 8/8 receiver and 6/6 probe prompts (SmolLM2-135M, CPU fp32).
+  - 51 unit tests OK (1 skipped); the fake-backend dry run passes the validator.
+- **Small fix:** `log_prompt` now creates its directory. This was a test-order failure; no behaviour change in real runs.
+
+## 5d. DRAFT resolution (pending the user's final OK; nothing frozen)
+**All three reviewers agree:**
+- proceed to B0 uncached;
+- the cache claim stays withheld, and the GPU cache path is tested separately;
+- keep the leak checks on the non-unstated kinds;
+- B1 reports planted rejection per corruption type;
+- settle the P4 entry-bar question after B0 and before B1;
+- batching needs the hygiene fixes (§5c, done).
+
+**Settled by majority:**
+- **Unstated** (Grok + GPT): the dedicated *-unstated probes are excluded from the leak rule and reported as an abstention diagnostic (no-text "Not stated" rate by kind). Ordinary questions that become UNKNOWN through a corruption stay in.
+- **Plants** (GPT, with Grok's timing for the rest):
+  - **Now:** strengthen only the explicitly-wrong-rule calibration plants (changed_constant: 11/13 have <8 flips). TEST plants stay untouched.
+  - **Report separately:** rejection of UNKNOWN-implying plants (deleted_negation, mismatched_definition). Revisit them after B, and rebuild only if the 7B pair shows the Stage A abstention pattern.
+  - **Stated limit:** answer agreement alone cannot detect a reader that silently reconstructs the intended rule (20/40 calibration plants would pass a gap-filling reader today).
+- **Still open:** reserve probe templates per kind (Claude 5), and the batch-size selection rule (Claude 6: largest size matching batch-1 on >=99% of non-TEST items).
+
 ## 6. Questions for the reviewers
 1. Do you agree that §7's "otherwise: go to Stage B" means Stage A's failure does not block B, only small-pair calibration?
 2. Is implementing batched generation (§3.4) a conformance fix that is acceptable before B0, or does it need its own re-review of the code?

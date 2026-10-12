@@ -100,6 +100,13 @@ class _Base:
         return dict(prefix_tokens=len(pt), setup_s=round(time.perf_counter() - t0, 4))
     def drop_cache(self): self._states.clear()
 
+# GPT A5 review (bug): HF generate() otherwise inherits the model's generation_config (Qwen2.5-7B ships
+# repetition_penalty=1.05, top_k/top_p/temperature), while the batch-1 decoder applies none. Pin every knob neutral.
+NEUTRAL_GEN = dict(temperature=1.0, top_p=1.0, top_k=0, repetition_penalty=1.0, no_repeat_ngram_size=0,
+                   length_penalty=1.0, encoder_repetition_penalty=1.0, min_new_tokens=0, typical_p=1.0, epsilon_cutoff=0.0,
+                   eta_cutoff=0.0, diversity_penalty=0.0, bad_words_ids=None, suppress_tokens=None, begin_suppress_tokens=None,
+                   forced_bos_token_id=None, forced_eos_token_id=None, sequence_bias=None, renormalize_logits=False)
+
 class LlamaCppBackend(_Base):
     def __init__(self, name, path, n_ctx=2048, n_threads=8, n_gpu_layers=0, template=None):
         from llama_cpp import Llama
@@ -173,11 +180,19 @@ class HFBackend(_Base):
         L = max(len(x) for x in toks); pad = self.tk.pad_token_id if self.tk.pad_token_id is not None else (self.tk.eos_token_id or 0)
         ids = t.tensor([[pad] * (L - len(x)) + x for x in toks], device=self.device)
         mask = t.tensor([[0] * (L - len(x)) + [1] * len(x) for x in toks], device=self.device)
+        # Claude A5 review: padding checks (left padding, mask covers exactly the real tokens, real tokens intact)
+        assert self.m.config.is_encoder_decoder is False, "decoder-only models only"
+        for i, x in enumerate(toks):
+            assert int(mask[i].sum()) == len(x) and int(mask[i, :L - len(x)].sum()) == 0, "left padding / mask mismatch"
+            assert ids[i, L - len(x):].tolist() == list(x), "real tokens altered by padding"
+        self.info.setdefault("pad_token_id", int(pad)); self.info.setdefault("pad_source", "tokenizer_pad" if self.tk.pad_token_id is not None else "eos_fallback")
+        # positions: HF Qwen2/Llama derive position_ids from attention_mask (cumsum-1) in generate(); equality with
+        # batch-1 tokens is checked by tools/smoke_hf_batch.py (mixed lengths, per-row stops)
         t0 = time.perf_counter()
         with t.no_grad():
             g = self.m.generate(input_ids=ids, attention_mask=mask, max_new_tokens=max_new, do_sample=False, num_beams=1,
                                 eos_token_id=sorted(self.stop_ids), pad_token_id=pad, output_scores=True, return_dict_in_generate=True,
-                                temperature=None, top_p=None, top_k=None)
+                                **NEUTRAL_GEN)
         lat = (time.perf_counter() - t0) / len(jobs); outs = []
         for i, (s, p, u) in enumerate(jobs):
             out, gaps, ans_gap = [], [], None
