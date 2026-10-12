@@ -1,0 +1,26 @@
+{
+ "model": "olmo7b",
+ "families": {
+  "F1": {
+   "probe": 0.8402777777777778,
+   "arith": 1.0,
+   "ok": false
+  },
+  "F2": {
+   "probe": 0.7361111111111112,
+   "arith": 0.8833333333333333,
+   "ok": false
+  },
+  "F3L": {
+   "probe": 0.8819444444444444,
+   "arith": 0.48333333333333334,
+   "ok": false
+  },
+  "_invalid_rate": {
+   "probe": 0.0,
+   "arith": 0.0
+  },
+  "_score": 3.459722222222222
+ },
+ "core_all_ok": false
+}
