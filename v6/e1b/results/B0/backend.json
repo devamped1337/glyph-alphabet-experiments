@@ -1,0 +1,1 @@
+{"kind": "gguf_cuda", "decided_by": "qwen7b", "reason": "RuntimeError(\"Failed to import transformers.integrations.bitsandbytes because of the following error (look up to see its traceback):\\nNo module named 'triton.ops'\")"}
