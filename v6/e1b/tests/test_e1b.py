@@ -329,4 +329,46 @@ class TestNeutralGen(unittest.TestCase):
         try: import transformers  # noqa
         except ImportError: self.skipTest("no transformers here; covered by tools/smoke_hf_batch.py --penalty")
 
+class TestA5Plants(unittest.TestCase):
+    """Amendment A5: explicit-wrong calibration plants flip >= 0.30 ordinary probes; >= 3 strong per calib type;
+    TEST-gate plants unchanged; a weakened book is rejected by verify()."""
+    def _nf(self, eid):
+        return sum(p["gold"] != p["honest_gold"] for p in BOOK["probes"]["calib"][eid] if not p["kind"].endswith("unstated"))
+    def test_explicit_wrong_strong(self):
+        ew = {tuple(x) for x in CFG["a5_plants"]["explicit_wrong"]}
+        for eid in BOOK["groups"]["planted_calib"]:
+            e = BOOK["entries"][eid]
+            if (e["fam"], e["corruption"]) in ew: self.assertGreaterEqual(self._nf(eid) / 24, 0.30, eid)
+    def test_min_per_type(self):
+        import collections
+        c = collections.Counter(BOOK["entries"][e]["corruption"] for e in BOOK["groups"]["planted_calib"] if self._nf(e) / 24 >= 0.30)
+        for ty in CFG["corruptions_calib"]: self.assertGreaterEqual(c[ty], 3, ty)
+    def test_testgate_plants_untouched(self):
+        # TEST-gate plants use the default path: changed_constant there (if any) would still shift one rate only
+        from e1b.cases import planted_entry
+        import random as _r
+        h = BOOK["entries"][BOOK["entries"][BOOK["groups"]["planted_testgate"][0]]["honest_id"]]
+        class I:
+            def new(self, f): return "X-1"
+        weak = planted_entry(h, "changed_constant", I(), _r.Random(0)); strong = planted_entry(h, "changed_constant", I(), _r.Random(0), strong=True)
+        k = "non" if h["fam"] == "F1" else "yr"
+        self.assertEqual(weak["sem"][k], h["sem"][k]); self.assertEqual(strong["sem"][k], h["sem"][k] + 3)
+    def test_verify_rejects_weak_plant(self):
+        B = copy.deepcopy(BOOK)
+        eid = next(e for e in B["groups"]["planted_calib"] if B["entries"][e]["corruption"] == "changed_constant")
+        for p in B["probes"]["calib"][eid]: p["gold"] = p["honest_gold"] if p["kind"] in ("non", "higher", "lower") else p["gold"]
+        with self.assertRaises(AssertionError): verify(B, CFG)
+
+class TestA5Unstated(unittest.TestCase):
+    def test_unstated_excluded_from_leak_rule(self):
+        from e1b.stages import leak_rule
+        obs = {"F1-unstated-v0": [1] * 60, "F1-mem-v0": [0] * 60, "F1-mem-v1": [0] * 60}
+        r = leak_rule(obs, CFG)
+        self.assertNotIn("F1-unstated-v0", r["flagged"]); self.assertNotIn("F1-unstated", r["kind_level_leak"])
+        self.assertEqual(r["abstention_diagnostic"]["F1-unstated-v0"]["no_text_not_stated_rate"], 1.0)
+    def test_other_kinds_still_checked(self):
+        from e1b.stages import leak_rule
+        r = leak_rule({"F1-mem-v0": [1] * 60, "F1-mem-v1": [1] * 60}, CFG)
+        self.assertIn("F1-mem", r["kind_level_leak"])
+
 if __name__ == "__main__": unittest.main()

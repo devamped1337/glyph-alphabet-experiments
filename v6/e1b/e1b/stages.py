@@ -412,6 +412,11 @@ def leak_rule(obs, cfg):
     and the pair. A template is flagged if its no-text accuracy > max(kind baseline, 0.25) + 0.15, with >= 50
     no-text observations. A kind whose own baseline > 0.40 is reported as a kind-level leak and all of its
     templates are flagged."""
+    # A5 (2026-10-12): the dedicated *-unstated probes are excluded from the leak rule and reported as an
+    # abstention diagnostic (their no-text "Not stated" rate by kind). Ordinary probes whose gold becomes
+    # "Not stated" through a corruption are unaffected (they are not of kind 'unstated').
+    diag = {t: v for t, v in obs.items() if _kk(t).endswith("unstated")}
+    obs = {t: v for t, v in obs.items() if t not in diag}
     kinds = {}
     for t, v in obs.items(): kinds.setdefault(_kk(t), []).extend(v)
     kb = {k: sum(v) / len(v) for k, v in kinds.items()}
@@ -420,7 +425,8 @@ def leak_rule(obs, cfg):
         sum(v) / len(v) > max(kb[_kk(t)], 0.25) + cfg["probe_leak_margin_over_kind"] or _kk(t) in kind_leak))
     under = sorted(t for t, v in obs.items() if len(v) < cfg["probe_leak_min_obs"])
     return dict(flagged=flagged, kind_baseline=kb, kind_level_leak=kind_leak, insufficient_obs=under,
-                acc={t: sum(v) / len(v) for t, v in obs.items()}, n={t: len(v) for t, v in obs.items()})
+                acc={t: sum(v) / len(v) for t, v in obs.items()}, n={t: len(v) for t, v in obs.items()},
+                abstention_diagnostic={t: dict(no_text_not_stated_rate=sum(v) / len(v), n=len(v)) for t, v in diag.items() if v})
 
 def replacement_leaks(v, kind_baseline, cfg):
     """A3 (gpt_code_2 #2): a replacement template is dropped if its no-text accuracy exceeds the kind-relative

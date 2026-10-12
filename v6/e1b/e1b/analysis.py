@@ -111,6 +111,10 @@ def summarize_A(d, cfg, B):
     return out
 
 # ------------------------------------------------------------------ B1 gate
+UNKNOWN_IMPLYING = {"mismatched_definition", "near_miss_polarity", "dropped_clause", "deleted_negation"}   # deleted_negation: F1 only implies UNKNOWN (F2 states a wrong rule)
+GATE_LIMIT = ("Answer agreement alone cannot detect a reader that silently reconstructs the intended rule; "
+              "rejection of UNKNOWN-implying plants is reported separately (A5).")
+
 def gate_decision(d, pair, cfg, E):
     d = Path(d); G = cfg["gate"]; res = {}
     for kind in ("calib", "testgate"):
@@ -129,6 +133,11 @@ def gate_decision(d, pair, cfg, E):
         ha = sum(v["accepted"] for v in H); pr = sum(not v["accepted"] for v in P)
         res[kind] = dict(per_entry=dec, honest_accept=bar_verdict(ha, len(H), G["calib_eligibility" if kind == "calib" else "repo_target"]["honest_accept"]),
                          planted_reject=bar_verdict(pr, len(P), G["calib_eligibility" if kind == "calib" else "repo_target"]["planted_reject"]),
+                         # A5: planted rejection per corruption type; UNKNOWN-implying types reported separately
+                         planted_reject_by_type={t: dict(n=sum(1 for e, v in dec.items() if v["planted"] and E[e].get("corruption") == t),
+                                                         rejected=sum(1 for e, v in dec.items() if v["planted"] and E[e].get("corruption") == t and not v["accepted"]),
+                                                         unknown_implying=t in UNKNOWN_IMPLYING)
+                                                 for t in sorted({E[e].get("corruption") for e, v in dec.items() if v["planted"]})},
                          neighbour_accept=dict(n=sum(v["neighbour"] for v in dec.values()), accepted=sum(v["neighbour"] and v["accepted"] for v in dec.values())))
     c = res["calib"]; elig = (c["honest_accept"]["point"] or 0) >= G["calib_eligibility"]["honest_accept"] and (c["planted_reject"]["point"] or 0) >= G["calib_eligibility"]["planted_reject"]
     accepted = sorted(e for e, v in c["per_entry"].items() if v["accepted"])   # the gate decision itself; no hidden-label filter
@@ -136,7 +145,7 @@ def gate_decision(d, pair, cfg, E):
     return dict(eligible=elig, accepted=accepted, calib=c, testgate_vs_repo_target=res["testgate"],
                 manipulation=dict(n=len(manip), follow_rate=sum(r["follows_planted"] for r in manip) / max(1, len(manip))),
                 note=("Accepted list FIXED from calibration (A1.3); TEST-gate only evaluates it. 'met in sample' != 'met at 95% confidence'. "
-                      "None of these bars is the POC success criterion."),
+                      "None of these bars is the POC success criterion. " + GATE_LIMIT),
                 not_checked_repository=None if elig else "B1 failed: B2/B3 still run, but the combined pipeline is NOT a checked repository; gate acceptance, coverage and abstentions are reported with every number")
 
 # ------------------------------------------------------------------ B2

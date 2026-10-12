@@ -1,3 +1,5 @@
+> **Superseded:** frozen as Amendment A5 in PREREG_E1b.md (2026-10-12). Kept for history.
+
 # DRAFT Amendment A5: proceed to Stage B (B0 qualification) after Stage A
 
 **Status: DRAFT for review by Grok and GPT. It is not merged into the frozen `PREREG_E1b.md`, and nothing in it has been run.** Date: 2026-10-12 (AEDT). Basis: Stage A results at commit `73a528b` ([STAGE_A_REPORT.md](STAGE_A_REPORT.md)). Scope, budgets and models are **unchanged**; no new models are added.

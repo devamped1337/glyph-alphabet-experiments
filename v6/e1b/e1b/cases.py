@@ -144,15 +144,19 @@ def neighbour_params(e, k, rng):
     return p
 
 # ------------------------------------------------------------------ planted corruptions
-def planted_entry(honest, ctype, ids, rng, donor=None):
-    """Return a planted entry: same ID-space semantics, corrupted text; sem = what the text actually says."""
+def planted_entry(honest, ctype, ids, rng, donor=None, strong=False):
+    """Return a planted entry: same ID-space semantics, corrupted text; sem = what the text actually says.
+    A5 (2026-10-12): strong=True (calibration plants only) makes changed_constant change BOTH stated rates (+3),
+    so >= 0.30 of the probes flip. No extra rng draws, so every other group is byte-identical."""
     f = honest["fam"]; assert f in ("F1", "F2"), "planted entries are core-family only"
     e = copy.deepcopy(honest); e["id"] = ids.new(f); e["kind"] = "planted"; e["corruption"] = ctype
     e["honest_id"] = honest["id"]; s = dict(honest["sem"]); txt = render_def(honest)
     if f == "F1":
         a, b, g, u = s["mem"], s["non"], honest["g"], honest["unit"]
         P = f"{g} members are charged {a} credits per {u}."; N = f"Customers who are not {g} members are charged {b} credits per {u}."
-        if ctype == "changed_constant": s["mem"] = a + 3; P = P.replace(f" {a} ", f" {a+3} ")
+        if ctype == "changed_constant":
+            s["mem"] = a + 3; P = P.replace(f" {a} ", f" {a+3} ")
+            if strong: s["non"] = b + 3; N = N.replace(f" {b} ", f" {b+3} ")
         elif ctype == "deleted_negation": N = N.replace(" not ", " "); s["mem"] = None; s["non"] = None
         elif ctype == "near_miss_polarity": P = f"{g} members are not charged {a} credits per {u}."; s["mem"] = None
         elif ctype == "swapped_roles":
@@ -170,7 +174,9 @@ def planted_entry(honest, ctype, ids, rng, donor=None):
         a, b, x, y = s["xr"], s["yr"], honest["x"], honest["y"]
         S1 = f"When a {x} hands items to a {y}, the {x} pays {a} credits per item"
         S2 = f" and the {y} pays {b} credits per item."; S3 = f" The {y} does not pay the {x}'s share."
-        if ctype == "changed_constant": s["xr"] = a + 3; S1 = S1.replace(f" {a} ", f" {a+3} ")
+        if ctype == "changed_constant":
+            s["xr"] = a + 3; S1 = S1.replace(f" {a} ", f" {a+3} ")
+            if strong: s["yr"] = b + 3; S2 = S2.replace(f" {b} ", f" {b+3} ")
         elif ctype == "deleted_negation": S3 = f" The {y} pays the {x}'s share."; s["yr"] = a + b
         elif ctype == "near_miss_polarity": S2 = f" and the {y} does not pay {b} credits per item."; s["yr"] = None
         elif ctype == "swapped_roles":
@@ -385,7 +391,7 @@ def build(cfg):
     for f in core + ["F3L"]: group(f"probediag_{f}", f, cfg["probe_diag"]["entries_per_family"])
     group("canary_F1", "F1", 4)
     # --- planted entries
-    def plant(name, types, n_total, src_groups):
+    def plant(name, types, n_total, src_groups, strong=False):
         out = []; srcs = [x for g in src_groups for x in B["groups"][g]]
         i = 0
         while len(out) < n_total:
@@ -393,11 +399,15 @@ def build(cfg):
             h = add(mk_entry(fam, ids, rng)); h["kind"] = "planted_source"
             if not planted_ok(h, ty): continue
             donor = B["entries"][rng.choice([s for s in srcs if B["entries"][s]["fam"] == fam])]
-            p = add(planted_entry(h, ty, ids, rng, donor)); out.append(p["id"]); i += 1
+            if strong and ty == "deleted_negation" and fam == "F2" and h["sem"]["xr"] <= h["sem"]["yr"]:
+                # A5: explicit-wrong F2 plant ("the y pays the x's share"): orient the calibration-only source so the
+                # higher/lower probes also flip (rng-free; the source entry is used only as this plant's honest reference)
+                h["sem"]["xr"], h["sem"]["yr"] = h["sem"]["yr"], h["sem"]["xr"]; h["text"] = render_def(h); h["hash"] = sha256_text(h["text"])
+            p = add(planted_entry(h, ty, ids, rng, donor, strong=strong)); out.append(p["id"]); i += 1
         B["groups"][name] = out
     plant("A2_planted", cfg["corruptions_calib"], A["planted_A2"], ["A2_F1", "A2_F2"])
     plant("A4_planted", cfg["corruptions_calib"] + cfg["corruptions_test"], A["planted_A4"], ["A2_F1", "A2_F2"])
-    plant("planted_calib", cfg["corruptions_calib"], max(c["planted_calib"] for c in cfg["configs"].values()), ["core_F1", "core_F2"])
+    plant("planted_calib", cfg["corruptions_calib"], max(c["planted_calib"] for c in cfg["configs"].values()), ["core_F1", "core_F2"], strong=True)
     plant("planted_testgate", cfg["corruptions_test"], cfg["planted_testgate"], ["core_F1", "core_F2"])
     # --- probes: calibration instances (core+planted_calib+qual+A2), fresh instances for TEST-gate
     prng = random.Random(cfg["seeds"]["generator"] + 2); frng = random.Random(cfg["seeds"]["probes_fresh"])
@@ -535,6 +545,15 @@ def verify(B, cfg):
                 # GPT code r1: a perfect reader of the SHOWN text must fall below the probe bar vs honest_gold
                 nf = sum(p["gold"] != p["honest_gold"] for p in ps)
                 assert (len(ps) - nf) / len(ps) < cfg["gate"]["probe_bar"], f"planted {eid}: only {nf}/{len(ps)} probes flipped; a perfect reader would pass"
+    # 5b. A5 (2026-10-12): explicit-wrong-rule calibration plants flip >= 0.30 of their ordinary probes; and every
+    # calibration corruption type has >= 3 plants meeting that bar. TEST-gate plants are not touched by this rule.
+    a5 = cfg["a5_plants"]; strong_n = {}
+    for eid in B["groups"]["planted_calib"]:
+        e = E[eid]; ps = B["probes"]["calib"][eid]; nf = sum(p["gold"] != p["honest_gold"] for p in ps if not p["kind"].endswith("unstated"))
+        ok = nf / len(ps) >= a5["min_flip_frac"]; strong_n[e["corruption"]] = strong_n.get(e["corruption"], 0) + ok
+        if (e["fam"], e["corruption"]) in {tuple(x) for x in a5["explicit_wrong"]}:
+            assert ok, f"A5: explicit-wrong calibration plant {eid} flips only {nf}/{len(ps)}"
+    for ty in cfg["corruptions_calib"]: assert strong_n.get(ty, 0) >= a5["min_per_type"], f"A5: <{a5['min_per_type']} strong {ty} plants"
     # 6. probe templates: >= 20 per family
     for f in ("F1", "F2", "F3s", "F3L"): assert len(templates(f)) >= cfg["probes_per_entry_min"]
     # 7. unknown messages all fail the delegate check

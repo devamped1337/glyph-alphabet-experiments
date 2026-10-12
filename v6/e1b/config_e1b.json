@@ -27,6 +27,7 @@
  "f3l_entries": 10,
  "test_cases_per_entry": 10,
  "planted_testgate": 40,
+ "a5_plants": {"min_flip_frac": 0.30, "min_per_type": 3, "explicit_wrong": [["F1", "changed_constant"], ["F2", "changed_constant"], ["F2", "deleted_negation"]], "note": "Amendment A5 2026-10-12: builder-only, calibration plants only (TEST-gate untouched). F1 deleted_negation and mismatched_definition imply UNKNOWN and are reported separately."},
  "corruptions_calib": [
   "deleted_negation",
   "mismatched_definition",

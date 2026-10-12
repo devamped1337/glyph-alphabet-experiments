@@ -310,3 +310,43 @@ Estimated from E1's measured CPU rates (Qwen-3B 2.25 s/call, Smol 1.31 s/call; p
 **Decision (the user's):** the **Stage A box-CPU budget is raised from 2 h to 5.5 h** (`stageA.budget_h`). **Nothing else changes:** the workload (A1–A6, the same cases, probes and cache sets), all thresholds, the 192-token reply limit, the models, the seeds and the exit rule stay as frozen in PREREG_E1b + A1–A3.
 
 **Reason:** the pre-registered projection after A1 (§7) gave **4.99 h**, over the 2 h cap, so the first attempt stopped as required ([STAGE_A_REPORT.md](STAGE_A_REPORT.md)). The overrun comes from per-call times (Qwen 7.68 s, Smol 4.08 s) that are longer than E1's, because the A1 prompt fix allows 192-token replies (mean 99 and 76 tokens). **The decision was made before any Stage A outcome beyond A1 was seen** (A1 is the capability smoke only; no probe, cache or exit-rule data existed). Stage A resumes from its checkpoint: the completed A1 rows are kept, and the cumulative budget ledger includes the first attempt's time. The stop marker from the first attempt is removed (it remains in git history, commit `f6bc078`).
+
+### A5: 2026-10-12 (AEDT), proceed to Stage B; approved by the user
+
+**Status:** frozen. The user approved the DRAFT resolution in [AMENDMENT_A5_DRAFT.md §5d](AMENDMENT_A5_DRAFT.md). It is based on the reviews [claude_A5](reviews/claude_A5.md), [grok_A5](reviews/grok_A5.md) and [gpt_A5](reviews/gpt_A5.md), with ties settled by majority. It was decided after Stage A and before any Stage B run. Nothing here changes Stage A's reported results.
+
+**Settled:**
+1. **Go to Stage B.** §7's "otherwise: go to Stage B" applies. Stage A's failure blocks only small-pair calibration.
+2. **Cache:** B0 runs **uncached**. The cache claim stays withheld, and the GPU cache path is tested separately under the frozen strict rule.
+3. **Leak rule:** the dedicated `*-unstated` probe templates are **excluded from the leak rule** and reported as an **abstention diagnostic** (no-text "Not stated" rate per template/kind; `leak_rule(...)["abstention_diagnostic"]`).
+   - The leak rule stays as frozen for every other kind.
+   - Ordinary probes whose gold becomes "Not stated" through a corruption stay in the gate.
+4. **Calibration plants, builder-only:** these are the explicitly-wrong-rule calibration plants: F1/F2 `changed_constant` and F2 `deleted_negation`.
+   - `changed_constant` changes **both** stated rates (+3).
+   - An F2 `deleted_negation` plant's calibration-only source is oriented so the higher/lower probes also flip. This uses no rng.
+   - `verify()` asserts that each such plant flips **≥ 0.30 of its probes** among the ordinary (non-unstated) probes, i.e. ≥ 8/24.
+   - It also asserts that every calibration corruption type has **≥ 3** plants meeting that bar (`config_e1b.json` `a5_plants`).
+5. **What the plant rebuild changed in the book:**
+   - Only the 15 affected calibration plants changed, plus 2 of their source entries, their 15 calibration probe sets, and the `manip_B1` cases that are derived from them.
+   - **TEST-gate plants, TEST cases, testgate probes, neighbours, unknown-ID messages, the dictionary and all Stage A groups are byte-identical**, and this was checked against the previous book.
+   - Before: 13/40 calibration plants had < 8 ordinary flips. After: 0/40.
+6. **UNKNOWN-implying plants** (F1 `deleted_negation`, `mismatched_definition`, and in TEST `near_miss_polarity` and `dropped_clause`) are not rebuilt.
+   - Their rejection is **reported separately**: B1 `planted_reject_by_type` with an `unknown_implying` flag.
+   - They will be revisited after B, and rebuilt only if the 7B pair shows the Stage A abstention pattern.
+   - With the current book, a gap-filling reader would pass the 90% gate on 20/40 calibration plants. All 20 are UNKNOWN-implying.
+7. **Stated limit:** answer agreement alone cannot detect a reader that silently reconstructs the intended rule. This sentence is carried in the B1 gate note.
+8. **Reporting:** B1 reports planted rejection **per corruption type**.
+9. **Batching, code hygiene:**
+   - byte-identical prompts are generated once and reused;
+   - batch composition is deterministic (prompt length, then content sha), with `batch_index/pos/n` logged;
+   - padding asserts;
+   - **neutral generation parameters pinned** (`repetition_penalty=1.0`, no sampling knobs; a GPT-found bug).
+   - Batched output equals batch-1 on CPU even under a penalised `generation_config`.
+10. **Unchanged:** the 0.90 bar, all thresholds, budgets and seeds, and A1-A4.
+
+**To be settled after B0 and before B1** (by a dated amendment, before any B1 data):
+- **(a)** The per-entry probe bar vs qualification (P4).
+  - With 24 probes: P(≥22/24) is 0.564 / 0.766 / 0.884 / 0.966 at p = 0.90 / 0.93 / 0.95 / 0.97.
+  - With 20 probes: P(≥18/20) is 0.677 / 0.839 / 0.925 / 0.979.
+- **(b)** Reserve probe templates for kinds other than the flagged ones.
+- **(c)** The B0 batch-size selection rule. Proposed: the largest size whose outputs match batch-1 on ≥ 99% of non-TEST items in the real nf4 GPU config, frozen before B1.
