@@ -18,7 +18,7 @@ class DryRun(unittest.TestCase):
         real_verify = BK.verify_gguf
         BK.verify_gguf = lambda path, want: "stubbed-in-dryrun"   # real runs keep the sha256 pin check (gpt_code_2 #1)
         S.load_B = lambda name, cfg, St: (Fake(name), "fake")
-        cfg = load_cfg()
+        cfg = load_cfg(); import os; os.environ["E1B_ALLOW_NO_GPU"] = "1"   # fake backend has no GPU (dry run only)
         try:
             for st in ("A",):
                 try: S.STAGES[st](cfg)
@@ -54,3 +54,27 @@ class DryRun(unittest.TestCase):
         self.assertIn("verify_gguf", inspect.getsource(S.stage_A)); self.assertIn("require_canaries", inspect.getsource(S.stage_B1))
 
 if __name__ == "__main__": unittest.main()
+
+
+class GPUPreflight(unittest.TestCase):
+    """A7: Stage B must never run silently on the CPU."""
+    def test_hf_on_cpu_fails(self):
+        from types import SimpleNamespace as N
+        class M:
+            def __init__(self, dev): self.dev = dev
+            def parameters(self): return [N(device=N(type=self.dev))]
+            def buffers(self): return []
+        for avail, dev in ((False, "cuda"), (True, "cpu"), (True, "meta")):
+            b = BK.HFBackend.__new__(BK.HFBackend); b.torch = N(cuda=N(is_available=lambda a=avail: a)); b.m = M(dev); b.info = dict(backend="hf-nf4", nf4=None)
+            with self.assertRaises(BK.GPUPreflightFail): BK.gpu_preflight(b)
+    def test_b0_without_gpu_aborts_exit9(self):
+        import os
+        os.environ.pop("E1B_ALLOW_NO_GPU", None)
+        tmp = Path(tempfile.mkdtemp()); old = S.RES; S.RES = tmp / "results"
+        try:
+            with self.assertRaises(SystemExit) as cm: S.STAGES["B0"](load_cfg())
+            self.assertEqual(cm.exception.code, 9); self.assertTrue((S.RES / "B0" / "GPU_PREFLIGHT_FAIL").exists())
+        finally: S.RES = old; shutil.rmtree(tmp, ignore_errors=True)
+    def test_order_has_no_mistral(self):
+        cfg = load_cfg(); self.assertEqual(cfg["models"]["stageB_order"], ["qwen7b", "olmo7b"])
+        self.assertNotIn("mistral7b", cfg["models"]["stageB"]); self.assertEqual(cfg["b0_resume"]["alloc"], "reserve")

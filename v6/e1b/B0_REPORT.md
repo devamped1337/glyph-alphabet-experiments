@@ -1,7 +1,9 @@
 # E1b Stage B0 report (Kaggle run, 2026-10-12)
 
+> **Superseded in part by A7:** the records below came from GGUF on CPU and are archived in `results/B0_run1_gguf_cpu/`. B0 is resumed on the reserve with nf4 and a hard GPU preflight.
+
 Kernel `devamped13/e1b-stage-b0` v1, Tesla T4 (cc 7.5), code at `fb423f0` (tag `prereg-e1b-a6`), code hash `2f8d428e…79a6` OK, config sha256 `c0404fe2…aa09`.
-B0 ran from 17:17 to 19:18 AEDT (06:17 to 08:18 UTC). Raw output is in `results/B0/` and the kernel log in `results/B0/kaggle_kernel.log`.
+B0 ran from 17:17 to 19:18 AEDT (06:17 to 08:18 UTC). Raw output is in `results/B0_run1_gguf_cpu/` and the kernel log in `results/B0_run1_gguf_cpu/kaggle_kernel.log`.
 
 ## Outcome: INCOMPLETE. The budget ran out (`BUDGET_EXHAUSTED`). No pair qualified, and no model was disqualified.
 

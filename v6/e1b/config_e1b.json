@@ -27,7 +27,25 @@
  "f3l_entries": 10,
  "test_cases_per_entry": 10,
  "planted_testgate": 40,
- "a5_plants": {"min_flip_frac": 0.30, "min_per_type": 3, "explicit_wrong": [["F1", "changed_constant"], ["F2", "changed_constant"], ["F2", "deleted_negation"]], "note": "Amendment A5 2026-10-12: builder-only, calibration plants only (TEST-gate untouched). F1 deleted_negation and mismatched_definition imply UNKNOWN and are reported separately."},
+ "a5_plants": {
+  "min_flip_frac": 0.3,
+  "min_per_type": 3,
+  "explicit_wrong": [
+   [
+    "F1",
+    "changed_constant"
+   ],
+   [
+    "F2",
+    "changed_constant"
+   ],
+   [
+    "F2",
+    "deleted_negation"
+   ]
+  ],
+  "note": "Amendment A5 2026-10-12: builder-only, calibration plants only (TEST-gate untouched). F1 deleted_negation and mismatched_definition imply UNKNOWN and are reported separately."
+ },
  "corruptions_calib": [
   "deleted_negation",
   "mismatched_definition",
@@ -128,11 +146,9 @@
     "gguf_sha256": "77665ea4815999596525c636fbeb56ba8b080b46ae85efef4f0d986a139834d7"
    }
   },
-  "stageB_order_note": "A6 (2026-10-12): llama8b removed from the order (gated; no HF account available); entry kept for the record only",
   "stageB_order": [
    "qwen7b",
-   "olmo7b",
-   "mistral7b"
+   "olmo7b"
   ],
   "stageB": {
    "qwen7b": {
@@ -171,18 +187,6 @@
     "gguf_sha256": {
      "OLMo-2-1124-7B-Instruct-Q4_K_M.gguf": "88790198b8ab4f251b5b462756adc0265b3f6b9d9d87708d847645d9568bf168"
     }
-   },
-   "mistral7b": {
-    "hf": "mistralai/Mistral-7B-Instruct-v0.3",
-    "gguf_repo": "bartowski/Mistral-7B-Instruct-v0.3-GGUF",
-    "gguf_file": "Mistral-7B-Instruct-v0.3-Q4_K_M.gguf",
-    "params": 7200000000.0,
-    "lab": "Mistral",
-    "revision": "c170c708c41dac9275d15a8fff4eca08d52bab71",
-    "gguf_revision": "61fd4167fff3ab01ee1cfe0da183fa27a944db48",
-    "gguf_sha256": {
-     "Mistral-7B-Instruct-v0.3-Q4_K_M.gguf": "1270d22c0fbb3d092fb725d4d96c457b7b687a5f5a715abe1e818da303e562b6"
-    }
    }
   },
   "nf4": {
@@ -192,9 +196,16 @@
    "bnb_4bit_use_double_quant": false
   },
   "embedding_baseline": "sentence-transformers/all-MiniLM-L6-v2",
-  "pins_note": "A2 (GPT code r1): HF commit SHAs and GGUF LFS sha256 read from the HF API on 2026-10-12; verified before any GPU/CPU use"
+  "pins_note": "A2 (GPT code r1): HF commit SHAs and GGUF LFS sha256 read from the HF API on 2026-10-12; verified before any GPU/CPU use",
+  "stageB_order_note": "A6: llama8b removed (gated). A7: Mistral removed entirely (user rule: no Mistral/European models); only qwen7b + olmo7b, no further substitutes"
  },
  "n_threads": 8,
  "stageB_batch_size": 8,
- "stageB_batch_note": "A5 conformance (PREREG \u00a79 'batched generation for B1-B3'); cache test stays batch-1"
+ "stageB_batch_note": "A5 conformance (PREREG \u00a79 'batched generation for B1-B3'); cache test stays batch-1",
+ "b0_resume": {
+  "alloc": "reserve",
+  "reserve_use": "c",
+  "amendment": "A7",
+  "note": "B0 (and B0b) draw from the 3 GPU-h reserve, cumulative in budget_ledger.json; the exhausted B0 allocation is not reused"
+ }
 }

@@ -14,11 +14,12 @@
  "A/prompts_smol17.jsonl": "e528a6f3c8b20d8ca43c57845156336f69332fd8acae27d141d931eee19c783b",
  "A/stage_log.jsonl": "800a68ca98f7c58706922f100b0d877c2e4a1229953fb7ca95f38d63503d48a2",
  "A/summary.json": "b4ff23278bad125b97b725dffb447433699c28f8f7ea2fb125cec19bb336d24c",
- "B0/BUDGET_EXHAUSTED": "5131dfc0abdee376e60f002e36f72c82598669dc5ee64901eb968d00b0dc199c",
- "B0/backend.json": "c509a059aaa449fae48ee07734a0a703e4b87a7e2222c896d01bde0840d66dbe",
- "B0/canary_qwen7b.jsonl": "6bbd4131da7d045e77779de49b226089a30bdbb6f009cec73f394b3174122789",
- "B0/prompts_qwen7b.jsonl": "c32462518d974a291a377e2f0babab00f1506da1449272536a8dd29b290029f2",
- "B0/qual_qwen7b.jsonl": "66975a7e93ec1ea08e2314a519a1016dd3e64516a327a859183c06a38497338d",
- "B0/stage_log.jsonl": "fb0e81fa2b63356d14e0d62147dccf0d6942b6398d33220ce436fc709b87cce6",
+ "B0_run1_gguf_cpu/BUDGET_EXHAUSTED": "5131dfc0abdee376e60f002e36f72c82598669dc5ee64901eb968d00b0dc199c",
+ "B0_run1_gguf_cpu/backend.json": "c509a059aaa449fae48ee07734a0a703e4b87a7e2222c896d01bde0840d66dbe",
+ "B0_run1_gguf_cpu/canary_qwen7b.jsonl": "6bbd4131da7d045e77779de49b226089a30bdbb6f009cec73f394b3174122789",
+ "B0_run1_gguf_cpu/kaggle_kernel.log": "8f90dc846091cfff869e0b595fc9a3b54c076c5a2269a5077fb7827ab95d937d",
+ "B0_run1_gguf_cpu/prompts_qwen7b.jsonl": "c32462518d974a291a377e2f0babab00f1506da1449272536a8dd29b290029f2",
+ "B0_run1_gguf_cpu/qual_qwen7b.jsonl": "66975a7e93ec1ea08e2314a519a1016dd3e64516a327a859183c06a38497338d",
+ "B0_run1_gguf_cpu/stage_log.jsonl": "fb0e81fa2b63356d14e0d62147dccf0d6942b6398d33220ce436fc709b87cce6",
  "budget_ledger.json": "124a87cf1e7d3de6c6215f1c243604528a0d7c42206394aaf94206804d5cf67f"
 }

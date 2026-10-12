@@ -3,11 +3,11 @@
 # Results land in /kaggle/working/glyph/v6/e1b/results/<stage>/ ; download them and commit to the repo.
 # %% 1. code at the pinned commit (set COMMIT to the commit that recorded CODE_HASH.txt)
 import os, subprocess, sys
-COMMIT = os.environ.get("E1B_COMMIT", "prereg-e1b-a6"); STAGE = os.environ.get("E1B_STAGE", "B0")   # pinned: tag prereg-e1b-a6 (A6)
+COMMIT = os.environ.get("E1B_COMMIT", "prereg-e1b-a7"); STAGE = os.environ.get("E1B_STAGE", "B0")   # pinned: tag prereg-e1b-a7 (A7)
 subprocess.run("git clone https://github.com/devamped1337/glyph-alphabet-experiments.git /kaggle/working/glyph", shell=True, check=True)
 subprocess.run(f"cd /kaggle/working/glyph && git checkout {COMMIT}", shell=True, check=True)
 # %% 2. pinned dependencies (nf4 path) + llama.cpp CUDA wheel (pre-registered GGUF fallback, e.g. P100)
-subprocess.run("pip install -q 'transformers==4.47.1' 'bitsandbytes==0.44.1' 'accelerate==1.1.1' 'huggingface_hub>=0.26' "
+subprocess.run("pip install -q 'transformers==4.47.1' 'bitsandbytes==0.47.0' 'accelerate==1.1.1' 'huggingface_hub>=0.26' "
                "'sentence-transformers==3.3.1'", shell=True, check=True)
 cap = subprocess.run("nvidia-smi --query-gpu=name,compute_cap --format=csv,noheader", shell=True, capture_output=True, text=True).stdout
 print("GPU:", cap)

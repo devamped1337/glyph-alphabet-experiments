@@ -14,13 +14,37 @@ SPLIT = "\u241eE1B_SPLIT\u241e"
 TEMPLATES = {
     "chatml": ("<|im_start|>system\n{sys}<|im_end|>\n<|im_start|>user\n{user}<|im_end|>\n<|im_start|>assistant\n", ["<|im_end|>"]),
     "llama3": ("<|begin_of_text|><|start_header_id|>system<|end_header_id|>\n\n{sys}<|eot_id|><|start_header_id|>user<|end_header_id|>\n\n{user}<|eot_id|><|start_header_id|>assistant<|end_header_id|>\n\n", ["<|eot_id|>"]),
-    "mistral": ("<s>[INST] {sys}\n\n{user}[/INST]", ["</s>"]),
     "olmo2": ("<|endoftext|><|system|>\n{sys}\n<|user|>\n{user}\n<|assistant|>\n", ["<|endoftext|>"]),
 }
 MODEL_TEMPLATE = {"qwen3b": "chatml", "smol17": "chatml", "qwen7b": "chatml", "llama8b": "llama3",
-                  "olmo7b": "olmo2", "mistral7b": "mistral"}
+                  "olmo7b": "olmo2"}   # A7: Mistral removed entirely
 
 class NonFinite(RuntimeError): pass
+class GPUPreflightFail(RuntimeError): pass
+
+def gpu_preflight(b):
+    """A7: hard preflight for Stage B. The model must actually run on CUDA: HF -> torch sees a GPU, every
+    parameter/buffer is on cuda (none on cpu/meta/disk) and the 4-bit layers are bitsandbytes Linear4bit;
+    GGUF -> llama.cpp was built with GPU offload and all layers are offloaded (n_gpu_layers=-1).
+    Anything else aborts the stage (never a silent CPU run)."""
+    if isinstance(b, LlamaCppBackend):
+        import llama_cpp
+        if not llama_cpp.llama_supports_gpu_offload(): raise GPUPreflightFail("llama.cpp build has no GPU offload (CPU-only wheel)")
+        if b.info.get("n_gpu_layers") != -1: raise GPUPreflightFail(f"GGUF n_gpu_layers={b.info.get('n_gpu_layers')} (must be -1: all layers offloaded)")
+        return dict(ok=True, backend="llama.cpp", gpu_offload=True, n_gpu_layers=-1)
+    t = b.torch
+    if not t.cuda.is_available(): raise GPUPreflightFail("torch.cuda.is_available() is False")
+    devs = {str(x.device.type) for x in list(b.m.parameters()) + list(b.m.buffers())}
+    if devs != {"cuda"}: raise GPUPreflightFail(f"model tensors not all on CUDA: {sorted(devs)}")
+    dm = getattr(b.m, "hf_device_map", None) or {}
+    if any(str(v) in ("cpu", "disk", "meta") for v in dm.values()): raise GPUPreflightFail(f"hf_device_map offloads to cpu/disk: {dm}")
+    if b.info.get("nf4"):
+        import bitsandbytes as bnb
+        n4 = sum(isinstance(m, bnb.nn.Linear4bit) for m in b.m.modules())
+        if n4 == 0: raise GPUPreflightFail("no bitsandbytes Linear4bit layers (4-bit quantization not applied)")
+    else: n4 = 0
+    return dict(ok=True, backend=b.info.get("backend"), gpu=t.cuda.get_device_name(0), capability=list(t.cuda.get_device_capability(0)),
+                linear4bit_layers=n4, param_devices=sorted(devs))
 
 def _gap(logits):
     l = np.asarray(logits, dtype=np.float64)

@@ -360,3 +360,41 @@ Estimated from E1's measured CPU rates (Qwen-3B 2.25 s/call, Smol 1.31 s/call; p
 3. **Anonymous access checked on 2026-10-12:** config.json, tokenizer and weight shards of the pinned OLMo-2 revision download with no token (HF API `gated: false`).
 4. **Consequences required by the swap:** OLMo-2 (`model_type olmo2`) needs `transformers>=4.47`, so the Kaggle pin moves from 4.46.3 to **4.47.1** (bitsandbytes, accelerate and other pins unchanged; versions are still logged). The HF token is optional in the notebook. The chat template is the model's own (`<|system|>/<|user|>/<|assistant|>`, eos `<|endoftext|>`, pad `<|pad|>`), already mapped as `olmo2` in `backends.py`.
 5. **Nothing else changes:** nf4 config (fp16 compute), neutral greedy generation settings (`repetition_penalty=1.0` explicit, all knobs pinned), bars, budgets (B0 2 GPU-h), pools, seeds, analysis and the GGUF fallback rule are as frozen. Non-finite logits stay fail-loud (§4).
+
+### A7: 2026-10-12 (AEDT), B0 environment failure, version fix, Mistral removed, B0 resumed from the reserve; approved by the user (Grok reviewer signed off)
+
+**Status:** frozen. Decided after the first B0 attempt (see [B0_REPORT.md](B0_REPORT.md)) and before any further B0 run, B0b, or any B1–B3 data.
+
+1. **Environment failure (first B0 attempt, kernel v1, `fb423f0`).**
+   - Kaggle's image is now Python 3.13 / CUDA 12.8.
+   - The pinned `bitsandbytes==0.44.1` ships no `libbitsandbytes_cuda128.so` and fails on import (`No module named 'triton.ops'`), so the nf4 load test failed. The §9 fallback then set `backend.json = gguf_cuda`.
+   - The pinned `llama-cpp-python==0.3.2` cu121 wheel has no cp313 build, so a CPU-only build was installed. The GGUF "CUDA" fallback therefore ran on the **CPU** (about 18–20 s per 1-token probe).
+   - B0 used its full 2 GPU-h (7217.6 s) on qwen7b alone and stopped with `BUDGET_EXHAUSTED`. OLMo-2 was never loaded.
+2. **Partial results already seen (disclosed).** Probe bar 0.90 and arithmetic bar 0.80, both unchanged.
+   - qwen7b F1: probes 137/144 = 0.951, arithmetic 60/60 = 1.000.
+   - qwen7b F2: probes 89/96 = 0.927 on 4/6 entries; arithmetic not run.
+   - F3 and F3L were not run. Canaries were 20/20.
+   - These numbers are published in `results/B0_run1_gguf_cpu/` and in B0_REPORT.md. **They do not enter the qualification decision** (see 5).
+3. **Version fix.**
+   - `bitsandbytes` is pinned to **0.47.0**. Its wheel is `py3-none` and ships `libbitsandbytes_cuda128.so`, and it no longer imports `triton.ops`.
+   - `transformers==4.47.1` (A6), `accelerate==1.1.1` and the nf4 config (fp16 compute) are unchanged.
+4. **Hard GPU preflight (new, fail-closed).**
+   - B0 aborts with exit 9 and a `GPU_PREFLIGHT_FAIL` marker if `torch.cuda` is unavailable.
+   - After every Stage B model load, `gpu_preflight` asserts the following, and aborts with exit 9 if any check fails:
+     - HF path: every parameter and buffer is on CUDA, nothing is offloaded to cpu/disk/meta, and the model has bitsandbytes `Linear4bit` layers.
+     - GGUF path: llama.cpp reports GPU offload support and `n_gpu_layers = -1`.
+   - **A silent CPU run is no longer possible.** The result is logged as `gpu_preflight` in `stage_log.jsonl`.
+5. **Backend decision (explicit).**
+   - `backend.json` is **reset**, because an environment failure caused it, not the GPU's capability. B0 again **prefers the pre-registered primary path, 4-bit nf4** (bitsandbytes restored).
+   - The §9 fallback rule is otherwise unchanged: if nf4 genuinely fails on the assigned GPU, GGUF via llama.cpp is used for all Stage B models, now subject to the offload preflight. The backend is never mixed.
+   - Consequence: the first attempt's qwen7b records came from a different backend (GGUF on CPU). They **cannot be mixed** with nf4 records, so they are archived (`results/B0_run1_gguf_cpu/`, including its `BUDGET_EXHAUSTED` and `backend.json`) and not reused.
+6. **Resume under reserve use (c), from the checkpoint.**
+   - B0 continues as the same interrupted, checkpointed stage, under §2 reserve use (c).
+   - Its budget is drawn from the **3 GPU-h reserve** (`config_e1b.json` `b0_resume`, ledger key `reserve`, cumulative). B0b, if needed, shares the same allocation. The exhausted B0 allocation is not reused.
+   - The B0 qualification and probe-diagnostic loops now **skip records already written, by key**. The first attempt's B0 loops did not. Any interruption within this resumed run therefore continues from the checkpoint.
+   - Because of 5, the resumed run starts with an empty B0 checkpoint on the nf4 backend.
+   - If the reserve runs out: stop and report (§2).
+7. **Mistral removed entirely (user rule).** No Mistral or other European model is used in B0, as a substitute or as a fallback.
+   - `stageB_order = [qwen7b, olmo7b]`, and the `mistral7b` config entry and its template are deleted. This supersedes the substitute chain in §3, A2 and A6.
+   - If qwen7b and olmo7b do not both qualify (a two-lab pair), there is **no further substitute: stop Stage B and report**.
+8. **Nothing else changes:** bars, pools, seeds, N, canary rule, generation settings (greedy, `repetition_penalty=1.0` explicit, all knobs pinned), analysis and the B1–B3 budgets are as frozen.

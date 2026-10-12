@@ -248,6 +248,27 @@ def stage_A(cfg):
     S.finish(summarize_A(S.dir, cfg, B)); print("[A] done")
 
 # ------------------------------------------------------------------ Stage B (Kaggle GPU)
+def _no_gpu_ok(): return os.environ.get("E1B_ALLOW_NO_GPU") == "1"   # fake-backend dry run (tests) ONLY
+
+def _preflight(b, name, S):
+    """A7: hard CUDA preflight after every Stage B model load; failure aborts the stage (exit 9)."""
+    if _no_gpu_ok(): S.log("gpu_preflight", model=name, result="SKIPPED (E1B_ALLOW_NO_GPU, dry run only)"); return
+    from .backends import gpu_preflight
+    try: r = gpu_preflight(b)
+    except Exception as ex:
+        S.log("gpu_preflight", model=name, result="FAIL", error=repr(ex))
+        (S.dir / "GPU_PREFLIGHT_FAIL").write_text(json.dumps(dict(model=name, error=repr(ex))) + "\n")
+        print(f"GPU PREFLIGHT FAILED for {name}: {ex!r} -> abort (no CPU fallback)"); sys.exit(9)
+    S.log("gpu_preflight", model=name, result="PASS", **r); print(f"GPU PREFLIGHT PASSED for {name}: {r}")
+
+def _require_gpu(S):
+    if _no_gpu_ok(): return
+    try:
+        import torch; ok = torch.cuda.is_available()
+    except Exception: ok = False
+    if not ok:
+        (S.dir / "GPU_PREFLIGHT_FAIL").write_text("no CUDA device visible to torch\n"); S.log("gpu_preflight", result="FAIL", error="no CUDA")
+        print("GPU PREFLIGHT FAILED: no CUDA device -> abort (no CPU fallback)"); sys.exit(9)
 def _B_backend_kind():
     p = RES / "B0" / "backend.json"
     return json.load(open(p)) if p.exists() else None
@@ -275,10 +296,12 @@ def load_B(name, cfg, S):
                 json.dump(dict(kind="gguf_cuda", decided_by=name, reason=repr(ex)), open(RES / "B0" / "backend.json", "w"))
                 S.log("nf4_failed_fallback", model=name, error=repr(ex))
                 print("nf4 load test failed -> pre-registered GGUF/llama.cpp CUDA fallback; fetch GGUF files and re-run B0"); sys.exit(7)
+            _preflight(b, name, S)
             S.log("load", model=name, kind=k, s=time.time() - t, info=b.info, system_turn_sha={kk: b.system_turn_sha(v) for kk, v in SYSTEMS.items()}); return b, k
         b, k = load_stageB(name, cfg, prefer="nf4", gguf_path=f"{gg}/{m['gguf_file']}")
         if kind and k != kind["kind"]:
             raise RuntimeError(f"backend kind changed ({kind['kind']} -> {k}); must be identical for all Stage B models/stages")
+    _preflight(b, name, S)
     S.log("load", model=name, kind=k, s=time.time() - t, info=b.info, system_turn_sha={kk: b.system_turn_sha(v) for kk, v in SYSTEMS.items()}); return b, k
 
 def canaries(b, name, cfg, B, S):
@@ -301,7 +324,9 @@ def require_canaries(b, name, cfg, B, S):
         (S.dir / "CANARY_FAIL").write_text(json.dumps(dict(model=name, changed=bad)) + "\n"); print("canary failure -> abort stage"); sys.exit(4)
 
 def stage_B0(cfg):
-    B = get_book(cfg); E = B["entries"]; S = Stage("B0", cfg["budgets_gpu_h"]["B0"], cfg); Q = cfg["qualification"]
+    B = get_book(cfg); E = B["entries"]; R7 = cfg.get("b0_resume")   # A7: B0 resume drawn from the reserve (use (c)), cumulative in the ledger
+    S = Stage("B0", cfg["budgets_gpu_h"]["reserve"], cfg, alloc=R7["alloc"]) if R7 else Stage("B0", cfg["budgets_gpu_h"]["B0"], cfg)
+    Q = cfg["qualification"]; _require_gpu(S)
     # access check
     try:
         from huggingface_hub import model_info
@@ -321,14 +346,20 @@ def stage_B0(cfg):
         can_ref[name] = canaries(b, name, cfg, B, S)
         fam_ok = {}
         for fam in cfg["families_core"] + ["F3L"]:
-            pr_c = pr_n = ar_c = ar_n = 0
+            qf = f"qual_{name}.jsonl"; dk = S.done_keys(qf)   # A7: resumable by key (checkpoint)
             for eid in B["groups"][f"qual_{fam}"]:
                 for p in B["probes"]["calib"][eid]:
-                    S.check_budget(); r = ask_probe(b, E[eid]["text"], p, cfg); pr_c += r["correct"]; pr_n += 1
-                    S.write(f"qual_{name}.jsonl", rec(name, "B0", "qual_probe", f"{eid}|{p['template']}", entry=eid, fam=fam, **r))
+                    k_ = f"{eid}|{p['template']}"
+                    if k_ in dk: continue
+                    S.check_budget(); r = ask_probe(b, E[eid]["text"], p, cfg)
+                    S.write(qf, rec(name, "B0", "qual_probe", k_, entry=eid, fam=fam, **r))
             for c in [c for c in B["cases"]["qualification"] if c["fam"] == fam]:
-                S.check_budget(); r = ask_arith(b, name, "direct_text", E[c["entry"]], c, cfg); ar_c += r["correct"]; ar_n += 1
-                S.write(f"qual_{name}.jsonl", rec(name, "B0", "qual_arith", c["text"], **r))
+                if c["text"] in dk: continue
+                S.check_budget(); r = ask_arith(b, name, "direct_text", E[c["entry"]], c, cfg)
+                S.write(qf, rec(name, "B0", "qual_arith", c["text"], **r))
+            Rf = [json.loads(l) for l in open(S.dir / qf)]
+            P_ = [x for x in Rf if x["step"] == "qual_probe" and x.get("fam") == fam]; A_ = [x for x in Rf if x["step"] == "qual_arith" and x.get("fam") == fam]
+            pr_c, pr_n = sum(bool(x["correct"]) for x in P_), len(P_); ar_c, ar_n = sum(bool(x["correct"]) for x in A_), len(A_)
             fam_ok[fam] = dict(probe=pr_c / pr_n, arith=ar_c / ar_n, ok=(pr_c / pr_n >= Q["probe_bar"] and ar_c / ar_n >= Q["arith_bar"]))
         Rq = [json.loads(l) for l in open(S.dir / f"qual_{name}.jsonl")]
         npb = max(1, sum(x["step"] == "qual_probe" for x in Rq)); nar = max(1, sum(x["step"] == "qual_arith" for x in Rq))
@@ -345,6 +376,7 @@ def stage_B0(cfg):
         for fam in cfg["families_core"] + ["F3L"]:
             for eid in B["groups"][f"probediag_{fam}"]:
                 for p in B["probes"]["calib"][eid]:
+                    if f"{eid}|{p['template']}" in S.done_keys(f"probediag_{name}.jsonl"): continue
                     S.check_budget(); S.write(f"probediag_{name}.jsonl", rec(name, "B0", "probediag", f"{eid}|{p['template']}", entry=eid, fam=fam,
                                                                          **ask_probe(b, E[eid]["text"], p, cfg, with_text=False)))
         pilot_timing(b, name, cfg, B, S)
@@ -438,7 +470,8 @@ def replacement_leaks(v, kind_baseline, cfg):
 
 def stage_B0b(cfg):
     """Re-check of replacement templates for flagged ones (A1.5), on the same probe-diagnostic pool, pair only."""
-    B = get_book(cfg); E = B["entries"]; S = Stage("B0b", cfg["budgets_gpu_h"]["B0"], cfg, alloc="B0")   # counts against the B0 allocation (not a reserve use)
+    B = get_book(cfg); E = B["entries"]; R7 = cfg.get("b0_resume")   # A7: once B0 runs on the reserve, B0b shares that allocation
+    S = Stage("B0b", cfg["budgets_gpu_h"]["reserve"], cfg, alloc=R7["alloc"]) if R7 else Stage("B0b", cfg["budgets_gpu_h"]["B0"], cfg, alloc="B0")
     ch = json.load(open(RES / "B0" / "config_choice.json")); pair = ch["pair"]; flagged = ch["leak"]["flagged"]
     repl = {}
     for t in flagged:
