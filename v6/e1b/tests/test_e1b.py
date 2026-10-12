@@ -269,4 +269,19 @@ class TestA3(unittest.TestCase):
     def test_unknown_messages_distinct(self):
         self.assertEqual(len({u["msg"] for u in BOOK["unknown_msgs"]}), CFG["unknown_id_messages"])
 
+class TestBatched(unittest.TestCase):
+    """A5: batched generation == batch-1 (generic path here; true HF batching in tools/smoke_hf_batch.py)."""
+    def test_generic_batch_equals_single(self):
+        from e1b.stages import ask_arith, ask_arith_many
+        E = BOOK["entries"]; cs = BOOK["cases"]["pilot"][:5]
+        one = [ask_arith(FakeBackend(), "m", "direct_text", E[c["entry"]], c, CFG) for c in cs]
+        bat = ask_arith_many(FakeBackend(), "m", [("direct_text", E[c["entry"]], c, None) for c in cs], CFG)
+        for x, y in zip(one, bat): self.assertEqual((x["raw"], x["pred"], x["prompt_sha"]), (y["raw"], y["pred"], y["prompt_sha"]))
+    def test_hf_batched_equals_single(self):
+        import importlib.util, subprocess, os
+        py = os.environ.get("E1B_HF_PY", "/workspace/hfsmoke/bin/python")
+        if not os.path.exists(py): self.skipTest("no torch/transformers env for the HF batch smoke")
+        r = subprocess.run([py, str(ROOT / "tools" / "smoke_hf_batch.py")], capture_output=True, text=True)
+        self.assertEqual(r.returncode, 0, r.stdout[-2000:] + r.stderr[-2000:])
+
 if __name__ == "__main__": unittest.main()

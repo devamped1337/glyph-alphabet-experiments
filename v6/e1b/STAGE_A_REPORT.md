@@ -15,6 +15,31 @@
 
 Wall-clock: first start 09:56 AEDT → stop 15:31 AEDT (~5.58 h calendar, including the projection stop / A4 resume). Cumulative charged time is the ledger (5.502 h).
 
+
+## CORRECTIONS (2026-10-12 AEDT, after GPT's review [gpt_stageA](reviews/gpt_stageA.md); every point re-verified against the raw rows)
+
+1. **A4: the 0.425 follow rate is an abstention failure, not "ignoring the corruption".** Of the 40 gold-changing cases:
+   - **17/17 followed the plant** where the corrupted rule implied a *different number* (swapped_roles 10, changed_constant 4, inverted_comparison 3).
+   - **0/23 abstained** where it implied **UNKNOWN** (deleted_negation 10, mismatched_definition 10, near_miss_polarity 3).
+   - Verification nuance GPT did not state: in 10 of those 23 cases, Qwen gave the *honest* (pre-corruption) answer; the other 13 gave some other number. So Qwen tracks numeric changes but never abstains, and sometimes falls back on the uncorrupted reading.
+   - The "By corruption" line in §A4 above is correct; earlier wording implying general ignoring of corruption is withdrawn.
+2. **A2 "Planted" accuracy (Qwen 0.674, Smol 0.347) is scored against the corrupted text shown** (`correct = letter == gold`), so a value above zero does **not** show the corruption was ignored.
+   - Against the honest meaning (`honest_correct`), Qwen scores 0.542.
+   - On the 75 Qwen probes whose answer the corruption flips, Qwen chose the shown-text answer 37 times and the honest answer 18 times.
+3. **A5 cache: the divergence is localised to chunking, not state restore.** For both models, cold/cold and warm/warm show 0 changed predictions and 0 token changes. Cold/warm shows **6/100 (Qwen) and 16/100 (Smol)** changed predictions on the fixed set, with token changes on 46 and 85 of 120 prompts.
+   - **Coldsplit vs warm is token-identical on all 120/120 prompts for both models**, and cold vs coldsplit reproduces exactly the cold/warm changes.
+   - So the change comes from processing the prompt in one chunk vs as prefix + suffix chunks (a numerics difference in llama.cpp batching), **not** from saving and restoring the cache state.
+   - **The cache claim stays withheld** (frozen rule: any cold/warm change withholds it).
+4. **A6 is not re-run.** It stays partial (qwen3b 218/480, smol17 none). No cost claim.
+5. **Claude's review ([claude_stageA](reviews/claude_stageA.md)), verified:**
+   - **A4 by corruption type checks out** (followed: changed_constant 4/4, swapped_roles 10/10, inverted_comparison 3/3; not followed: deleted_negation 0/10, mismatched_definition 0/10, near_miss_polarity 0/3). It is the same split as point 1. The not-followed types are exactly the ones whose corrupted gold is UNKNOWN, so "gap-filling" (answering numerically where the rule no longer determines a number) is the accurate description.
+   - **The binomial arithmetic checks out:** P(≥22/24 | p = 0.90) = **0.564**. At p = 0.95 it is 0.884. With two independent models at p = 0.90 both passing, it is 0.318, before the agreement bar.
+   - **The chunking noise floor checks out:** cold vs cold-split changes predictions on 6% (Qwen) and 16% (Smol) of the fixed prompts.
+   - **First vs last integer after `Answer:` differ** on 1/114 Smol A1 rows (0.9%) and 0/116, 0/118, 0/119 and 0/216 on the other files, all below Claude's proposed 2% trigger.
+   - **The *-unstated no-text answers** were "correct" (Not stated) on 119/192 runs across both models.
+   - Claude's proposals are recorded as reviewer proposals in [AMENDMENT_A5_DRAFT.md](AMENDMENT_A5_DRAFT.md); none is adopted yet.
+
+
 ## Outcome
 
 Stage A completed **A1–A5 for both models**, **A4 for qwen3b only** (by design), and **partial A6 for qwen3b only (218/480)**. It did **not** finish A6 smol17, did not write `.done`, and stopped with `BUDGET_EXHAUSTED`.

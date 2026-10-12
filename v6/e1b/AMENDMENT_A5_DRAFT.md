@@ -79,7 +79,30 @@
 - No repository claim if B1 fails.
 - Stage A remains diagnostic only.
 
-## 5. Questions for the reviewers
+## 5. Reviewer input received
+
+- **GPT ([gpt_stageA](reviews/gpt_stageA.md), on `73a528b`):** proceed to **B0 uncached**, **keep the leak checks**, and **test the GPU cache path separately**. Also: A4's low follow rate is an abstention failure (17/17 numeric follows, 0/23 UNKNOWN), the A2 planted accuracy is scored against the shown text, and the CPU cache divergence is localised to one-chunk vs prefix/suffix chunking (coldsplit = warm on 120/120). All verified against the raw rows; see the STAGE_A_REPORT corrections.
+- **Claude ([claude_stageA](reviews/claude_stageA.md)): proposals for the reviewers, NOT adopted. Each needs a dated amendment before B.**
+  - **P1, gap-filling guarantee (builder):** require every planted entry to be rejected by a reader who answers the honest way wherever the shown text leaves a gap, with a margin of ≥8/24 flipped probes.
+    - Verified context: the current calibration pool has **16 planted entries with only 5/24 flipped probes** (changed_constant 13, deleted_negation 3). They would have to be regenerated. TEST-gate entries have 15–20 flips.
+  - **P2, abstention prompt:** an exploratory abstention-instruction prompt test on Qwen-3B CPU (~40 calls, logged as exploratory, no claims). The chosen prompt would be frozen by a dated amendment before B. **Not run; it awaits approval.**
+  - **P3:** B1 reports planted rejection **per corruption type**. This is reporting only.
+  - **P4, entry bar vs qualification (decide with P1):** at 24 probes the 0.90 bar means ≥22/24, and P(pass | p = 0.90) = 0.564 (verified; 0.318 for two independent models). Options:
+    - more probes per entry;
+    - a binomial entry test (e.g. a lower confidence bound ≥ a fixed value);
+    - a higher qualification bar (e.g. ≥0.95 per probe, where P(≥22/24) = 0.884).
+  - **P5, cache:** use **warm vs cold-split as the primary state-restore check** and report cold vs split as chunking sensitivity, keeping the strict rule alongside. Stage A CPU: warm = cold-split token-identical on 120/120 for both models; chunking noise floor 6% (Qwen) / 16% (Smol) of predictions.
+  - **P6:** treat the *-unstated no-text "leaks" as an **abstention diagnostic**, excluded from the leak rule. This conflicts with §3.1, which keeps the frozen B0b procedure; reviewers decide.
+  - **P7:** report the share of rows whose first and last integers after `Answer:` differ, with >2% as a B0 prompt-fix trigger. Stage A max is 0.9%.
+- **Batched generation (§3.4) is implemented** (conformance with PREREG §9):
+  - `HFBackend.generate_batch` does left-padded greedy decoding with per-row stop handling and per-step top-2 gaps. It is fail-loud on non-finite logits. llama.cpp (the GGUF fallback) stays sequential at batch 1.
+  - B1 probes, the B2 main conditions and the B3 receiver calls run in chunks of `stageB_batch_size = 8`. The B3 sender, the cache test, warm runs, B0 qualification and the canaries stay batch-1. Each row logs `batch`.
+  - The B0 pilot measures per-call receiver and probe time at the batch size used, so the A1.1 projection uses batched timings.
+  - **Regression test** (`tools/smoke_hf_batch.py`, run by `tests/test_e1b.py`; SmolLM2-135M, fp32, CPU, no nf4): batched vs batch-1 output tokens were **identical on 8/8 receiver and 6/6 probe prompts**, with identical parsed predictions. Per-call time went from 1.41 s to 0.49 s (receiver) and 0.21 s to 0.075 s (probe) on CPU.
+  - **Caveat:** fp16/nf4 on GPU with padding may not be bit-identical to batch-1. Proposal for reviewers: B0 re-runs this check on the Kaggle GPU in nf4 and reports any differences, and the batch size is frozen in the post-B0 amendment.
+  - The code hash is re-recorded. Nothing has been run on Kaggle.
+
+## 6. Questions for the reviewers
 1. Do you agree that §7's "otherwise: go to Stage B" means Stage A's failure does not block B, only small-pair calibration?
 2. Is implementing batched generation (§3.4) a conformance fix that is acceptable before B0, or does it need its own re-review of the code?
 3. Is the expected loss of the "unstated" probe kind via B0b acceptable (20 probes per entry remain)?

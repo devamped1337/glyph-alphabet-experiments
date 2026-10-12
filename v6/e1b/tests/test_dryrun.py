@@ -9,7 +9,7 @@ import e1b.backends as BK
 from test_e1b import FakeBackend
 
 class Fake(FakeBackend):
-    def __init__(self, *a, **k): super().__init__(False); self.info = dict(backend="fake")
+    def __init__(self, name="fake", *a, **k): super().__init__(False); self.info = dict(backend="fake"); self.name = name
 
 class DryRun(unittest.TestCase):
     def test_all_stages(self):
@@ -17,7 +17,7 @@ class DryRun(unittest.TestCase):
         BK.LlamaCppBackend = Fake
         real_verify = BK.verify_gguf
         BK.verify_gguf = lambda path, want: "stubbed-in-dryrun"   # real runs keep the sha256 pin check (gpt_code_2 #1)
-        S.load_B = lambda name, cfg, St: (Fake(), "fake")
+        S.load_B = lambda name, cfg, St: (Fake(name), "fake")
         cfg = load_cfg()
         try:
             for st in ("A",):

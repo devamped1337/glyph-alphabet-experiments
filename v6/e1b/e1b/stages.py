@@ -73,6 +73,10 @@ def get_book(cfg):
     B = build(cfg); DATA.mkdir(exist_ok=True); json.dump(B, open(p, "w"))
     (DATA / "cases_e1b.sha256").write_text(sha256_text(open(p).read()) + "\n"); return B
 
+def bs(cfg): return int(cfg.get("stageB_batch_size", 1))
+def chunks(xs, n):
+    for i in range(0, len(xs), n): yield xs[i:i + n]
+
 SYSTEMS = dict(arith=SYS_ARITH, probe=SYS_PROBE, sender=SYS_SENDER)
 def rec(model, stage, step, key, **kw): return dict(model=model, stage=stage, step=step, key=key, **kw)
 
@@ -91,7 +95,17 @@ def log_prompt(r, model):
 # ------------------------------------------------------------------ generic calls
 def ask_arith(be, model, cond, entry, case, cfg, msg=None, ablate=False, warm=False, extra=None):
     sysm, pre, suf, payload = receiver_parts(cond, entry, case, msg=msg, ablate_answer=ablate)
-    r = be.generate(sysm, pre, suf, cfg["max_new_tokens"], warm=warm); p = parse_answer(r["text"]); log_prompt(r, model)
+    r = be.generate(sysm, pre, suf, cfg["max_new_tokens"], warm=warm)
+    return _arith_row(r, model, cond, entry, case, sysm, pre, suf, payload, extra)
+
+def ask_arith_many(be, model, reqs, cfg):
+    """Batched receiver calls (PREREG §9; A5). reqs = [(cond, entry, case, extra)]; same prompts/parser as ask_arith."""
+    parts = [receiver_parts(c, e, k) for c, e, k, _ in reqs]
+    rs = be.generate_batch([(s, p, u) for s, p, u, _ in parts], cfg["max_new_tokens"])
+    return [_arith_row(r, model, c, e, k, *parts[i], x) for i, (r, (c, e, k, x)) in enumerate(zip(rs, reqs))]
+
+def _arith_row(r, model, cond, entry, case, sysm, pre, suf, payload, extra):
+    p = parse_answer(r["text"]); log_prompt(r, model)
     out = dict(cond=cond, entry=entry["id"], fam=entry["fam"], case=case["text"], gold=case["gold"], raw=r["text"],
                pred=p["pred"], abstained=p["abstained"], parse_path=p["path"], conflict=p["conflict"],
                correct=score_answer(p, case["gold"]), content_sha=sha256_text(sysm + pre + suf), model_called=True,
@@ -102,11 +116,20 @@ def ask_arith(be, model, cond, entry, case, cfg, msg=None, ablate=False, warm=Fa
 
 def ask_probe(be, entry_text, probe, cfg, with_text=True):
     sysm, pre, suf = probe_parts(entry_text, probe, with_text)
-    r = be.generate(sysm, pre, suf, cfg["probe_max_new_tokens"]); L, path = parse_letter(r["text"]); log_prompt(r, getattr(be, "name", "model"))
+    return _probe_row(be, be.generate(sysm, pre, suf, cfg["probe_max_new_tokens"]), probe, with_text)
+
+def ask_probe_many(be, reqs, cfg):
+    """Batched probe calls. reqs = [(entry_text, probe)] with entry text shown."""
+    rs = be.generate_batch([probe_parts(t, p, True) for t, p in reqs], cfg["probe_max_new_tokens"])
+    return [_probe_row(be, r, p, True) for r, (_, p) in zip(rs, reqs)]
+
+def _probe_row(be, r, probe, with_text):
+    L, path = parse_letter(r["text"]); log_prompt(r, getattr(be, "name", "model"))
     return dict(template=probe["template"], kind=probe["kind"], with_text=with_text, raw=r["text"], letter=L, parse_path=path,
                 gold=probe["gold"], honest_gold=probe["honest_gold"], correct=(L == probe["gold"]),
                 honest_correct=(L == probe["honest_gold"]),   # GPT code r1: the GATE scores this; `correct` (shown text) is for diagnostics
-                latency_s=r["latency_s"], gen_tokens=r["gen_tokens"], new_prompt_tokens=r["new_prompt_tokens"], first_gap=r["first_gap"])
+                latency_s=r["latency_s"], gen_tokens=r["gen_tokens"], new_prompt_tokens=r["new_prompt_tokens"], first_gap=r["first_gap"], batch=r.get("batch", 1),
+                prompt_sha=r.get("prompt_sha"), system_turn_sha=r.get("system_turn_sha"))
 
 # ------------------------------------------------------------------ Stage A (box CPU, diagnostic only)
 def stage_A(cfg):
@@ -313,12 +336,17 @@ def stage_B0(cfg):
 def pilot_timing(b, name, cfg, B, S):
     E = B["entries"]; tm = {"receiver": [], "receiver_warm": [], "probe": [], "sender": []}; t0 = time.time()
     rng = random.Random(0)
-    for c in B["cases"]["pilot"]:
+    # batched per-call time at the batch size actually used for B1-B3 (A1.1 + A5); warm stays batch-1
+    pc = B["cases"]["pilot"]
+    for ch in chunks(pc, bs(cfg)):
+        S.check_budget()
+        tm["receiver"] += [r["latency_s"] for r in ask_arith_many(b, name, [("direct_text", E[c["entry"]], c, None) for c in ch], cfg)]
+        qp = [(E[c["entry"]]["text"], B["probes"]["calib"][B["groups"][f"qual_{E[c['entry']]['fam']}"][0]][0]) for c in ch]
+        tm["probe"] += [r["latency_s"] for r in ask_probe_many(b, qp, cfg)]
+    for c in pc:
         e = E[c["entry"]]; S.check_budget()
-        tm["receiver"].append(ask_arith(b, name, "direct_text", e, c, cfg)["latency_s"])
         sysm, pre, _, _ = receiver_parts("direct_text", e, c); b.cache_prefix(sysm, pre)
         tm["receiver_warm"].append(ask_arith(b, name, "direct_text", e, c, cfg, warm=True)["latency_s"]); b.drop_cache()
-        tm["probe"].append(ask_probe(b, e["text"], B["probes"]["calib"][B["groups"][f"qual_{e['fam']}"][0]][0], cfg)["latency_s"])
     for fam in cfg["families_core"]:
         for eid in B["groups"][f"pilot_{fam}"][:3]:   # GPT code r1: pilot entries (with their own neighbours), never TEST
             v = sender_view(B, eid, rng); s, p, u = sender_parts(v); t = time.time()
@@ -423,11 +451,11 @@ def stage_B1(cfg):
         b, _ = load_B(m, cfg, S); require_canaries(b, m, cfg, B, S)
         for kind, ids in (("calib", calib_ids), ("testgate", tg_ids)):
             f = f"{kind}_{m}.jsonl"
-            for eid in ids:
-                for p in probe_set(B, eid, kind, cfg):
-                    k = f"{eid}|{p['template']}"
-                    if k in S.done_keys(f): continue
-                    S.check_budget(); S.write(f, rec(m, "B1", kind, k, entry=eid, planted=E[eid]["kind"] == "planted", **ask_probe(b, E[eid]["text"], p, cfg)))
+            todo = [(eid, p) for eid in ids for p in probe_set(B, eid, kind, cfg) if f"{eid}|{p['template']}" not in S.done_keys(f)]
+            for ch in chunks(todo, bs(cfg)):   # batched generation (PREREG §9; A5)
+                S.check_budget()
+                for (eid, p), r in zip(ch, ask_probe_many(b, [(E[eid]["text"], p) for eid, p in ch], cfg)):
+                    S.write(f, rec(m, "B1", kind, f"{eid}|{p['template']}", entry=eid, planted=E[eid]["kind"] == "planted", **r))
         if m == (strong or pair[0]):   # A2: manipulation check on the model with the higher B0 qualification score
             for c in [c for c in B["cases"]["manip_B1"] if c["entry"] in set(B["groups"]["planted_calib"][:P])]:
                 k = c["text"]
@@ -468,12 +496,12 @@ def stage_B2(cfg):
                                      pred="UNKNOWN", model_called=False))
     for m in pair:
         b, _ = load_B(m, cfg, S); require_canaries(b, m, cfg, B, S); f = f"main_{m}.jsonl"
-        for c in items:
-            e = E[c["entry"]]
-            for cond in ["direct_text", "prose"] + (["id_raw", "placebo"] if c["entry"] in sanity else []):
-                k = f"{cond}|{c['text']}"
-                if k in S.done_keys(f): continue
-                S.check_budget(); S.write(f, rec(m, "B2", "main", k, sanity=c["entry"] in sanity, **ask_arith(b, m, cond, e, c, cfg)))
+        todo = [(cond, c) for c in items for cond in ["direct_text", "prose"] + (["id_raw", "placebo"] if c["entry"] in sanity else [])
+                if f"{cond}|{c['text']}" not in S.done_keys(f)]
+        for ch in chunks(todo, bs(cfg)):   # batched generation (PREREG §9; A5)
+            S.check_budget()
+            for (cond, c), r in zip(ch, ask_arith_many(b, m, [(cond, E[c["entry"]], c, None) for cond, c in ch], cfg)):
+                S.write(f, rec(m, "B2", "main", f"{cond}|{c['text']}", sanity=c["entry"] in sanity, **r))
         for c in paired:
             k = f"id_oracle|{c['text']}"
             if k in S.done_keys(f): continue
@@ -550,11 +578,11 @@ def stage_B3(cfg):
     # 2. receiver = the OTHER model: id_selected (pipeline) vs prose (same original message)
     for snd, rcv in ((pair[0], pair[1]), (pair[1], pair[0])):
         b, _ = load_B(rcv, cfg, S); f = f"exchange_{snd}_to_{rcv}.jsonl"
+        model_jobs = []   # (key, cond, entry_for_prompt, case, extra) for batched receiver calls
         for c in items:
             e = E[c["entry"]]; sel = picks[snd][c["entry"]]
             k = f"id_selected|{c['text']}"
             if k not in S.done_keys(f):
-                S.check_budget()
                 if sel["pick"] is None:
                     r = dict(cond="id_selected", entry=e["id"], fam=e["fam"], case=c["text"], gold=c["gold"], pred=None, correct=False,
                              abstained=False, model_called=False, reason="sender_invalid", **bytes_record("id_selected", "", c))
@@ -564,13 +592,16 @@ def stage_B3(cfg):
                         r = dict(cond="id_selected", entry=e["id"], fam=e["fam"], case=c["text"], gold=c["gold"], pred="UNKNOWN",
                                  abstained=True, correct=False, model_called=False, reason=why, **bytes_record("id_selected", msg, c))
                     else:
-                        r = ask_arith(b, rcv, "id_selected", ent, c, cfg, extra=dict(selected=ent["id"], selection_correct=ent["id"] == e["id"]))
-                        r["entry"] = e["id"]; r["fam"] = e["fam"]
-                r.update(sender=snd, receiver=rcv, gated=gated); S.write(f, rec(rcv, "B3", "exchange", k, **r))
+                        model_jobs.append((k, "id_selected", ent, c, dict(selected=ent["id"], selection_correct=ent["id"] == e["id"],
+                                                                           sender=snd, receiver=rcv, gated=gated, entry=e["id"], fam=e["fam"])))
+                        r = None
+                if r is not None: r.update(sender=snd, receiver=rcv, gated=gated); S.write(f, rec(rcv, "B3", "exchange", k, **r))
             k = f"prose|{c['text']}"
-            if k not in S.done_keys(f):
-                S.check_budget(); r = ask_arith(b, rcv, "prose", e, c, cfg); r.update(sender=snd, receiver=rcv)
-                S.write(f, rec(rcv, "B3", "exchange", k, **r))
+            if k not in S.done_keys(f): model_jobs.append((k, "prose", e, c, dict(sender=snd, receiver=rcv)))
+        for ch in chunks(model_jobs, bs(cfg)):   # batched generation (PREREG §9; A5)
+            S.check_budget()
+            for (k, cond, ent, c, x), r in zip(ch, ask_arith_many(b, rcv, [(cond, ent, c, None) for k, cond, ent, c, x in ch], cfg)):
+                r.update(x); S.write(f, rec(rcv, "B3", "exchange", k, **r))
         del b
     from .analysis import summarize_B3
     S.finish(summarize_B3(S.dir, pair, cfg, B, gated))

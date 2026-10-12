@@ -75,6 +75,23 @@ class _Base:
         for s in self.stop_str: r["text"] = r["text"].split(s)[0]
         r["text"] = r["text"].strip(); return r
 
+    def generate_batch(self, jobs, max_new):
+        """PREREG §9 'batched generation for B1-B3' (A5 conformance fix). jobs = [(system, prefix_user, suffix_user)].
+        Cold mode only (the cache test stays batch-1). Base implementation = sequential batch-1 (llama.cpp);
+        HFBackend overrides it with true left-padded batched greedy decoding."""
+        return [self.generate(s, p, u, max_new) for s, p, u in jobs]
+
+    def _post(self, out, gaps, ans_gap, ptxt, stxt, system, n_prompt, latency, batch):
+        import hashlib
+        txt = self.detok(out)
+        r = dict(text=txt, gen_tokens=len(out), prompt_tokens=n_prompt, new_prompt_tokens=n_prompt, latency_s=round(latency, 4),
+                 first_gap=gaps[0] if gaps else None, answer_gap=ans_gap if ans_gap is not None else (gaps[0] if gaps else None),
+                 answer_gap_source="after_answer_line" if ans_gap is not None else "first_token_fallback",
+                 out_ids=[int(x) for x in out], warm=False, batch=batch, mode="cold", rendered_prompt=ptxt + stxt,
+                 prompt_sha=hashlib.sha256((ptxt + stxt).encode("utf-8")).hexdigest(), system_turn_sha=self.system_turn_sha(system))
+        for s in self.stop_str: r["text"] = r["text"].split(s)[0]
+        r["text"] = r["text"].strip(); return r
+
     def cache_prefix(self, system, prefix_user):
         """Process the prefix once from a fresh context and save its state. Returns setup seconds/tokens."""
         ptxt, _ = self.split_render(system, prefix_user, "")
@@ -145,6 +162,33 @@ class HFBackend(_Base):
             o = self.m(input_ids=ids, past_key_values=self._past, use_cache=True)
             self._past = o.past_key_values
             return o.logits[0, -1].float().cpu().numpy()
+    def generate_batch(self, jobs, max_new):
+        """True batched greedy decoding: left padding + attention mask, identical token sequences to the batch-1
+        cold path (prefix and suffix tokenized separately and concatenated), per-row stop handling, per-step top-2
+        gaps (fail-loud on non-finite logits). Latency is the batch wall time divided by the batch size."""
+        t = self.torch
+        if len(jobs) == 1: return [self.generate(*jobs[0], max_new)]
+        rend = [self.split_render(s, p, u) for s, p, u in jobs]
+        toks = [self.tok(pt, True) + self.tok(st, False) for pt, st in rend]
+        L = max(len(x) for x in toks); pad = self.tk.pad_token_id if self.tk.pad_token_id is not None else (self.tk.eos_token_id or 0)
+        ids = t.tensor([[pad] * (L - len(x)) + x for x in toks], device=self.device)
+        mask = t.tensor([[0] * (L - len(x)) + [1] * len(x) for x in toks], device=self.device)
+        t0 = time.perf_counter()
+        with t.no_grad():
+            g = self.m.generate(input_ids=ids, attention_mask=mask, max_new_tokens=max_new, do_sample=False, num_beams=1,
+                                eos_token_id=sorted(self.stop_ids), pad_token_id=pad, output_scores=True, return_dict_in_generate=True,
+                                temperature=None, top_p=None, top_k=None)
+        lat = (time.perf_counter() - t0) / len(jobs); outs = []
+        for i, (s, p, u) in enumerate(jobs):
+            out, gaps, ans_gap = [], [], None
+            for step, sc in enumerate(g.scores):
+                tok, gp = _gap(sc[i].float().cpu().numpy()); gaps.append(gp)
+                if ans_gap is None and out and "Answer:" in self.detok(out): ans_gap = gp
+                if tok in self.stop_ids: break
+                out.append(tok)
+                if any(x in self.detok(out[-8:]) for x in self.stop_str): break
+            outs.append(self._post(out, gaps, ans_gap, rend[i][0], rend[i][1], s, len(toks[i]), lat, len(jobs)))
+        return outs
     def _save(self):
         import copy; return copy.deepcopy(self._past)
     def _restore(self, st):
