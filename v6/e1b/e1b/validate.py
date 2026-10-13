@@ -29,7 +29,7 @@ def expected_files(st, cfg, res):
         inc = (res / "B0x" / "ATTEMPT_INCOMPLETE").exists() or (res / "B0x" / "NO_ACCESS").exists()
         ms = [m for m in ms if not (inc and m == X.get("candidate"))]
         return ["canaries_ref.json", "summary.json", "b0x_state.json"] + [f"{p}_{m}.jsonl" for m in ms for p in ("qual", "probediag", "prompts", "canary")] \
-               + [f"qualification_{m}.json" for m in ms] + (["pilot_timings.json"] if not inc else []) + (["config_choice.json"] if px else [])
+               + [f"qualification_{m}.json" for m in ms] + (["pilot_timings.json", "compute_dtype.json"] if not inc else []) + (["config_choice.json"] if px else [])
     if st == "B0b": return ["template_replacements.json", "summary.json"]
     if not pair: return ["<B0/config_choice.json with a pair>"]
     if st == "B1": return [f"{k}_{m}.jsonl" for m in pair for k in ("calib", "testgate")] + ["manip.jsonl", "accepted.json", "summary.json"]

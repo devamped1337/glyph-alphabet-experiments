@@ -415,6 +415,13 @@ def _b0_finish(S, cfg, qualified, kinds, can_ref):
 def _sha(p):
     import hashlib; return hashlib.sha256(Path(p).read_bytes()).hexdigest()
 
+ACCESS_ERR = ("GatedRepoError", "RepositoryNotFoundError", "RevisionNotFoundError", "EntryNotFoundError", "401", "403", "404", "gated", "licen")
+
+def _is_access_error(ex):
+    """A8 (Claude final): deterministic access failures (gated / 401 / 403 / 404 / licence) are never retried."""
+    t = type(ex).__name__ + " " + repr(ex)
+    return any(k in t for k in ACCESS_ERR)
+
 def stage_B0x(cfg):
     """A8 (DRAFT until frozen): ONE bounded B0 extension. Qwen-7B's run-2 B0 records are reused BY DESIGN (same nf4
     backend, A7 environment, same frozen pools), verified against sha256 pinned from immutable commit 7873596;
@@ -482,7 +489,16 @@ def stage_B0x(cfg):
     if retry:   # pre-registered fallback for the single infra retry (A8)
         ccfg = copy.deepcopy(cfg); ccfg["models"]["nf4"].update(X["retry_fallback"]["nf4_override"]); S.log("infra_retry_fallback", **X["retry_fallback"])
     labs = {cfg["models"]["stageB"][q]["lab"] for q in qualified}
-    ok = _b0_model(c, ccfg, B, S, kinds, can_ref)
+    dt = ccfg["models"]["nf4"]["bnb_4bit_compute_dtype"]   # GPT final: record the compute dtype actually used
+    json.dump({c: dict(bnb_4bit_compute_dtype=dt, infra_retry=retry), **{m: dict(bnb_4bit_compute_dtype=cfg["models"]["nf4"]["bnb_4bit_compute_dtype"], reused=True) for m in X["reuse"]}},
+              open(d / "compute_dtype.json", "w"), indent=1)
+    S.log("compute_dtype", model=c, bnb_4bit_compute_dtype=dt, infra_retry=retry)
+    try: ok = _b0_model(c, ccfg, B, S, kinds, can_ref)
+    except Exception as ex:
+        if _is_access_error(ex):   # deterministic: not retried -> NO_QUALIFYING_PAIR
+            S.log("access", result={c: repr(ex)}); (d / "NO_ACCESS").write_text(repr(ex) + "\n")
+            st["finished"] = True; json.dump(st, open(stp, "w"), indent=1); _b0_finish(S, cfg, qualified, kinds, can_ref)
+        raise   # load / OOM / non-finite / crash: state stays unfinished -> the single fp32 retry applies if no probe was scored
     st["finished"] = True; json.dump(st, open(stp, "w"), indent=1)
     if ok and cfg["models"]["stageB"][c]["lab"] not in labs: qualified.append(c)
     _b0_finish(S, cfg, qualified, kinds, can_ref)

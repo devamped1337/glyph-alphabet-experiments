@@ -102,7 +102,7 @@ class B0xExtension(unittest.TestCase):
     def _state(self): return json.load(open(self.res / "B0x" / "b0x_state.json"))
 
     def test_refuses_when_draft(self):
-        cfg = load_cfg(); self.assertEqual(cfg["b0_ext"]["status"], "draft"); self.assertEqual(self._run(cfg), 10)
+        cfg = load_cfg(); cfg["b0_ext"]["status"] = "draft"; self.assertEqual(self._run(cfg), 10)   # any non-frozen status refuses
     def test_reuse_pins_match_immutable_commit(self):
         import subprocess, hashlib
         for f, h in load_cfg()["b0_ext"]["reuse_sha256"].items():
@@ -170,3 +170,27 @@ class B0xExtension(unittest.TestCase):
         self.assertEqual(self._run(self._cfg()), 5)
         self.assertIn("not qualified", (self.res / "B0x" / "ATTEMPT_INCOMPLETE").read_text())
         self.assertEqual(json.load(open(self.res / "B0x" / "summary.json"))["pair"], None)
+
+
+class B0xFinal(B0xExtension):
+    """A8 final (Claude): access errors are never retried; load/OOM/non-finite/crash get the single fp32 retry; dtype recorded."""
+    def test_access_error_not_retried(self):
+        class GatedRepoError(Exception): pass
+        def gated(name, cfg, St): raise GatedRepoError("401 Client Error: gated repo")
+        S.load_B = gated
+        self.assertEqual(self._run(self._cfg()), 5)
+        d = self.res / "B0x"; self.assertTrue((d / "NO_ACCESS").exists()); self.assertTrue(self._state()["finished"])
+        self.assertFalse(self._state()["retry_used"]); self.assertEqual(self._run(self._cfg()), 0)   # no retry afterwards
+    def test_oom_before_scoring_gets_fp32_retry(self):
+        def oom(name, cfg, St): raise RuntimeError("CUDA out of memory")
+        S.load_B = oom
+        with self.assertRaises(RuntimeError): S.STAGES["B0x"](self._cfg())
+        self.assertFalse(self._state()["finished"])
+        seen = {}
+        def ok(name, cfg, St): seen["dt"] = cfg["models"]["nf4"]["bnb_4bit_compute_dtype"]; return Fake(name), "nf4"
+        S.load_B = ok; self.assertIn(self._run(self._cfg()), (5, 6, None)); self.assertEqual(seen["dt"], "float32")
+        cd = json.load(open(self.res / "B0x" / "compute_dtype.json"))
+        self.assertEqual(cd["falcon7b"], {"bnb_4bit_compute_dtype": "float32", "infra_retry": True}); self.assertEqual(cd["qwen7b"]["bnb_4bit_compute_dtype"], "float16")
+    def test_dtype_recorded_first_attempt(self):
+        S.load_B = lambda name, cfg, St: (Fake(name), "nf4"); self._run(self._cfg())
+        self.assertEqual(json.load(open(self.res / "B0x" / "compute_dtype.json"))["falcon7b"]["bnb_4bit_compute_dtype"], "float16")

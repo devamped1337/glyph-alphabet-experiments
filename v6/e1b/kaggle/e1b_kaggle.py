@@ -3,7 +3,7 @@
 # Results land in /kaggle/working/glyph/v6/e1b/results/<stage>/ ; download them and commit to the repo.
 # %% 1. code at the pinned commit (set COMMIT to the commit that recorded CODE_HASH.txt)
 import os, subprocess, sys
-COMMIT = os.environ.get("E1B_COMMIT", "prereg-e1b-a8"); STAGE = os.environ.get("E1B_STAGE", "B0x")   # A8 (DRAFT): tag prereg-e1b-a8 is created only when A8 is frozen; B0x refuses to run while draft
+COMMIT = os.environ.get("E1B_COMMIT", "prereg-e1b-a8"); STAGE = os.environ.get("E1B_STAGE", "B0x")   # A8 (frozen): tag prereg-e1b-a8
 subprocess.run("git clone https://github.com/devamped1337/glyph-alphabet-experiments.git /kaggle/working/glyph", shell=True, check=True)
 subprocess.run(f"cd /kaggle/working/glyph && git checkout {COMMIT}", shell=True, check=True)
 # %% 2. pinned dependencies (nf4 path) + llama.cpp CUDA wheel (pre-registered GGUF fallback, e.g. P100)

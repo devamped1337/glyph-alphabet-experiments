@@ -399,9 +399,9 @@ Estimated from E1's measured CPU rates (Qwen-3B 2.25 s/call, Smol 1.31 s/call; p
    - If qwen7b and olmo7b do not both qualify (a two-lab pair), there is **no further substitute: stop Stage B and report**.
 8. **Nothing else changes:** bars, pools, seeds, N, canary rule, generation settings (greedy, `repetition_penalty=1.0` explicit, all knobs pinned), analysis and the B1–B3 budgets are as frozen.
 
-### A8 (DRAFT, NOT FROZEN): 2026-10-13 (AEDT), one bounded post-hoc B0 extension with one named candidate
+### A8 (FROZEN): 2026-10-13 (AEDT), one bounded post-hoc B0 extension with one named candidate
 
-**Status: DRAFT, revised after review round 3** (`reviews/grok_A8.md`, `claude_A8.md`, `gpt_A8.md`; still not frozen). Nothing in A8 runs until all three reviewers (Grok, Claude, GPT; `reviews/*_B0.md`) approve. Then A8 is frozen by a dated, hash-pinned commit and tag `prereg-e1b-a8`, and config `b0_ext.status` is set to `"frozen"`. Until then, stage `B0x` refuses to run (exit 10).
+**Status: FROZEN 2026-10-13 (AEDT).** All three reviewers approved freezing (`reviews/*_A8_final.md`), with Claude's two wording fixes applied. Tag `prereg-e1b-a8`. Nothing in A8 runs until all three reviewers (Grok, Claude, GPT; `reviews/*_B0.md`) approve. Then A8 is frozen by a dated, hash-pinned commit and tag `prereg-e1b-a8`, and config `b0_ext.status` is set to `"frozen"`. Until then, stage `B0x` refuses to run (exit 10).
 
 1. **Disclosure.** E1b's B0 result is final and stays the **primary result: no qualifying two-lab 7B pair** under the free-access constraints. That result is at commit `7873596fdc127486d83c90baa65d1718585dec39` (B0_REPORT.md, run 2):
    - qwen7b QUALIFIED: F1 0.924/1.000, F2 0.924/1.000.
@@ -473,9 +473,12 @@ Estimated from E1's measured CPU rates (Qwen-3B 2.25 s/call, Smol 1.31 s/call; p
    - **One attempt, no chain, no rolling search.** If Falcon fails access, the preflight or qualification: `NO_QUALIFYING_PAIR`, stop and report. No further candidate is added under A8.
    - Budget exhaustion: stop and report (§2).
    - **Deadline fixed once (GPT A8 #1).** The first start writes `B0x/b0x_state.json` with the initial reserve usage and the absolute reserve deadline (initial + 1.2 h, capped at 3.0 h). Every restart and the retry reuse that deadline; it is never recomputed from the current ledger.
+   - **Deterministic access failures are not retried (Claude final #1).** Gated, 401, 403, 404, missing revision or licence errors, at the access check or at load, mean `NO_ACCESS` and therefore `NO_QUALIFYING_PAIR`. The retry below covers only load, OOM, non-finite or crash failures.
    - **Infra-abort rule (Claude A8 #2).** An abort before **any** candidate probe is scored (load failure, preflight failure, crash) does **not** use the attempt.
      - **One** retry is allowed, with the pre-registered fallback: nf4 compute dtype **float32** instead of fp16. All else is unchanged, and the deadline is the same.
      - A second such abort means **INCOMPLETE = not qualified**.
+     - **The fp32 retry is not a real second chance (Claude final #2).** fp32 compute is slower and uses more memory on a T4, and it runs under the same absolute deadline. It may not fit and may end INCOMPLETE, which counts as not qualified.
+     - The compute dtype actually used is recorded per model in `B0x/compute_dtype.json` and in `stage_log.jsonl` (`compute_dtype`). The validator expects that file (GPT final).
    - **Once a probe is scored, the attempt is used.**
      - An interrupted attempt after that point counts as INCOMPLETE = not qualified (`ATTEMPT_INCOMPLETE`).
      - Hitting the cap (`BUDGET_EXHAUSTED`) also counts as **INCOMPLETE = not qualified**.

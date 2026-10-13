@@ -223,7 +223,7 @@
   "note": "B0 (and B0b) draw from the 3 GPU-h reserve, cumulative in budget_ledger.json; the exhausted B0 allocation is not reused"
  },
  "b0_ext": {
-  "status": "draft",
+  "status": "frozen",
   "amendment": "A8",
   "candidate": "falcon7b",
   "reuse": [
