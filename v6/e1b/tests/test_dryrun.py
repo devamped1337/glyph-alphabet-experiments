@@ -81,32 +81,92 @@ class GPUPreflight(unittest.TestCase):
 
 
 class B0xExtension(unittest.TestCase):
-    """A8 (draft): B0x refuses unless frozen; when frozen it reuses Qwen's B0 records byte-identically and qualifies one candidate."""
-    def _env(self):
+    """A8 (draft): refusal while draft; byte-identical, pin-verified Qwen reuse incl. prompt log; one candidate;
+    absolute deadline persisted across restarts; single infra retry with fallback; scored-then-interrupted = incomplete;
+    full B0x -> validator path (missing files, duplicates)."""
+    def _env(self, reserve=4968.9):
         import os; os.environ["E1B_ALLOW_NO_GPU"] = "1"
-        tmp = Path(tempfile.mkdtemp()); res = tmp / "results"; (res / "B0").mkdir(parents=True)
-        for f in ("backend.json", "canaries_ref.json", "pilot_timings.json", "qualification_qwen7b.json", "qual_qwen7b.jsonl", "probediag_qwen7b.jsonl", "canary_qwen7b.jsonl"):
-            shutil.copyfile(ROOT / "results" / "B0" / f, res / "B0" / f)
-        json.dump({"reserve": 4968.9}, open(res / "budget_ledger.json", "w"))
+        tmp = Path(tempfile.mkdtemp()); res = tmp / "results"; res.mkdir()
+        shutil.copytree(ROOT / "results" / "B0", res / "B0")
+        for f in ("config_e1b.json",): shutil.copyfile(ROOT / f, tmp / f)
+        (tmp / "data").symlink_to(ROOT / "data")
+        json.dump({"reserve": reserve}, open(res / "budget_ledger.json", "w"))
         return tmp, res
-    def test_refuses_when_draft(self):
-        cfg = load_cfg(); self.assertEqual(cfg["b0_ext"]["status"], "draft")
+    def _cfg(self):
+        cfg = load_cfg(); cfg["b0_ext"]["status"] = "frozen"; return cfg
+    def _run(self, cfg):
         with self.assertRaises(SystemExit) as cm: S.STAGES["B0x"](cfg)
-        self.assertEqual(cm.exception.code, 10)
-    def test_frozen_reuse_and_one_candidate(self):
-        import hashlib
-        tmp, res = self._env(); old, oldL = S.RES, S.load_B; S.RES = res
+        return cm.exception.code
+    def setUp(self): self.old = (S.RES, S.load_B); self.tmp, self.res = self._env(); S.RES = self.res
+    def tearDown(self): S.RES, S.load_B = self.old; shutil.rmtree(self.tmp, ignore_errors=True)
+    def _state(self): return json.load(open(self.res / "B0x" / "b0x_state.json"))
+
+    def test_refuses_when_draft(self):
+        cfg = load_cfg(); self.assertEqual(cfg["b0_ext"]["status"], "draft"); self.assertEqual(self._run(cfg), 10)
+    def test_reuse_pins_match_immutable_commit(self):
+        import subprocess, hashlib
+        for f, h in load_cfg()["b0_ext"]["reuse_sha256"].items():
+            b = subprocess.run(["git", "-C", str(ROOT), "show", f"7873596:v6/e1b/results/B0/{f}"], capture_output=True).stdout
+            if b: self.assertEqual(hashlib.sha256(b).hexdigest(), h, f)
+    def test_hash_mismatch_refuses(self):
+        with open(self.res / "B0" / "qual_qwen7b.jsonl", "a") as f: f.write("\n")
+        self.assertEqual(self._run(self._cfg()), 12)
+    def test_full_run_reuse_and_validator(self):
+        import hashlib, io, contextlib
+        from e1b import validate
         S.load_B = lambda name, cfg, St: (Fake(name), "nf4")
-        try:
-            cfg = load_cfg(); cfg["b0_ext"]["status"] = "frozen"
-            with self.assertRaises(SystemExit) as cm: S.STAGES["B0x"](cfg)
-            self.assertIn(cm.exception.code, (5, 6, None))
-            d = res / "B0x"
-            for f in ("qual_qwen7b.jsonl", "probediag_qwen7b.jsonl"):
-                self.assertEqual(hashlib.sha256((d / f).read_bytes()).digest(), hashlib.sha256((res / "B0" / f).read_bytes()).digest())
-            self.assertTrue((d / "qual_falcon7b.jsonl").exists())
-            self.assertFalse(any((d / f"qual_{m}.jsonl").exists() for m in ("olmo7b", "mistral7b")))
-            log = [json.loads(l) for l in open(d / "stage_log.jsonl")]
-            st = [x for x in log if x["ev"] == "start"][0]; self.assertEqual(st["alloc"], "reserve")
-            self.assertTrue(any(x["ev"] == "reuse" and x["model"] == "qwen7b" for x in log))
-        finally: S.RES, S.load_B = old, oldL; shutil.rmtree(tmp, ignore_errors=True)
+        self.assertIn(self._run(self._cfg()), (5, 6, None))
+        d = self.res / "B0x"
+        for f in ("qual_qwen7b.jsonl", "probediag_qwen7b.jsonl", "prompts_qwen7b.jsonl", "canary_qwen7b.jsonl"):
+            self.assertEqual(hashlib.sha256((d / f).read_bytes()).hexdigest(), load_cfg()["b0_ext"]["reuse_sha256"][f])
+        self.assertTrue((d / "qual_falcon7b.jsonl").exists())
+        self.assertFalse(any((d / f"qual_{m}.jsonl").exists() for m in ("olmo7b", "mistral7b")))
+        log = [json.loads(l) for l in open(d / "stage_log.jsonl")]
+        self.assertEqual([x for x in log if x["ev"] == "start"][0]["alloc"], "reserve")
+        def val():
+            buf = io.StringIO()
+            with contextlib.redirect_stdout(buf): rc = validate.run(self.tmp)
+            return rc, buf.getvalue()
+        rc, out = val(); self.assertEqual(rc, 0, [l for l in out.splitlines() if l.startswith("FAIL")])
+        self.assertIn("B0x/qual_qwen7b.jsonl: byte-identical to 7873596 pin", out)
+        self.assertIn("B0x/qual_qwen7b.jsonl: rendered prompts logged (A2)", out)
+        # duplicate key -> FAIL
+        L = open(d / "qual_falcon7b.jsonl").readline()
+        with open(d / "qual_falcon7b.jsonl", "a") as f: f.write(L)
+        rc, out = val(); self.assertEqual(rc, 1); self.assertIn("FAIL B0x/qual_falcon7b.jsonl: unique keys", out)
+        # missing reused prompt log -> FAIL (expected file + prompt_sha resolution)
+        (d / "prompts_qwen7b.jsonl").unlink()
+        rc, out = val(); self.assertIn("missing ['prompts_qwen7b.jsonl']", out)
+        # tampered reused file -> FAIL
+        rows = open(self.res / "B0" / "qual_qwen7b.jsonl").read().splitlines(); r0 = json.loads(rows[0]); r0["correct"] = not r0["correct"]
+        open(d / "qual_qwen7b.jsonl", "w").write("\n".join([json.dumps(r0)] + rows[1:]) + "\n")   # silently edited score
+        rc, out = val(); self.assertIn("FAIL B0x/qual_qwen7b.jsonl: byte-identical to 7873596 pin", out)
+    def test_deadline_fixed_across_restart_and_single_retry(self):
+        def abort(name, cfg, St): sys.exit(9)   # infra abort before any probe is scored
+        S.load_B = abort
+        self.assertEqual(self._run(self._cfg()), 9)
+        st1 = self._state(); self.assertEqual(st1["starts"], 1); self.assertFalse(st1["retry_used"])
+        self.assertAlmostEqual(st1["deadline_reserve_s"], 4968.9 + 1.2 * 3600, places=3)
+        # 0.5 h more reserve spent before the restart: the deadline must NOT move (GPT A8 #1)
+        L = json.load(open(self.res / "budget_ledger.json")); L["reserve"] = L["reserve"] + 1800; json.dump(L, open(self.res / "budget_ledger.json", "w"))
+        seen = {}
+        def ok(name, cfg, St): seen["dtype"] = cfg["models"]["nf4"]["bnb_4bit_compute_dtype"]; return Fake(name), "nf4"
+        S.load_B = ok
+        self.assertIn(self._run(self._cfg()), (5, 6, None))
+        st2 = self._state(); self.assertEqual(st2["deadline_reserve_s"], st1["deadline_reserve_s"]); self.assertTrue(st2["retry_used"])
+        self.assertEqual(seen["dtype"], "float32")   # pre-registered fallback on the retry only
+        log = [json.loads(l) for l in open(self.res / "B0x" / "stage_log.jsonl")]
+        self.assertTrue(any(x["ev"] == "infra_retry_fallback" for x in log))
+        self.assertEqual(self._run(self._cfg()), 0)   # finished: one attempt only
+    def test_second_infra_abort_and_scored_interrupt_are_incomplete(self):
+        def abort(name, cfg, St): sys.exit(9)
+        S.load_B = abort
+        self.assertEqual(self._run(self._cfg()), 9); self.assertEqual(self._run(self._cfg()), 9)
+        self.assertEqual(self._run(self._cfg()), 5); self.assertTrue((self.res / "B0x" / "ATTEMPT_INCOMPLETE").exists())
+    def test_scored_then_interrupted_counts_as_not_qualified(self):
+        def abort(name, cfg, St): sys.exit(9)
+        S.load_B = abort; self.assertEqual(self._run(self._cfg()), 9)
+        with open(self.res / "B0x" / "qual_falcon7b.jsonl", "w") as f: f.write(json.dumps(dict(key="x", step="qual_probe")) + "\n")
+        self.assertEqual(self._run(self._cfg()), 5)
+        self.assertIn("not qualified", (self.res / "B0x" / "ATTEMPT_INCOMPLETE").read_text())
+        self.assertEqual(json.load(open(self.res / "B0x" / "summary.json"))["pair"], None)

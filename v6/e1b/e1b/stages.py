@@ -412,41 +412,79 @@ def _b0_finish(S, cfg, qualified, kinds, can_ref):
     if choice["choice"] == "INSUFFICIENT_BUDGET": print("insufficient budget -> stop and report"); sys.exit(6)
 
 
+def _sha(p):
+    import hashlib; return hashlib.sha256(Path(p).read_bytes()).hexdigest()
+
 def stage_B0x(cfg):
-    """A8 (DRAFT until frozen): ONE bounded B0 extension. Qwen-7B's run-2 B0 records are reused (same nf4 backend,
-    A7 environment, same frozen pools); exactly one pre-named candidate is qualified under the unchanged bars.
-    No chain: if the candidate fails, NO_QUALIFYING_PAIR and stop. Budget drawn from the reserve, frozen cap."""
+    """A8 (DRAFT until frozen): ONE bounded B0 extension. Qwen-7B's run-2 B0 records are reused BY DESIGN (same nf4
+    backend, A7 environment, same frozen pools), verified against sha256 pinned from immutable commit 7873596;
+    exactly one pre-named candidate is qualified under the unchanged bars. No chain.
+    Budget: the absolute reserve deadline is fixed ONCE at the first start (b0x_state.json) and reused on every
+    restart/retry (GPT A8 #1). Infra-abort rule (Claude A8 #2): an abort before any candidate probe is scored does
+    not use the attempt -> one retry with the pre-registered fallback (fp32 compute); once a probe is scored the
+    attempt is used, and an interrupted or capped attempt = INCOMPLETE = not qualified."""
     X = cfg.get("b0_ext")
     if not X or X.get("status") != "frozen":
         print("B0x refused: A8 is not frozen (config b0_ext.status != 'frozen')"); sys.exit(10)
-    import hashlib, shutil
-    B = get_book(cfg); src = RES / "B0"
-    L = json.load(open(RES / "budget_ledger.json")) if (RES / "budget_ledger.json").exists() else {}
-    cap_h = min(cfg["budgets_gpu_h"]["reserve"], L.get("reserve", 0.0) / 3600 + X["budget_h"])   # cumulative reserve, frozen A8 cap
-    S = Stage("B0x", cap_h, cfg, alloc="reserve"); _require_gpu(S)
+    import shutil, copy
+    B = get_book(cfg); src = RES / "B0"; d = RES / "B0x"; d.mkdir(parents=True, exist_ok=True)
+    stp = d / "b0x_state.json"; c = X["candidate"]
+    if stp.exists(): st = json.load(open(stp))
+    else:
+        L = json.load(open(RES / "budget_ledger.json")) if (RES / "budget_ledger.json").exists() else {}
+        init = L.get("reserve", 0.0)
+        st = dict(initial_reserve_s=init, deadline_reserve_s=min(cfg["budgets_gpu_h"]["reserve"] * 3600, init + X["budget_h"] * 3600),
+                  starts=0, retry_used=False, finished=False)
+    if st["finished"]: print("B0x already finished; one attempt only"); sys.exit(0)
+    qf = d / f"qual_{c}.jsonl"; scored = sum(1 for l in open(qf) if '"qual_probe"' in l) if qf.exists() else 0
+    retry = False
+    if st["starts"] > 0:
+        if scored > 0:   # attempt used and interrupted -> incomplete -> not qualified
+            st["finished"] = True; json.dump(st, open(stp, "w"), indent=1)
+            (d / "ATTEMPT_INCOMPLETE").write_text(f"{c}: interrupted after {scored} scored probes; counts as not qualified (A8)\n")
+            S = Stage("B0x", st["deadline_reserve_s"] / 3600, cfg, alloc="reserve")
+            _b0_finish(S, cfg, [m for m in X["reuse"]], {}, json.load(open(d / "canaries_ref.json")) if (d / "canaries_ref.json").exists() else {})
+        if st["retry_used"]:
+            st["finished"] = True; json.dump(st, open(stp, "w"), indent=1)
+            (d / "ATTEMPT_INCOMPLETE").write_text(f"{c}: second infra abort before any scored probe; retry already used (A8)\n")
+            S = Stage("B0x", st["deadline_reserve_s"] / 3600, cfg, alloc="reserve"); _b0_finish(S, cfg, list(X["reuse"]), {}, {})
+        st["retry_used"] = True; retry = True
+    st["starts"] += 1; json.dump(st, open(stp, "w"), indent=1)
+    S = Stage("B0x", st["deadline_reserve_s"] / 3600, cfg, alloc="reserve"); _require_gpu(S)   # same absolute cap on every start
+    S.log("b0x_state", **st, retry=retry)
     kind = _B_backend_kind()
     if not kind or kind["kind"] != X["backend"]:
         print(f"B0x refused: B0 backend {kind} != frozen {X['backend']}"); sys.exit(11)
-    reused, kinds, can_ref = [], {}, dict(json.load(open(src / "canaries_ref.json")))
-    timings = json.load(open(src / "pilot_timings.json")); out_t = {}
+    pins = X["reuse_sha256"]; bad = {f: _sha(src / f) for f in pins if not (src / f).exists() or _sha(src / f) != pins[f]}
+    if bad:
+        (d / "REUSE_HASH_MISMATCH").write_text(json.dumps(bad) + "\n"); print("B0x refused: reused B0 files differ from 7873596 pins", bad); sys.exit(12)
+    reused, kinds = [], {}
     for m in X["reuse"]:
-        sh = {}
-        for f in (f"qualification_{m}.json", f"qual_{m}.jsonl", f"probediag_{m}.jsonl", f"canary_{m}.jsonl"):
-            shutil.copyfile(src / f, S.dir / f); sh[f] = hashlib.sha256((src / f).read_bytes()).hexdigest()
-        out_t[m] = timings[m]; kinds[m] = kind["kind"]
-        S.log("reuse", model=m, source=f"results/B0 @ {X['reuse_commit']}", sha256=sh)
+        for f in (f"qualification_{m}.json", f"qual_{m}.jsonl", f"probediag_{m}.jsonl", f"canary_{m}.jsonl", f"prompts_{m}.jsonl"):
+            shutil.copyfile(src / f, d / f); assert _sha(d / f) == pins[f], f
+        kinds[m] = kind["kind"]
+        S.log("reuse", model=m, source=f"results/B0 @ {X['reuse_commit']}", sha256={f: pins[f] for f in pins if f.endswith(f"_{m}.jsonl") or f.endswith(f"_{m}.json")})
         q = json.load(open(src / f"qualification_{m}.json"))["families"]
         if any(q[f]["ok"] for f in cfg["families_core"]): reused.append(m)
-    json.dump(out_t, open(S.dir / "pilot_timings.json", "w"), indent=1)
-    c = X["candidate"]; qualified = list(reused)
+    can_ref = {m: v for m, v in json.load(open(src / "canaries_ref.json")).items() if m in X["reuse"]}
+    T = json.load(open(src / "pilot_timings.json")); tp = d / "pilot_timings.json"
+    cur = json.load(open(tp)) if tp.exists() else {}
+    cur.update({m: T[m] for m in X["reuse"]}); json.dump(cur, open(tp, "w"), indent=1)
+    qualified = list(reused)
     try:
         from huggingface_hub import model_info
         model_info(cfg["models"]["stageB"][c]["hf"], revision=cfg["models"]["stageB"][c]["revision"]); S.log("access", result={c: True})
     except ImportError: pass
     except Exception as ex:
-        S.log("access", result={c: repr(ex)}); (S.dir / "NO_ACCESS").write_text(repr(ex) + "\n"); _b0_finish(S, cfg, qualified, kinds, can_ref)
+        S.log("access", result={c: repr(ex)}); (d / "NO_ACCESS").write_text(repr(ex) + "\n")
+        st["finished"] = True; json.dump(st, open(stp, "w"), indent=1); _b0_finish(S, cfg, qualified, kinds, can_ref)
+    ccfg = cfg
+    if retry:   # pre-registered fallback for the single infra retry (A8)
+        ccfg = copy.deepcopy(cfg); ccfg["models"]["nf4"].update(X["retry_fallback"]["nf4_override"]); S.log("infra_retry_fallback", **X["retry_fallback"])
     labs = {cfg["models"]["stageB"][q]["lab"] for q in qualified}
-    if _b0_model(c, cfg, B, S, kinds, can_ref) and cfg["models"]["stageB"][c]["lab"] not in labs: qualified.append(c)
+    ok = _b0_model(c, ccfg, B, S, kinds, can_ref)
+    st["finished"] = True; json.dump(st, open(stp, "w"), indent=1)
+    if ok and cfg["models"]["stageB"][c]["lab"] not in labs: qualified.append(c)
     _b0_finish(S, cfg, qualified, kinds, can_ref)
 
 def pilot_timing(b, name, cfg, B, S):

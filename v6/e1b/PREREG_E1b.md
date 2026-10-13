@@ -401,7 +401,7 @@ Estimated from E1's measured CPU rates (Qwen-3B 2.25 s/call, Smol 1.31 s/call; p
 
 ### A8 (DRAFT, NOT FROZEN): 2026-10-13 (AEDT), one bounded post-hoc B0 extension with one named candidate
 
-**Status: DRAFT for review round 3.** Nothing in A8 runs until all three reviewers (Grok, Claude, GPT; `reviews/*_B0.md`) approve. Then A8 is frozen by a dated, hash-pinned commit and tag `prereg-e1b-a8`, and config `b0_ext.status` is set to `"frozen"`. Until then, stage `B0x` refuses to run (exit 10).
+**Status: DRAFT, revised after review round 3** (`reviews/grok_A8.md`, `claude_A8.md`, `gpt_A8.md`; still not frozen). Nothing in A8 runs until all three reviewers (Grok, Claude, GPT; `reviews/*_B0.md`) approve. Then A8 is frozen by a dated, hash-pinned commit and tag `prereg-e1b-a8`, and config `b0_ext.status` is set to `"frozen"`. Until then, stage `B0x` refuses to run (exit 10).
 
 1. **Disclosure.** E1b's B0 result is final and stays the **primary result: no qualifying two-lab 7B pair** under the free-access constraints. That result is at commit `7873596fdc127486d83c90baa65d1718585dec39` (B0_REPORT.md, run 2):
    - qwen7b QUALIFIED: F1 0.924/1.000, F2 0.924/1.000.
@@ -409,7 +409,10 @@ Estimated from E1's measured CPU rates (Qwen-3B 2.25 s/call, Smol 1.31 s/call; p
    - Post-hoc diagnostic: OLMo's 41/41 wrong `unstated` answers were numeric.
 
    **This extension is chosen after seeing those results.** Every result from it is labelled a **post-hoc follow-up**, never the primary result.
-2. **Selection rule, written before looking at any abstention or capability evidence for the candidates.** No such evidence was consulted. Candidates are checked in this order, and the first rule that separates them decides:
+2. **Selection rule.** No abstention or capability evidence for any candidate was consulted, before or after the rule was written. **Commit-order disclosure (Claude A8 #3):**
+   - The rule and the candidate table were committed **together**, in `de992d1` (2026-10-13 19:08 AEDT). Git history cannot prove that the rule predates the candidate list.
+   - The candidates' access, license, size and architecture metadata were looked up **before** the rule was written down. The rule's order follows the example ordering in the user's instruction (eligibility, then a different lab, then size near 7–8B, then license), which arrived before those lookups.
+   - So the rule is **not** hash-provably prior to the candidate metadata. It is only prior to any performance evidence. Candidates are checked in this order, and the first rule that separates them decides:
    - (i) **Eligibility** (all must hold):
      - (a) ≥ 7B parameters (the prereg's 7B class);
      - (b) anonymous download with no token (HF API `gated: false` and `config.json` HTTP 200);
@@ -418,13 +421,13 @@ Estimated from E1's measured CPU rates (Qwen-3B 2.25 s/call, Smol 1.31 s/call; p
      - (e) loads under the A7 environment (`transformers==4.47.1`, `bitsandbytes==0.47.0` nf4) with a chat template that has a system role;
      - (f) fits a 16 GB T4 in nf4.
    - (ii) Parameter count inside 7.0–8.0B, otherwise the nearest.
-   - (iii) An OSI-permissive license.
+   - (iii) License, as **loosened in review round 3 (disclosed; see 3a)**: royalty-free, ungated, research use permitted. An OSI-approved license is preferred only as a lower-priority tie-break. The original draft said "OSI-permissive".
    - (iv) The most recent release within the family.
 3. **Candidates considered** (all checked 2026-10-13; the reviewers' list):
 
    | candidate | lab | revision | gated | config.json | license | arch / transformers 4.47.1 | params | nf4 on T4 | outcome |
    |---|---|---|---|---|---|---|---|---|---|
-   | `tiiuae/Falcon3-7B-Instruct` | TII (UAE) | `1e57a0ecd176c7c139f289c60a74e57f887c3dfb` | false | 200 (weights 206) | TII Falcon License (Apache-2.0-based, royalty-free, AUP + attribution) | LlamaForCausalLM ✔; template `<\|system\|>/<\|user\|>/<\|assistant\|>`, eos `<\|endoftext\|>` (11), pad `<\|pad\|>` | 7.46B | ~5.5 GB ✔ | **SELECTED**: eligible, and inside 7–8B at (ii) |
+   | `tiiuae/Falcon3-7B-Instruct` | TII (UAE) | `1e57a0ecd176c7c139f289c60a74e57f887c3dfb` | false | 200 (weights 206) | TII Falcon License (royalty-free; AUP + attribution; **not OSI-approved**) | LlamaForCausalLM ✔; template `<\|system\|>/<\|user\|>/<\|assistant\|>`, eos `<\|endoftext\|>` (11), pad `<\|pad\|>` | 7.46B | ~5.5 GB ✔ | **SELECTED**: eligible, and inside 7–8B at (ii) |
    | `ibm-granite/granite-3.3-8b-instruct` | IBM (US) | `51dd4bc2ade4059a6bd87649d68aa11e4fb2529b` | false | 200 | Apache-2.0 | GraniteForCausalLM ✔ (4.47.1 ships `granite`; template uses `strftime_now`, which 4.47.1 supports) | 8.17B | ~5.5 GB ✔ | eligible; **dropped at (ii)** (8.17B is outside 7–8B; Falcon is inside) |
    | `ibm-granite/granite-3.0/3.1/3.2-8b-instruct` | IBM (US) | `5af56291…` / `4009206d…` / `610d8c6e…` | false | 200 | Apache-2.0 | ✔ | 8.17B | ✔ | same family; dropped at (ii); (iv) would have preferred 3.3 |
    | `microsoft/Phi-4-mini-instruct` | Microsoft (US) | `cfbefacb99257ffa30c83adab238a50856ac3083` | false | 200 | MIT | Phi3ForCausalLM (longrope) | 3.84B | ✔ | **ineligible at (i)(a)**: below the 7B class |
@@ -433,8 +436,32 @@ Estimated from E1's measured CPU rates (Qwen-3B 2.25 s/call, Smol 1.31 s/call; p
    | OLMo-2-1124-7B-Instruct | AI2 | — | — | — | — | — | — | — | already failed B0 (not retried) |
 
    **Choice: `falcon7b` = `tiiuae/Falcon3-7B-Instruct` @ `1e57a0e…`** (GGUF pin `tiiuae/Falcon3-7B-Instruct-GGUF` @ `b5eb297…` for completeness only, since the backend is fixed to nf4). The license has an acceptable-use policy and an attribution clause ("built using … technology from the Technology Innovation Institute"). It is free and needs no account, so it meets the free-access constraint.
+3a. **License resolution (GPT A8, adopted; Claude A8 #1, Grok A8).**
+   - **OSI status, checked 2026-10-13:** the TII Falcon License is **not** on opensource.org/licenses. Searching OSI's list for "falcon" or "Technology Innovation" returns nothing, and `opensource.org/license/tii-falcon` returns 404.
+   - Under the original (iii), "OSI-permissive", Falcon would fail, and so would every candidate except Granite (Apache-2.0) and Phi-4-mini (MIT). The options were:
+     - **A:** stop as "no eligible candidate";
+     - **B:** openly loosen (iii).
+   - **B is adopted, following GPT's resolution.**
+     - (iii) becomes "royalty-free, ungated, research use permitted", with OSI as a lower-priority preference only.
+     - Falcon is selected at step (ii), size, which comes before the license step. So the loosening does not change the choice relative to Granite, which loses at (ii).
+     - The license is described as the **TII Falcon License (royalty-free; acceptable-use policy plus attribution)**. It is never described as Apache-2.0 or as OSI-permissive.
+     - This loosening was made **after the candidates were known**, and it is disclosed here and in the final report.
+   - Grok accepts this license as "free access" for this experiment.
+   - **Attribution (license §6.1, verbatim):** "You shall include prominently in any public statement regarding a Derivative Work the following statement: '[name of relevant Derivative Work] is built using artificial intelligence technology from the Technology Innovation Institute'." E1b publishes measurements of the unmodified model, not a Derivative Work. Even so, every E1b report or post that shows Falcon results will carry: "Falcon3-7B-Instruct results were produced using artificial intelligence technology from the Technology Innovation Institute (TII Falcon License)."
+   - **AUP** (falconllm.tii.ae/falcon3/falcon-3-acceptable-use-policy.html, read 2026-10-13). It forbids using the model, a Work or a Derivative Work:
+     - (1) in violation of law;
+     - (2) to exploit or harm minors or living beings;
+     - (3) to generate or disseminate verifiably false information with the purpose of harming others;
+     - (4) to defame, disparage or harass others.
+
+     License §5.2 extends this to outputs used to create other works, and §5.3 says the AUP may be updated. **Publishing research results** (accuracy numbers and logged replies to synthetic rule puzzles) **conflicts with none of these.** The AUP URL and read date are recorded here, and the AUP will be re-read before any publication.
 4. **Unchanged:** bars (probes ≥ 0.90 and arithmetic ≥ 0.80 per family; ≥ 1 core family); the `unstated` probes stay in qualification; the qualification, probe-diagnostic and pilot pools; scoring and parsing; the canary rule; generation settings (greedy, `repetition_penalty=1.0` explicit, all knobs pinned); the 5% invalid-reply rule; the leak rule; the nf4 config.
-5. **Qwen's records are reused, not re-run.** Stage `B0x` copies them byte-identically, with sha256 logged, from `results/B0` at `7873596`. Why they are comparable:
+5. **Qwen's records are reused, not re-run, by design.** B0's result stands unchanged.
+   - Stage `B0x` copies Qwen's qual, probediag, canary and **prompt log** byte-identically.
+   - It verifies each file against sha256 pinned in `config_e1b.json` `b0_ext.reuse_sha256`, taken from immutable commit `7873596` with `git show`. A mismatch refuses the run (exit 12). The validator re-checks the copies.
+   - **Any B1–B3 run must run both models fresh, under identical conditions** (Claude A8 #3).
+
+   Why the reused records are comparable:
    - same backend (`nf4`, `backend.json` unchanged; B0x refuses any other backend, exit 11);
    - same A7 environment pins;
    - same frozen book, pools and seeds;
@@ -445,9 +472,24 @@ Estimated from E1's measured CPU rates (Qwen-3B 2.25 s/call, Smol 1.31 s/call; p
    - **≤ 1.2 GPU-h**, drawn from the reserve (ledger key `reserve`, cumulative; the hard cap is also ≤ the 1.62 GPU-h remaining).
    - **One attempt, no chain, no rolling search.** If Falcon fails access, the preflight or qualification: `NO_QUALIFYING_PAIR`, stop and report. No further candidate is added under A8.
    - Budget exhaustion: stop and report (§2).
-   - An infrastructure crash with no result seen may be re-run once from the checkpoint within the same 1.2 GPU-h cap.
+   - **Deadline fixed once (GPT A8 #1).** The first start writes `B0x/b0x_state.json` with the initial reserve usage and the absolute reserve deadline (initial + 1.2 h, capped at 3.0 h). Every restart and the retry reuse that deadline; it is never recomputed from the current ledger.
+   - **Infra-abort rule (Claude A8 #2).** An abort before **any** candidate probe is scored (load failure, preflight failure, crash) does **not** use the attempt.
+     - **One** retry is allowed, with the pre-registered fallback: nf4 compute dtype **float32** instead of fp16. All else is unchanged, and the deadline is the same.
+     - A second such abort means **INCOMPLETE = not qualified**.
+   - **Once a probe is scored, the attempt is used.**
+     - An interrupted attempt after that point counts as INCOMPLETE = not qualified (`ATTEMPT_INCOMPLETE`).
+     - Hitting the cap (`BUDGET_EXHAUSTED`) also counts as **INCOMPLETE = not qualified**.
 7. **If the pair qualifies:**
    - B0x writes `results/B0x/config_choice.json` (pair, leak flags, pilot-based C60/C100 projection).
    - **B1–B3 stay blocked.** The remaining reserve (< 1 GPU-h) cannot cover B1–B3. They wait for a new budget period and a further dated amendment that freezes the pair choice.
    - That amendment uses a **fresh TEST pool**: newly generated with new pinned seeds and a new book hash, disjoint from every pool seen so far. The current TEST pool has not been touched by any model, but the extension is post hoc, so a fresh one is used (Claude).
-8. **Code (not run):** `stage_B0x`, a `falcon7b` config entry, a `falcon3` template entry, and `b0_ext` config with `status: "draft"`. Tests cover the refusal while draft, the byte-identical Qwen reuse and the single candidate. The Kaggle notebook defaults to `E1B_STAGE=B0x` at tag `prereg-e1b-a8`, which does not exist until A8 is frozen. **The kernel has not been pushed.**
+8. **Code (not run):** `stage_B0x`, a `falcon7b` config entry, a `falcon3` template entry, and `b0_ext` config with `status: "draft"`. Tests cover:
+   - the refusal while draft;
+   - pin verification against `7873596`;
+   - the hash-mismatch refusal;
+   - byte-identical reuse including the prompt log;
+   - the single candidate;
+   - a deadline that stays fixed across a restart with 0.5 h more reserve spent;
+   - the single fp32 retry;
+   - a second abort or a post-scoring interrupt counting as not qualified;
+   - a full B0x → validator run (B0x registered in the validator's stages, expected files, uniqueness, prompt resolution and reuse-hash checks), including a duplicate key, a missing prompt log and a tampered reused file. The Kaggle notebook defaults to `E1B_STAGE=B0x` at tag `prereg-e1b-a8`, which does not exist until A8 is frozen. **The kernel has not been pushed.**

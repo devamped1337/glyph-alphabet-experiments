@@ -193,7 +193,7 @@
     "params": 7455550464.0,
     "lab": "TII",
     "revision": "1e57a0ecd176c7c139f289c60a74e57f887c3dfb",
-    "license": "TII Falcon License (Apache-2.0-based; royalty-free; acceptable-use policy + attribution)",
+    "license": "TII Falcon License (royalty-free; acceptable-use policy + attribution; not OSI-approved)",
     "note": "A8 DRAFT candidate; B0 backend is fixed to nf4 (GGUF pinned for completeness only; official TII GGUF)",
     "gguf_repo": "tiiuae/Falcon3-7B-Instruct-GGUF",
     "gguf_file": "Falcon3-7B-Instruct-q4_k_m.gguf",
@@ -233,7 +233,24 @@
   "backend": "nf4",
   "budget_h": 1.2,
   "alloc": "reserve",
-  "stop_rule": "one attempt, no chain: candidate fails -> NO_QUALIFYING_PAIR, stop",
-  "note": "stage B0x; refuses to run unless status == 'frozen'"
+  "stop_rule": "one attempt, no chain; interrupted after a scored probe, or budget cap hit = INCOMPLETE = not qualified",
+  "note": "stage B0x; refuses to run unless status == 'frozen'",
+  "reuse_sha256": {
+   "qualification_qwen7b.json": "2061619fc1887e91d63e6769f405a663a2925c3235f81ba3b9dd5042ffb05d22",
+   "qual_qwen7b.jsonl": "799a4e78dcde763427155d6b55c1e5d94a3ed58130d9adf3aef7f8dd4ba1e671",
+   "probediag_qwen7b.jsonl": "c468a66404048ab0e4c575294076c1dfe9fcd99c30c335473135f0644601e402",
+   "canary_qwen7b.jsonl": "71e53913af168c49a67727ffd9a270e8d2d212aa015aad94f7517ae3e8ddd9b8",
+   "prompts_qwen7b.jsonl": "1b64e531839dfe0c56d8943d57af6d400f9dda2f0acc74dafafdfc5fe7016928",
+   "canaries_ref.json": "ead9d326e4bdcda79d20ca46b8669b536c0fe68341f161d280f9d1408e5833b6",
+   "pilot_timings.json": "db3a0ebb02b6c93321ba3de696f6ec456ab336f193cab1053f4ed778ac7c1c4c",
+   "backend.json": "7d19313c02e0893166c44824ec741da892faaa4571d898d40edc067c05564e01"
+  },
+  "reuse_sha256_source": "git show 7873596:v6/e1b/results/B0/<file> | sha256sum (2026-10-13)",
+  "retry_fallback": {
+   "nf4_override": {
+    "bnb_4bit_compute_dtype": "float32"
+   },
+   "rule": "one retry only if no candidate probe was scored; same absolute reserve deadline"
+  }
  }
 }

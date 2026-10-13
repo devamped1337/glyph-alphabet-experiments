@@ -7,7 +7,7 @@ from .cases import verify
 from .analysis import jl, flops
 from . import cachediag
 
-STAGES = ("A", "B0", "B0b", "B1", "B2", "B3")
+STAGES = ("A", "B0", "B0x", "B0b", "B1", "B2", "B3")
 INCOMPLETE_MARKERS = ("PROJECTION_EXCEEDS_BUDGET", "BUDGET_EXHAUSTED", "CANARY_FAIL", "NO_QUALIFYING_PAIR", "PROMPT_FIX_REQUIRED")
 NO_UNIQUE = ("stage_log", "prompts_", "canary_")
 
@@ -23,6 +23,13 @@ def expected_files(st, cfg, res):
     mA = list(cfg["models"]["stageA"])
     if st == "A": return [f"{a}_{m}.jsonl" for m in mA for a in ("A1", "A2", "A5", "A6")] + ["A4_qwen3b.jsonl", "summary.json"]
     if st == "B0": return ["canaries_ref.json", "summary.json"] + ([f"{p}_{m}.jsonl" for m in pair for p in ("qual", "probediag")] + ["pilot_timings.json", "config_choice.json"] if pair else [])
+    if st == "B0x":   # A8: reused models + the single candidate
+        X = cfg.get("b0_ext") or {}; ms = list(X.get("reuse", [])) + ([X["candidate"]] if X.get("candidate") else [])
+        chx = res / "B0x" / "config_choice.json"; px = json.load(open(chx))["pair"] if chx.exists() else None
+        inc = (res / "B0x" / "ATTEMPT_INCOMPLETE").exists() or (res / "B0x" / "NO_ACCESS").exists()
+        ms = [m for m in ms if not (inc and m == X.get("candidate"))]
+        return ["canaries_ref.json", "summary.json", "b0x_state.json"] + [f"{p}_{m}.jsonl" for m in ms for p in ("qual", "probediag", "prompts", "canary")] \
+               + [f"qualification_{m}.json" for m in ms] + (["pilot_timings.json"] if not inc else []) + (["config_choice.json"] if px else [])
     if st == "B0b": return ["template_replacements.json", "summary.json"]
     if not pair: return ["<B0/config_choice.json with a pair>"]
     if st == "B1": return [f"{k}_{m}.jsonl" for m in pair for k in ("calib", "testgate")] + ["manip.jsonl", "accepted.json", "summary.json"]
@@ -124,7 +131,13 @@ def run(root, inputs_only=False):
     bi = res / "B2" / "byte_identity.json"
     if bi.exists(): chk(json.load(open(bi))["all_identical"], "B2 byte identity asserted on all items")
     # canaries + finite (a NonFinite abort leaves no .done)
-    for st in ("B0", "B1", "B2", "B3"):
+    X = cfg.get("b0_ext") or {}
+    if (res / "B0x").is_dir():   # A8: reused files must match the pins from immutable commit 7873596
+        for f, h in (X.get("reuse_sha256") or {}).items():
+            q = res / "B0x" / f
+            if q.exists() and any(f.endswith(f"_{m}.jsonl") or f.endswith(f"_{m}.json") for m in X.get("reuse", [])):
+                chk(hashlib.sha256(q.read_bytes()).hexdigest() == h, f"B0x/{f}: byte-identical to 7873596 pin")
+    for st in ("B0", "B0x", "B1", "B2", "B3"):
         d = res / st
         if d.exists():
             chk((d / ".done").exists() or (d / "BUDGET_EXHAUSTED").exists(), f"{st}: finished or budget-stopped (no silent abort)")

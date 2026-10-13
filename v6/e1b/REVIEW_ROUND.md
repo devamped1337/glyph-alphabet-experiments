@@ -13,7 +13,7 @@
 ## A8 in one screen ([PREREG_E1b.md §A8](https://github.com/devamped1337/glyph-alphabet-experiments/blob/de992d1d647c1a7a62e12fa3dd28cb1351164586/v6/e1b/PREREG_E1b.md))
 - **Candidate:** `tiiuae/Falcon3-7B-Instruct` @ `1e57a0ecd176c7c139f289c60a74e57f887c3dfb`, TII (UAE), 7.46B.
   - Anonymous access: `gated:false`, config.json 200, weights 206.
-  - License: TII Falcon License. It is Apache-2.0-based and royalty-free, with an acceptable-use policy and an attribution clause.
+  - License: TII Falcon License (royalty-free; acceptable-use policy plus attribution; not OSI-approved). Corrected after round 3.
 - **Selection rule (written before any abstention evidence for the candidates was looked at):**
   - (i) Eligibility: ≥7B; no token needed; no Mistral or European lab; a lab other than Alibaba; loads under the A7 environment; fits a T4.
   - (ii) Size inside 7–8B.
