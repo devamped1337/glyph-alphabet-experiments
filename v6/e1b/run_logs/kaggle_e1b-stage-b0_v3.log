@@ -1,0 +1,251 @@
+[{"stream_name":"stderr","time":0.711913791,"data":"Cloning into '/kaggle/working/glyph'...\n"}
+,{"stream_name":"stderr","time":2.942476977,"data":"Note: switching to 'e258b456feab685961aff6e172b1530bdd393655'.\n"}
+,{"stream_name":"stderr","time":2.942499045,"data":"\n"}
+,{"stream_name":"stderr","time":2.942522078,"data":"You are in 'detached HEAD' state. You can look around, make experimental\n"}
+,{"stream_name":"stderr","time":2.942526532,"data":"changes and commit them, and you can discard any commits you make in this\n"}
+,{"stream_name":"stderr","time":2.9425306989999997,"data":"state without impacting any branches by switching back to a branch.\n"}
+,{"stream_name":"stderr","time":2.942534564,"data":"\n"}
+,{"stream_name":"stderr","time":2.942538169,"data":"If you want to create a new branch to retain commits you create, you may\n"}
+,{"stream_name":"stderr","time":2.942542236,"data":"do so (now or later) by using -c with the switch command. Example:\n"}
+,{"stream_name":"stderr","time":2.942545689,"data":"\n"}
+,{"stream_name":"stderr","time":2.942548955,"data":"  git switch -c \u003cnew-branch-name\u003e\n"}
+,{"stream_name":"stderr","time":2.942553229,"data":"\n"}
+,{"stream_name":"stderr","time":2.942556622,"data":"Or undo this operation with:\n"}
+,{"stream_name":"stderr","time":2.942564932,"data":"\n"}
+,{"stream_name":"stderr","time":2.942567681,"data":"  git switch -\n"}
+,{"stream_name":"stderr","time":2.9425697790000003,"data":"\n"}
+,{"stream_name":"stderr","time":2.942571839,"data":"Turn off this advice by setting config variable advice.detachedHead to false\n"}
+,{"stream_name":"stderr","time":2.942574114,"data":"\n"}
+,{"stream_name":"stderr","time":2.942576325,"data":"HEAD is now at e258b45 E1b Amendment A8 FROZEN (2026-10-13, all 3 reviewers yes): access errors not retried, fp32 retry not a real second chance, compute dtype recorded; b0_ext.status=frozen; final sign-offs\n"}
+,{"stream_name":"stdout","time":5.962625802,"data":"     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 44.1/44.1 kB 1.6 MB/s eta 0:00:00\n"}
+,{"stream_name":"stdout","time":7.370262792,"data":"   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 10.1/10.1 MB 98.1 MB/s eta 0:00:00\n"}
+,{"stream_name":"stdout","time":7.971810039,"data":"   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 61.3/61.3 MB 34.4 MB/s eta 0:00:00\n"}
+,{"stream_name":"stdout","time":8.006318429,"data":"   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 333.2/333.2 kB 13.6 MB/s eta 0:00:00\n"}
+,{"stream_name":"stdout","time":8.044013647,"data":"   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 268.8/268.8 kB 9.5 MB/s eta 0:00:00\n"}
+,{"stream_name":"stdout","time":8.081094547,"data":"   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 566.4/566.4 kB 20.5 MB/s eta 0:00:00\n"}
+,{"stream_name":"stdout","time":8.127890347,"data":"   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 3.1/3.1 MB 85.8 MB/s eta 0:00:00\n"}
+,{"stream_name":"stderr","time":24.164771583,"data":"ERROR: pip's dependency resolver does not currently take into account all the packages that are installed. This behaviour is the source of the following dependency conflicts.\n"}
+,{"stream_name":"stderr","time":24.16479847,"data":"gradio 6.26.0 requires huggingface-hub\u003c2.0,\u003e=1.16.0, but you have huggingface-hub 0.36.2 which is incompatible.\n"}
+,{"stream_name":"stderr","time":24.164817389,"data":"diffusers 0.40.0 requires huggingface-hub\u003c2.0,\u003e=1.23.0, but you have huggingface-hub 0.36.2 which is incompatible.\n"}
+,{"stream_name":"stdout","time":24.334751767,"data":"GPU: Tesla T4, 7.5\n"}
+,{"stream_name":"stdout","time":24.334788231,"data":"Tesla T4, 7.5\n"}
+,{"stream_name":"stdout","time":24.334791731,"data":"\n"}
+,{"stream_name":"stdout","time":26.821254224,"data":"     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 65.0/65.0 MB 31.2 MB/s eta 0:00:00\n"}
+,{"stream_name":"stdout","time":38.490920307,"data":"   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 45.5/45.5 kB 2.1 MB/s eta 0:00:00\n"}
+,{"stream_name":"stdout","time":101.685748984,"data":"no HF secret (fine: models are non-gated)\n"}
+,{"stream_name":"stdout","time":101.702725412,"data":"== B0x start Tue Oct 13 09:37:13 AM UTC 2026\n"}
+,{"stream_name":"stdout","time":101.7045161,"data":"e258b456feab685961aff6e172b1530bdd393655\n"}
+,{"stream_name":"stdout","time":101.707455331,"data":"f96fe67e6444de82b68c390135dbab3aaf0abfcd4940d68b956658bf142557da\n"}
+,{"stream_name":"stdout","time":101.710940157,"data":"fc808f3b0e5468ebcae10cf88a53c16068fbf47a0aeb62b8ccb173b0e987a6d1  config_e1b.json\n"}
+,{"stream_name":"stdout","time":101.77601083,"data":"code hash OK f96fe67e6444de82b68c390135dbab3aaf0abfcd4940d68b956658bf142557da\n"}
+,{"stream_name":"stderr","time":225.736339463,"data":"\rDownloading shards:   0%|          | 0/4 [00:00\u003c?, ?it/s]\rDownloading shards:  25%|██▌       | 1/4 [00:36\u003c01:48, 36.23s/it]\rDownloading shards:  50%|█████     | 2/4 [00:49\u003c00:45, 22.77s/it]\rDownloading shards:  75%|███████▌  | 3/4 [01:21\u003c00:26, 26.91s/it]\rDownloading shards: 100%|██████████| 4/4 [01:23\u003c00:00, 17.25s/it]\rDownloading shards: 100%|██████████| 4/4 [01:23\u003c00:00, 20.96s/it]\n"}
+,{"stream_name":"stderr","time":277.521661032,"data":"\rLoading checkpoint shards:   0%|          | 0/4 [00:00\u003c?, ?it/s]\rLoading checkpoint shards:  25%|██▌       | 1/4 [00:23\u003c01:11, 23.82s/it]\rLoading checkpoint shards:  50%|█████     | 2/4 [00:44\u003c00:43, 21.69s/it]\rLoading checkpoint shards:  75%|███████▌  | 3/4 [00:50\u003c00:14, 14.56s/it]\rLoading checkpoint shards: 100%|██████████| 4/4 [00:51\u003c00:00,  9.24s/it]\rLoading checkpoint shards: 100%|██████████| 4/4 [00:51\u003c00:00, 12.79s/it]\n"}
+,{"stream_name":"stderr","time":279.070814955,"data":"We detected that you are passing `past_key_values` as a tuple of tuples. This is deprecated and will be removed in v4.47. Please convert your cache or use an appropriate `Cache` class (https://huggingface.co/docs/transformers/kv_cache#legacy-cache-format)\n"}
+,{"stream_name":"stderr","time":279.072974811,"data":"/usr/local/lib/python3.13/dist-packages/bitsandbytes/backends/cuda/ops.py:464: FutureWarning: _check_is_size will be removed in a future PyTorch release along with guard_size_oblivious.     Use _check(i \u003e= 0) instead.\n"}
+,{"stream_name":"stderr","time":279.072989673,"data":"  torch._check_is_size(blocksize)\n"}
+,{"stream_name":"stderr","time":2627.815573188,"data":"/usr/local/lib/python3.13/dist-packages/transformers/generation/configuration_utils.py:650: UserWarning: `do_sample` is set to `False`. However, `top_k` is set to `0` -- this flag is only used in sample-based generation modes. You should set `do_sample=True` or unset `top_k`.\n"}
+,{"stream_name":"stderr","time":2627.815615108,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":2658.047843061,"data":"From v4.47 onwards, when a model cache is to be returned, `generate` will return a `Cache` instance instead by default (as opposed to the legacy tuple of tuples format). If you want to keep returning the legacy format, please set `return_legacy_cache=True`.\n"}
+,{"stream_name":"stdout","time":3004.826554163,"data":"GPU PREFLIGHT PASSED for falcon7b: {'ok': True, 'backend': 'hf-nf4', 'gpu': 'Tesla T4', 'capability': [7, 5], 'linear4bit_layers': 196, 'param_devices': ['cuda']}\n"}
+,{"stream_name":"stdout","time":3004.826603019,"data":"insufficient budget -\u003e stop and report\n"}
+,{"stream_name":"stdout","time":3009.983771095,"data":"exit 6\n"}
+,{"stream_name":"stdout","time":3010.012785983,"data":"== manifest start Tue Oct 13 10:25:42 AM UTC 2026\n"}
+,{"stream_name":"stdout","time":3010.020163851,"data":"e258b456feab685961aff6e172b1530bdd393655\n"}
+,{"stream_name":"stdout","time":3010.022354751,"data":"f96fe67e6444de82b68c390135dbab3aaf0abfcd4940d68b956658bf142557da\n"}
+,{"stream_name":"stdout","time":3010.029467299,"data":"fc808f3b0e5468ebcae10cf88a53c16068fbf47a0aeb62b8ccb173b0e987a6d1  config_e1b.json\n"}
+,{"stream_name":"stdout","time":3010.226833477,"data":"59\n"}
+,{"stream_name":"stdout","time":3010.239851308,"data":"== manifest end Tue Oct 13 10:25:42 AM UTC 2026\n"}
+,{"stream_name":"stdout","time":3010.245738389,"data":"== validate start Tue Oct 13 10:25:42 AM UTC 2026\n"}
+,{"stream_name":"stdout","time":3010.247469747,"data":"e258b456feab685961aff6e172b1530bdd393655\n"}
+,{"stream_name":"stdout","time":3010.248703936,"data":"f96fe67e6444de82b68c390135dbab3aaf0abfcd4940d68b956658bf142557da\n"}
+,{"stream_name":"stdout","time":3010.25044337,"data":"fc808f3b0e5468ebcae10cf88a53c16068fbf47a0aeb62b8ccb173b0e987a6d1  config_e1b.json\n"}
+,{"stream_name":"stdout","time":3011.136166027,"data":"OK   builder assertions re-run (disjoint/unique/gold/neighbours/plant flips/unknown)\n"}
+,{"stream_name":"stdout","time":3011.136202476,"data":"OK   cases_e1b.json sha256 matches\n"}
+,{"stream_name":"stdout","time":3011.136207132,"data":"OK   A: status incomplete:BUDGET_EXHAUSTED (a started stage must be complete or carry an explicit stop marker)\n"}
+,{"stream_name":"stdout","time":3011.136210342,"data":"OK   A/A4_qwen3b.jsonl: unique keys (60 rows)\n"}
+,{"stream_name":"stdout","time":3011.136213356,"data":"OK   A/A3_smol17.jsonl: unique keys (120 rows)\n"}
+,{"stream_name":"stdout","time":3011.136216168,"data":"OK   A/A3_qwen3b.jsonl: unique keys (120 rows)\n"}
+,{"stream_name":"stdout","time":3011.136218957,"data":"OK   A/A5_qwen3b.jsonl: unique keys (120 rows)\n"}
+,{"stream_name":"stdout","time":3011.136221678,"data":"OK   A/A1_qwen3b.jsonl: unique keys (120 rows)\n"}
+,{"stream_name":"stdout","time":3011.136224466,"data":"OK   A/A1_smol17.jsonl: unique keys (120 rows)\n"}
+,{"stream_name":"stdout","time":3011.136227182,"data":"OK   A/A6_qwen3b.jsonl: unique keys (218 rows)\n"}
+,{"stream_name":"stdout","time":3011.136229901,"data":"OK   A/A2_qwen3b.jsonl: unique keys (1152 rows)\n"}
+,{"stream_name":"stdout","time":3011.136232636,"data":"OK   A/A5_smol17.jsonl: unique keys (120 rows)\n"}
+,{"stream_name":"stdout","time":3011.136235442,"data":"OK   A/A2_smol17.jsonl: unique keys (1152 rows)\n"}
+,{"stream_name":"stdout","time":3011.136238205,"data":"OK   B0: status complete (a started stage must be complete or carry an explicit stop marker)\n"}
+,{"stream_name":"stdout","time":3011.136241054,"data":"OK   B0: expected files present\n"}
+,{"stream_name":"stdout","time":3011.136243838,"data":"OK   B0/qual_qwen7b.jsonl: unique keys (612 rows)\n"}
+,{"stream_name":"stdout","time":3011.136246686,"data":"OK   B0/probediag_olmo7b.jsonl: unique keys (1800 rows)\n"}
+,{"stream_name":"stdout","time":3011.136259687,"data":"OK   B0/probediag_qwen7b.jsonl: unique keys (1800 rows)\n"}
+,{"stream_name":"stdout","time":3011.136262086,"data":"OK   B0/qual_olmo7b.jsonl: unique keys (612 rows)\n"}
+,{"stream_name":"stdout","time":3011.136264271,"data":"OK   B0x: status complete (a started stage must be complete or carry an explicit stop marker)\n"}
+,{"stream_name":"stdout","time":3011.136266502,"data":"OK   B0x: expected files present\n"}
+,{"stream_name":"stdout","time":3011.136268659,"data":"OK   B0x/qual_qwen7b.jsonl: unique keys (612 rows)\n"}
+,{"stream_name":"stdout","time":3011.136271009,"data":"OK   B0x/qual_falcon7b.jsonl: unique keys (612 rows)\n"}
+,{"stream_name":"stdout","time":3011.136273181,"data":"OK   B0x/probediag_qwen7b.jsonl: unique keys (1800 rows)\n"}
+,{"stream_name":"stdout","time":3011.13627536,"data":"OK   B0x/probediag_falcon7b.jsonl: unique keys (1800 rows)\n"}
+,{"stream_name":"stdout","time":3011.136277556,"data":"OK   A/A1_qwen3b.jsonl: all 120 case texts belong to a frozen pool\n"}
+,{"stream_name":"stdout","time":3011.136279812,"data":"OK   A/A1_qwen3b.jsonl: no TEST case used outside B2/B3\n"}
+,{"stream_name":"stdout","time":3011.136281979,"data":"OK   A/A1_smol17.jsonl: all 120 case texts belong to a frozen pool\n"}
+,{"stream_name":"stdout","time":3011.136284152,"data":"OK   A/A1_smol17.jsonl: no TEST case used outside B2/B3\n"}
+,{"stream_name":"stdout","time":3011.136286331,"data":"OK   A/A2_qwen3b.jsonl: all 0 case texts belong to a frozen pool\n"}
+,{"stream_name":"stdout","time":3011.136288576,"data":"OK   A/A2_qwen3b.jsonl: no TEST case used outside B2/B3\n"}
+,{"stream_name":"stdout","time":3011.136290739,"data":"OK   A/A2_smol17.jsonl: all 0 case texts belong to a frozen pool\n"}
+,{"stream_name":"stdout","time":3011.136292916,"data":"OK   A/A2_smol17.jsonl: no TEST case used outside B2/B3\n"}
+,{"stream_name":"stdout","time":3011.136295291,"data":"OK   A/A3_qwen3b.jsonl: all 120 case texts belong to a frozen pool\n"}
+,{"stream_name":"stdout","time":3011.136297601,"data":"OK   A/A3_qwen3b.jsonl: no TEST case used outside B2/B3\n"}
+,{"stream_name":"stdout","time":3011.136300752,"data":"OK   A/A3_smol17.jsonl: all 120 case texts belong to a frozen pool\n"}
+,{"stream_name":"stdout","time":3011.136303001,"data":"OK   A/A3_smol17.jsonl: no TEST case used outside B2/B3\n"}
+,{"stream_name":"stdout","time":3011.13630521,"data":"OK   A/A4_qwen3b.jsonl: all 60 case texts belong to a frozen pool\n"}
+,{"stream_name":"stdout","time":3011.136307388,"data":"OK   A/A4_qwen3b.jsonl: no TEST case used outside B2/B3\n"}
+,{"stream_name":"stdout","time":3011.136309558,"data":"OK   A/A5_qwen3b.jsonl: all 120 case texts belong to a frozen pool\n"}
+,{"stream_name":"stdout","time":3011.136311724,"data":"OK   A/A5_qwen3b.jsonl: no TEST case used outside B2/B3\n"}
+,{"stream_name":"stdout","time":3011.136313892,"data":"OK   A/A5_smol17.jsonl: all 120 case texts belong to a frozen pool\n"}
+,{"stream_name":"stdout","time":3011.136316072,"data":"OK   A/A5_smol17.jsonl: no TEST case used outside B2/B3\n"}
+,{"stream_name":"stdout","time":3011.136318241,"data":"OK   A/A6_qwen3b.jsonl: all 218 case texts belong to a frozen pool\n"}
+,{"stream_name":"stdout","time":3011.13632041,"data":"OK   A/A6_qwen3b.jsonl: no TEST case used outside B2/B3\n"}
+,{"stream_name":"stdout","time":3011.136322569,"data":"OK   A/prompts_qwen3b.jsonl: all 0 case texts belong to a frozen pool\n"}
+,{"stream_name":"stdout","time":3011.136324775,"data":"OK   A/prompts_qwen3b.jsonl: no TEST case used outside B2/B3\n"}
+,{"stream_name":"stdout","time":3011.136326949,"data":"OK   A/prompts_smol17.jsonl: all 0 case texts belong to a frozen pool\n"}
+,{"stream_name":"stdout","time":3011.136329158,"data":"OK   A/prompts_smol17.jsonl: no TEST case used outside B2/B3\n"}
+,{"stream_name":"stdout","time":3011.136333806,"data":"OK   B0/canary_olmo7b.jsonl: all 20 case texts belong to a frozen pool\n"}
+,{"stream_name":"stdout","time":3011.136336166,"data":"OK   B0/canary_olmo7b.jsonl: no TEST case used outside B2/B3\n"}
+,{"stream_name":"stdout","time":3011.136338348,"data":"OK   B0/canary_qwen7b.jsonl: all 20 case texts belong to a frozen pool\n"}
+,{"stream_name":"stdout","time":3011.136340546,"data":"OK   B0/canary_qwen7b.jsonl: no TEST case used outside B2/B3\n"}
+,{"stream_name":"stdout","time":3011.136342712,"data":"OK   B0/probediag_olmo7b.jsonl: all 0 case texts belong to a frozen pool\n"}
+,{"stream_name":"stdout","time":3011.13634491,"data":"OK   B0/probediag_olmo7b.jsonl: no TEST case used outside B2/B3\n"}
+,{"stream_name":"stdout","time":3011.136347087,"data":"OK   B0/probediag_qwen7b.jsonl: all 0 case texts belong to a frozen pool\n"}
+,{"stream_name":"stdout","time":3011.136349253,"data":"OK   B0/probediag_qwen7b.jsonl: no TEST case used outside B2/B3\n"}
+,{"stream_name":"stdout","time":3011.136351431,"data":"OK   B0/prompts_olmo7b.jsonl: all 0 case texts belong to a frozen pool\n"}
+,{"stream_name":"stdout","time":3011.136353614,"data":"OK   B0/prompts_olmo7b.jsonl: no TEST case used outside B2/B3\n"}
+,{"stream_name":"stdout","time":3011.136355789,"data":"OK   B0/prompts_qwen7b.jsonl: all 0 case texts belong to a frozen pool\n"}
+,{"stream_name":"stdout","time":3011.136357977,"data":"OK   B0/prompts_qwen7b.jsonl: no TEST case used outside B2/B3\n"}
+,{"stream_name":"stdout","time":3011.136360154,"data":"OK   B0/qual_olmo7b.jsonl: all 180 case texts belong to a frozen pool\n"}
+,{"stream_name":"stdout","time":3011.136362347,"data":"OK   B0/qual_olmo7b.jsonl: no TEST case used outside B2/B3\n"}
+,{"stream_name":"stdout","time":3011.136364533,"data":"OK   B0/qual_qwen7b.jsonl: all 180 case texts belong to a frozen pool\n"}
+,{"stream_name":"stdout","time":3011.136366712,"data":"OK   B0/qual_qwen7b.jsonl: no TEST case used outside B2/B3\n"}
+,{"stream_name":"stdout","time":3011.136368872,"data":"OK   B0_run1_gguf_cpu/canary_qwen7b.jsonl: all 20 case texts belong to a frozen pool\n"}
+,{"stream_name":"stdout","time":3011.136371147,"data":"OK   B0_run1_gguf_cpu/canary_qwen7b.jsonl: no TEST case used outside B2/B3\n"}
+,{"stream_name":"stdout","time":3011.136373732,"data":"OK   B0_run1_gguf_cpu/prompts_qwen7b.jsonl: all 0 case texts belong to a frozen pool\n"}
+,{"stream_name":"stdout","time":3011.136375967,"data":"OK   B0_run1_gguf_cpu/prompts_qwen7b.jsonl: no TEST case used outside B2/B3\n"}
+,{"stream_name":"stdout","time":3011.136378177,"data":"OK   B0_run1_gguf_cpu/qual_qwen7b.jsonl: all 60 case texts belong to a frozen pool\n"}
+,{"stream_name":"stdout","time":3011.136380403,"data":"OK   B0_run1_gguf_cpu/qual_qwen7b.jsonl: no TEST case used outside B2/B3\n"}
+,{"stream_name":"stdout","time":3011.13638257,"data":"OK   B0x/canary_falcon7b.jsonl: all 20 case texts belong to a frozen pool\n"}
+,{"stream_name":"stdout","time":3011.13638478,"data":"OK   B0x/canary_falcon7b.jsonl: no TEST case used outside B2/B3\n"}
+,{"stream_name":"stdout","time":3011.136386955,"data":"OK   B0x/canary_qwen7b.jsonl: all 20 case texts belong to a frozen pool\n"}
+,{"stream_name":"stdout","time":3011.136389326,"data":"OK   B0x/canary_qwen7b.jsonl: no TEST case used outside B2/B3\n"}
+,{"stream_name":"stdout","time":3011.136391541,"data":"OK   B0x/probediag_falcon7b.jsonl: all 0 case texts belong to a frozen pool\n"}
+,{"stream_name":"stdout","time":3011.13639374,"data":"OK   B0x/probediag_falcon7b.jsonl: no TEST case used outside B2/B3\n"}
+,{"stream_name":"stdout","time":3011.136395912,"data":"OK   B0x/probediag_qwen7b.jsonl: all 0 case texts belong to a frozen pool\n"}
+,{"stream_name":"stdout","time":3011.13640068,"data":"OK   B0x/probediag_qwen7b.jsonl: no TEST case used outside B2/B3\n"}
+,{"stream_name":"stdout","time":3011.136403064,"data":"OK   B0x/prompts_falcon7b.jsonl: all 0 case texts belong to a frozen pool\n"}
+,{"stream_name":"stdout","time":3011.136405357,"data":"OK   B0x/prompts_falcon7b.jsonl: no TEST case used outside B2/B3\n"}
+,{"stream_name":"stdout","time":3011.136407522,"data":"OK   B0x/prompts_qwen7b.jsonl: all 0 case texts belong to a frozen pool\n"}
+,{"stream_name":"stdout","time":3011.136409783,"data":"OK   B0x/prompts_qwen7b.jsonl: no TEST case used outside B2/B3\n"}
+,{"stream_name":"stdout","time":3011.136411963,"data":"OK   B0x/qual_falcon7b.jsonl: all 180 case texts belong to a frozen pool\n"}
+,{"stream_name":"stdout","time":3011.136414178,"data":"OK   B0x/qual_falcon7b.jsonl: no TEST case used outside B2/B3\n"}
+,{"stream_name":"stdout","time":3011.136416373,"data":"OK   B0x/qual_qwen7b.jsonl: all 180 case texts belong to a frozen pool\n"}
+,{"stream_name":"stdout","time":3011.136418644,"data":"OK   B0x/qual_qwen7b.jsonl: no TEST case used outside B2/B3\n"}
+,{"stream_name":"stdout","time":3011.136420802,"data":"OK   A5_qwen3b.jsonl: cold/cold/coldsplit/warm/warm present for every prompt\n"}
+,{"stream_name":"stdout","time":3011.13642302,"data":"OK   A5_qwen3b.jsonl: batch-1\n"}
+,{"stream_name":"stdout","time":3011.136425178,"data":"OK   A5_qwen3b.jsonl: prompt counts {'fixed': 100, 'stress': 20} == {'fixed': 100, 'stress': 20}\n"}
+,{"stream_name":"stdout","time":3011.136427688,"data":"OK   A5_smol17.jsonl: cold/cold/coldsplit/warm/warm present for every prompt\n"}
+,{"stream_name":"stdout","time":3011.136429893,"data":"OK   A5_smol17.jsonl: batch-1\n"}
+,{"stream_name":"stdout","time":3011.136432032,"data":"OK   A5_smol17.jsonl: prompt counts {'fixed': 100, 'stress': 20} == {'fixed': 100, 'stress': 20}\n"}
+,{"stream_name":"stdout","time":3011.136434264,"data":"OK   B0_run1_gguf_cpu/qual_qwen7b.jsonl: rendered prompts logged (A2)\n"}
+,{"stream_name":"stdout","time":3011.136436438,"data":"OK   B0_run1_gguf_cpu/canary_qwen7b.jsonl: rendered prompts logged (A2)\n"}
+,{"stream_name":"stdout","time":3011.136438622,"data":"OK   B0/canary_olmo7b.jsonl: rendered prompts logged (A2)\n"}
+,{"stream_name":"stdout","time":3011.136441248,"data":"OK   B0/qual_qwen7b.jsonl: rendered prompts logged (A2)\n"}
+,{"stream_name":"stdout","time":3011.136443455,"data":"OK   B0/probediag_olmo7b.jsonl: rendered prompts logged (A2)\n"}
+,{"stream_name":"stdout","time":3011.136445645,"data":"OK   B0/probediag_qwen7b.jsonl: rendered prompts logged (A2)\n"}
+,{"stream_name":"stdout","time":3011.136447818,"data":"OK   B0/qual_olmo7b.jsonl: rendered prompts logged (A2)\n"}
+,{"stream_name":"stdout","time":3011.136449977,"data":"OK   B0/canary_qwen7b.jsonl: rendered prompts logged (A2)\n"}
+,{"stream_name":"stdout","time":3011.13645213,"data":"OK   A/A4_qwen3b.jsonl: rendered prompts logged (A2)\n"}
+,{"stream_name":"stdout","time":3011.136454293,"data":"OK   A/A3_smol17.jsonl: rendered prompts logged (A2)\n"}
+,{"stream_name":"stdout","time":3011.136456445,"data":"OK   A/A3_qwen3b.jsonl: rendered prompts logged (A2)\n"}
+,{"stream_name":"stdout","time":3011.136458573,"data":"OK   A/A1_qwen3b.jsonl: rendered prompts logged (A2)\n"}
+,{"stream_name":"stdout","time":3011.136460703,"data":"OK   A/A1_smol17.jsonl: rendered prompts logged (A2)\n"}
+,{"stream_name":"stdout","time":3011.136462838,"data":"OK   A/A6_qwen3b.jsonl: rendered prompts logged (A2)\n"}
+,{"stream_name":"stdout","time":3011.13646497,"data":"OK   B0x/qual_qwen7b.jsonl: rendered prompts logged (A2)\n"}
+,{"stream_name":"stdout","time":3011.136467145,"data":"OK   B0x/qual_falcon7b.jsonl: rendered prompts logged (A2)\n"}
+,{"stream_name":"stdout","time":3011.136471436,"data":"OK   B0x/probediag_qwen7b.jsonl: rendered prompts logged (A2)\n"}
+,{"stream_name":"stdout","time":3011.136473744,"data":"OK   B0x/canary_falcon7b.jsonl: rendered prompts logged (A2)\n"}
+,{"stream_name":"stdout","time":3011.136475903,"data":"OK   B0x/probediag_falcon7b.jsonl: rendered prompts logged (A2)\n"}
+,{"stream_name":"stdout","time":3011.136478072,"data":"OK   B0x/canary_qwen7b.jsonl: rendered prompts logged (A2)\n"}
+,{"stream_name":"stdout","time":3011.136480245,"data":"OK   B0x/qualification_qwen7b.json: byte-identical to 7873596 pin\n"}
+,{"stream_name":"stdout","time":3011.136482418,"data":"OK   B0x/qual_qwen7b.jsonl: byte-identical to 7873596 pin\n"}
+,{"stream_name":"stdout","time":3011.136484657,"data":"OK   B0x/probediag_qwen7b.jsonl: byte-identical to 7873596 pin\n"}
+,{"stream_name":"stdout","time":3011.136486815,"data":"OK   B0x/canary_qwen7b.jsonl: byte-identical to 7873596 pin\n"}
+,{"stream_name":"stdout","time":3011.136488972,"data":"OK   B0x/prompts_qwen7b.jsonl: byte-identical to 7873596 pin\n"}
+,{"stream_name":"stdout","time":3011.136491124,"data":"OK   B0: finished or budget-stopped (no silent abort)\n"}
+,{"stream_name":"stdout","time":3011.13649328,"data":"OK   B0x: finished or budget-stopped (no silent abort)\n"}
+,{"stream_name":"stdout","time":3011.136495448,"data":"OK   B0x: canaries logged\n"}
+,{"stream_name":"stdout","time":3011.136497572,"data":"OK   MANIFEST A/A1_qwen3b.jsonl\n"}
+,{"stream_name":"stdout","time":3011.136499724,"data":"OK   MANIFEST A/A1_smol17.jsonl\n"}
+,{"stream_name":"stdout","time":3011.136501857,"data":"OK   MANIFEST A/A2_qwen3b.jsonl\n"}
+,{"stream_name":"stdout","time":3011.13650396,"data":"OK   MANIFEST A/A2_smol17.jsonl\n"}
+,{"stream_name":"stdout","time":3011.136506052,"data":"OK   MANIFEST A/A3_qwen3b.jsonl\n"}
+,{"stream_name":"stdout","time":3011.136508145,"data":"OK   MANIFEST A/A3_smol17.jsonl\n"}
+,{"stream_name":"stdout","time":3011.13651024,"data":"OK   MANIFEST A/A4_qwen3b.jsonl\n"}
+,{"stream_name":"stdout","time":3011.136512327,"data":"OK   MANIFEST A/A5_qwen3b.jsonl\n"}
+,{"stream_name":"stdout","time":3011.13651442,"data":"OK   MANIFEST A/A5_smol17.jsonl\n"}
+,{"stream_name":"stdout","time":3011.136516515,"data":"OK   MANIFEST A/A6_qwen3b.jsonl\n"}
+,{"stream_name":"stdout","time":3011.13651862,"data":"OK   MANIFEST A/BUDGET_EXHAUSTED\n"}
+,{"stream_name":"stdout","time":3011.136520778,"data":"OK   MANIFEST A/prompts_qwen3b.jsonl\n"}
+,{"stream_name":"stdout","time":3011.13652291,"data":"OK   MANIFEST A/prompts_smol17.jsonl\n"}
+,{"stream_name":"stdout","time":3011.13652502,"data":"OK   MANIFEST A/stage_log.jsonl\n"}
+,{"stream_name":"stdout","time":3011.136527123,"data":"OK   MANIFEST A/summary.json\n"}
+,{"stream_name":"stdout","time":3011.136529262,"data":"OK   MANIFEST B0/.done\n"}
+,{"stream_name":"stdout","time":3011.136531382,"data":"OK   MANIFEST B0/NO_QUALIFYING_PAIR\n"}
+,{"stream_name":"stdout","time":3011.136533511,"data":"OK   MANIFEST B0/backend.json\n"}
+,{"stream_name":"stdout","time":3011.136535637,"data":"OK   MANIFEST B0/canaries_ref.json\n"}
+,{"stream_name":"stdout","time":3011.136537792,"data":"OK   MANIFEST B0/canary_olmo7b.jsonl\n"}
+,{"stream_name":"stdout","time":3011.142866358,"data":"OK   MANIFEST B0/canary_qwen7b.jsonl\n"}
+,{"stream_name":"stdout","time":3011.142885101,"data":"OK   MANIFEST B0/kaggle_kernel.log\n"}
+,{"stream_name":"stdout","time":3011.14288993,"data":"OK   MANIFEST B0/pilot_timings.json\n"}
+,{"stream_name":"stdout","time":3011.14289394,"data":"OK   MANIFEST B0/probediag_olmo7b.jsonl\n"}
+,{"stream_name":"stdout","time":3011.142897233,"data":"OK   MANIFEST B0/probediag_qwen7b.jsonl\n"}
+,{"stream_name":"stdout","time":3011.142908165,"data":"OK   MANIFEST B0/prompts_olmo7b.jsonl\n"}
+,{"stream_name":"stdout","time":3011.142917298,"data":"OK   MANIFEST B0/prompts_qwen7b.jsonl\n"}
+,{"stream_name":"stdout","time":3011.142920106,"data":"OK   MANIFEST B0/qual_olmo7b.jsonl\n"}
+,{"stream_name":"stdout","time":3011.142922211,"data":"OK   MANIFEST B0/qual_qwen7b.jsonl\n"}
+,{"stream_name":"stdout","time":3011.142924435,"data":"OK   MANIFEST B0/qualification_olmo7b.json\n"}
+,{"stream_name":"stdout","time":3011.142926564,"data":"OK   MANIFEST B0/qualification_qwen7b.json\n"}
+,{"stream_name":"stdout","time":3011.142928715,"data":"OK   MANIFEST B0/stage_log.jsonl\n"}
+,{"stream_name":"stdout","time":3011.14293089,"data":"OK   MANIFEST B0/summary.json\n"}
+,{"stream_name":"stdout","time":3011.142933017,"data":"OK   MANIFEST B0_run1_gguf_cpu/BUDGET_EXHAUSTED\n"}
+,{"stream_name":"stdout","time":3011.142935177,"data":"OK   MANIFEST B0_run1_gguf_cpu/backend.json\n"}
+,{"stream_name":"stdout","time":3011.142937302,"data":"OK   MANIFEST B0_run1_gguf_cpu/canary_qwen7b.jsonl\n"}
+,{"stream_name":"stdout","time":3011.142939471,"data":"OK   MANIFEST B0_run1_gguf_cpu/kaggle_kernel.log\n"}
+,{"stream_name":"stdout","time":3011.142941611,"data":"OK   MANIFEST B0_run1_gguf_cpu/prompts_qwen7b.jsonl\n"}
+,{"stream_name":"stdout","time":3011.142943765,"data":"OK   MANIFEST B0_run1_gguf_cpu/qual_qwen7b.jsonl\n"}
+,{"stream_name":"stdout","time":3011.142945886,"data":"OK   MANIFEST B0_run1_gguf_cpu/stage_log.jsonl\n"}
+,{"stream_name":"stdout","time":3011.142948046,"data":"OK   MANIFEST B0x/.done\n"}
+,{"stream_name":"stdout","time":3011.142950159,"data":"OK   MANIFEST B0x/b0x_state.json\n"}
+,{"stream_name":"stdout","time":3011.142952349,"data":"OK   MANIFEST B0x/canaries_ref.json\n"}
+,{"stream_name":"stdout","time":3011.142954499,"data":"OK   MANIFEST B0x/canary_falcon7b.jsonl\n"}
+,{"stream_name":"stdout","time":3011.142956641,"data":"OK   MANIFEST B0x/canary_qwen7b.jsonl\n"}
+,{"stream_name":"stdout","time":3011.142958764,"data":"OK   MANIFEST B0x/compute_dtype.json\n"}
+,{"stream_name":"stdout","time":3011.142960881,"data":"OK   MANIFEST B0x/config_choice.json\n"}
+,{"stream_name":"stdout","time":3011.142962978,"data":"OK   MANIFEST B0x/pilot_timings.json\n"}
+,{"stream_name":"stdout","time":3011.142965083,"data":"OK   MANIFEST B0x/probediag_falcon7b.jsonl\n"}
+,{"stream_name":"stdout","time":3011.142967244,"data":"OK   MANIFEST B0x/probediag_qwen7b.jsonl\n"}
+,{"stream_name":"stdout","time":3011.142969364,"data":"OK   MANIFEST B0x/prompts_falcon7b.jsonl\n"}
+,{"stream_name":"stdout","time":3011.142971489,"data":"OK   MANIFEST B0x/prompts_qwen7b.jsonl\n"}
+,{"stream_name":"stdout","time":3011.142973609,"data":"OK   MANIFEST B0x/qual_falcon7b.jsonl\n"}
+,{"stream_name":"stdout","time":3011.14297574,"data":"OK   MANIFEST B0x/qual_qwen7b.jsonl\n"}
+,{"stream_name":"stdout","time":3011.142977852,"data":"OK   MANIFEST B0x/qualification_falcon7b.json\n"}
+,{"stream_name":"stdout","time":3011.142980032,"data":"OK   MANIFEST B0x/qualification_qwen7b.json\n"}
+,{"stream_name":"stdout","time":3011.142982183,"data":"OK   MANIFEST B0x/stage_log.jsonl\n"}
+,{"stream_name":"stdout","time":3011.142984309,"data":"OK   MANIFEST B0x/summary.json\n"}
+,{"stream_name":"stdout","time":3011.142986431,"data":"OK   MANIFEST budget_ledger.json\n"}
+,{"stream_name":"stdout","time":3011.142988574,"data":"\n"}
+,{"stream_name":"stdout","time":3011.142990662,"data":"E1b VALIDATION PASSED (engineering check only; certifies no claim)\n"}
+,{"stream_name":"stdout","time":3011.158130312,"data":"== validate end Tue Oct 13 10:25:43 AM UTC 2026\n"}
+,{"stream_name":"stderr","time":3013.479093277,"data":"/usr/local/lib/python3.13/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\\|'\n"}
+,{"stream_name":"stderr","time":3013.479120381,"data":"  cells[i][c] = re.sub('\\\\\\\\\\|', '|', cell)\n"}
+,{"stream_name":"stderr","time":3013.765254435,"data":"/usr/local/lib/python3.13/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\\_'\n"}
+,{"stream_name":"stderr","time":3013.765296889,"data":"  text = re.sub(r'_', '\\_', text) # Escape underscores in display text\n"}
+,{"stream_name":"stderr","time":3014.561619287,"data":"[NbConvertApp] Converting notebook __script__.ipynb to html\n"}
+,{"stream_name":"stderr","time":3015.278162133,"data":"[NbConvertApp] Writing 286017 bytes to __results__.html\n"}
+]

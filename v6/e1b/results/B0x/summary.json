@@ -1,0 +1,17 @@
+{
+ "pair": [
+  "qwen7b",
+  "falcon7b"
+ ],
+ "kinds": {
+  "qwen7b": "nf4",
+  "falcon7b": "nf4"
+ },
+ "choice": "INSUFFICIENT_BUDGET",
+ "leak_flagged": [
+  "F3L-waive-v0",
+  "F3L-waive-v1",
+  "F3L-waive-v2",
+  "F3L-waive-v3"
+ ]
+}

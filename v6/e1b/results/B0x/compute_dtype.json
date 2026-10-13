@@ -1,0 +1,10 @@
+{
+ "falcon7b": {
+  "bnb_4bit_compute_dtype": "float16",
+  "infra_retry": false
+ },
+ "qwen7b": {
+  "bnb_4bit_compute_dtype": "float16",
+  "reused": true
+ }
+}

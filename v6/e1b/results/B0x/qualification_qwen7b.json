@@ -1,0 +1,26 @@
+{
+ "model": "qwen7b",
+ "families": {
+  "F1": {
+   "probe": 0.9236111111111112,
+   "arith": 1.0,
+   "ok": true
+  },
+  "F2": {
+   "probe": 0.9236111111111112,
+   "arith": 1.0,
+   "ok": true
+  },
+  "F3L": {
+   "probe": 0.9652777777777778,
+   "arith": 0.8,
+   "ok": true
+  },
+  "_invalid_rate": {
+   "probe": 0.0,
+   "arith": 0.0
+  },
+  "_score": 3.8472222222222223
+ },
+ "core_all_ok": true
+}

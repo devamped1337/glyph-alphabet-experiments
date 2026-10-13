@@ -1,0 +1,253 @@
+{
+ "pair": [
+  "qwen7b",
+  "falcon7b"
+ ],
+ "strong_model": "falcon7b",
+ "invalid_rates": {
+  "qwen7b": {
+   "probe": 0.0,
+   "arith": 0.0
+  },
+  "falcon7b": {
+   "probe": 0.0,
+   "arith": 0.0
+  }
+ },
+ "choice": {
+  "choice": "INSUFFICIENT_BUDGET",
+  "projections": {
+   "C100": {
+    "B1": {
+     "projected_h": 4.097,
+     "budget_h": 3.0
+    },
+    "B2": {
+     "projected_h": 14.373,
+     "budget_h": 2.0
+    },
+    "B3": {
+     "projected_h": 4.992,
+     "budget_h": 5.0
+    }
+   },
+   "C60": {
+    "B1": {
+     "projected_h": 2.71,
+     "budget_h": 3.0
+    },
+    "B2": {
+     "projected_h": 10.17,
+     "budget_h": 2.0
+    },
+    "B3": {
+     "projected_h": 3.231,
+     "budget_h": 5.0
+    }
+   }
+  },
+  "rule": "every stage <= 0.8 x budget"
+ },
+ "leak": {
+  "flagged": [
+   "F3L-waive-v0",
+   "F3L-waive-v1",
+   "F3L-waive-v2",
+   "F3L-waive-v3"
+  ],
+  "kind_baseline": {
+   "F1-mem": 0.016,
+   "F1-non": 0.016,
+   "F1-higher": 0.352,
+   "F1-lower": 0.34,
+   "F2-xr": 0.004,
+   "F2-yr": 0.0,
+   "F2-higher": 0.14,
+   "F2-lower": 0.116,
+   "F3L-a": 0.01,
+   "F3L-c": 0.025,
+   "F3L-t": 0.0,
+   "F3L-s": 0.0,
+   "F3L-waive": 0.44
+  },
+  "kind_level_leak": [
+   "F3L-waive"
+  ],
+  "insufficient_obs": [],
+  "acc": {
+   "F1-mem-v0": 0.0,
+   "F1-mem-v1": 0.0,
+   "F1-mem-v2": 0.04,
+   "F1-mem-v3": 0.04,
+   "F1-mem-v4": 0.0,
+   "F1-non-v0": 0.08,
+   "F1-non-v1": 0.0,
+   "F1-non-v2": 0.0,
+   "F1-non-v3": 0.0,
+   "F1-non-v4": 0.0,
+   "F1-higher-v0": 0.34,
+   "F1-higher-v1": 0.36,
+   "F1-higher-v2": 0.44,
+   "F1-higher-v3": 0.3,
+   "F1-higher-v4": 0.32,
+   "F1-lower-v0": 0.38,
+   "F1-lower-v1": 0.38,
+   "F1-lower-v2": 0.22,
+   "F1-lower-v3": 0.34,
+   "F1-lower-v4": 0.38,
+   "F2-xr-v0": 0.0,
+   "F2-xr-v1": 0.0,
+   "F2-xr-v2": 0.02,
+   "F2-xr-v3": 0.0,
+   "F2-xr-v4": 0.0,
+   "F2-yr-v0": 0.0,
+   "F2-yr-v1": 0.0,
+   "F2-yr-v2": 0.0,
+   "F2-yr-v3": 0.0,
+   "F2-yr-v4": 0.0,
+   "F2-higher-v0": 0.16,
+   "F2-higher-v1": 0.12,
+   "F2-higher-v2": 0.06,
+   "F2-higher-v3": 0.1,
+   "F2-higher-v4": 0.26,
+   "F2-lower-v0": 0.12,
+   "F2-lower-v1": 0.26,
+   "F2-lower-v2": 0.02,
+   "F2-lower-v3": 0.04,
+   "F2-lower-v4": 0.14,
+   "F3L-a-v0": 0.0,
+   "F3L-a-v1": 0.04,
+   "F3L-a-v2": 0.0,
+   "F3L-a-v3": 0.0,
+   "F3L-c-v0": 0.02,
+   "F3L-c-v1": 0.0,
+   "F3L-c-v2": 0.0,
+   "F3L-c-v3": 0.08,
+   "F3L-t-v0": 0.0,
+   "F3L-t-v1": 0.0,
+   "F3L-t-v2": 0.0,
+   "F3L-t-v3": 0.0,
+   "F3L-s-v0": 0.0,
+   "F3L-s-v1": 0.0,
+   "F3L-s-v2": 0.0,
+   "F3L-s-v3": 0.0,
+   "F3L-waive-v0": 0.54,
+   "F3L-waive-v1": 0.54,
+   "F3L-waive-v2": 0.24,
+   "F3L-waive-v3": 0.44
+  },
+  "n": {
+   "F1-mem-v0": 50,
+   "F1-mem-v1": 50,
+   "F1-mem-v2": 50,
+   "F1-mem-v3": 50,
+   "F1-mem-v4": 50,
+   "F1-non-v0": 50,
+   "F1-non-v1": 50,
+   "F1-non-v2": 50,
+   "F1-non-v3": 50,
+   "F1-non-v4": 50,
+   "F1-higher-v0": 50,
+   "F1-higher-v1": 50,
+   "F1-higher-v2": 50,
+   "F1-higher-v3": 50,
+   "F1-higher-v4": 50,
+   "F1-lower-v0": 50,
+   "F1-lower-v1": 50,
+   "F1-lower-v2": 50,
+   "F1-lower-v3": 50,
+   "F1-lower-v4": 50,
+   "F2-xr-v0": 50,
+   "F2-xr-v1": 50,
+   "F2-xr-v2": 50,
+   "F2-xr-v3": 50,
+   "F2-xr-v4": 50,
+   "F2-yr-v0": 50,
+   "F2-yr-v1": 50,
+   "F2-yr-v2": 50,
+   "F2-yr-v3": 50,
+   "F2-yr-v4": 50,
+   "F2-higher-v0": 50,
+   "F2-higher-v1": 50,
+   "F2-higher-v2": 50,
+   "F2-higher-v3": 50,
+   "F2-higher-v4": 50,
+   "F2-lower-v0": 50,
+   "F2-lower-v1": 50,
+   "F2-lower-v2": 50,
+   "F2-lower-v3": 50,
+   "F2-lower-v4": 50,
+   "F3L-a-v0": 50,
+   "F3L-a-v1": 50,
+   "F3L-a-v2": 50,
+   "F3L-a-v3": 50,
+   "F3L-c-v0": 50,
+   "F3L-c-v1": 50,
+   "F3L-c-v2": 50,
+   "F3L-c-v3": 50,
+   "F3L-t-v0": 50,
+   "F3L-t-v1": 50,
+   "F3L-t-v2": 50,
+   "F3L-t-v3": 50,
+   "F3L-s-v0": 50,
+   "F3L-s-v1": 50,
+   "F3L-s-v2": 50,
+   "F3L-s-v3": 50,
+   "F3L-waive-v0": 50,
+   "F3L-waive-v1": 50,
+   "F3L-waive-v2": 50,
+   "F3L-waive-v3": 50
+  },
+  "abstention_diagnostic": {
+   "F1-unstated-v0": {
+    "no_text_not_stated_rate": 1.0,
+    "n": 50
+   },
+   "F1-unstated-v1": {
+    "no_text_not_stated_rate": 1.0,
+    "n": 50
+   },
+   "F1-unstated-v2": {
+    "no_text_not_stated_rate": 1.0,
+    "n": 50
+   },
+   "F1-unstated-v3": {
+    "no_text_not_stated_rate": 1.0,
+    "n": 50
+   },
+   "F2-unstated-v0": {
+    "no_text_not_stated_rate": 1.0,
+    "n": 50
+   },
+   "F2-unstated-v1": {
+    "no_text_not_stated_rate": 1.0,
+    "n": 50
+   },
+   "F2-unstated-v2": {
+    "no_text_not_stated_rate": 1.0,
+    "n": 50
+   },
+   "F2-unstated-v3": {
+    "no_text_not_stated_rate": 1.0,
+    "n": 50
+   },
+   "F3L-unstated-v0": {
+    "no_text_not_stated_rate": 1.0,
+    "n": 50
+   },
+   "F3L-unstated-v1": {
+    "no_text_not_stated_rate": 1.0,
+    "n": 50
+   },
+   "F3L-unstated-v2": {
+    "no_text_not_stated_rate": 1.0,
+    "n": 50
+   },
+   "F3L-unstated-v3": {
+    "no_text_not_stated_rate": 0.98,
+    "n": 50
+   }
+  }
+ },
+ "note": "freeze this in a dated PREREG amendment BEFORE B1"
+}

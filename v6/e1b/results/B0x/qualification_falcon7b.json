@@ -1,0 +1,26 @@
+{
+ "model": "falcon7b",
+ "families": {
+  "F1": {
+   "probe": 0.9583333333333334,
+   "arith": 1.0,
+   "ok": true
+  },
+  "F2": {
+   "probe": 0.9722222222222222,
+   "arith": 1.0,
+   "ok": true
+  },
+  "F3L": {
+   "probe": 0.9791666666666666,
+   "arith": 0.65,
+   "ok": false
+  },
+  "_invalid_rate": {
+   "probe": 0.0,
+   "arith": 0.0
+  },
+  "_score": 3.930555555555556
+ },
+ "core_all_ok": true
+}

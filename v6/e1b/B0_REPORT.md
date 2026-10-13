@@ -147,3 +147,39 @@ This addendum is computed from the run-2 records already committed (`7873596`). 
 **Interpretation:** this is **not a formatting failure**. OLMo answers in the correct format and fills in a plausible number (often a constant from the same rule) instead of abstaining. The Stage A small models showed the same gap-filling pattern; Qwen-7B shows none of it (72/72).
 
 This supports the review's reading that the 3B abstention failure is partly a size or model effect. The OLMo failure also does not depend on `unstated`: its F2 probes are 0.808 without them.
+
+---
+
+## POST-HOC EXTENSION (A8, stage B0x): Qwen2.5-7B + Falcon3-7B-Instruct
+
+**This is a post-hoc follow-up under Amendment A8, chosen after seeing the B0 results. It is not the primary result.** The primary E1b B0 result is unchanged: no qualifying two-lab 7B pair under the original candidates (commit `7873596`).
+
+Falcon3-7B-Instruct results were produced using artificial intelligence technology from the Technology Innovation Institute (TII Falcon License).
+
+**Run:** Kaggle kernel `devamped13/e1b-stage-b0` version 3, pushed 2026-10-13 20:35 AEDT, code at `e258b45` (A8 frozen, tag `prereg-e1b-a8`). B0x ran 20:37–21:25 AEDT. This is the one pre-registered A8 attempt (`b0x_state.json`: starts 1, retry not used). Log: `run_logs/kaggle_e1b-stage-b0_v3.log`.
+
+**Checks (all pass):**
+- GPU preflight PASS for falcon7b: hf-nf4, Tesla T4 (cc 7.5), 196 Linear4bit layers, all params on CUDA.
+- Compute dtype float16 for both models (`B0x/compute_dtype.json`). No fp32 retry.
+- Falcon pin `tiiuae/Falcon3-7B-Instruct` @ `1e57a0e`, access OK.
+- Parsing: invalid rate 0.0 for probe and arithmetic replies. All 432 probes parsed as a single letter. Arithmetic: 165 parsed by answer line, 15 by last integer.
+- Prompt truncation: none. Reply-length limit: 15 Falcon arithmetic replies hit the pre-registered 192-token reply limit. **All 15 are F3L** (exploratory arm), scored as frozen. No F1/F2 reply, canary or probe-diagnostic reply hit the limit, and Qwen has none.
+- Gold labels: present on all 612 rows, gold = honest gold everywhere; builder assertions re-run OK.
+- Canaries: falcon7b 20/20.
+- Qwen reuse: all 5 files byte-identical to the `7873596` pins (sha256 re-checked independently with `git show 7873596`).
+- Stop markers: B0x `.done` present, status complete, no silent abort.
+- Cap: B0x used 0.806 GPU-h of the 1.2 GPU-h cap (reserve ledger 4968.9 s → 7871.7 s).
+- Validator: `E1b VALIDATION PASSED` (engineering check only).
+
+**Qualification** (bars: probes ≥ 0.90 and arithmetic ≥ 0.80 per family; core families F1 and F2; F3L is exploratory and descriptive only). Values recomputed from `qual_*.jsonl` and identical to `qualification_*.json`:
+
+| model | F1 probe / arith | F2 probe / arith | F3L probe / arith (exploratory) | core |
+|---|---|---|---|---|
+| qwen7b (reused from B0) | 0.924 / 1.000 | 0.924 / 1.000 | 0.965 / 0.800 | QUALIFIED |
+| falcon7b | 0.958 (138/144) / 1.000 (60/60) | 0.972 (140/144) / 1.000 (60/60) | 0.979 (141/144) / 0.650 (39/60) | QUALIFIED |
+
+**Result: the post-hoc pair Qwen2.5-7B (Alibaba) + Falcon3-7B-Instruct (TII) QUALIFIES under A8.** Falcon's F3L arithmetic (0.650) is below the bar, but F3L is outside qualification. 12 of its 21 F3L arithmetic misses hit the 192-token limit.
+
+`config_choice.json`: projection `INSUFFICIENT_BUDGET` (C60: B1 2.71 h, B2 10.17 h, B3 3.23 h, which is not within 0.8 × budget). Kind-level leak flag `F3L-waive`. As A8 §7 requires, **B1–B3 stay blocked** until a new budget period and a further dated amendment that freezes the pair and uses a fresh TEST pool. Both models will run fresh there.
+
+**Duplicate-launch disclosure.** On 2026-10-14 at about 10:08 AEDT, an unattended agent session wrongly pushed a second kernel, `devamped13/e1b-stage-b0x` v1, which tried B0x again. It was not authorised and is not part of A8, which allows one attempt. The kernel had no cancel option through the Kaggle CLI or API and was still running at 10:23 AEDT. **Any output from it is excluded from E1b, and none of it has been downloaded or looked at.** The results above come only from `e1b-stage-b0` v3, which finished before that push.
