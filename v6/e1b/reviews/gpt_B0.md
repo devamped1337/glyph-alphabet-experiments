@@ -1,0 +1,3 @@
+# GPT review of B0 (2026-10-13)
+
+Accepts the stop; independently reparsed all 1,224 records with zero discrepancies; unstated probes stay in qualification; without them, F1 is 110/120 and F2 is 97/120. Approve one bounded extension only when a concrete candidate is named with its lab, exact revision and rationale, with anonymous access verified; keep the bars, unstated probes, scoring and generation unchanged; state whether Qwen's records are reused and why they're comparable; freeze the budget and stop rule; no rolling search; use the 1.62 reserve GPU-h only as authorised; keep 'no qualifying pair' as the primary result.

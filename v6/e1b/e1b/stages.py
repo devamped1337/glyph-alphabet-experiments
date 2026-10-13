@@ -340,50 +340,59 @@ def stage_B0(cfg):
     for name in cfg["models"]["stageB_order"]:
         if len({cfg["models"]["stageB"][q]["lab"] for q in qualified}) >= 2: break
         if acc.get(name, True) is not True: S.log("skip_no_access", model=name); continue
-        b, k = load_B(name, cfg, S); kinds[name] = k
-        if not (RES / "B0" / "backend.json").exists():
-            json.dump(dict(kind=k, decided_by=name), open(RES / "B0" / "backend.json", "w"))
-        can_ref[name] = canaries(b, name, cfg, B, S)
-        fam_ok = {}
-        for fam in cfg["families_core"] + ["F3L"]:
-            qf = f"qual_{name}.jsonl"; dk = S.done_keys(qf)   # A7: resumable by key (checkpoint)
-            for eid in B["groups"][f"qual_{fam}"]:
-                for p in B["probes"]["calib"][eid]:
-                    k_ = f"{eid}|{p['template']}"
-                    if k_ in dk: continue
-                    S.check_budget(); r = ask_probe(b, E[eid]["text"], p, cfg)
-                    S.write(qf, rec(name, "B0", "qual_probe", k_, entry=eid, fam=fam, **r))
-            for c in [c for c in B["cases"]["qualification"] if c["fam"] == fam]:
-                if c["text"] in dk: continue
-                S.check_budget(); r = ask_arith(b, name, "direct_text", E[c["entry"]], c, cfg)
-                S.write(qf, rec(name, "B0", "qual_arith", c["text"], **r))
-            Rf = [json.loads(l) for l in open(S.dir / qf)]
-            P_ = [x for x in Rf if x["step"] == "qual_probe" and x.get("fam") == fam]; A_ = [x for x in Rf if x["step"] == "qual_arith" and x.get("fam") == fam]
-            pr_c, pr_n = sum(bool(x["correct"]) for x in P_), len(P_); ar_c, ar_n = sum(bool(x["correct"]) for x in A_), len(A_)
-            fam_ok[fam] = dict(probe=pr_c / pr_n, arith=ar_c / ar_n, ok=(pr_c / pr_n >= Q["probe_bar"] and ar_c / ar_n >= Q["arith_bar"]))
-        Rq = [json.loads(l) for l in open(S.dir / f"qual_{name}.jsonl")]
-        npb = max(1, sum(x["step"] == "qual_probe" for x in Rq)); nar = max(1, sum(x["step"] == "qual_arith" for x in Rq))
-        fam_ok["_invalid_rate"] = dict(probe=sum(x["step"] == "qual_probe" and x.get("letter") is None for x in Rq) / npb,
-                                       arith=sum(x["step"] == "qual_arith" and x.get("parse_path") == "invalid" for x in Rq) / nar)
-        fam_ok["_score"] = sum(fam_ok[f]["probe"] + fam_ok[f]["arith"] for f in cfg["families_core"])   # A2: manip-check model choice
-        S.log("qualification", model=name, families=fam_ok)
-        core_ok = all(fam_ok[f]["ok"] for f in cfg["families_core"])
-        any_core = any(fam_ok[f]["ok"] for f in cfg["families_core"])
-        if any_core and cfg["models"]["stageB"][name]["lab"] not in {cfg["models"]["stageB"][q]["lab"] for q in qualified}:
+        if _b0_model(name, cfg, B, S, kinds, can_ref) and cfg["models"]["stageB"][name]["lab"] not in {cfg["models"]["stageB"][q]["lab"] for q in qualified}:
             qualified.append(name)
-        json.dump(dict(model=name, families=fam_ok, core_all_ok=core_ok), open(S.dir / f"qualification_{name}.json", "w"), indent=1)
-        # probe-diagnostic pool (no entry text) for the leak flag, then pilot timings
-        for fam in cfg["families_core"] + ["F3L"]:
-            for eid in B["groups"][f"probediag_{fam}"]:
-                for p in B["probes"]["calib"][eid]:
-                    if f"{eid}|{p['template']}" in S.done_keys(f"probediag_{name}.jsonl"): continue
-                    S.check_budget(); S.write(f"probediag_{name}.jsonl", rec(name, "B0", "probediag", f"{eid}|{p['template']}", entry=eid, fam=fam,
-                                                                         **ask_probe(b, E[eid]["text"], p, cfg, with_text=False)))
-        pilot_timing(b, name, cfg, B, S)
-        del b
-        try:
-            import torch, gc; gc.collect(); torch.cuda.empty_cache()
-        except Exception: pass
+    _b0_finish(S, cfg, qualified, kinds, can_ref)
+
+def _b0_model(name, cfg, B, S, kinds, can_ref):
+    """One B0 model: load (+GPU preflight), canaries, qualification, probe-diagnostic pool, pilot timings.
+    Returns True if the model passes >= 1 core family (refactor for A8; behaviour unchanged)."""
+    E = B["entries"]; Q = cfg["qualification"]
+    b, k = load_B(name, cfg, S); kinds[name] = k
+    if not (RES / "B0" / "backend.json").exists():
+        json.dump(dict(kind=k, decided_by=name), open(RES / "B0" / "backend.json", "w"))
+    can_ref[name] = canaries(b, name, cfg, B, S)
+    fam_ok = {}
+    for fam in cfg["families_core"] + ["F3L"]:
+        qf = f"qual_{name}.jsonl"; dk = S.done_keys(qf)   # A7: resumable by key (checkpoint)
+        for eid in B["groups"][f"qual_{fam}"]:
+            for p in B["probes"]["calib"][eid]:
+                k_ = f"{eid}|{p['template']}"
+                if k_ in dk: continue
+                S.check_budget(); r = ask_probe(b, E[eid]["text"], p, cfg)
+                S.write(qf, rec(name, S.name, "qual_probe", k_, entry=eid, fam=fam, **r))
+        for c in [c for c in B["cases"]["qualification"] if c["fam"] == fam]:
+            if c["text"] in dk: continue
+            S.check_budget(); r = ask_arith(b, name, "direct_text", E[c["entry"]], c, cfg)
+            S.write(qf, rec(name, S.name, "qual_arith", c["text"], **r))
+        Rf = [json.loads(l) for l in open(S.dir / qf)]
+        P_ = [x for x in Rf if x["step"] == "qual_probe" and x.get("fam") == fam]; A_ = [x for x in Rf if x["step"] == "qual_arith" and x.get("fam") == fam]
+        pr_c, pr_n = sum(bool(x["correct"]) for x in P_), len(P_); ar_c, ar_n = sum(bool(x["correct"]) for x in A_), len(A_)
+        fam_ok[fam] = dict(probe=pr_c / pr_n, arith=ar_c / ar_n, ok=(pr_c / pr_n >= Q["probe_bar"] and ar_c / ar_n >= Q["arith_bar"]))
+    Rq = [json.loads(l) for l in open(S.dir / f"qual_{name}.jsonl")]
+    npb = max(1, sum(x["step"] == "qual_probe" for x in Rq)); nar = max(1, sum(x["step"] == "qual_arith" for x in Rq))
+    fam_ok["_invalid_rate"] = dict(probe=sum(x["step"] == "qual_probe" and x.get("letter") is None for x in Rq) / npb,
+                                   arith=sum(x["step"] == "qual_arith" and x.get("parse_path") == "invalid" for x in Rq) / nar)
+    fam_ok["_score"] = sum(fam_ok[f]["probe"] + fam_ok[f]["arith"] for f in cfg["families_core"])   # A2: manip-check model choice
+    S.log("qualification", model=name, families=fam_ok)
+    core_ok = all(fam_ok[f]["ok"] for f in cfg["families_core"])
+    any_core = any(fam_ok[f]["ok"] for f in cfg["families_core"])
+    json.dump(dict(model=name, families=fam_ok, core_all_ok=core_ok), open(S.dir / f"qualification_{name}.json", "w"), indent=1)
+    # probe-diagnostic pool (no entry text) for the leak flag, then pilot timings
+    for fam in cfg["families_core"] + ["F3L"]:
+        for eid in B["groups"][f"probediag_{fam}"]:
+            for p in B["probes"]["calib"][eid]:
+                if f"{eid}|{p['template']}" in S.done_keys(f"probediag_{name}.jsonl"): continue
+                S.check_budget(); S.write(f"probediag_{name}.jsonl", rec(name, S.name, "probediag", f"{eid}|{p['template']}", entry=eid, fam=fam,
+                                                                     **ask_probe(b, E[eid]["text"], p, cfg, with_text=False)))
+    pilot_timing(b, name, cfg, B, S)
+    del b
+    try:
+        import torch, gc; gc.collect(); torch.cuda.empty_cache()
+    except Exception: pass
+    return any(fam_ok[f]["ok"] for f in cfg["families_core"])
+
+def _b0_finish(S, cfg, qualified, kinds, can_ref):
     json.dump(can_ref, open(S.dir / "canaries_ref.json", "w"))
     pair = qualified[:2]
     if len(pair) < 2:
@@ -401,6 +410,44 @@ def stage_B0(cfg):
               open(S.dir / "config_choice.json", "w"), indent=1)
     S.finish(dict(pair=pair, kinds=kinds, choice=choice["choice"], leak_flagged=leak["flagged"]))
     if choice["choice"] == "INSUFFICIENT_BUDGET": print("insufficient budget -> stop and report"); sys.exit(6)
+
+
+def stage_B0x(cfg):
+    """A8 (DRAFT until frozen): ONE bounded B0 extension. Qwen-7B's run-2 B0 records are reused (same nf4 backend,
+    A7 environment, same frozen pools); exactly one pre-named candidate is qualified under the unchanged bars.
+    No chain: if the candidate fails, NO_QUALIFYING_PAIR and stop. Budget drawn from the reserve, frozen cap."""
+    X = cfg.get("b0_ext")
+    if not X or X.get("status") != "frozen":
+        print("B0x refused: A8 is not frozen (config b0_ext.status != 'frozen')"); sys.exit(10)
+    import hashlib, shutil
+    B = get_book(cfg); src = RES / "B0"
+    L = json.load(open(RES / "budget_ledger.json")) if (RES / "budget_ledger.json").exists() else {}
+    cap_h = min(cfg["budgets_gpu_h"]["reserve"], L.get("reserve", 0.0) / 3600 + X["budget_h"])   # cumulative reserve, frozen A8 cap
+    S = Stage("B0x", cap_h, cfg, alloc="reserve"); _require_gpu(S)
+    kind = _B_backend_kind()
+    if not kind or kind["kind"] != X["backend"]:
+        print(f"B0x refused: B0 backend {kind} != frozen {X['backend']}"); sys.exit(11)
+    reused, kinds, can_ref = [], {}, dict(json.load(open(src / "canaries_ref.json")))
+    timings = json.load(open(src / "pilot_timings.json")); out_t = {}
+    for m in X["reuse"]:
+        sh = {}
+        for f in (f"qualification_{m}.json", f"qual_{m}.jsonl", f"probediag_{m}.jsonl", f"canary_{m}.jsonl"):
+            shutil.copyfile(src / f, S.dir / f); sh[f] = hashlib.sha256((src / f).read_bytes()).hexdigest()
+        out_t[m] = timings[m]; kinds[m] = kind["kind"]
+        S.log("reuse", model=m, source=f"results/B0 @ {X['reuse_commit']}", sha256=sh)
+        q = json.load(open(src / f"qualification_{m}.json"))["families"]
+        if any(q[f]["ok"] for f in cfg["families_core"]): reused.append(m)
+    json.dump(out_t, open(S.dir / "pilot_timings.json", "w"), indent=1)
+    c = X["candidate"]; qualified = list(reused)
+    try:
+        from huggingface_hub import model_info
+        model_info(cfg["models"]["stageB"][c]["hf"], revision=cfg["models"]["stageB"][c]["revision"]); S.log("access", result={c: True})
+    except ImportError: pass
+    except Exception as ex:
+        S.log("access", result={c: repr(ex)}); (S.dir / "NO_ACCESS").write_text(repr(ex) + "\n"); _b0_finish(S, cfg, qualified, kinds, can_ref)
+    labs = {cfg["models"]["stageB"][q]["lab"] for q in qualified}
+    if _b0_model(c, cfg, B, S, kinds, can_ref) and cfg["models"]["stageB"][c]["lab"] not in labs: qualified.append(c)
+    _b0_finish(S, cfg, qualified, kinds, can_ref)
 
 def pilot_timing(b, name, cfg, B, S):
     E = B["entries"]; tm = {"receiver": [], "receiver_warm": [], "probe": [], "sender": []}; t0 = time.time()
@@ -685,4 +732,4 @@ def stage_B3(cfg):
 def stage_build(cfg):
     B = get_book(cfg); print(json.dumps({k: len(v) for k, v in B["cases"].items()}), "entries", len(B["entries"]))
 
-STAGES = dict(build=stage_build, A=stage_A, B0=stage_B0, B0b=stage_B0b, B1=stage_B1, B2=stage_B2, B3=stage_B3)
+STAGES = dict(build=stage_build, A=stage_A, B0=stage_B0, B0x=stage_B0x, B0b=stage_B0b, B1=stage_B1, B2=stage_B2, B3=stage_B3)

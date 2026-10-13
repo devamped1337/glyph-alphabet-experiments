@@ -78,3 +78,35 @@ class GPUPreflight(unittest.TestCase):
     def test_order_has_no_mistral(self):
         cfg = load_cfg(); self.assertEqual(cfg["models"]["stageB_order"], ["qwen7b", "olmo7b"])
         self.assertNotIn("mistral7b", cfg["models"]["stageB"]); self.assertEqual(cfg["b0_resume"]["alloc"], "reserve")
+
+
+class B0xExtension(unittest.TestCase):
+    """A8 (draft): B0x refuses unless frozen; when frozen it reuses Qwen's B0 records byte-identically and qualifies one candidate."""
+    def _env(self):
+        import os; os.environ["E1B_ALLOW_NO_GPU"] = "1"
+        tmp = Path(tempfile.mkdtemp()); res = tmp / "results"; (res / "B0").mkdir(parents=True)
+        for f in ("backend.json", "canaries_ref.json", "pilot_timings.json", "qualification_qwen7b.json", "qual_qwen7b.jsonl", "probediag_qwen7b.jsonl", "canary_qwen7b.jsonl"):
+            shutil.copyfile(ROOT / "results" / "B0" / f, res / "B0" / f)
+        json.dump({"reserve": 4968.9}, open(res / "budget_ledger.json", "w"))
+        return tmp, res
+    def test_refuses_when_draft(self):
+        cfg = load_cfg(); self.assertEqual(cfg["b0_ext"]["status"], "draft")
+        with self.assertRaises(SystemExit) as cm: S.STAGES["B0x"](cfg)
+        self.assertEqual(cm.exception.code, 10)
+    def test_frozen_reuse_and_one_candidate(self):
+        import hashlib
+        tmp, res = self._env(); old, oldL = S.RES, S.load_B; S.RES = res
+        S.load_B = lambda name, cfg, St: (Fake(name), "nf4")
+        try:
+            cfg = load_cfg(); cfg["b0_ext"]["status"] = "frozen"
+            with self.assertRaises(SystemExit) as cm: S.STAGES["B0x"](cfg)
+            self.assertIn(cm.exception.code, (5, 6, None))
+            d = res / "B0x"
+            for f in ("qual_qwen7b.jsonl", "probediag_qwen7b.jsonl"):
+                self.assertEqual(hashlib.sha256((d / f).read_bytes()).digest(), hashlib.sha256((res / "B0" / f).read_bytes()).digest())
+            self.assertTrue((d / "qual_falcon7b.jsonl").exists())
+            self.assertFalse(any((d / f"qual_{m}.jsonl").exists() for m in ("olmo7b", "mistral7b")))
+            log = [json.loads(l) for l in open(d / "stage_log.jsonl")]
+            st = [x for x in log if x["ev"] == "start"][0]; self.assertEqual(st["alloc"], "reserve")
+            self.assertTrue(any(x["ev"] == "reuse" and x["model"] == "qwen7b" for x in log))
+        finally: S.RES, S.load_B = old, oldL; shutil.rmtree(tmp, ignore_errors=True)

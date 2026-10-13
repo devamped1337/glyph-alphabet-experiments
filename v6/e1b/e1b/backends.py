@@ -14,10 +14,11 @@ SPLIT = "\u241eE1B_SPLIT\u241e"
 TEMPLATES = {
     "chatml": ("<|im_start|>system\n{sys}<|im_end|>\n<|im_start|>user\n{user}<|im_end|>\n<|im_start|>assistant\n", ["<|im_end|>"]),
     "llama3": ("<|begin_of_text|><|start_header_id|>system<|end_header_id|>\n\n{sys}<|eot_id|><|start_header_id|>user<|end_header_id|>\n\n{user}<|eot_id|><|start_header_id|>assistant<|end_header_id|>\n\n", ["<|eot_id|>"]),
+    "falcon3": ("<|system|>\n{sys}\n<|user|>\n{user}\n<|assistant|>\n", ["<|endoftext|>"]),
     "olmo2": ("<|endoftext|><|system|>\n{sys}\n<|user|>\n{user}\n<|assistant|>\n", ["<|endoftext|>"]),
 }
 MODEL_TEMPLATE = {"qwen3b": "chatml", "smol17": "chatml", "qwen7b": "chatml", "llama8b": "llama3",
-                  "olmo7b": "olmo2"}   # A7: Mistral removed entirely
+                  "olmo7b": "olmo2", "falcon7b": "falcon3"}   # A7: Mistral removed entirely
 
 class NonFinite(RuntimeError): pass
 class GPUPreflightFail(RuntimeError): pass

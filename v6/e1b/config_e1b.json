@@ -187,6 +187,20 @@
     "gguf_sha256": {
      "OLMo-2-1124-7B-Instruct-Q4_K_M.gguf": "88790198b8ab4f251b5b462756adc0265b3f6b9d9d87708d847645d9568bf168"
     }
+   },
+   "falcon7b": {
+    "hf": "tiiuae/Falcon3-7B-Instruct",
+    "params": 7455550464.0,
+    "lab": "TII",
+    "revision": "1e57a0ecd176c7c139f289c60a74e57f887c3dfb",
+    "license": "TII Falcon License (Apache-2.0-based; royalty-free; acceptable-use policy + attribution)",
+    "note": "A8 DRAFT candidate; B0 backend is fixed to nf4 (GGUF pinned for completeness only; official TII GGUF)",
+    "gguf_repo": "tiiuae/Falcon3-7B-Instruct-GGUF",
+    "gguf_file": "Falcon3-7B-Instruct-q4_k_m.gguf",
+    "gguf_revision": "b5eb297a52350fa68f8b88be3ce16a57578ba114",
+    "gguf_sha256": {
+     "Falcon3-7B-Instruct-q4_k_m.gguf": "17bc6e769a4248acd25fd7df934c8fa2c255c85dee88ec10a03d8655a7310cf3"
+    }
    }
   },
   "nf4": {
@@ -207,5 +221,19 @@
   "reserve_use": "c",
   "amendment": "A7",
   "note": "B0 (and B0b) draw from the 3 GPU-h reserve, cumulative in budget_ledger.json; the exhausted B0 allocation is not reused"
+ },
+ "b0_ext": {
+  "status": "draft",
+  "amendment": "A8",
+  "candidate": "falcon7b",
+  "reuse": [
+   "qwen7b"
+  ],
+  "reuse_commit": "7873596fdc127486d83c90baa65d1718585dec39",
+  "backend": "nf4",
+  "budget_h": 1.2,
+  "alloc": "reserve",
+  "stop_rule": "one attempt, no chain: candidate fails -> NO_QUALIFYING_PAIR, stop",
+  "note": "stage B0x; refuses to run unless status == 'frozen'"
  }
 }

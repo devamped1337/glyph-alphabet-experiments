@@ -398,3 +398,56 @@ Estimated from E1's measured CPU rates (Qwen-3B 2.25 s/call, Smol 1.31 s/call; p
    - `stageB_order = [qwen7b, olmo7b]`, and the `mistral7b` config entry and its template are deleted. This supersedes the substitute chain in §3, A2 and A6.
    - If qwen7b and olmo7b do not both qualify (a two-lab pair), there is **no further substitute: stop Stage B and report**.
 8. **Nothing else changes:** bars, pools, seeds, N, canary rule, generation settings (greedy, `repetition_penalty=1.0` explicit, all knobs pinned), analysis and the B1–B3 budgets are as frozen.
+
+### A8 (DRAFT, NOT FROZEN): 2026-10-13 (AEDT), one bounded post-hoc B0 extension with one named candidate
+
+**Status: DRAFT for review round 3.** Nothing in A8 runs until all three reviewers (Grok, Claude, GPT; `reviews/*_B0.md`) approve. Then A8 is frozen by a dated, hash-pinned commit and tag `prereg-e1b-a8`, and config `b0_ext.status` is set to `"frozen"`. Until then, stage `B0x` refuses to run (exit 10).
+
+1. **Disclosure.** E1b's B0 result is final and stays the **primary result: no qualifying two-lab 7B pair** under the free-access constraints. That result is at commit `7873596fdc127486d83c90baa65d1718585dec39` (B0_REPORT.md, run 2):
+   - qwen7b QUALIFIED: F1 0.924/1.000, F2 0.924/1.000.
+   - olmo7b FAILED: F1 0.840/1.000, F2 0.736/0.883.
+   - Post-hoc diagnostic: OLMo's 41/41 wrong `unstated` answers were numeric.
+
+   **This extension is chosen after seeing those results.** Every result from it is labelled a **post-hoc follow-up**, never the primary result.
+2. **Selection rule, written before looking at any abstention or capability evidence for the candidates.** No such evidence was consulted. Candidates are checked in this order, and the first rule that separates them decides:
+   - (i) **Eligibility** (all must hold):
+     - (a) ≥ 7B parameters (the prereg's 7B class);
+     - (b) anonymous download with no token (HF API `gated: false` and `config.json` HTTP 200);
+     - (c) no Mistral and no European lab (A7 §7);
+     - (d) a lab other than Alibaba (two-lab pair);
+     - (e) loads under the A7 environment (`transformers==4.47.1`, `bitsandbytes==0.47.0` nf4) with a chat template that has a system role;
+     - (f) fits a 16 GB T4 in nf4.
+   - (ii) Parameter count inside 7.0–8.0B, otherwise the nearest.
+   - (iii) An OSI-permissive license.
+   - (iv) The most recent release within the family.
+3. **Candidates considered** (all checked 2026-10-13; the reviewers' list):
+
+   | candidate | lab | revision | gated | config.json | license | arch / transformers 4.47.1 | params | nf4 on T4 | outcome |
+   |---|---|---|---|---|---|---|---|---|---|
+   | `tiiuae/Falcon3-7B-Instruct` | TII (UAE) | `1e57a0ecd176c7c139f289c60a74e57f887c3dfb` | false | 200 (weights 206) | TII Falcon License (Apache-2.0-based, royalty-free, AUP + attribution) | LlamaForCausalLM ✔; template `<\|system\|>/<\|user\|>/<\|assistant\|>`, eos `<\|endoftext\|>` (11), pad `<\|pad\|>` | 7.46B | ~5.5 GB ✔ | **SELECTED**: eligible, and inside 7–8B at (ii) |
+   | `ibm-granite/granite-3.3-8b-instruct` | IBM (US) | `51dd4bc2ade4059a6bd87649d68aa11e4fb2529b` | false | 200 | Apache-2.0 | GraniteForCausalLM ✔ (4.47.1 ships `granite`; template uses `strftime_now`, which 4.47.1 supports) | 8.17B | ~5.5 GB ✔ | eligible; **dropped at (ii)** (8.17B is outside 7–8B; Falcon is inside) |
+   | `ibm-granite/granite-3.0/3.1/3.2-8b-instruct` | IBM (US) | `5af56291…` / `4009206d…` / `610d8c6e…` | false | 200 | Apache-2.0 | ✔ | 8.17B | ✔ | same family; dropped at (ii); (iv) would have preferred 3.3 |
+   | `microsoft/Phi-4-mini-instruct` | Microsoft (US) | `cfbefacb99257ffa30c83adab238a50856ac3083` | false | 200 | MIT | Phi3ForCausalLM (longrope) | 3.84B | ✔ | **ineligible at (i)(a)**: below the 7B class |
+   | Mistral-7B-Instruct-v0.3 | Mistral (FR) | — | — | — | — | — | — | — | excluded (A7 §7, user rule) |
+   | Llama-3.1-8B-Instruct | Meta | — | gated | — | — | — | — | — | excluded (A6: gated) |
+   | OLMo-2-1124-7B-Instruct | AI2 | — | — | — | — | — | — | — | already failed B0 (not retried) |
+
+   **Choice: `falcon7b` = `tiiuae/Falcon3-7B-Instruct` @ `1e57a0e…`** (GGUF pin `tiiuae/Falcon3-7B-Instruct-GGUF` @ `b5eb297…` for completeness only, since the backend is fixed to nf4). The license has an acceptable-use policy and an attribution clause ("built using … technology from the Technology Innovation Institute"). It is free and needs no account, so it meets the free-access constraint.
+4. **Unchanged:** bars (probes ≥ 0.90 and arithmetic ≥ 0.80 per family; ≥ 1 core family); the `unstated` probes stay in qualification; the qualification, probe-diagnostic and pilot pools; scoring and parsing; the canary rule; generation settings (greedy, `repetition_penalty=1.0` explicit, all knobs pinned); the 5% invalid-reply rule; the leak rule; the nf4 config.
+5. **Qwen's records are reused, not re-run.** Stage `B0x` copies them byte-identically, with sha256 logged, from `results/B0` at `7873596`. Why they are comparable:
+   - same backend (`nf4`, `backend.json` unchanged; B0x refuses any other backend, exit 11);
+   - same A7 environment pins;
+   - same frozen book, pools and seeds;
+   - same code paths: the B0 per-model logic is moved unchanged into `_b0_model` and shared by B0 and B0x.
+
+   The candidate runs the same sequence: GPU preflight, canaries, qualification, probe-diagnostic pool, pilot timings.
+6. **Budget and stop rule (frozen with A8):**
+   - **≤ 1.2 GPU-h**, drawn from the reserve (ledger key `reserve`, cumulative; the hard cap is also ≤ the 1.62 GPU-h remaining).
+   - **One attempt, no chain, no rolling search.** If Falcon fails access, the preflight or qualification: `NO_QUALIFYING_PAIR`, stop and report. No further candidate is added under A8.
+   - Budget exhaustion: stop and report (§2).
+   - An infrastructure crash with no result seen may be re-run once from the checkpoint within the same 1.2 GPU-h cap.
+7. **If the pair qualifies:**
+   - B0x writes `results/B0x/config_choice.json` (pair, leak flags, pilot-based C60/C100 projection).
+   - **B1–B3 stay blocked.** The remaining reserve (< 1 GPU-h) cannot cover B1–B3. They wait for a new budget period and a further dated amendment that freezes the pair choice.
+   - That amendment uses a **fresh TEST pool**: newly generated with new pinned seeds and a new book hash, disjoint from every pool seen so far. The current TEST pool has not been touched by any model, but the extension is post hoc, so a fresh one is used (Claude).
+8. **Code (not run):** `stage_B0x`, a `falcon7b` config entry, a `falcon3` template entry, and `b0_ext` config with `status: "draft"`. Tests cover the refusal while draft, the byte-identical Qwen reuse and the single candidate. The Kaggle notebook defaults to `E1B_STAGE=B0x` at tag `prereg-e1b-a8`, which does not exist until A8 is frozen. **The kernel has not been pushed.**
