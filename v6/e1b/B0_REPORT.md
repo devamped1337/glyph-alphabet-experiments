@@ -110,3 +110,40 @@ Invalid-reply rate is 0% (rule A2.12 not triggered). All errors are on higher/lo
 - A re-run or completion can only come from the **3 GPU-h reserve**, under (a) re-run after an infrastructure failure or (c) completing an interrupted checkpointed stage. Results are resumable by key. Partial F1/F2 numbers have now been seen, so (c) is the honest fit rather than (a).
 - First, the compute path has to be fixed, which needs a dated amendment (A7). Options: a CUDA build of llama-cpp-python for py3.13, or a bitsandbytes version with CUDA 12.8 support (this would also restore the pre-registered nf4 primary path). `backend.json` currently fixes `gguf_cuda` for all of Stage B ("never mixed"). Whether that decision stands or is reset, given that it was caused by an environment failure, has to be decided in A7 before any re-run.
 - B1 must not start: B0 has no `.done` and no qualifying pair.
+
+---
+
+## Addendum (2026-10-13): POST-HOC DIAGNOSTIC, invalid replies and letter choice on probes (requested by the Claude B0 review)
+
+This addendum is computed from the run-2 records already committed (`7873596`). Nothing was re-run, and it **does not change the B0 decision**.
+
+**Invalid-reply rate by probe kind** (n / invalid / correct):
+
+| kind | qwen7b | olmo7b |
+|---|---|---|
+| mem | 30 / 0 / 30 | 30 / 0 / 30 |
+| non | 30 / 0 / 30 | 30 / 0 / 30 |
+| higher | 60 / 0 / 53 | 60 / 0 / 43 |
+| lower | 60 / 0 / 46 | 60 / 0 / 44 |
+| xr | 30 / 0 / 29 | 30 / 0 / 30 |
+| yr | 30 / 0 / 30 | 30 / 0 / 30 |
+| a | 24 / 0 / 24 | 24 / 0 / 23 |
+| c | 24 / 0 / 24 | 24 / 0 / 22 |
+| s | 24 / 0 / 19 | 24 / 0 / 24 |
+| t | 24 / 0 / 24 | 24 / 0 / 23 |
+| waive | 24 / 0 / 24 | 24 / 0 / 24 |
+| **unstated** | **72 / 0 / 72** | **72 / 0 / 31** |
+
+- **Invalid replies are 0/432 for both models in every kind.** Every reply was a single valid letter token (A–D).
+- The frozen A2.12 rule (invalid > 5% → `PROMPT_FIX_REQUIRED`) **did not apply** for either model; the arithmetic invalid rate was also 0%.
+
+**OLMo on the 72 `unstated` probes** (gold option = "Not stated by the rule"):
+- Its first token is always a letter: D 28, C 18, B 13, A 13. The gold letters are spread A 20, B 15, C 19, D 18.
+- **All 41 of its wrong answers chose a numeric option. It never chose a non-numeric wrong option.** Wrong letters: D 15, C 11, B 8, A 7, so there is a mild lean to D but no single-position habit.
+- 30 of the 41 chosen numbers appear elsewhere in the rule text (one of the rule's other constants). The other 11 do not.
+- By family, wrong answers split F1 13, F2 15, F3L 13.
+- Mean top-2 logit gap on the wrong answers is 1.23, so the model chose them with low confidence.
+
+**Interpretation:** this is **not a formatting failure**. OLMo answers in the correct format and fills in a plausible number (often a constant from the same rule) instead of abstaining. The Stage A small models showed the same gap-filling pattern; Qwen-7B shows none of it (72/72).
+
+This supports the review's reading that the 3B abstention failure is partly a size or model effect. The OLMo failure also does not depend on `unstated`: its F2 probes are 0.808 without them.
