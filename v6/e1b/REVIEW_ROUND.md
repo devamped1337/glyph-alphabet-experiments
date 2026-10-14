@@ -1,30 +1,34 @@
-# E1b review round 4b (A9 rev 4b: final yes/no)
+# E1b review round 5: A10 draft (Grok + GPT)
 
-- **Pinned commit:** `b3edce69ac2e7ca6212bac04f31aa989687718b3` (code hash `0bbc247a…`)
-- **Scope:** a final **yes / no** on A9 as revised ([PREREG_E1b.md §A9](https://github.com/devamped1337/glyph-alphabet-experiments/blob/b3edce69ac2e7ca6212bac04f31aa989687718b3/v6/e1b/PREREG_E1b.md)). Nothing has run, and no Kaggle kernel has been pushed.
-- **Round-4 reviews (summaries):** [grok_A9](https://github.com/devamped1337/glyph-alphabet-experiments/blob/b3edce69ac2e7ca6212bac04f31aa989687718b3/v6/e1b/reviews/grok_A9.md), [gpt_A9](https://github.com/devamped1337/glyph-alphabet-experiments/blob/b3edce69ac2e7ca6212bac04f31aa989687718b3/v6/e1b/reviews/gpt_A9.md)
+- **Pinned commit:** `6a60c8d4c84edc75bb40c149580b8667ef740ddc` (draft code hash `543a369c…`). A10 is a **draft**: not frozen, not tagged, and nothing pushed to Kaggle.
+- **Text:** [PREREG_E1b.md §A10](https://github.com/devamped1337/glyph-alphabet-experiments/blob/6a60c8d4c84edc75bb40c149580b8667ef740ddc/v6/e1b/PREREG_E1b.md). GPT's plan review (summary): [reviews/gpt_A10.md](https://github.com/devamped1337/glyph-alphabet-experiments/blob/6a60c8d4c84edc75bb40c149580b8667ef740ddc/v6/e1b/reviews/gpt_A10.md). Offline pilot: [a10_offline_pilot.json](https://github.com/devamped1337/glyph-alphabet-experiments/blob/6a60c8d4c84edc75bb40c149580b8667ef740ddc/v6/e1b/a10_offline_pilot.json). Code: [parsing.py](https://github.com/devamped1337/glyph-alphabet-experiments/blob/6a60c8d4c84edc75bb40c149580b8667ef740ddc/v6/e1b/e1b/parsing.py) (`parse_letter_a10`), [stages.py](https://github.com/devamped1337/glyph-alphabet-experiments/blob/6a60c8d4c84edc75bb40c149580b8667ef740ddc/v6/e1b/e1b/stages.py) (`stage_B3f`, `stage_B3r`). Tests: [test_a10.py](https://github.com/devamped1337/glyph-alphabet-experiments/blob/6a60c8d4c84edc75bb40c149580b8667ef740ddc/v6/e1b/tests/test_a10.py).
+- **Framing:** A10 is a post-hoc diagnostic completion on an already-seen TEST set (written after the 56/60 exploratory re-parse). **The A9 B3 verdict, POC FAILED, stays primary.** A10 is secondary and cannot overturn it.
 
-## Changes since round 4 (`c714453`)
-1. **Projection corrected (GPT #1).**
-   - Batch-1 latency is now used for the B1 manipulation check, the B2 paired oracle and the cold cache runs; warm latency for warm runs.
-   - B3 is charged two loads per model.
-   - Result: L4 caps are **B1c 0.65 / B1 3.20 / B2 6.40 / B3 1.75 = 12.00 ≤ 12.0** GPU-h, with 9.48 GPU-h projected.
-2. **Ladder reordered (Grok, GPT #2).** F3L is dropped first, then cases are cut 10 → 6 → 4 → 2, always even. The first level that fits is **L4: C60, 4 cases per entry, no F3L**. Reduced power is flagged in the headline.
-3. **Branch balance (GPT #2).** Every TEST entry has 2 cases on each answer branch. The book was rebuilt and its new sha is `19f8d46da3ff…`. The freshness, neighbour and branch asserts pass, and the frozen book is unchanged.
-4. **Per-entry gate dropped for B2/B3: a PI decision by Stefan, made after seeing the qualification scores.**
-   - B2/B3 run ungated as the pre-declared comparison. There are no checked-repository or corruption-protection claims.
-   - B1 and the ≥ 22/24 bar are reported descriptively.
-   - Both positions are recorded: GPT (keep the bar) and Grok (change it or drop the gate).
-5. **B1c (GPT #4, Grok).**
-   - 60 arithmetic + 60 probes per model, 30 per family each, from the non-TEST qualification pool.
-   - Parsed decisions must match 60/60 per path. Expected models, counts and keys are required. Full-token agreement is a diagnostic.
-   - Sender selection is described as a single batch-1 run.
-   - **Bug fixed:** (None, None) pairs and empty mappings now fail, with regression tests.
-6. **Robustness (GPT #6).**
-   - **Bug fixed:** B2's `unknown.jsonl` resume no longer duplicates rows (tested: interrupt → resume → validate).
-   - Prerequisites are checked before a start is consumed, and stage order is enforced.
-   - `NO_ACCESS`, `BUDGET_EXHAUSTED`, `CANARY_FAIL` and `ATTEMPT_INCOMPLETE` are terminal.
-7. **Tests:** 95 pass (18 A9).
+## What A10 does (all six GPT points applied)
+1. **Parser.** It removes candidate-ID fragments (`F1`, `F2`, `F3L`, with optional `-NNNN@vN#hash`), then applies the frozen `parse_letter` unchanged.
+   - A bare `F1` is rejected.
+   - Conflicting choices are still rejected.
+   - There is no first-letter rule.
+   - The prompt, settings (4 tokens, greedy), candidate order, cases, scoring, margin and analysis code are unchanged.
+2. **No new sender call.** The 60 archived Falcon replies are re-parsed, and the validator checks the raw replies are byte-identical.
+   - **Only the Qwen id_selected arm runs** (240 items).
+   - **The prose arm is reused verbatim, not rerun.**
+   - Six inputs are pinned by sha256.
+   - The symmetric Qwen-sends rerun is dropped.
+3. **Offline pilot** over all 22,296 archived letter replies of both models: **0 changed decisions** and 60 rescued (all Falcon B3 sender replies; 56 correct picks, already seen).
+4. **B3f**, a non-TEST format check, runs **before the freeze**. Both models get the frozen sender prompt on the pilot entries: 4 entries × 6 orders = 24 views each.
+5. **Budget and attempts.**
+   - B3f cap 0.25 h and B3r cap 0.50 h: the A10 total is 0.75 h, within the ≤ 1 h cap.
+   - Estimates are about 0.15 h for B3f and 0.21 h for B3r.
+   - The cumulative A9 + A10 limit is ≤ 12 h; A9 has used 6.15 h, so the worst case is 6.90 h.
+   - One start per stage, with separate result directories.
+   - B3r needs `a10.status=frozen` plus `E1B_GO=B3r`.
+6. **B3_REPORT corrected.** There were 37 Qwen→Falcon id_selected errors: 36 came from wrong selections and 1 happened despite a correct selection (verified at `3973107`).
+7. **Tests:** 105 run, all pass, 1 skipped (10 new A10 tests). The validator passes.
 
-## Question
-**Approve A9 rev 4b for freezing (yes / no)?** If no, name the blocking item.
+## Open questions (please answer yes / no / change)
+1. **Is reusing the prose arm acceptable,** given the cross-session batch-neighbour difference (bounded by B1c 120/120 and B2 20/20)? The alternative is rerunning prose too, with both arms in one session; that adds about 0.15 h and creates a second prose measurement.
+2. **B3f bar before the freeze:** A10 should give a valid parse on at least 22/24 per model, with 0 changed frozen decisions. Is this the right bar, and is pilot-entry reuse (4 entries × 6 orders) enough as non-TEST material?
+3. **Is the ID-fragment regex scoped right?** It covers whole-token `F1`, `F2` and `F3L`, optionally with a truncated `-digits`, `@v` and `#hex`. Should `F3L` be included, since F3L was not run in A9?
+4. **Reporting:** should B3R_REPORT show the A10 Falcon→Qwen result next to the A9 one, or only in a separate secondary section?
+5. **Freeze:** yes or no on freezing A10 after B3f, if B3f meets the bar.
