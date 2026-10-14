@@ -1,0 +1,389 @@
+{
+ "gated": false,
+ "framing": "communication proof of concept; 4-way selection, not repository search",
+ "not_checked_repository": "B1 failed or not eligible: combined pipeline is NOT a checked repository",
+ "excluded_families": [],
+ "qwen7b->falcon7b": {
+  "headline": {
+   "diff_id_selected_minus_prose": -0.15416666666666667,
+   "ci95": [
+    -0.25,
+    -0.07083333333333333
+   ],
+   "label": "inferior",
+   "margin": -0.05,
+   "n_entries": 60,
+   "n_items": 240,
+   "acc_id_selected": 0.8458333333333333,
+   "acc_prose": 1.0
+  },
+  "bytes": {
+   "payload_saving": 0.8909716908951798,
+   "whole_exchange_saving": 0.5873063405254614,
+   "target_payload_saving": 0.3,
+   "payload_target_met": true,
+   "note": "reported separately from the accuracy label (A1.2); saving is near-guaranteed by design"
+  },
+  "per_family_descriptive": {
+   "F1": {
+    "diff": -0.23333333333333334,
+    "ci": [
+     -0.4,
+     -0.1
+    ],
+    "label": "inferior",
+    "descriptive": true
+   },
+   "F2": {
+    "diff": -0.075,
+    "ci": [
+     -0.18333333333333332,
+     0.0
+    ],
+    "label": "inconclusive",
+    "descriptive": true
+   }
+  },
+  "denominators": {
+   "all_scheduled_items": 240,
+   "abstentions": 0,
+   "rejected_by_gate": 0,
+   "unresolved": 0,
+   "sender_invalid": 0
+  },
+  "selection": {
+   "acc": 0.85,
+   "ci95": [
+    0.75,
+    0.9333333333333333
+   ],
+   "chance": 0.25,
+   "above_chance": true,
+   "baselines": {
+    "regex": 0.75,
+    "tfidf": 0.4166666666666667,
+    "bm25": 0.4166666666666667,
+    "minilm": 0.5166666666666667
+   },
+   "best_baseline": "regex",
+   "wording": "selection among compact labelled candidates (4-way), not a repository search",
+   "trials_per_family": {
+    "F1": 30,
+    "F2": 30
+   },
+   "by_neighbour_type": {
+    "swap": {
+     "n_trials": 60,
+     "sender_picked": 6,
+     "sender_avoided_rate": 0.9,
+     "baseline_picked": {
+      "regex": 11,
+      "tfidf": 33,
+      "bm25": 29,
+      "minilm": 25
+     }
+    },
+    "shift": {
+     "n_trials": 60,
+     "sender_picked": 1,
+     "sender_avoided_rate": 0.9833333333333333,
+     "baseline_picked": {
+      "regex": 2,
+      "tfidf": 0,
+      "bm25": 2,
+      "minilm": 2
+     }
+    },
+    "swap+shift": {
+     "n_trials": 60,
+     "sender_picked": 2,
+     "sender_avoided_rate": 0.9666666666666667,
+     "baseline_picked": {
+      "regex": 2,
+      "tfidf": 2,
+      "bm25": 4,
+      "minilm": 2
+     }
+    }
+   },
+   "regex_frozen_views": {
+    "derived": {
+     "n": 6,
+     "correct": 2,
+     "tie_guess": 5,
+     "tie_guess_correct": 1
+    },
+    "plain": {
+     "n": 38,
+     "correct": 38,
+     "tie_guess": 0,
+     "tie_guess_correct": 0
+    },
+    "spelled": {
+     "n": 8,
+     "correct": 2,
+     "tie_guess": 8,
+     "tie_guess_correct": 2
+    },
+    "reordered": {
+     "n": 8,
+     "correct": 3,
+     "tie_guess": 0,
+     "tie_guess_correct": 0
+    }
+   },
+   "regex_tie_guesses": 13,
+   "by_message_style": {
+    "derived": {
+     "n": 6,
+     "acc": 0.5
+    },
+    "plain": {
+     "n": 38,
+     "acc": 0.9736842105263158
+    },
+    "spelled": {
+     "n": 8,
+     "acc": 0.625
+    },
+    "reordered": {
+     "n": 8,
+     "acc": 0.75
+    }
+   },
+   "sender_minus_best_baseline": {
+    "est": 0.1,
+    "ci": [
+     0.016666666666666666,
+     0.18333333333333332
+    ],
+    "beats": true
+   },
+   "note": "separate secondary claim; not part of the headline"
+  },
+  "costs": {
+   "sender": {
+    "latency_s": 0.5548983333333334,
+    "flops": 3720200000000.0,
+    "candidate_prep_bytes": 279.3333333333333
+   },
+   "receiver": {
+    "id_selected": {
+     "n": 240,
+     "latency_s": 3.779603333333333,
+     "prompt_tokens": 132.72083333333333,
+     "new_prompt_tokens": 132.72083333333333,
+     "gen_tokens": 77.6125,
+     "flops_new_tokens": 3136301561856.0,
+     "batch": "mixed",
+     "cached": false
+    },
+    "prose": {
+     "n": 240,
+     "latency_s": 3.779603333333333,
+     "prompt_tokens": 137.97083333333333,
+     "new_prompt_tokens": 137.97083333333333,
+     "gen_tokens": 74.24166666666666,
+     "flops_new_tokens": 3164322005683.2,
+     "batch": "mixed",
+     "cached": false
+    }
+   },
+   "dictionary_setup": {
+    "bytes_once": 36420,
+    "messages": 240,
+    "amortised_bytes_per_message": 151.75,
+    "break_even_messages": 234.56419063975954
+   }
+  }
+ },
+ "falcon7b->qwen7b": {
+  "headline": {
+   "diff_id_selected_minus_prose": -0.9916666666666667,
+   "ci95": [
+    -1.0,
+    -0.9791666666666666
+   ],
+   "label": "inferior",
+   "margin": -0.05,
+   "n_entries": 60,
+   "n_items": 240,
+   "acc_id_selected": 0.0,
+   "acc_prose": 0.9916666666666667
+  },
+  "bytes": {
+   "payload_saving": 1.0,
+   "whole_exchange_saving": 0.6591750855017415,
+   "target_payload_saving": 0.3,
+   "payload_target_met": true,
+   "note": "reported separately from the accuracy label (A1.2); saving is near-guaranteed by design"
+  },
+  "per_family_descriptive": {
+   "F1": {
+    "diff": -1.0,
+    "ci": [
+     -1.0,
+     -1.0
+    ],
+    "label": "inferior",
+    "descriptive": true
+   },
+   "F2": {
+    "diff": -0.9833333333333333,
+    "ci": [
+     -1.0,
+     -0.9583333333333334
+    ],
+    "label": "inferior",
+    "descriptive": true
+   }
+  },
+  "denominators": {
+   "all_scheduled_items": 240,
+   "abstentions": 0,
+   "rejected_by_gate": 0,
+   "unresolved": 240,
+   "sender_invalid": 240
+  },
+  "selection": {
+   "acc": 0.0,
+   "ci95": [
+    0.0,
+    0.0
+   ],
+   "chance": 0.25,
+   "above_chance": false,
+   "baselines": {
+    "regex": 0.75,
+    "tfidf": 0.4166666666666667,
+    "bm25": 0.4166666666666667,
+    "minilm": 0.5166666666666667
+   },
+   "best_baseline": "regex",
+   "wording": "selection among compact labelled candidates (4-way), not a repository search",
+   "trials_per_family": {
+    "F1": 30,
+    "F2": 30
+   },
+   "by_neighbour_type": {
+    "swap": {
+     "n_trials": 60,
+     "sender_picked": 0,
+     "sender_avoided_rate": 1.0,
+     "baseline_picked": {
+      "regex": 11,
+      "tfidf": 33,
+      "bm25": 29,
+      "minilm": 25
+     }
+    },
+    "shift": {
+     "n_trials": 60,
+     "sender_picked": 0,
+     "sender_avoided_rate": 1.0,
+     "baseline_picked": {
+      "regex": 2,
+      "tfidf": 0,
+      "bm25": 2,
+      "minilm": 2
+     }
+    },
+    "swap+shift": {
+     "n_trials": 60,
+     "sender_picked": 0,
+     "sender_avoided_rate": 1.0,
+     "baseline_picked": {
+      "regex": 2,
+      "tfidf": 2,
+      "bm25": 4,
+      "minilm": 2
+     }
+    }
+   },
+   "regex_frozen_views": {
+    "derived": {
+     "n": 6,
+     "correct": 2,
+     "tie_guess": 5,
+     "tie_guess_correct": 1
+    },
+    "plain": {
+     "n": 38,
+     "correct": 38,
+     "tie_guess": 0,
+     "tie_guess_correct": 0
+    },
+    "spelled": {
+     "n": 8,
+     "correct": 2,
+     "tie_guess": 8,
+     "tie_guess_correct": 2
+    },
+    "reordered": {
+     "n": 8,
+     "correct": 3,
+     "tie_guess": 0,
+     "tie_guess_correct": 0
+    }
+   },
+   "regex_tie_guesses": 13,
+   "by_message_style": {
+    "derived": {
+     "n": 6,
+     "acc": 0.0
+    },
+    "plain": {
+     "n": 38,
+     "acc": 0.0
+    },
+    "spelled": {
+     "n": 8,
+     "acc": 0.0
+    },
+    "reordered": {
+     "n": 8,
+     "acc": 0.0
+    }
+   },
+   "sender_minus_best_baseline": {
+    "est": -0.75,
+    "ci": [
+     -0.85,
+     -0.6333333333333333
+    ],
+    "beats": false
+   },
+   "note": "separate secondary claim; not part of the headline"
+  },
+  "costs": {
+   "sender": {
+    "latency_s": 0.7389916666666667,
+    "flops": 3979027282636.8,
+    "candidate_prep_bytes": 279.3333333333333
+   },
+   "receiver": {
+    "prose": {
+     "n": 240,
+     "latency_s": 2.2771666666666666,
+     "prompt_tokens": 127.10833333333333,
+     "new_prompt_tokens": 127.10833333333333,
+     "gen_tokens": 53.96666666666667,
+     "flops_new_tokens": 2752340000000.0,
+     "batch": "mixed",
+     "cached": false
+    }
+   },
+   "dictionary_setup": {
+    "bytes_once": 36420,
+    "messages": 240,
+    "amortised_bytes_per_message": 151.75,
+    "break_even_messages": 208.99005355776586
+   }
+  }
+ },
+ "poc_success": {
+  "both_directions_non_inferior": false,
+  "payload_target_met_both": true,
+  "note": "success = both directions non-inferior AND payload bytes >=30% fewer AND costs reported; byte miss reported separately"
+ }
+}

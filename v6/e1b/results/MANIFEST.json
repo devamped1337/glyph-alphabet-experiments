@@ -98,5 +98,17 @@
  "B2/stage_log.jsonl": "1db07118df162d66032f73df6bb7395cd063b0c5ec60fc6c93d61fea6db0bb66",
  "B2/summary.json": "bd011f02f26cf1ddceb3e35be6dab1785715e67d0bfb7a8d8d6eb9db608ac373",
  "B2/unknown.jsonl": "08e758b143ddc1e7987aaa47b090a05031ac79a461a09fc94faea6cc8a2e7bb1",
- "budget_ledger.json": "89449fd9082498efbd490d75f7f7a604e8c8df8d3892f237d6d43d7c8a49117f"
+ "B3/.done": "ef3865d610d91ffa452b36693a9676330c9368b5d12ced2349c294e480d99f76",
+ "B3/a9_state.json": "a8a33bbb157c7a99532d91e8cced6492217acdb2684c5b28c6e0d77c49998b67",
+ "B3/canary_falcon7b.jsonl": "ad23c0e7d38a493326ad5fdcb4c83b365c87e0fe61b0c869c940ac25389c279c",
+ "B3/canary_qwen7b.jsonl": "89a2e803ed52a77c17739e01cec0ff8dee4eec1584962e021857c7e65191a146",
+ "B3/exchange_falcon7b_to_qwen7b.jsonl": "cd7121960fa186fde50a8437110068f052882d9775f76678787f485e5d77d1be",
+ "B3/exchange_qwen7b_to_falcon7b.jsonl": "0d89fe4d9a1239035ee9553b1ca6bf124a808f66f948bf8b7552c5276b335f96",
+ "B3/prompts_falcon7b.jsonl": "9fd8a48a52d96dd90d0ac9491b120973d6f7bedae582d6565ae4c6fb187eba95",
+ "B3/prompts_qwen7b.jsonl": "d0cdca2c15a7eae44298e7010672ccd1a8f6e0b56e6e49d5d9cc797395b1fd17",
+ "B3/select_falcon7b.jsonl": "6d2494fb966d9304d880960dd10e23d1e4606c901c31fd6f830be04c2737ce06",
+ "B3/select_qwen7b.jsonl": "d7a301d2be10c25c9806424f830378ac329ddef2a0f3585fb40a73c2b4be4d01",
+ "B3/stage_log.jsonl": "f30918a42db0900a6da4cca57588c3c3049f1c325821f9de1437879b8f9963fc",
+ "B3/summary.json": "42cf348edc8ae3c652a44d38f713839b4b1f706dfa2211235748583462ea58e7",
+ "budget_ledger.json": "d866654411184dd6cee957830cab04a8714f72fe530e781dbc2f00ed5c673849"
 }
