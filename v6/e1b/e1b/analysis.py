@@ -197,7 +197,8 @@ def summarize_B3(d, pair, cfg, B, gated):
     if not gated: out["not_checked_repository"] = "B1 failed or not eligible: combined pipeline is NOT a checked repository"
     excluded = []
     for m in pair:
-        q = Path(d).parent / "B0" / f"qualification_{m}.json"
+        q = Path(d).parent / "B0x" / f"qualification_{m}.json"   # A9: the pair qualified in B0x
+        if not q.exists(): q = Path(d).parent / "B0" / f"qualification_{m}.json"
         if q.exists():
             excluded += [f for f, v in json.load(open(q))["families"].items() if f in cfg["families_core"] and not v["ok"]]
     excluded = sorted(set(excluded)); out["excluded_families"] = excluded

@@ -3,7 +3,10 @@
 # Results land in /kaggle/working/glyph/v6/e1b/results/<stage>/ ; download them and commit to the repo.
 # %% 1. code at the pinned commit (set COMMIT to the commit that recorded CODE_HASH.txt)
 import os, subprocess, sys
-COMMIT = os.environ.get("E1B_COMMIT", "prereg-e1b-a8"); STAGE = os.environ.get("E1B_STAGE", "B0x")   # A8 (frozen): tag prereg-e1b-a8
+COMMIT = os.environ.get("E1B_COMMIT", "prereg-e1b-a9"); STAGE = os.environ.get("E1B_STAGE")   # A9 (DRAFT): tag prereg-e1b-a9 does not exist until frozen
+# A9: no default stage and no automated launches. STAGE and E1B_GO are set by hand, per stage, only on Stefan's explicit go;
+# the A9 stages refuse unless E1B_GO == STAGE (exit 14) and a9.status == 'frozen' (exit 13).
+assert STAGE, "set E1B_STAGE explicitly (A9: no default stage)"
 subprocess.run("git clone https://github.com/devamped1337/glyph-alphabet-experiments.git /kaggle/working/glyph", shell=True, check=True)
 subprocess.run(f"cd /kaggle/working/glyph && git checkout {COMMIT}", shell=True, check=True)
 # %% 2. pinned dependencies (nf4 path) + llama.cpp CUDA wheel (pre-registered GGUF fallback, e.g. P100)

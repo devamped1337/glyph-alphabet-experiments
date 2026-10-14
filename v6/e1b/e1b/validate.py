@@ -7,8 +7,8 @@ from .cases import verify
 from .analysis import jl, flops
 from . import cachediag
 
-STAGES = ("A", "B0", "B0x", "B0b", "B1", "B2", "B3")
-INCOMPLETE_MARKERS = ("PROJECTION_EXCEEDS_BUDGET", "BUDGET_EXHAUSTED", "CANARY_FAIL", "NO_QUALIFYING_PAIR", "PROMPT_FIX_REQUIRED")
+STAGES = ("A", "B0", "B0x", "B0b", "B1c", "B1", "B2", "B3")
+INCOMPLETE_MARKERS = ("PROJECTION_EXCEEDS_BUDGET", "BUDGET_EXHAUSTED", "CANARY_FAIL", "NO_QUALIFYING_PAIR", "PROMPT_FIX_REQUIRED", "ATTEMPT_INCOMPLETE")
 NO_UNIQUE = ("stage_log", "prompts_", "canary_")
 
 def stage_status(d):
@@ -20,6 +20,8 @@ def stage_status(d):
 
 def expected_files(st, cfg, res):
     ch = res / "B0" / "config_choice.json"; pair = json.load(open(ch))["pair"] if ch.exists() else None
+    if "a9" in cfg and (res / "B1c").is_dir() and st in ("B1c", "B1", "B2", "B3"): pair = cfg["a9"]["pair"]   # A9 run present: the B0x post-hoc pair
+    if st == "B1c": return [f"batchcheck_{m}.jsonl" for m in (pair or [])] + ["batch_rule.json", "summary.json", "a9_state.json"]
     mA = list(cfg["models"]["stageA"])
     if st == "A": return [f"{a}_{m}.jsonl" for m in mA for a in ("A1", "A2", "A5", "A6")] + ["A4_qwen3b.jsonl", "summary.json"]
     if st == "B0": return ["canaries_ref.json", "summary.json"] + ([f"{p}_{m}.jsonl" for m in pair for p in ("qual", "probediag")] + ["pilot_timings.json", "config_choice.json"] if pair else [])
@@ -81,16 +83,22 @@ def run(root, inputs_only=False):
             for m in pair: chk(len(jl(res / "B1" / f"calib_{m}.jsonl")) == want, f"B1 calib_{m}: {want} probe rows")
     pool_of = {norm(c["text"]): p for p, cs in B["cases"].items() for c in cs}
     test_texts = {norm(c["text"]) for c in B["cases"]["test"]}
+    # A9: B1c-B3 rows are checked against the fresh pinned A9 book (sha256 re-checked), never the frozen one
+    A9S = ("B1c", "B1", "B2", "B3"); a9p = root / "data" / "cases_e1b_a9.json"; P9 = T9 = None
+    if "a9" in cfg and a9p.exists() and (res / "B1c").is_dir():   # A9 stages run only after B1c
+        raw9 = open(a9p).read(); chk(sha256_text(raw9) == cfg["a9"]["book_sha256"], "cases_e1b_a9.json sha256 matches a9.book_sha256")
+        B9 = json.loads(raw9); P9 = {norm(c["text"]): p for p, cs in B9["cases"].items() for c in cs}; T9 = {norm(c["text"]) for c in B9["cases"]["test"]}
     # every arithmetic row's case text must exist in a pool; B2/B3 rows must be TEST only; nothing else uses TEST
     for f in sorted(res.rglob("*.jsonl")):
         st = f.parent.name; rows = jl(f)
         if not rows or "stage_log" in f.name: continue
         cases = [norm(r["case"]) for r in rows if isinstance(r.get("case"), str)]
-        unknown = [c for c in cases if c not in pool_of]
+        pool_of_f, test_texts_f = (P9, T9) if (P9 is not None and st in A9S) else (pool_of, test_texts)
+        unknown = [c for c in cases if c not in pool_of_f]
         chk(not unknown, f"{st}/{f.name}: all {len(cases)} case texts belong to a frozen pool")
         is_test_file = (st == "B3" and f.name.startswith(("exchange_", "select_"))) or (st == "B2" and f.name.startswith(("main_", "prefix_")))
-        if is_test_file: chk(all(c in test_texts for c in cases), f"{st}/{f.name}: TEST cases only")
-        else: chk(not any(c in test_texts for c in cases), f"{st}/{f.name}: no TEST case used outside B2/B3")
+        if is_test_file: chk(all(c in test_texts_f for c in cases), f"{st}/{f.name}: TEST cases only")
+        else: chk(not any(c in test_texts_f for c in cases), f"{st}/{f.name}: no TEST case used outside B2/B3")
         for r in rows:
             if "new_prompt_tokens" in r and r.get("warm") is False and "prompt_tokens" in r and r["new_prompt_tokens"] != r["prompt_tokens"]:
                 chk(False, f"{f.name}: cold row with new_prompt_tokens != prompt_tokens"); break

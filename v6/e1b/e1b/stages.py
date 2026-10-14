@@ -73,7 +73,10 @@ def get_book(cfg):
     B = build(cfg); DATA.mkdir(exist_ok=True); json.dump(B, open(p, "w"))
     (DATA / "cases_e1b.sha256").write_text(sha256_text(open(p).read()) + "\n"); return B
 
-def bs(cfg): return int(cfg.get("stageB_batch_size", 1))
+def bs(cfg):
+    if _A9.get("on") and _A9.get("batch_size"): return int(_A9["batch_size"])
+    return int(cfg.get("stageB_batch_size", 1))
+_A9 = {}
 def chunks(xs, n):
     for i in range(0, len(xs), n): yield xs[i:i + n]
 
@@ -317,7 +320,8 @@ def canary_regressions(ref, now):
     return sorted(k for k, v in ref.items() if k not in now or now[k]["pred"] != v["pred"] or (v["correct"] and not now[k]["correct"]))
 
 def require_canaries(b, name, cfg, B, S):
-    ref = json.load(open(RES / "B0" / "canaries_ref.json")).get(name)
+    rp = RES / ("B0x" if _A9.get("on") else "B0") / "canaries_ref.json"   # A9: B0x holds both pair models' refs
+    ref = json.load(open(rp)).get(name)
     now = canaries(b, name, cfg, B, S)
     bad = canary_regressions(ref, now) if ref is not None else []
     if bad:
@@ -615,14 +619,68 @@ def probe_set(B, eid, kind, cfg):
 def _ctx(cfg):
     ch = json.load(open(RES / "B0" / "config_choice.json")); return ch["pair"], ch["choice"]["choice"]
 
+def _a9_start(cfg, name):
+    """A9 (DRAFT until frozen): launch gate, fresh pinned book, fixed per-stage cap (own ledger allocation, never
+    recomputed), total-cap check, start counter (1 start + max_infra_retries), batch rule from B1c."""
+    from . import a9 as A9
+    X = A9.require_go(cfg, name); B = A9.get_book(cfg); lv = X["frozen_level"]
+    L = json.load(open(RES / "budget_ledger.json")) if (RES / "budget_ledger.json").exists() else {}
+    used = sum(v for k, v in L.items() if k.startswith("A9_")) / 3600
+    if used >= X["total_cap_h"]: print(f"A9 total cap {X['total_cap_h']} h used -> stop and report"); sys.exit(3)
+    d = RES / name; d.mkdir(parents=True, exist_ok=True); stp = d / "a9_state.json"
+    st = json.load(open(stp)) if stp.exists() else dict(starts=0, cap_h=X["caps_h"][name])
+    if (d / ".done").exists(): print(f"{name} already finished (A9)"); sys.exit(0)
+    if st["starts"] >= 1 + X["max_infra_retries"]:
+        (d / "ATTEMPT_INCOMPLETE").write_text(f"{name}: {st['starts']} starts used (1 + {X['max_infra_retries']} infra retry); INCOMPLETE (A9)\n")
+        print(f"{name}: no starts left -> INCOMPLETE"); sys.exit(17)
+    st["starts"] += 1; json.dump(st, open(stp, "w"), indent=1)
+    _A9.clear(); _A9["on"] = True; _A9["cfg"] = A9.a9_cfg(cfg)[0]   # A9 seeds (fresh views, subsets, bootstrap)
+    if name != "B1c":
+        br = RES / "B1c" / "batch_rule.json"
+        if not br.exists() or not json.load(open(br))["pass_"]:
+            print("A9: B1c batch rule missing or failed -> B1-B3 do not run this budget period"); sys.exit(16)
+        _A9["batch_size"] = json.load(open(br))["batch_size"]
+    S = Stage(name, st["cap_h"], cfg, alloc=f"A9_{name}"); _require_gpu(S)
+    S.log("a9", label=X["label"], level=lv, cap_h=st["cap_h"], starts=st["starts"], book_sha256=X["book_sha256"], pair=X["pair"])
+    n = cfg["configs"][lv["config"]]["core_per_family"]
+    core = {f: B["groups"][f"core_{f}"][:n] for f in cfg["families_core"]}
+    f3l = list(B["groups"]["F3L"]) if lv["f3l"] else []
+    return X, B, S, X["pair"], core, f3l, lv
+
+def stage_B1c(cfg):
+    """A9 (c): batch-size rule. Per pair model, a9.batch_check_items qualification-pool arithmetic items (non-TEST,
+    fresh A9 book) at batch 1 and at stageB_batch_size; pass iff predictions match on >= a9.batch_match_min."""
+    from . import a9 as A9
+    X, B, S, pair, core, f3l, lv = _a9_start(cfg, "B1c"); E = B["entries"]; cfg = _A9["cfg"]
+    items = B["cases"]["qualification"][:X["batch_check_items"]]; rows = {}
+    for m in pair:
+        b, _ = load_B(m, cfg, S); require_canaries(b, m, cfg, B, S); f = f"batchcheck_{m}.jsonl"
+        for c in items:
+            k = f"b1|{c['text']}"
+            if k in S.done_keys(f): continue
+            S.check_budget(); S.write(f, rec(m, "B1c", "batch1", k, **ask_arith(b, m, "direct_text", E[c["entry"]], c, cfg)))
+        todo = [c for c in items if f"bN|{c['text']}" not in S.done_keys(f)]
+        for ch in chunks(todo, int(cfg["stageB_batch_size"])):
+            S.check_budget()
+            for c, r in zip(ch, ask_arith_many(b, m, [("direct_text", E[c["entry"]], c, None) for c in ch], cfg)):
+                S.write(f, rec(m, "B1c", "batchN", f"bN|{c['text']}", **r))
+        R = {json.loads(l)["key"]: json.loads(l) for l in open(S.dir / f)}
+        rows[m] = [(R[f"b1|{c['text']}"]["pred"], R[f"bN|{c['text']}"]["pred"]) for c in items]
+        del b
+    out = A9.batch_rule(cfg, rows); json.dump(out, open(S.dir / "batch_rule.json", "w"), indent=1); S.finish(out)
+
 def stage_B1(cfg):
     if (RES / "B0" / "PROMPT_FIX_REQUIRED").exists() and not (RES / "B0" / "PROMPT_FIX_AMENDED").exists():
         print("B0 invalid-reply rate > 5%: a prompt fix and dated amendment are required before B1 (A2)"); sys.exit(8)
-    strong = json.load(open(RES / "B0" / "config_choice.json")).get("strong_model")
-    B = get_book(cfg); E = B["entries"]; S = Stage("B1", cfg["budgets_gpu_h"]["B1"], cfg); pair, cname = _ctx(cfg)
-    core = entries_for_config(B, cfg, cname); P = cfg["configs"][cname]["planted_calib"]
+    if "a9" in cfg:
+        X, B, S, pair, core, f3l, lv = _a9_start(cfg, "B1"); strong = X["strong_model"]; cname = lv["config"]; cfg = _A9["cfg"]
+    else:
+        strong = json.load(open(RES / "B0" / "config_choice.json")).get("strong_model")
+        B = get_book(cfg); S = Stage("B1", cfg["budgets_gpu_h"]["B1"], cfg); pair, cname = _ctx(cfg)
+        core = entries_for_config(B, cfg, cname); f3l = B["groups"]["F3L"]
+    E = B["entries"]; P = cfg["configs"][cname]["planted_calib"]
     calib_ids = [x for f in core for x in core[f]] + B["groups"]["planted_calib"][:P]
-    calib_ids += [n for f in core for x in core[f] for n in B["neighbours"][x]] + [x for e in B["groups"]["F3L"] for x in [e] + B["neighbours"][e]]   # GPT code r1
+    calib_ids += [n for f in core for x in core[f] for n in B["neighbours"][x]] + [x for e in f3l for x in [e] + B["neighbours"][e]]   # GPT code r1
     tg_ids = [x for f in core for x in core[f]] + B["groups"]["planted_testgate"]
     for m in pair:
         b, _ = load_B(m, cfg, S); require_canaries(b, m, cfg, B, S)
@@ -653,8 +711,11 @@ def accepted_set(B, cfg):
     return (set(g["accepted"]), True) if g["eligible"] else (None, False)
 
 def stage_B2(cfg):
-    B = get_book(cfg); E = B["entries"]; S = Stage("B2", cfg["budgets_gpu_h"]["B2"], cfg); pair, cname = _ctx(cfg)
-    core = entries_for_config(B, cfg, cname); ids = set(x for f in core for x in core[f]) | set(B["groups"]["F3L"])
+    if "a9" in cfg: X, B, S, pair, core, f3l, lv = _a9_start(cfg, "B2"); cfg = _A9["cfg"]
+    else:
+        B = get_book(cfg); S = Stage("B2", cfg["budgets_gpu_h"]["B2"], cfg); pair, cname = _ctx(cfg)
+        core = entries_for_config(B, cfg, cname); f3l = B["groups"]["F3L"]
+    E = B["entries"]; ids = set(x for f in core for x in core[f]) | set(f3l)
     items = [c for c in B["cases"]["test"] if c["entry"] in ids]; sanity = set(B["groups"]["sanity"])
     D = Dictionary(B)
     # byte identity assertion on ALL items (sha256 per item), before any model call
@@ -728,8 +789,11 @@ def regex_report(B, cfg, ids=None):
     return out
 
 def stage_B3(cfg):
-    B = get_book(cfg); E = B["entries"]; S = Stage("B3", cfg["budgets_gpu_h"]["B3"], cfg); pair, cname = _ctx(cfg)
-    core = entries_for_config(B, cfg, cname); ids = [x for f in core for x in core[f]] + B["groups"]["F3L"]
+    if "a9" in cfg: X, B, S, pair, core, f3l, lv = _a9_start(cfg, "B3"); cfg = _A9["cfg"]
+    else:
+        B = get_book(cfg); S = Stage("B3", cfg["budgets_gpu_h"]["B3"], cfg); pair, cname = _ctx(cfg)
+        core = entries_for_config(B, cfg, cname); f3l = B["groups"]["F3L"]
+    E = B["entries"]; ids = [x for f in core for x in core[f]] + list(f3l)
     items = [c for c in B["cases"]["test"] if c["entry"] in set(ids)]
     acc, gated = accepted_set(B, cfg); D = Dictionary(B, accepted=acc if gated else None)   # recorded gate decision (GPT code r1)
     # 1. selection: each pair model as sender, once per entry (message is entry-level); view logged in full
@@ -786,4 +850,4 @@ def stage_B3(cfg):
 def stage_build(cfg):
     B = get_book(cfg); print(json.dumps({k: len(v) for k, v in B["cases"].items()}), "entries", len(B["entries"]))
 
-STAGES = dict(build=stage_build, A=stage_A, B0=stage_B0, B0x=stage_B0x, B0b=stage_B0b, B1=stage_B1, B2=stage_B2, B3=stage_B3)
+STAGES = dict(build=stage_build, A=stage_A, B0=stage_B0, B0x=stage_B0x, B0b=stage_B0b, B1c=stage_B1c, B1=stage_B1, B2=stage_B2, B3=stage_B3)

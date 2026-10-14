@@ -18,7 +18,7 @@ class DryRun(unittest.TestCase):
         real_verify = BK.verify_gguf
         BK.verify_gguf = lambda path, want: "stubbed-in-dryrun"   # real runs keep the sha256 pin check (gpt_code_2 #1)
         S.load_B = lambda name, cfg, St: (Fake(name), "fake")
-        cfg = load_cfg(); import os; os.environ["E1B_ALLOW_NO_GPU"] = "1"   # fake backend has no GPU (dry run only)
+        cfg = load_cfg(); cfg.pop("a9", None); import os; os.environ["E1B_ALLOW_NO_GPU"] = "1"   # legacy (pre-A9) path; A9 has its own dry run (test_a9.py)
         try:
             for st in ("A",):
                 try: S.STAGES[st](cfg)

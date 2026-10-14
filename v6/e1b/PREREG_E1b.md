@@ -496,3 +496,106 @@ Estimated from E1's measured CPU rates (Qwen-3B 2.25 s/call, Smol 1.31 s/call; p
    - the single fp32 retry;
    - a second abort or a post-scoring interrupt counting as not qualified;
    - a full B0x → validator run (B0x registered in the validator's stages, expected files, uniqueness, prompt resolution and reuse-hash checks), including a duplicate key, a missing prompt log and a tampered reused file. The Kaggle notebook defaults to `E1B_STAGE=B0x` at tag `prereg-e1b-a8`, which does not exist until A8 is frozen. **The kernel has not been pushed.**
+
+### A9 (DRAFT, NOT FROZEN): 2026-10-14 (AEDT), B1–B3 for the post-hoc pair Qwen2.5-7B + Falcon3-7B-Instruct
+
+**Status: DRAFT.** Nothing in A9 has run. Config `a9.status` is `"draft"`, and stages `B1c`, `B1`, `B2` and `B3` refuse to run while it is (exit 13). A9 is frozen only after Grok, Claude and GPT all approve (round 4), by a dated, hash-pinned commit, tag `prereg-e1b-a9`, and `a9.status = "frozen"`. **No Kaggle kernel has been pushed for A9.**
+
+1. **Labels (carried into every B result).**
+   - The primary E1b B0 result stays **NO QUALIFYING PAIR** (`7873596`).
+   - The pair `qwen7b` + `falcon7b` qualified only in the **post-hoc** A8 extension (B0x, `e1b-stage-b0` v3 at `e258b45`; B0_REPORT.md at `781b397`). Every B1, B2 and B3 number, table and post is labelled **"POST-HOC follow-up (A8 pair)"**. None is ever called the pre-registered primary result. Each stage logs this label (`stage_log` event `a9`).
+   - Every report, table or post that shows Falcon results carries, verbatim: "Falcon3-7B-Instruct results were produced using artificial intelligence technology from the Technology Innovation Institute (TII Falcon License)." (config `a9.attribution`; A8 §3a). The AUP is re-read before any publication.
+   - The duplicate kernel `devamped13/e1b-stage-b0x` (pushed by an automation on 2026-10-14 at about 10:08 AEDT) is excluded. Its output is never used or looked at.
+2. **Fresh, untouched TEST pool (A8 §7; Claude A8).**
+   - The A9 book `data/cases_e1b_a9.json` is a full rebuild with **new pinned seeds** (`a9.seeds`: generator 81062, probes_fresh 81063, sanity_subset 81064, cache_sample 81065, bootstrap 81066, hard_messages 81067).
+   - Its sha256 is `bc0df8496ce6def43dda5a31d9c883c3a9219ae104c47f06f1b876aaf0793a58`, pinned in `a9.book_sha256` and **committed with this draft, before any A9 run**. Every A9 stage re-checks the sha and refuses on a mismatch (exit 15). The validator re-checks it too.
+   - **Disjointness from everything seen so far, asserted in code** (`a9.check_fresh`). No case text, entry text or entry id of the frozen book `cases_e1b.json` appears in the A9 book. The builder reserves the frozen book's texts and ids before it samples. All frozen-book assertions (gold recomputed from text, load-bearing neighbours, plant flips, pool disjointness) are re-run on the A9 book.
+   - **One exception: the 20-prompt canary pool** is copied verbatim, because the B0x canary references (`results/B0x/canaries_ref.json`, both pair models) are keyed by those texts. Canaries are a precision check, never scored as results.
+   - The frozen book is reproduced byte-identically by the unchanged builder (tested), so nothing earlier moves.
+   - Calibration, TEST-gate, TEST, cache, sanity, manipulation and unknown-ID pools are therefore new too. B1's TEST-gate probes use new fresh-probe seeds.
+3. **Both models fresh, under identical conditions (Claude A8 #3).** `a9.reuse = []`. No B0/B0x record is reused as a result. In every A9 stage both models are loaded and run on the same items with the same:
+   - backend (nf4, `backend.json`), compute dtype (fp16, as recorded in B0x) and A7 environment pins;
+   - prompts and parsing, generation settings, and batch rule (§6 below).
+
+   Canaries run at the start of every stage against the B0x references. The manipulation check uses `a9.strong_model = falcon7b`, the higher B0x qualification score (A2 rule).
+4. **Budget (new budget period).** Stefan's Kaggle has about 16 GPU-h left this week. A9 caps the total at **≤ 12.0 GPU-h** (`a9.total_cap_h`), leaving about 4 GPU-h of headroom.
+   - **Projection** (`a9.project`), from B0x pilot timings only (never accuracy). Per-item s/call for Qwen / Falcon:
+     - receiver at batch 8: 2.81 / 5.06;
+     - warm prefix (batch 1): 4.29 / 6.76;
+     - probe: 0.365 / 0.537;
+     - sender: 0.477 / 0.656;
+     - batch-1 arithmetic (B0x qualification rows): 4.65 / 6.37;
+     - measured setup: 247 s / 289 s.
+
+     Call counts are the same formulas as §5 / A1.1 / A2 (`projection.call_counts`), with the TEST size and F3L as parameters.
+   - **Cap rule:** each stage's cap = projection / 0.8 (the pre-registered 80% headroom), rounded up to 0.05 h.
+   - **Ladder (pre-registered; applied mechanically, first level that fits wins):** the first level whose summed caps (B1c + B1 + B2 + B3) are ≤ 12.0 GPU-h is used. Nothing else is cut. No condition, model, cache comparison or baseline is dropped except as named here.
+
+   | level | entries | TEST cases / entry | F3L arm | B1c | B1 | B2 | B3 | Σ projected | Σ caps | fits ≤ 12? |
+   |---|---|---|---|---|---|---|---|---|---|---|
+   | L0 | C100 | 10 | yes | 0.46 | 4.10 | 14.37 | 4.99 | 23.93 | 30.00 | no |
+   | L1 | C60 | 10 | yes | 0.46 | 2.71 | 10.17 | 3.23 | 16.58 | 20.80 | no |
+   | L2 | C60 | 5 | yes | 0.46 | 2.71 | 5.84 | 1.70 | 10.71 | 13.45 | no |
+   | L3 | C60 | 5 | **no** | 0.46 | 2.47 | 5.31 | 1.48 | 9.73 | 12.20 | no |
+   | **L4** | **C60** | **4** | **no** | 0.46 | 2.47 | 4.55 | 1.22 | **8.70** | **10.95** | **yes** |
+
+   (projected GPU-h per stage; caps for L4: **B1c 0.60, B1 3.10, B2 5.70, B3 1.55; total 10.95 ≤ 12.0**)
+
+   - **Chosen: L4** = C60 (30 F1 + 30 F2 honest core entries, 24 calibration plants, 40 TEST-gate plants), **4 TEST cases per entry**, and the **F3L exploratory arm not run** in B1–B3.
+   - **Disclosed consequences:**
+     - F3L is reported as "not run (budget, A9 L4)", not as a result.
+     - TEST is 60 entries × 4 = 240 items per condition per model, against 600 in the original C60 design. Entries, not cases, carry the power (§5, Claude r2), and the entry count of C60 is unchanged.
+     - The book is built at 4 cases per entry, so the load-bearing-neighbour check (≥ 80% of an entry's TEST cases) holds on exactly the cases used.
+   - If B1c fails its rule (see 6c), B1–B3 **do not run in this budget period** (batch 1 does not fit). That is a stop-and-report. A9 does not scale down further.
+5. **Stop rules, fixed caps, infra aborts, launch gate (as in A8).**
+   - **Fixed caps:**
+     - Each stage has its own cumulative ledger allocation (`A9_B1c`, `A9_B1`, `A9_B2`, `A9_B3`).
+     - Its cap is written to `results/<stage>/a9_state.json` at the first start and reused on every restart; it is never recomputed from the ledger.
+     - A stage that hits its cap writes `BUDGET_EXHAUSTED` and stops. That is **INCOMPLETE**, reported as such, never extended within A9.
+     - A start is refused if the A9 allocations together already reach `a9.total_cap_h`.
+   - **Infra-abort rule:**
+     - A stage may start at most **1 + 1** times (`a9.max_infra_retries = 1`). The single retry is for an infrastructure abort (load, OOM, non-finite, crash, Kaggle session loss).
+     - The retry resumes by key (the stages are checkpointed), under the same fixed cap and the same config (fp16; B0x showed fp16 works on the T4).
+     - A third start is refused: `ATTEMPT_INCOMPLETE` (exit 17), so the stage is INCOMPLETE.
+     - Deterministic access errors are never retried (A8).
+   - **Order:** B1c → B1 → B2 → B3. B1–B3 refuse without a passing `B1c/batch_rule.json` (exit 16), and B3 reads B1's recorded gate decision. B2/B3 still run if B1's eligibility fails (§9 B1), reported as "not a checked repository".
+   - **Launch gate (Stefan's rule):** no automated, scheduled or proactive launches.
+     - Each stage refuses unless `a9.status == "frozen"` **and** the environment variable `E1B_GO` equals that stage's name (exit 14). A go for one stage never starts another.
+     - The Kaggle runner has no default stage. `E1B_STAGE` and `E1B_GO` are set by hand, per stage, **only after Stefan's explicit go for that stage**.
+     - No agent, script, cron or loop may push a Kaggle kernel for E1b.
+   - **No Mistral** (and no other European model; A7 §7). The pair is fixed. No substitution happens within A9.
+6. **Items deferred "until after B0" (A2/A3 list), resolved or explicitly deferred:**
+   - **(a) Per-entry probe bar vs qualification (P4): kept unchanged, with a pre-stated expectation.**
+     - The per-entry bar stays **each model ≥ 0.90 and agreement ≥ 0.90**, which is ≥ 22/24 probes (§9 B1, "Fixed, with no post-hoc threshold").
+     - Reason: the qualification accuracies are already known (Qwen 0.924 / 0.924, Falcon 0.958 / 0.972 on F1 / F2). Any change to the bar now would be chosen after seeing the data.
+     - **Pre-stated binomial expectation:** if probes were independent with p equal to the qualification rate, an entry would pass at P(≥ 22/24) = 0.726 for Qwen (p = 0.924), 0.922 for Falcon F1 (0.958) and 0.971 for Falcon F2 (0.972). The joint pass rate before agreement is therefore roughly 0.67–0.70.
+     - So **honest acceptance below the 0.80 calibration-eligibility bar is the expected outcome**, and B2/B3 then run ungated (§9 B1). This is stated now, before any B1 data.
+     - A binomial-adjusted entry test is **reported descriptively only** (per entry, the exact one-sided test of p ≥ 0.90). It never changes the gate decision.
+   - **(b) Reserve probe templates: deferred, with reasons.**
+     - B0x flagged only `F3L-waive-v0…v3`, a kind-level leak (F3L-waive no-text baseline 0.44). No F1/F2 template was flagged.
+     - At L4 the F3L arm does not run, so no replacement is needed. B0b is not run under A9 (cost 0).
+     - If a later amendment restores F3L, the A1.5 procedure applies (the next same-kind reserve, re-checked once, dropped if flagged again). The whole waive kind would most likely be dropped.
+   - **(c) Batch-size rule: resolved.**
+     - New sub-stage **B1c** (cap 0.60 GPU-h) runs before any B1 data. Per pair model, it takes the first **60 qualification-pool arithmetic items** of the A9 book (non-TEST, never used by B1–B3) at batch 1 and at the fixed `stageB_batch_size = 8`.
+     - **Pass iff the parsed predictions match on ≥ 99% of items, per model** (`a9.batch_match_min`). At n = 60 that is 60/60.
+     - Pass: batch 8 is used for B1–B3, as projected. Fail: stop and report (6c above). Batch 8 is not swapped for another size within A9.
+     - The B2 cache test and the warm-prefix timing stay at batch 1 (§8).
+7. **Unchanged:** all bars and thresholds; scoring and parsing; the canary rule; the 5% invalid rule; the leak rule; gate definitions and verdict wording ("met in sample" vs "met at 95% confidence"); B2 conditions, the cache rule and the cache comparisons; B3 selection, baselines, receivers and denominators; and the generation settings.
+8. **Code (in this draft commit, tested; not run on any GPU):**
+   - `e1b/a9.py`: launch gate, book build/pin/freshness, ladder projection, batch rule, binomial helper.
+   - `cases.build`: optional reserved texts and ids, defaults unchanged.
+   - `tools/build_a9_book.py`.
+   - `stages.stage_B1c` and the A9 paths in B1/B2/B3: fixed caps, start limit, A9 seeds, B0x canary references, F3L by level.
+   - Validator: B1c, A9 book pools.
+   - `kaggle/e1b_kaggle.py`: no default stage, tag `prereg-e1b-a9`.
+   - Tests in `tests/test_a9.py`:
+     - refusal while draft and without `E1B_GO`;
+     - a go for one stage not starting another;
+     - pinned and deterministic book;
+     - freshness, plus tamper tests;
+     - the ladder reproducing the frozen level and caps;
+     - the batch rule;
+     - the start limit;
+     - a full fake-backend B1c → B1 → B2 → B3 → validator run, checking both models loaded fresh, no old TEST text, the L4 counts and the label in the log.
+
+     All 88 tests pass.

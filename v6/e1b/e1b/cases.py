@@ -123,10 +123,13 @@ def render_label(e):
     if f == "F2": return f"hand-over: {e['x']} pays {s['xr']}/item, {e['y']} pays {s['yr']}/item"
     return f"stay: {s['a']}/day to day {s['t']}, then {s['c']}/day; fee {s['s']} waived with {e['g']} permit"
 
+_FORBID = set()   # A9: normalised entry texts of an earlier book; empty for the frozen book (unchanged behaviour)
 def mk_entry(fam, ids, rng, params=None):
-    e = dict(fam=fam, id=ids.new(fam), ver=1, **copy.deepcopy(params or honest_params(fam, rng)))
-    e["text"] = render_def(e); e["hash"] = sha256_text(e["text"]); e["kind"] = "honest"
-    return e
+    for _ in range(1000):
+        e = dict(fam=fam, id=ids.new(fam), ver=1, **copy.deepcopy(params or honest_params(fam, rng)))
+        e["text"] = render_def(e); e["hash"] = sha256_text(e["text"]); e["kind"] = "honest"
+        if params is not None or norm(e["text"]) not in _FORBID: return e
+    raise RuntimeError("A9: could not make an entry text unseen in the earlier book")
 
 # ------------------------------------------------------------------ neighbours (confusable, load-bearing)
 def neighbour_params(e, k, rng):
@@ -372,9 +375,11 @@ def gold_of(sem, fam, meta):
 POOLS = ["stageA_A1", "stageA_A4", "stageA_A6", "cache_fixed", "cache_stress", "qualification", "pilot",
          "canary", "manip_B1", "test"]
 
-def build(cfg):
+def build(cfg, seen_init=(), ids_init=(), forbid_texts=()):
+    """A9: seen_init / ids_init pre-reserve case texts and entry ids of an earlier book (fresh-pool build);
+    both default to empty, so the frozen book is reproduced unchanged."""
     rng = random.Random(cfg["seeds"]["generator"]); ids = IdAlloc(random.Random(cfg["seeds"]["generator"] + 1))
-    seen = set(); B = dict(entries={}, groups={}, cases={p: [] for p in POOLS}, probes={}, neighbours={},
+    ids.used |= set(ids_init); seen = set(seen_init); _FORBID.clear(); _FORBID.update(forbid_texts); B = dict(entries={}, groups={}, cases={p: [] for p in POOLS}, probes={}, neighbours={},
                            unknown_msgs=[], meta=dict(seeds=cfg["seeds"]))
     def add(e): B["entries"][e["id"]] = e; return e
     def group(name, fam, n): B["groups"][name] = [add(mk_entry(fam, ids, rng))["id"] for _ in range(n)]; return B["groups"][name]
@@ -403,7 +408,10 @@ def build(cfg):
                 # A5: explicit-wrong F2 plant ("the y pays the x's share"): orient the calibration-only source so the
                 # higher/lower probes also flip (rng-free; the source entry is used only as this plant's honest reference)
                 h["sem"]["xr"], h["sem"]["yr"] = h["sem"]["yr"], h["sem"]["xr"]; h["text"] = render_def(h); h["hash"] = sha256_text(h["text"])
-            p = add(planted_entry(h, ty, ids, rng, donor, strong=strong)); out.append(p["id"]); i += 1
+            p = planted_entry(h, ty, ids, rng, donor, strong=strong)
+            if _FORBID and (norm(h["text"]) in _FORBID or norm(p["text"]) in _FORBID):   # A9 only (empty for the frozen book)
+                B["entries"].pop(h["id"]); continue
+            p = add(p); out.append(p["id"]); i += 1
         B["groups"][name] = out
     plant("A2_planted", cfg["corruptions_calib"], A["planted_A2"], ["A2_F1", "A2_F2"])
     plant("A4_planted", cfg["corruptions_calib"] + cfg["corruptions_test"], A["planted_A4"], ["A2_F1", "A2_F2"])
@@ -460,7 +468,7 @@ def build(cfg):
                 for attempt in range(200):
                     n = mk_entry(e["fam"], ids, rng, neighbour_params(e, k if attempt < 100 else attempt % 3, rng))
                     ch = sum(str(gold_of(n["sem"], n["fam"], c["meta"])) != c["gold"] for c in by_e[eid]) / len(by_e[eid])
-                    if render_label(n) not in labels and ch >= thr: break
+                    if render_label(n) not in labels and ch >= thr and norm(n["text"]) not in _FORBID: break
                     ids.used.discard(n["id"])
                 else: raise AssertionError(f"could not build load-bearing neighbour {k} for {eid}")
                 n["kind"] = "neighbour"; n["of"] = eid; n["ntype"] = ["swap", "shift", "swap+shift"][k if attempt < 100 else attempt % 3]; add(n); nb.append(n["id"]); labels.add(render_label(n))

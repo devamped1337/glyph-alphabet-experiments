@@ -5,7 +5,7 @@ import hashlib, sys
 from pathlib import Path
 R = Path(__file__).resolve().parent.parent
 FILES = sorted([*R.glob("e1b/*.py"), R / "run_e1b.py", R / "run.sh", R / "config_e1b.json", R / "kaggle/e1b_kaggle.py",
-                R / "tools/code_hash.py", R / "tools/smoke_hf_cpu.py", R / "tools/smoke_hf_batch.py", R.parent / "checks/validate_v6.py"])
+                R / "tools/code_hash.py", R / "tools/build_a9_book.py", R / "tools/smoke_hf_cpu.py", R / "tools/smoke_hf_batch.py", R.parent / "checks/validate_v6.py"])
 def h():
     s = hashlib.sha256()
     for f in FILES: s.update(f"{f.relative_to(R.parent)}:{hashlib.sha256(f.read_bytes()).hexdigest()}\n".encode())

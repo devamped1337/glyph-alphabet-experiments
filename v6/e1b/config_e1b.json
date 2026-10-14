@@ -252,5 +252,83 @@
    },
    "rule": "one retry only if no candidate probe was scored; same absolute reserve deadline"
   }
+ },
+ "a9": {
+  "status": "draft",
+  "amendment": "A9",
+  "label": "POST-HOC follow-up (A8 pair); B0 primary result stays NO_QUALIFYING_PAIR",
+  "pair": [
+   "qwen7b",
+   "falcon7b"
+  ],
+  "strong_model": "falcon7b",
+  "reuse": [],
+  "backend": "nf4",
+  "seeds": {
+   "hard_messages": 81067,
+   "generator": 81062,
+   "probes_fresh": 81063,
+   "sanity_subset": 81064,
+   "cache_sample": 81065,
+   "bootstrap": 81066
+  },
+  "book_sha256": "bc0df8496ce6def43dda5a31d9c883c3a9219ae104c47f06f1b876aaf0793a58",
+  "headroom": 0.8,
+  "total_cap_h": 12.0,
+  "ladder": [
+   {
+    "name": "L0",
+    "config": "C100",
+    "cases_per_entry": 10,
+    "f3l": true
+   },
+   {
+    "name": "L1",
+    "config": "C60",
+    "cases_per_entry": 10,
+    "f3l": true
+   },
+   {
+    "name": "L2",
+    "config": "C60",
+    "cases_per_entry": 5,
+    "f3l": true
+   },
+   {
+    "name": "L3",
+    "config": "C60",
+    "cases_per_entry": 5,
+    "f3l": false
+   },
+   {
+    "name": "L4",
+    "config": "C60",
+    "cases_per_entry": 4,
+    "f3l": false
+   }
+  ],
+  "frozen_level": {
+   "name": "L4",
+   "config": "C60",
+   "cases_per_entry": 4,
+   "f3l": false
+  },
+  "caps_h": {
+   "B1c": 0.6,
+   "B1": 3.1,
+   "B2": 5.7,
+   "B3": 1.55
+  },
+  "max_infra_retries": 1,
+  "batch_check_items": 60,
+  "batch_match_min": 0.99,
+  "stages": [
+   "B1c",
+   "B1",
+   "B2",
+   "B3"
+  ],
+  "attribution": "Falcon3-7B-Instruct results were produced using artificial intelligence technology from the Technology Innovation Institute (TII Falcon License).",
+  "note": "stages refuse unless status == 'frozen' and E1B_GO == stage"
  }
 }
