@@ -23,7 +23,7 @@ def require_go(cfg, stage):
 def a9_cfg(cfg, level=None):
     """cfg with A9 seeds and the ladder level's TEST cases per entry (the book is built at that size)."""
     X = cfg["a9"]; lv = level or X["frozen_level"]; c2 = copy.deepcopy(cfg)
-    c2["seeds"] = dict(X["seeds"]); c2["test_cases_per_entry"] = lv["cases_per_entry"]
+    c2["seeds"] = dict(X["seeds"]); c2["test_cases_per_entry"] = lv["cases_per_entry"]; c2["test_branch_balance"] = True   # round 4b (GPT A9 #2): both answer branches per entry, cases/2 each
     return c2, lv
 
 def build_book(cfg, old):
@@ -35,7 +35,16 @@ def build_book(cfg, old):
     B["cases"]["canary"] = list(old["cases"]["canary"]); B["groups"]["canary_F1"] = list(old["groups"]["canary_F1"])
     for eid in old["groups"]["canary_F1"]: B["entries"][eid] = old["entries"][eid]
     B["meta"] = dict(seeds=c2["seeds"], amendment="A9", level=lv, canary_from="cases_e1b.json")
-    verify(B, c2); check_fresh(B, old); return B
+    verify(B, c2); check_fresh(B, old); check_branches(B, lv["cases_per_entry"]); return B
+
+def check_branches(B, T):
+    """Round 4b (GPT A9 #2): every TEST entry has exactly T/2 cases on each answer branch
+    (F1 member/non-member, F2 x-pays/y-pays, F3L permit/no permit)."""
+    key = dict(F1="mem", F2="ask_y", F3L="perm"); by = {}
+    for c in B["cases"]["test"]: by.setdefault(c["entry"], []).append(bool(c["meta"][key[c["fam"]]]))
+    for eid, bs_ in by.items():
+        assert len(bs_) == T and sum(bs_) == T // 2, f"A9: TEST entry {eid} not branch-balanced: {bs_}"
+    return True
 
 def check_fresh(B, old):
     """No case text, entry text or entry id of the frozen book appears in the A9 book, except the canary pool."""
@@ -57,7 +66,7 @@ def get_book(cfg):
     if not BOOK.exists(): print("A9 book missing: build it with tools/build_a9_book.py and commit it before any run"); sys.exit(15)
     raw = open(BOOK).read(); h = sha256_text(raw)
     if h != X["book_sha256"]: print(f"A9 book sha256 {h} != pinned {X['book_sha256']}"); sys.exit(15)
-    B = json.loads(raw); c2, _ = a9_cfg(cfg); verify(B, c2); check_fresh(B, old); return B
+    B = json.loads(raw); c2, lv = a9_cfg(cfg); verify(B, c2); check_fresh(B, old); check_branches(B, lv["cases_per_entry"]); return B
 
 def ids_for(B, cfg, lv):
     n = cfg["configs"][lv["config"]]["core_per_family"]
@@ -67,27 +76,32 @@ def ids_for(B, cfg, lv):
 
 # ------------------------------------------------------------------ projection + ladder
 def call_counts(cfg, lv, n_models=2):
+    """Calls per stage by latency type (round 4b, GPT A9 #1): batched receiver/probe calls use the batch-8 per-item
+    latency; batch-1 calls (B1 manipulation check, B2 paired id_oracle, B2 cache-test cold runs, B1c references)
+    use the measured batch-1 latency; warm runs use warm latency. 'loads' = model loads per model (B3 loads each
+    model twice: once as sender, once as receiver)."""
     c = cfg["configs"][lv["config"]]; F = len(cfg["families_core"]); E = c["core_per_family"] * F
     T = lv["cases_per_entry"]; P = c["planted_calib"]; PT = cfg["planted_testgate"]; L = cfg["f3l_entries"] if lv["f3l"] else 0
     probes = max(len(templates(f)) for f in ("F1", "F2", "F3L")); N = cfg["n_neighbours"]
     items = (E + L) * T; sanity = cfg["sanity_subset_per_family"] * F * T
-    cache = cfg["cache"]["fixed_per_model"] + cfg["cache"]["stress_per_model"]; K = cfg["a9"]["batch_check_items"]
+    cache = cfg["cache"]["fixed_per_model"] + cfg["cache"]["stress_per_model"]; X = cfg["a9"]
+    Ka, Kp = X["batch_check_arith"], X["batch_check_probe"]
     return {
-        "B1c": {"receiver_b1": n_models * K, "receiver": n_models * K},
-        "B1": {"probe": n_models * probes * ((E + P + L) + N * (E + L) + E + PT), "receiver": 5 * P},
-        "B2": {"receiver": n_models * (items * 2 + 2 * sanity + cfg["byte_identity_paired_items"] + 5 * cache),
-               "receiver_warm": n_models * items * 2},
-        "B3": {"sender": n_models * (E + L), "receiver": n_models * items * 2},
+        "B1c": {"receiver_b1": n_models * Ka, "receiver": n_models * Ka, "probe_b1": n_models * Kp, "probe": n_models * Kp, "loads": 1},
+        "B1": {"probe": n_models * probes * ((E + P + L) + N * (E + L) + E + PT), "receiver_b1": 5 * P, "loads": 1},
+        "B2": {"receiver": n_models * (items * 2 + 2 * sanity), "receiver_b1": n_models * (cfg["byte_identity_paired_items"] + 3 * cache),
+               "receiver_warm": n_models * (2 * cache + items * 2), "loads": 1},
+        "B3": {"sender": n_models * (E + L), "receiver": n_models * items * 2, "loads": 2},
     }
 
 def project(cfg, timings, lv):
-    """timings[model] = B0x pilot_timings entry (+ 'receiver_b1' = batch-1 qualification arithmetic latency).
-    Each call type: count/2 x sum over models (each model does half the calls) + measured setup of both."""
+    """timings[model] = B0x pilot_timings entry + 'receiver_b1' / 'probe_b1' (batch-1 latencies from the B0x
+    qualification rows). Each call type: count / n_models x sum over models; + loads x measured setup per model."""
     out = {}; h = cfg["a9"]["headroom"]; ms = list(timings)
     for st, calls in call_counts(cfg, lv, len(ms)).items():
-        s = sum(n / len(ms) * sum(timings[m][ct] for m in ms) for ct, n in calls.items()) + sum(timings[m]["setup_s"] for m in ms)
-        p = s / 3600; out[st] = dict(projected_h=round(p, 3), cap_h=math.ceil(p / h / 0.05 - 1e-9) * 0.05)
-        out[st]["cap_h"] = round(out[st]["cap_h"], 2)
+        loads = calls.pop("loads")
+        s = sum(n / len(ms) * sum(timings[m][ct] for m in ms) for ct, n in calls.items()) + loads * sum(timings[m]["setup_s"] for m in ms)
+        p = s / 3600; out[st] = dict(projected_h=round(p, 3), cap_h=round(math.ceil(p / h / 0.05 - 1e-9) * 0.05, 2))
     return out
 
 def choose(cfg, timings):
@@ -104,15 +118,28 @@ def pilot_timings(res_dir):
     for m in t:
         rows = [json.loads(l) for l in open(res_dir / "B0x" / f"qual_{m}.jsonl")]
         a = [r["latency_s"] for r in rows if r["step"] == "qual_arith"]; t[m]["receiver_b1"] = sum(a) / len(a)
+        q = [r["latency_s"] for r in rows if r["step"] == "qual_probe"]; t[m]["probe_b1"] = sum(q) / len(q)
     return t
 
-def batch_rule(cfg, pair_rows):
-    """(c) batch-size rule: batched predictions must equal batch-1 predictions on >= a9.batch_match_min of the
-    non-TEST check items, per model. pair_rows[m] = list of (pred_b1, pred_bN)."""
-    out = {}
+def batch_rule(cfg, pair_rows, expected=None):
+    """(c) batch-size rule (round 4b). pair_rows[m] = list of (key, decision_b1, decision_bN, tokens_equal).
+    Pass iff every expected model is present with exactly the expected keys (paired, no duplicates) and, per model,
+    the parsed decisions match on >= a9.batch_match_min. A None decision (invalid parse) never counts as a match;
+    an empty mapping or an empty/missing model fails. Full-token agreement is a diagnostic only."""
+    X = cfg["a9"]; out = {}; ok = bool(pair_rows)
+    exp_models = (expected or {}).get("models"); exp_keys = (expected or {}).get("keys")
+    if exp_models is not None and sorted(pair_rows) != sorted(exp_models): ok = False
+    def path(k): return k.split("|", 1)[0] if "|" in k else "all"   # 'a' arithmetic, 'p' probes: each path must pass
     for m, rows in pair_rows.items():
-        k = sum(a == b for a, b in rows); out[m] = dict(n=len(rows), match=k, rate=k / len(rows) if rows else 0.0)
-    ok = all(v["n"] > 0 and v["rate"] >= cfg["a9"]["batch_match_min"] for v in out.values())
+        keys = [r[0] for r in rows]; k = sum(a is not None and a == b for _, a, b, _ in rows)
+        tok = sum(bool(t) for *_, t in rows)
+        good_keys = len(keys) == len(set(keys)) and (exp_keys is None or sorted(keys) == sorted(exp_keys))
+        paths = {}
+        for key, a, b, _ in rows:
+            g = paths.setdefault(path(key), [0, 0]); g[0] += a is not None and a == b; g[1] += 1
+        out[m] = dict(n=len(rows), match=k, rate=k / len(rows) if rows else 0.0, token_match=tok, keys_ok=good_keys,
+                      paths={g: dict(n=v[1], match=v[0], rate=v[0] / v[1]) for g, v in paths.items()})
+        if not rows or not good_keys or any(v["rate"] < X["batch_match_min"] for v in out[m]["paths"].values()): ok = False
     return dict(pass_=ok, per_model=out, batch_size=cfg["stageB_batch_size"] if ok else 1)
 
 def entry_pass_prob(n, bar, p):

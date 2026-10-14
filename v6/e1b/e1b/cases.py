@@ -330,12 +330,13 @@ def make_probes(e_text_entry, e_ref, rng, fam=None, tpl=None):
     return out
 
 # ------------------------------------------------------------------ arithmetic cases
-def mk_case(e, rng, seen, case_sem=None):
+def mk_case(e, rng, seen, case_sem=None, branch=None):
     """Case + honest gold (from e['sem']); planted gold from case_sem if given. Globally unique text."""
     f = e["fam"]; s = e["sem"]
     for _ in range(500):
         if f == "F1":
             mem = rng.random() < 0.5; n = rng.randint(2, 12); nm = rng.choice(NAMES)
+            if branch is not None: mem = bool(branch)   # A9 round 4b: forced answer branch (None = frozen behaviour)
             txt = (f"{nm} {'is' if mem else 'is not'} a {e['g']} member and buys {n} {e['unit']}s. "
                    f"How many credits is {nm} charged in total?")
             key = "mem" if mem else "non"; gold = n * s[key]
@@ -343,6 +344,7 @@ def mk_case(e, rng, seen, case_sem=None):
             meta = dict(n=n, mem=mem)
         elif f == "F2":
             n = rng.randint(2, 12); n1, n2 = rng.sample(NAMES, 2); ask_y = rng.random() < 0.5
+            if branch is not None: ask_y = bool(branch)
             txt = rng.choice([f"{n1}, acting as {e['x']}, hands {n} items to {n2}, the {e['y']}. ",
                               f"{n2} (the {e['y']}) receives {n} items from {n1} (the {e['x']}). "])
             txt += f"How many credits does {n2 if ask_y else n1} pay in total?"
@@ -351,6 +353,7 @@ def mk_case(e, rng, seen, case_sem=None):
             meta = dict(n=n, ask_y=ask_y)
         else:
             d = rng.randint(1, s["t"] + 5); perm = rng.random() < 0.5; nm = rng.choice(NAMES)
+            if branch is not None: perm = bool(branch)
             txt = (f"{nm} books a stay of {d} days and {'holds' if perm else 'does not hold'} a {e['g']} permit. "
                    f"What is the total charge in credits?")
             gold = f3_total(s, d, perm); pg = None; meta = dict(d=d, perm=perm)
@@ -428,12 +431,12 @@ def build(cfg, seen_init=(), ids_init=(), forbid_texts=()):
     for g in ["core_F1", "core_F2", "planted_testgate"]:
         for eid in B["groups"][g]: B["probes"].setdefault("testgate", {})[eid] = probes_for(eid, frng)
     # --- cases
-    def cases(pool, gname, n, planted=False):
+    def cases(pool, gname, n, planted=False, balance=False):
         for eid in B["groups"][gname]:
             e = B["entries"][eid]
             src = B["entries"][e["honest_id"]] if planted else e
-            for _ in range(n):
-                c = mk_case(src, rng, seen, case_sem=e["sem"] if planted else None); c["entry"] = eid
+            for i in range(n):
+                c = mk_case(src, rng, seen, case_sem=e["sem"] if planted else None, branch=(i % 2 == 0) if balance else None); c["entry"] = eid
                 B["cases"][pool].append(c)
     for f in core + ["F3s"]: cases("stageA_A1", f"A1_{f}", A["cases_A1"])
     cases("stageA_A4", "A4_planted", A["cases_A4"], planted=True)
@@ -453,7 +456,7 @@ def build(cfg, seen_init=(), ids_init=(), forbid_texts=()):
         for blk in (ids_g[:cut], ids_g[cut:]):
             for eid in sorted(hrng.sample(blk, math.ceil(cfg["hard_message_share"] * len(blk) - 1e-9))):
                 B["entries"][eid]["msg_style"] = MSG_STYLES[i % 3]; i += 1
-    for g in ["core_F1", "core_F2", "F3L"]: cases("test", g, cfg["test_cases_per_entry"])
+    for g in ["core_F1", "core_F2", "F3L"]: cases("test", g, cfg["test_cases_per_entry"], balance=cfg.get("test_branch_balance", False))   # A9 4b
     # --- neighbours for core + F3L (TEST) entries: built AFTER the TEST cases so that each neighbour can be
     # regenerated (same ID slot) until it is distinct and changes gold on >= threshold of that entry's TEST cases
     thr = cfg["neighbour_gold_change_min"]

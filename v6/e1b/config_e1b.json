@@ -272,7 +272,7 @@
    "cache_sample": 81065,
    "bootstrap": 81066
   },
-  "book_sha256": "bc0df8496ce6def43dda5a31d9c883c3a9219ae104c47f06f1b876aaf0793a58",
+  "book_sha256": "19f8d46da3fffa8f9502e28d8e0adde960f3a0a6683d0e0dc747c04b24869f41",
   "headroom": 0.8,
   "total_cap_h": 12.0,
   "ladder": [
@@ -291,19 +291,25 @@
    {
     "name": "L2",
     "config": "C60",
-    "cases_per_entry": 5,
-    "f3l": true
+    "cases_per_entry": 10,
+    "f3l": false
    },
    {
     "name": "L3",
     "config": "C60",
-    "cases_per_entry": 5,
+    "cases_per_entry": 6,
     "f3l": false
    },
    {
     "name": "L4",
     "config": "C60",
     "cases_per_entry": 4,
+    "f3l": false
+   },
+   {
+    "name": "L5",
+    "config": "C60",
+    "cases_per_entry": 2,
     "f3l": false
    }
   ],
@@ -314,13 +320,12 @@
    "f3l": false
   },
   "caps_h": {
-   "B1c": 0.6,
-   "B1": 3.1,
-   "B2": 5.7,
-   "B3": 1.55
+   "B1c": 0.65,
+   "B1": 3.2,
+   "B2": 6.4,
+   "B3": 1.75
   },
   "max_infra_retries": 1,
-  "batch_check_items": 60,
   "batch_match_min": 0.99,
   "stages": [
    "B1c",
@@ -329,6 +334,10 @@
    "B3"
   ],
   "attribution": "Falcon3-7B-Instruct results were produced using artificial intelligence technology from the Technology Innovation Institute (TII Falcon License).",
-  "note": "stages refuse unless status == 'frozen' and E1B_GO == stage"
+  "note": "stages refuse unless status == 'frozen' and E1B_GO == stage",
+  "batch_check_arith": 60,
+  "batch_check_probe": 60,
+  "gate_policy": "ungated",
+  "gate_note": "Stefan (PI), 2026-10-14, after seeing qualification scores: B2/B3 run ungated; per-entry bar (>=22/24) still computed in B1 and reported descriptively; no checked-repository or corruption-protection claim"
  }
 }
