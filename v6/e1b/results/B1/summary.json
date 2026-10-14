@@ -1,0 +1,3850 @@
+{
+ "eligible": false,
+ "accepted": [
+  "F1-0128",
+  "F1-0197",
+  "F1-0239",
+  "F1-0448",
+  "F1-0729",
+  "F1-0776",
+  "F1-0851",
+  "F1-0879",
+  "F1-0952",
+  "F1-1133",
+  "F1-1263",
+  "F1-1288",
+  "F1-1298",
+  "F1-1316",
+  "F1-1434",
+  "F1-1708",
+  "F1-1797",
+  "F1-1851",
+  "F1-1917",
+  "F1-2142",
+  "F1-2194",
+  "F1-2568",
+  "F1-2708",
+  "F1-3094",
+  "F1-3419",
+  "F1-3757",
+  "F1-3917",
+  "F1-3929",
+  "F1-3973",
+  "F1-4236",
+  "F1-4315",
+  "F1-4341",
+  "F1-4461",
+  "F1-4657",
+  "F1-4941",
+  "F1-5122",
+  "F1-5785",
+  "F1-5944",
+  "F1-6082",
+  "F1-6118",
+  "F1-6300",
+  "F1-6375",
+  "F1-6505",
+  "F1-6506",
+  "F1-7243",
+  "F1-7255",
+  "F1-7286",
+  "F1-7321",
+  "F1-7383",
+  "F1-7563",
+  "F1-7736",
+  "F1-8140",
+  "F1-8171",
+  "F1-8602",
+  "F1-8736",
+  "F1-9270",
+  "F1-9766",
+  "F2-0023",
+  "F2-0050",
+  "F2-0236",
+  "F2-0677",
+  "F2-0759",
+  "F2-0847",
+  "F2-0946",
+  "F2-1023",
+  "F2-1113",
+  "F2-1142",
+  "F2-1282",
+  "F2-1325",
+  "F2-1383",
+  "F2-1384",
+  "F2-1472",
+  "F2-1621",
+  "F2-1846",
+  "F2-1949",
+  "F2-2005",
+  "F2-2336",
+  "F2-2525",
+  "F2-2777",
+  "F2-2909",
+  "F2-3203",
+  "F2-3257",
+  "F2-3621",
+  "F2-3793",
+  "F2-3812",
+  "F2-3824",
+  "F2-4222",
+  "F2-4252",
+  "F2-4273",
+  "F2-4297",
+  "F2-4353",
+  "F2-4709",
+  "F2-4734",
+  "F2-5272",
+  "F2-5337",
+  "F2-5391",
+  "F2-5548",
+  "F2-5606",
+  "F2-5837",
+  "F2-5933",
+  "F2-6053",
+  "F2-6172",
+  "F2-6681",
+  "F2-7746",
+  "F2-8054",
+  "F2-8130",
+  "F2-8136",
+  "F2-8155",
+  "F2-8192",
+  "F2-8331",
+  "F2-8490",
+  "F2-8880",
+  "F2-9115",
+  "F2-9291",
+  "F2-9520",
+  "F2-9640"
+ ],
+ "calib": {
+  "per_entry": {
+   "F1-0128": {
+    "acc": {
+     "qwen7b": 1.0,
+     "falcon7b": 1.0
+    },
+    "agree": 1.0,
+    "accepted": true,
+    "planted": false,
+    "neighbour": true
+   },
+   "F1-0178": {
+    "acc": {
+     "qwen7b": 0.7916666666666666,
+     "falcon7b": 0.9166666666666666
+    },
+    "agree": 0.7916666666666666,
+    "accepted": false,
+    "planted": false,
+    "neighbour": true
+   },
+   "F1-0197": {
+    "acc": {
+     "qwen7b": 1.0,
+     "falcon7b": 1.0
+    },
+    "agree": 1.0,
+    "accepted": true,
+    "planted": false,
+    "neighbour": false
+   },
+   "F1-0200": {
+    "acc": {
+     "qwen7b": 0.75,
+     "falcon7b": 0.9166666666666666
+    },
+    "agree": 0.8333333333333334,
+    "accepted": false,
+    "planted": false,
+    "neighbour": true
+   },
+   "F1-0239": {
+    "acc": {
+     "qwen7b": 1.0,
+     "falcon7b": 1.0
+    },
+    "agree": 1.0,
+    "accepted": true,
+    "planted": false,
+    "neighbour": true
+   },
+   "F1-0448": {
+    "acc": {
+     "qwen7b": 1.0,
+     "falcon7b": 1.0
+    },
+    "agree": 1.0,
+    "accepted": true,
+    "planted": false,
+    "neighbour": true
+   },
+   "F1-0463": {
+    "acc": {
+     "qwen7b": 0.7083333333333334,
+     "falcon7b": 0.7916666666666666
+    },
+    "agree": 0.8333333333333334,
+    "accepted": false,
+    "planted": false,
+    "neighbour": true
+   },
+   "F1-0631": {
+    "acc": {
+     "qwen7b": 0.5833333333333334,
+     "falcon7b": 0.5833333333333334
+    },
+    "agree": 1.0,
+    "accepted": false,
+    "planted": true,
+    "neighbour": false
+   },
+   "F1-0729": {
+    "acc": {
+     "qwen7b": 1.0,
+     "falcon7b": 1.0
+    },
+    "agree": 1.0,
+    "accepted": true,
+    "planted": false,
+    "neighbour": true
+   },
+   "F1-0776": {
+    "acc": {
+     "qwen7b": 1.0,
+     "falcon7b": 1.0
+    },
+    "agree": 1.0,
+    "accepted": true,
+    "planted": false,
+    "neighbour": true
+   },
+   "F1-0800": {
+    "acc": {
+     "qwen7b": 0.6666666666666666,
+     "falcon7b": 0.8333333333333334
+    },
+    "agree": 0.75,
+    "accepted": false,
+    "planted": false,
+    "neighbour": true
+   },
+   "F1-0840": {
+    "acc": {
+     "qwen7b": 0.6666666666666666,
+     "falcon7b": 0.9583333333333334
+    },
+    "agree": 0.7083333333333334,
+    "accepted": false,
+    "planted": false,
+    "neighbour": true
+   },
+   "F1-0851": {
+    "acc": {
+     "qwen7b": 1.0,
+     "falcon7b": 1.0
+    },
+    "agree": 1.0,
+    "accepted": true,
+    "planted": false,
+    "neighbour": true
+   },
+   "F1-0879": {
+    "acc": {
+     "qwen7b": 1.0,
+     "falcon7b": 1.0
+    },
+    "agree": 1.0,
+    "accepted": true,
+    "planted": false,
+    "neighbour": true
+   },
+   "F1-0952": {
+    "acc": {
+     "qwen7b": 1.0,
+     "falcon7b": 1.0
+    },
+    "agree": 1.0,
+    "accepted": true,
+    "planted": false,
+    "neighbour": true
+   },
+   "F1-1006": {
+    "acc": {
+     "qwen7b": 0.7916666666666666,
+     "falcon7b": 0.6666666666666666
+    },
+    "agree": 0.5833333333333334,
+    "accepted": false,
+    "planted": false,
+    "neighbour": true
+   },
+   "F1-1067": {
+    "acc": {
+     "qwen7b": 0.6666666666666666,
+     "falcon7b": 0.875
+    },
+    "agree": 0.7083333333333334,
+    "accepted": false,
+    "planted": false,
+    "neighbour": true
+   },
+   "F1-1091": {
+    "acc": {
+     "qwen7b": 0.8333333333333334,
+     "falcon7b": 0.9583333333333334
+    },
+    "agree": 0.7916666666666666,
+    "accepted": false,
+    "planted": false,
+    "neighbour": true
+   },
+   "F1-1110": {
+    "acc": {
+     "qwen7b": 0.7083333333333334,
+     "falcon7b": 0.8333333333333334
+    },
+    "agree": 0.7083333333333334,
+    "accepted": false,
+    "planted": false,
+    "neighbour": true
+   },
+   "F1-1133": {
+    "acc": {
+     "qwen7b": 1.0,
+     "falcon7b": 1.0
+    },
+    "agree": 1.0,
+    "accepted": true,
+    "planted": false,
+    "neighbour": true
+   },
+   "F1-1190": {
+    "acc": {
+     "qwen7b": 0.7916666666666666,
+     "falcon7b": 1.0
+    },
+    "agree": 0.7916666666666666,
+    "accepted": false,
+    "planted": false,
+    "neighbour": false
+   },
+   "F1-1263": {
+    "acc": {
+     "qwen7b": 1.0,
+     "falcon7b": 1.0
+    },
+    "agree": 1.0,
+    "accepted": true,
+    "planted": false,
+    "neighbour": false
+   },
+   "F1-1288": {
+    "acc": {
+     "qwen7b": 1.0,
+     "falcon7b": 1.0
+    },
+    "agree": 1.0,
+    "accepted": true,
+    "planted": false,
+    "neighbour": false
+   },
+   "F1-1294": {
+    "acc": {
+     "qwen7b": 0.5833333333333334,
+     "falcon7b": 0.5833333333333334
+    },
+    "agree": 1.0,
+    "accepted": false,
+    "planted": true,
+    "neighbour": false
+   },
+   "F1-1298": {
+    "acc": {
+     "qwen7b": 0.9583333333333334,
+     "falcon7b": 1.0
+    },
+    "agree": 0.9583333333333334,
+    "accepted": true,
+    "planted": false,
+    "neighbour": true
+   },
+   "F1-1316": {
+    "acc": {
+     "qwen7b": 0.9583333333333334,
+     "falcon7b": 0.9583333333333334
+    },
+    "agree": 0.9166666666666666,
+    "accepted": true,
+    "planted": false,
+    "neighbour": true
+   },
+   "F1-1358": {
+    "acc": {
+     "qwen7b": 0.7083333333333334,
+     "falcon7b": 0.625
+    },
+    "agree": 0.7916666666666666,
+    "accepted": false,
+    "planted": false,
+    "neighbour": true
+   },
+   "F1-1407": {
+    "acc": {
+     "qwen7b": 0.8333333333333334,
+     "falcon7b": 0.5833333333333334
+    },
+    "agree": 0.5,
+    "accepted": false,
+    "planted": false,
+    "neighbour": true
+   },
+   "F1-1434": {
+    "acc": {
+     "qwen7b": 0.9583333333333334,
+     "falcon7b": 1.0
+    },
+    "agree": 0.9583333333333334,
+    "accepted": true,
+    "planted": false,
+    "neighbour": true
+   },
+   "F1-1534": {
+    "acc": {
+     "qwen7b": 0.8333333333333334,
+     "falcon7b": 0.7916666666666666
+    },
+    "agree": 0.7916666666666666,
+    "accepted": false,
+    "planted": false,
+    "neighbour": true
+   },
+   "F1-1610": {
+    "acc": {
+     "qwen7b": 0.2916666666666667,
+     "falcon7b": 0.5833333333333334
+    },
+    "agree": 0.625,
+    "accepted": false,
+    "planted": true,
+    "neighbour": false
+   },
+   "F1-1667": {
+    "acc": {
+     "qwen7b": 0.6666666666666666,
+     "falcon7b": 0.75
+    },
+    "agree": 0.75,
+    "accepted": false,
+    "planted": false,
+    "neighbour": true
+   },
+   "F1-1708": {
+    "acc": {
+     "qwen7b": 1.0,
+     "falcon7b": 1.0
+    },
+    "agree": 1.0,
+    "accepted": true,
+    "planted": false,
+    "neighbour": true
+   },
+   "F1-1727": {
+    "acc": {
+     "qwen7b": 0.75,
+     "falcon7b": 0.6666666666666666
+    },
+    "agree": 0.8333333333333334,
+    "accepted": false,
+    "planted": false,
+    "neighbour": true
+   },
+   "F1-1797": {
+    "acc": {
+     "qwen7b": 1.0,
+     "falcon7b": 1.0
+    },
+    "agree": 1.0,
+    "accepted": true,
+    "planted": false,
+    "neighbour": true
+   },
+   "F1-1851": {
+    "acc": {
+     "qwen7b": 1.0,
+     "falcon7b": 1.0
+    },
+    "agree": 1.0,
+    "accepted": true,
+    "planted": false,
+    "neighbour": false
+   },
+   "F1-1917": {
+    "acc": {
+     "qwen7b": 1.0,
+     "falcon7b": 1.0
+    },
+    "agree": 1.0,
+    "accepted": true,
+    "planted": false,
+    "neighbour": true
+   },
+   "F1-2097": {
+    "acc": {
+     "qwen7b": 0.75,
+     "falcon7b": 0.9166666666666666
+    },
+    "agree": 0.8333333333333334,
+    "accepted": false,
+    "planted": false,
+    "neighbour": true
+   },
+   "F1-2142": {
+    "acc": {
+     "qwen7b": 1.0,
+     "falcon7b": 1.0
+    },
+    "agree": 1.0,
+    "accepted": true,
+    "planted": false,
+    "neighbour": true
+   },
+   "F1-2194": {
+    "acc": {
+     "qwen7b": 1.0,
+     "falcon7b": 1.0
+    },
+    "agree": 1.0,
+    "accepted": true,
+    "planted": false,
+    "neighbour": false
+   },
+   "F1-2291": {
+    "acc": {
+     "qwen7b": 0.75,
+     "falcon7b": 0.9166666666666666
+    },
+    "agree": 0.75,
+    "accepted": false,
+    "planted": false,
+    "neighbour": true
+   },
+   "F1-2356": {
+    "acc": {
+     "qwen7b": 0.6666666666666666,
+     "falcon7b": 0.9583333333333334
+    },
+    "agree": 0.7083333333333334,
+    "accepted": false,
+    "planted": false,
+    "neighbour": true
+   },
+   "F1-2568": {
+    "acc": {
+     "qwen7b": 1.0,
+     "falcon7b": 1.0
+    },
+    "agree": 1.0,
+    "accepted": true,
+    "planted": false,
+    "neighbour": true
+   },
+   "F1-2610": {
+    "acc": {
+     "qwen7b": 0.8333333333333334,
+     "falcon7b": 0.8333333333333334
+    },
+    "agree": 0.8333333333333334,
+    "accepted": false,
+    "planted": false,
+    "neighbour": true
+   },
+   "F1-2678": {
+    "acc": {
+     "qwen7b": 0.875,
+     "falcon7b": 0.875
+    },
+    "agree": 0.9166666666666666,
+    "accepted": false,
+    "planted": false,
+    "neighbour": false
+   },
+   "F1-2708": {
+    "acc": {
+     "qwen7b": 1.0,
+     "falcon7b": 1.0
+    },
+    "agree": 1.0,
+    "accepted": true,
+    "planted": false,
+    "neighbour": false
+   },
+   "F1-2883": {
+    "acc": {
+     "qwen7b": 0.7916666666666666,
+     "falcon7b": 0.875
+    },
+    "agree": 0.8333333333333334,
+    "accepted": false,
+    "planted": false,
+    "neighbour": true
+   },
+   "F1-2910": {
+    "acc": {
+     "qwen7b": 0.7916666666666666,
+     "falcon7b": 1.0
+    },
+    "agree": 0.7916666666666666,
+    "accepted": false,
+    "planted": false,
+    "neighbour": false
+   },
+   "F1-2953": {
+    "acc": {
+     "qwen7b": 0.6666666666666666,
+     "falcon7b": 0.7083333333333334
+    },
+    "agree": 0.7916666666666666,
+    "accepted": false,
+    "planted": false,
+    "neighbour": false
+   },
+   "F1-3023": {
+    "acc": {
+     "qwen7b": 0.7083333333333334,
+     "falcon7b": 0.8333333333333334
+    },
+    "agree": 0.7916666666666666,
+    "accepted": false,
+    "planted": false,
+    "neighbour": false
+   },
+   "F1-3060": {
+    "acc": {
+     "qwen7b": 0.7083333333333334,
+     "falcon7b": 0.7083333333333334
+    },
+    "agree": 0.8333333333333334,
+    "accepted": false,
+    "planted": true,
+    "neighbour": false
+   },
+   "F1-3065": {
+    "acc": {
+     "qwen7b": 0.16666666666666666,
+     "falcon7b": 0.2916666666666667
+    },
+    "agree": 0.75,
+    "accepted": false,
+    "planted": true,
+    "neighbour": false
+   },
+   "F1-3067": {
+    "acc": {
+     "qwen7b": 0.7083333333333334,
+     "falcon7b": 0.875
+    },
+    "agree": 0.75,
+    "accepted": false,
+    "planted": false,
+    "neighbour": false
+   },
+   "F1-3075": {
+    "acc": {
+     "qwen7b": 0.75,
+     "falcon7b": 0.9166666666666666
+    },
+    "agree": 0.75,
+    "accepted": false,
+    "planted": false,
+    "neighbour": true
+   },
+   "F1-3082": {
+    "acc": {
+     "qwen7b": 0.7083333333333334,
+     "falcon7b": 0.9583333333333334
+    },
+    "agree": 0.75,
+    "accepted": false,
+    "planted": false,
+    "neighbour": true
+   },
+   "F1-3094": {
+    "acc": {
+     "qwen7b": 1.0,
+     "falcon7b": 1.0
+    },
+    "agree": 1.0,
+    "accepted": true,
+    "planted": false,
+    "neighbour": true
+   },
+   "F1-3419": {
+    "acc": {
+     "qwen7b": 1.0,
+     "falcon7b": 1.0
+    },
+    "agree": 1.0,
+    "accepted": true,
+    "planted": false,
+    "neighbour": true
+   },
+   "F1-3465": {
+    "acc": {
+     "qwen7b": 0.75,
+     "falcon7b": 0.5833333333333334
+    },
+    "agree": 0.5416666666666666,
+    "accepted": false,
+    "planted": false,
+    "neighbour": true
+   },
+   "F1-3757": {
+    "acc": {
+     "qwen7b": 1.0,
+     "falcon7b": 1.0
+    },
+    "agree": 1.0,
+    "accepted": true,
+    "planted": false,
+    "neighbour": false
+   },
+   "F1-3917": {
+    "acc": {
+     "qwen7b": 1.0,
+     "falcon7b": 1.0
+    },
+    "agree": 1.0,
+    "accepted": true,
+    "planted": false,
+    "neighbour": false
+   },
+   "F1-3929": {
+    "acc": {
+     "qwen7b": 1.0,
+     "falcon7b": 1.0
+    },
+    "agree": 1.0,
+    "accepted": true,
+    "planted": false,
+    "neighbour": true
+   },
+   "F1-3973": {
+    "acc": {
+     "qwen7b": 1.0,
+     "falcon7b": 1.0
+    },
+    "agree": 1.0,
+    "accepted": true,
+    "planted": false,
+    "neighbour": true
+   },
+   "F1-4236": {
+    "acc": {
+     "qwen7b": 1.0,
+     "falcon7b": 0.9583333333333334
+    },
+    "agree": 0.9583333333333334,
+    "accepted": true,
+    "planted": false,
+    "neighbour": true
+   },
+   "F1-4254": {
+    "acc": {
+     "qwen7b": 0.6666666666666666,
+     "falcon7b": 0.7916666666666666
+    },
+    "agree": 0.875,
+    "accepted": false,
+    "planted": false,
+    "neighbour": true
+   },
+   "F1-4315": {
+    "acc": {
+     "qwen7b": 1.0,
+     "falcon7b": 1.0
+    },
+    "agree": 1.0,
+    "accepted": true,
+    "planted": false,
+    "neighbour": true
+   },
+   "F1-4330": {
+    "acc": {
+     "qwen7b": 0.6666666666666666,
+     "falcon7b": 0.7916666666666666
+    },
+    "agree": 0.7916666666666666,
+    "accepted": false,
+    "planted": false,
+    "neighbour": true
+   },
+   "F1-4341": {
+    "acc": {
+     "qwen7b": 1.0,
+     "falcon7b": 0.9583333333333334
+    },
+    "agree": 0.9583333333333334,
+    "accepted": true,
+    "planted": false,
+    "neighbour": true
+   },
+   "F1-4366": {
+    "acc": {
+     "qwen7b": 0.7083333333333334,
+     "falcon7b": 0.875
+    },
+    "agree": 0.75,
+    "accepted": false,
+    "planted": false,
+    "neighbour": true
+   },
+   "F1-4455": {
+    "acc": {
+     "qwen7b": 0.6666666666666666,
+     "falcon7b": 0.7083333333333334
+    },
+    "agree": 0.7916666666666666,
+    "accepted": false,
+    "planted": true,
+    "neighbour": false
+   },
+   "F1-4461": {
+    "acc": {
+     "qwen7b": 1.0,
+     "falcon7b": 0.9583333333333334
+    },
+    "agree": 0.9583333333333334,
+    "accepted": true,
+    "planted": false,
+    "neighbour": true
+   },
+   "F1-4600": {
+    "acc": {
+     "qwen7b": 0.875,
+     "falcon7b": 0.9166666666666666
+    },
+    "agree": 0.7916666666666666,
+    "accepted": false,
+    "planted": false,
+    "neighbour": true
+   },
+   "F1-4657": {
+    "acc": {
+     "qwen7b": 1.0,
+     "falcon7b": 1.0
+    },
+    "agree": 1.0,
+    "accepted": true,
+    "planted": false,
+    "neighbour": true
+   },
+   "F1-4673": {
+    "acc": {
+     "qwen7b": 0.3333333333333333,
+     "falcon7b": 0.5
+    },
+    "agree": 0.6666666666666666,
+    "accepted": false,
+    "planted": true,
+    "neighbour": false
+   },
+   "F1-4892": {
+    "acc": {
+     "qwen7b": 0.75,
+     "falcon7b": 0.9583333333333334
+    },
+    "agree": 0.7916666666666666,
+    "accepted": false,
+    "planted": false,
+    "neighbour": true
+   },
+   "F1-4941": {
+    "acc": {
+     "qwen7b": 0.9583333333333334,
+     "falcon7b": 1.0
+    },
+    "agree": 0.9583333333333334,
+    "accepted": true,
+    "planted": false,
+    "neighbour": true
+   },
+   "F1-4977": {
+    "acc": {
+     "qwen7b": 0.75,
+     "falcon7b": 0.8333333333333334
+    },
+    "agree": 0.75,
+    "accepted": false,
+    "planted": false,
+    "neighbour": false
+   },
+   "F1-5100": {
+    "acc": {
+     "qwen7b": 0.6666666666666666,
+     "falcon7b": 0.7916666666666666
+    },
+    "agree": 0.7083333333333334,
+    "accepted": false,
+    "planted": false,
+    "neighbour": false
+   },
+   "F1-5122": {
+    "acc": {
+     "qwen7b": 1.0,
+     "falcon7b": 1.0
+    },
+    "agree": 1.0,
+    "accepted": true,
+    "planted": false,
+    "neighbour": true
+   },
+   "F1-5157": {
+    "acc": {
+     "qwen7b": 0.7083333333333334,
+     "falcon7b": 0.7916666666666666
+    },
+    "agree": 0.7916666666666666,
+    "accepted": false,
+    "planted": false,
+    "neighbour": false
+   },
+   "F1-5289": {
+    "acc": {
+     "qwen7b": 0.8333333333333334,
+     "falcon7b": 0.6666666666666666
+    },
+    "agree": 0.75,
+    "accepted": false,
+    "planted": true,
+    "neighbour": false
+   },
+   "F1-5488": {
+    "acc": {
+     "qwen7b": 0.7083333333333334,
+     "falcon7b": 0.8333333333333334
+    },
+    "agree": 0.875,
+    "accepted": false,
+    "planted": false,
+    "neighbour": true
+   },
+   "F1-5715": {
+    "acc": {
+     "qwen7b": 0.7083333333333334,
+     "falcon7b": 0.9583333333333334
+    },
+    "agree": 0.75,
+    "accepted": false,
+    "planted": false,
+    "neighbour": false
+   },
+   "F1-5785": {
+    "acc": {
+     "qwen7b": 1.0,
+     "falcon7b": 1.0
+    },
+    "agree": 1.0,
+    "accepted": true,
+    "planted": false,
+    "neighbour": true
+   },
+   "F1-5944": {
+    "acc": {
+     "qwen7b": 1.0,
+     "falcon7b": 1.0
+    },
+    "agree": 1.0,
+    "accepted": true,
+    "planted": false,
+    "neighbour": true
+   },
+   "F1-5988": {
+    "acc": {
+     "qwen7b": 0.7083333333333334,
+     "falcon7b": 0.7916666666666666
+    },
+    "agree": 0.6666666666666666,
+    "accepted": false,
+    "planted": false,
+    "neighbour": false
+   },
+   "F1-6082": {
+    "acc": {
+     "qwen7b": 1.0,
+     "falcon7b": 0.9583333333333334
+    },
+    "agree": 0.9583333333333334,
+    "accepted": true,
+    "planted": false,
+    "neighbour": true
+   },
+   "F1-6106": {
+    "acc": {
+     "qwen7b": 0.7916666666666666,
+     "falcon7b": 0.875
+    },
+    "agree": 0.8333333333333334,
+    "accepted": false,
+    "planted": false,
+    "neighbour": true
+   },
+   "F1-6118": {
+    "acc": {
+     "qwen7b": 1.0,
+     "falcon7b": 1.0
+    },
+    "agree": 1.0,
+    "accepted": true,
+    "planted": false,
+    "neighbour": true
+   },
+   "F1-6204": {
+    "acc": {
+     "qwen7b": 0.7916666666666666,
+     "falcon7b": 0.9583333333333334
+    },
+    "agree": 0.8333333333333334,
+    "accepted": false,
+    "planted": false,
+    "neighbour": true
+   },
+   "F1-6292": {
+    "acc": {
+     "qwen7b": 0.8333333333333334,
+     "falcon7b": 0.9166666666666666
+    },
+    "agree": 0.8333333333333334,
+    "accepted": false,
+    "planted": false,
+    "neighbour": true
+   },
+   "F1-6300": {
+    "acc": {
+     "qwen7b": 1.0,
+     "falcon7b": 1.0
+    },
+    "agree": 1.0,
+    "accepted": true,
+    "planted": false,
+    "neighbour": true
+   },
+   "F1-6375": {
+    "acc": {
+     "qwen7b": 1.0,
+     "falcon7b": 1.0
+    },
+    "agree": 1.0,
+    "accepted": true,
+    "planted": false,
+    "neighbour": true
+   },
+   "F1-6505": {
+    "acc": {
+     "qwen7b": 1.0,
+     "falcon7b": 1.0
+    },
+    "agree": 1.0,
+    "accepted": true,
+    "planted": false,
+    "neighbour": true
+   },
+   "F1-6506": {
+    "acc": {
+     "qwen7b": 1.0,
+     "falcon7b": 1.0
+    },
+    "agree": 1.0,
+    "accepted": true,
+    "planted": false,
+    "neighbour": true
+   },
+   "F1-6725": {
+    "acc": {
+     "qwen7b": 0.7916666666666666,
+     "falcon7b": 0.875
+    },
+    "agree": 0.8333333333333334,
+    "accepted": false,
+    "planted": false,
+    "neighbour": true
+   },
+   "F1-6815": {
+    "acc": {
+     "qwen7b": 0.875,
+     "falcon7b": 0.6666666666666666
+    },
+    "agree": 0.6666666666666666,
+    "accepted": false,
+    "planted": false,
+    "neighbour": true
+   },
+   "F1-6997": {
+    "acc": {
+     "qwen7b": 0.75,
+     "falcon7b": 0.625
+    },
+    "agree": 0.75,
+    "accepted": false,
+    "planted": false,
+    "neighbour": true
+   },
+   "F1-7243": {
+    "acc": {
+     "qwen7b": 1.0,
+     "falcon7b": 1.0
+    },
+    "agree": 1.0,
+    "accepted": true,
+    "planted": false,
+    "neighbour": false
+   },
+   "F1-7255": {
+    "acc": {
+     "qwen7b": 1.0,
+     "falcon7b": 0.9583333333333334
+    },
+    "agree": 0.9583333333333334,
+    "accepted": true,
+    "planted": false,
+    "neighbour": true
+   },
+   "F1-7286": {
+    "acc": {
+     "qwen7b": 1.0,
+     "falcon7b": 1.0
+    },
+    "agree": 1.0,
+    "accepted": true,
+    "planted": false,
+    "neighbour": true
+   },
+   "F1-7292": {
+    "acc": {
+     "qwen7b": 0.75,
+     "falcon7b": 1.0
+    },
+    "agree": 0.75,
+    "accepted": false,
+    "planted": false,
+    "neighbour": true
+   },
+   "F1-7321": {
+    "acc": {
+     "qwen7b": 1.0,
+     "falcon7b": 1.0
+    },
+    "agree": 1.0,
+    "accepted": true,
+    "planted": false,
+    "neighbour": true
+   },
+   "F1-7383": {
+    "acc": {
+     "qwen7b": 1.0,
+     "falcon7b": 0.9583333333333334
+    },
+    "agree": 0.9583333333333334,
+    "accepted": true,
+    "planted": false,
+    "neighbour": true
+   },
+   "F1-7527": {
+    "acc": {
+     "qwen7b": 0.16666666666666666,
+     "falcon7b": 0.16666666666666666
+    },
+    "agree": 0.8333333333333334,
+    "accepted": false,
+    "planted": true,
+    "neighbour": false
+   },
+   "F1-7563": {
+    "acc": {
+     "qwen7b": 1.0,
+     "falcon7b": 1.0
+    },
+    "agree": 1.0,
+    "accepted": true,
+    "planted": false,
+    "neighbour": true
+   },
+   "F1-7572": {
+    "acc": {
+     "qwen7b": 0.7916666666666666,
+     "falcon7b": 0.625
+    },
+    "agree": 0.625,
+    "accepted": false,
+    "planted": false,
+    "neighbour": true
+   },
+   "F1-7703": {
+    "acc": {
+     "qwen7b": 0.7083333333333334,
+     "falcon7b": 0.9166666666666666
+    },
+    "agree": 0.7083333333333334,
+    "accepted": false,
+    "planted": false,
+    "neighbour": false
+   },
+   "F1-7736": {
+    "acc": {
+     "qwen7b": 1.0,
+     "falcon7b": 1.0
+    },
+    "agree": 1.0,
+    "accepted": true,
+    "planted": false,
+    "neighbour": true
+   },
+   "F1-7954": {
+    "acc": {
+     "qwen7b": 0.6666666666666666,
+     "falcon7b": 0.9166666666666666
+    },
+    "agree": 0.6666666666666666,
+    "accepted": false,
+    "planted": false,
+    "neighbour": true
+   },
+   "F1-8047": {
+    "acc": {
+     "qwen7b": 0.625,
+     "falcon7b": 0.8333333333333334
+    },
+    "agree": 0.7916666666666666,
+    "accepted": false,
+    "planted": false,
+    "neighbour": true
+   },
+   "F1-8060": {
+    "acc": {
+     "qwen7b": 0.16666666666666666,
+     "falcon7b": 0.25
+    },
+    "agree": 0.7916666666666666,
+    "accepted": false,
+    "planted": true,
+    "neighbour": false
+   },
+   "F1-8105": {
+    "acc": {
+     "qwen7b": 0.7916666666666666,
+     "falcon7b": 0.9166666666666666
+    },
+    "agree": 0.7083333333333334,
+    "accepted": false,
+    "planted": false,
+    "neighbour": false
+   },
+   "F1-8140": {
+    "acc": {
+     "qwen7b": 1.0,
+     "falcon7b": 1.0
+    },
+    "agree": 1.0,
+    "accepted": true,
+    "planted": false,
+    "neighbour": false
+   },
+   "F1-8158": {
+    "acc": {
+     "qwen7b": 0.7083333333333334,
+     "falcon7b": 0.7083333333333334
+    },
+    "agree": 0.9166666666666666,
+    "accepted": false,
+    "planted": false,
+    "neighbour": false
+   },
+   "F1-8171": {
+    "acc": {
+     "qwen7b": 1.0,
+     "falcon7b": 0.9583333333333334
+    },
+    "agree": 0.9583333333333334,
+    "accepted": true,
+    "planted": false,
+    "neighbour": true
+   },
+   "F1-8384": {
+    "acc": {
+     "qwen7b": 0.75,
+     "falcon7b": 0.8333333333333334
+    },
+    "agree": 0.75,
+    "accepted": false,
+    "planted": false,
+    "neighbour": true
+   },
+   "F1-8602": {
+    "acc": {
+     "qwen7b": 1.0,
+     "falcon7b": 1.0
+    },
+    "agree": 1.0,
+    "accepted": true,
+    "planted": false,
+    "neighbour": true
+   },
+   "F1-8707": {
+    "acc": {
+     "qwen7b": 0.625,
+     "falcon7b": 0.8333333333333334
+    },
+    "agree": 0.7916666666666666,
+    "accepted": false,
+    "planted": false,
+    "neighbour": false
+   },
+   "F1-8736": {
+    "acc": {
+     "qwen7b": 1.0,
+     "falcon7b": 1.0
+    },
+    "agree": 1.0,
+    "accepted": true,
+    "planted": false,
+    "neighbour": false
+   },
+   "F1-8767": {
+    "acc": {
+     "qwen7b": 0.375,
+     "falcon7b": 0.5833333333333334
+    },
+    "agree": 0.7916666666666666,
+    "accepted": false,
+    "planted": true,
+    "neighbour": false
+   },
+   "F1-9270": {
+    "acc": {
+     "qwen7b": 1.0,
+     "falcon7b": 1.0
+    },
+    "agree": 1.0,
+    "accepted": true,
+    "planted": false,
+    "neighbour": true
+   },
+   "F1-9367": {
+    "acc": {
+     "qwen7b": 0.8333333333333334,
+     "falcon7b": 0.6666666666666666
+    },
+    "agree": 0.8333333333333334,
+    "accepted": false,
+    "planted": false,
+    "neighbour": false
+   },
+   "F1-9438": {
+    "acc": {
+     "qwen7b": 0.7916666666666666,
+     "falcon7b": 0.8333333333333334
+    },
+    "agree": 0.7916666666666666,
+    "accepted": false,
+    "planted": false,
+    "neighbour": true
+   },
+   "F1-9497": {
+    "acc": {
+     "qwen7b": 0.875,
+     "falcon7b": 1.0
+    },
+    "agree": 0.875,
+    "accepted": false,
+    "planted": false,
+    "neighbour": true
+   },
+   "F1-9524": {
+    "acc": {
+     "qwen7b": 0.625,
+     "falcon7b": 0.6666666666666666
+    },
+    "agree": 0.8333333333333334,
+    "accepted": false,
+    "planted": false,
+    "neighbour": false
+   },
+   "F1-9533": {
+    "acc": {
+     "qwen7b": 0.8333333333333334,
+     "falcon7b": 0.875
+    },
+    "agree": 0.875,
+    "accepted": false,
+    "planted": false,
+    "neighbour": true
+   },
+   "F1-9630": {
+    "acc": {
+     "qwen7b": 0.7916666666666666,
+     "falcon7b": 0.875
+    },
+    "agree": 0.75,
+    "accepted": false,
+    "planted": false,
+    "neighbour": false
+   },
+   "F1-9671": {
+    "acc": {
+     "qwen7b": 0.375,
+     "falcon7b": 0.5
+    },
+    "agree": 0.7916666666666666,
+    "accepted": false,
+    "planted": true,
+    "neighbour": false
+   },
+   "F1-9707": {
+    "acc": {
+     "qwen7b": 0.875,
+     "falcon7b": 0.625
+    },
+    "agree": 0.625,
+    "accepted": false,
+    "planted": false,
+    "neighbour": true
+   },
+   "F1-9758": {
+    "acc": {
+     "qwen7b": 0.7916666666666666,
+     "falcon7b": 1.0
+    },
+    "agree": 0.7916666666666666,
+    "accepted": false,
+    "planted": false,
+    "neighbour": true
+   },
+   "F1-9766": {
+    "acc": {
+     "qwen7b": 1.0,
+     "falcon7b": 1.0
+    },
+    "agree": 1.0,
+    "accepted": true,
+    "planted": false,
+    "neighbour": false
+   },
+   "F1-9867": {
+    "acc": {
+     "qwen7b": 0.6666666666666666,
+     "falcon7b": 0.875
+    },
+    "agree": 0.7083333333333334,
+    "accepted": false,
+    "planted": false,
+    "neighbour": true
+   },
+   "F2-0023": {
+    "acc": {
+     "qwen7b": 1.0,
+     "falcon7b": 1.0
+    },
+    "agree": 1.0,
+    "accepted": true,
+    "planted": false,
+    "neighbour": true
+   },
+   "F2-0030": {
+    "acc": {
+     "qwen7b": 0.9583333333333334,
+     "falcon7b": 0.875
+    },
+    "agree": 0.9166666666666666,
+    "accepted": false,
+    "planted": false,
+    "neighbour": false
+   },
+   "F2-0050": {
+    "acc": {
+     "qwen7b": 0.9166666666666666,
+     "falcon7b": 1.0
+    },
+    "agree": 0.9166666666666666,
+    "accepted": true,
+    "planted": false,
+    "neighbour": true
+   },
+   "F2-0146": {
+    "acc": {
+     "qwen7b": 0.8333333333333334,
+     "falcon7b": 0.9166666666666666
+    },
+    "agree": 0.75,
+    "accepted": false,
+    "planted": false,
+    "neighbour": false
+   },
+   "F2-0155": {
+    "acc": {
+     "qwen7b": 0.5416666666666666,
+     "falcon7b": 0.5
+    },
+    "agree": 0.375,
+    "accepted": false,
+    "planted": false,
+    "neighbour": true
+   },
+   "F2-0236": {
+    "acc": {
+     "qwen7b": 0.9166666666666666,
+     "falcon7b": 1.0
+    },
+    "agree": 0.9166666666666666,
+    "accepted": true,
+    "planted": false,
+    "neighbour": true
+   },
+   "F2-0677": {
+    "acc": {
+     "qwen7b": 1.0,
+     "falcon7b": 1.0
+    },
+    "agree": 1.0,
+    "accepted": true,
+    "planted": false,
+    "neighbour": false
+   },
+   "F2-0759": {
+    "acc": {
+     "qwen7b": 0.9166666666666666,
+     "falcon7b": 1.0
+    },
+    "agree": 0.9166666666666666,
+    "accepted": true,
+    "planted": false,
+    "neighbour": true
+   },
+   "F2-0847": {
+    "acc": {
+     "qwen7b": 0.9583333333333334,
+     "falcon7b": 0.9583333333333334
+    },
+    "agree": 0.9166666666666666,
+    "accepted": true,
+    "planted": false,
+    "neighbour": false
+   },
+   "F2-0946": {
+    "acc": {
+     "qwen7b": 0.9583333333333334,
+     "falcon7b": 1.0
+    },
+    "agree": 0.9583333333333334,
+    "accepted": true,
+    "planted": false,
+    "neighbour": true
+   },
+   "F2-0996": {
+    "acc": {
+     "qwen7b": 0.5416666666666666,
+     "falcon7b": 0.625
+    },
+    "agree": 0.5,
+    "accepted": false,
+    "planted": false,
+    "neighbour": true
+   },
+   "F2-1021": {
+    "acc": {
+     "qwen7b": 0.9583333333333334,
+     "falcon7b": 0.875
+    },
+    "agree": 0.8333333333333334,
+    "accepted": false,
+    "planted": false,
+    "neighbour": false
+   },
+   "F2-1023": {
+    "acc": {
+     "qwen7b": 0.9583333333333334,
+     "falcon7b": 0.9583333333333334
+    },
+    "agree": 0.9166666666666666,
+    "accepted": true,
+    "planted": false,
+    "neighbour": true
+   },
+   "F2-1113": {
+    "acc": {
+     "qwen7b": 0.9583333333333334,
+     "falcon7b": 0.9583333333333334
+    },
+    "agree": 0.9166666666666666,
+    "accepted": true,
+    "planted": false,
+    "neighbour": true
+   },
+   "F2-1142": {
+    "acc": {
+     "qwen7b": 0.9583333333333334,
+     "falcon7b": 0.9166666666666666
+    },
+    "agree": 0.9583333333333334,
+    "accepted": true,
+    "planted": false,
+    "neighbour": true
+   },
+   "F2-1213": {
+    "acc": {
+     "qwen7b": 0.9166666666666666,
+     "falcon7b": 0.9166666666666666
+    },
+    "agree": 0.8333333333333334,
+    "accepted": false,
+    "planted": false,
+    "neighbour": true
+   },
+   "F2-1282": {
+    "acc": {
+     "qwen7b": 1.0,
+     "falcon7b": 0.9583333333333334
+    },
+    "agree": 0.9583333333333334,
+    "accepted": true,
+    "planted": false,
+    "neighbour": true
+   },
+   "F2-1325": {
+    "acc": {
+     "qwen7b": 1.0,
+     "falcon7b": 1.0
+    },
+    "agree": 1.0,
+    "accepted": true,
+    "planted": false,
+    "neighbour": false
+   },
+   "F2-1349": {
+    "acc": {
+     "qwen7b": 0.375,
+     "falcon7b": 0.4166666666666667
+    },
+    "agree": 0.5,
+    "accepted": false,
+    "planted": true,
+    "neighbour": false
+   },
+   "F2-1383": {
+    "acc": {
+     "qwen7b": 1.0,
+     "falcon7b": 1.0
+    },
+    "agree": 1.0,
+    "accepted": true,
+    "planted": false,
+    "neighbour": true
+   },
+   "F2-1384": {
+    "acc": {
+     "qwen7b": 0.9166666666666666,
+     "falcon7b": 1.0
+    },
+    "agree": 0.9166666666666666,
+    "accepted": true,
+    "planted": false,
+    "neighbour": false
+   },
+   "F2-1472": {
+    "acc": {
+     "qwen7b": 0.9583333333333334,
+     "falcon7b": 1.0
+    },
+    "agree": 0.9583333333333334,
+    "accepted": true,
+    "planted": false,
+    "neighbour": false
+   },
+   "F2-1621": {
+    "acc": {
+     "qwen7b": 0.9583333333333334,
+     "falcon7b": 1.0
+    },
+    "agree": 0.9583333333333334,
+    "accepted": true,
+    "planted": false,
+    "neighbour": true
+   },
+   "F2-1647": {
+    "acc": {
+     "qwen7b": 0.5833333333333334,
+     "falcon7b": 0.5416666666666666
+    },
+    "agree": 0.9583333333333334,
+    "accepted": false,
+    "planted": true,
+    "neighbour": false
+   },
+   "F2-1815": {
+    "acc": {
+     "qwen7b": 0.875,
+     "falcon7b": 0.9583333333333334
+    },
+    "agree": 0.8333333333333334,
+    "accepted": false,
+    "planted": false,
+    "neighbour": true
+   },
+   "F2-1839": {
+    "acc": {
+     "qwen7b": 0.9583333333333334,
+     "falcon7b": 0.9166666666666666
+    },
+    "agree": 0.875,
+    "accepted": false,
+    "planted": false,
+    "neighbour": true
+   },
+   "F2-1846": {
+    "acc": {
+     "qwen7b": 1.0,
+     "falcon7b": 1.0
+    },
+    "agree": 1.0,
+    "accepted": true,
+    "planted": false,
+    "neighbour": true
+   },
+   "F2-1949": {
+    "acc": {
+     "qwen7b": 0.9583333333333334,
+     "falcon7b": 1.0
+    },
+    "agree": 0.9583333333333334,
+    "accepted": true,
+    "planted": false,
+    "neighbour": true
+   },
+   "F2-2005": {
+    "acc": {
+     "qwen7b": 0.9583333333333334,
+     "falcon7b": 1.0
+    },
+    "agree": 0.9583333333333334,
+    "accepted": true,
+    "planted": false,
+    "neighbour": false
+   },
+   "F2-2218": {
+    "acc": {
+     "qwen7b": 0.5833333333333334,
+     "falcon7b": 0.5833333333333334
+    },
+    "agree": 0.5,
+    "accepted": false,
+    "planted": false,
+    "neighbour": true
+   },
+   "F2-2336": {
+    "acc": {
+     "qwen7b": 0.9583333333333334,
+     "falcon7b": 1.0
+    },
+    "agree": 0.9583333333333334,
+    "accepted": true,
+    "planted": false,
+    "neighbour": false
+   },
+   "F2-2489": {
+    "acc": {
+     "qwen7b": 0.8333333333333334,
+     "falcon7b": 0.9166666666666666
+    },
+    "agree": 0.75,
+    "accepted": false,
+    "planted": false,
+    "neighbour": false
+   },
+   "F2-2525": {
+    "acc": {
+     "qwen7b": 1.0,
+     "falcon7b": 0.9583333333333334
+    },
+    "agree": 0.9583333333333334,
+    "accepted": true,
+    "planted": false,
+    "neighbour": false
+   },
+   "F2-2554": {
+    "acc": {
+     "qwen7b": 0.875,
+     "falcon7b": 0.8333333333333334
+    },
+    "agree": 0.7083333333333334,
+    "accepted": false,
+    "planted": true,
+    "neighbour": false
+   },
+   "F2-2695": {
+    "acc": {
+     "qwen7b": 0.75,
+     "falcon7b": 0.9583333333333334
+    },
+    "agree": 0.7083333333333334,
+    "accepted": false,
+    "planted": false,
+    "neighbour": true
+   },
+   "F2-2755": {
+    "acc": {
+     "qwen7b": 1.0,
+     "falcon7b": 0.875
+    },
+    "agree": 0.875,
+    "accepted": false,
+    "planted": false,
+    "neighbour": true
+   },
+   "F2-2777": {
+    "acc": {
+     "qwen7b": 1.0,
+     "falcon7b": 0.9166666666666666
+    },
+    "agree": 0.9166666666666666,
+    "accepted": true,
+    "planted": false,
+    "neighbour": true
+   },
+   "F2-2909": {
+    "acc": {
+     "qwen7b": 1.0,
+     "falcon7b": 0.9583333333333334
+    },
+    "agree": 0.9583333333333334,
+    "accepted": true,
+    "planted": false,
+    "neighbour": true
+   },
+   "F2-2947": {
+    "acc": {
+     "qwen7b": 0.9583333333333334,
+     "falcon7b": 0.9166666666666666
+    },
+    "agree": 0.875,
+    "accepted": false,
+    "planted": false,
+    "neighbour": true
+   },
+   "F2-2966": {
+    "acc": {
+     "qwen7b": 0.9583333333333334,
+     "falcon7b": 0.9166666666666666
+    },
+    "agree": 0.875,
+    "accepted": false,
+    "planted": false,
+    "neighbour": true
+   },
+   "F2-3145": {
+    "acc": {
+     "qwen7b": 0.9166666666666666,
+     "falcon7b": 0.9166666666666666
+    },
+    "agree": 0.8333333333333334,
+    "accepted": false,
+    "planted": false,
+    "neighbour": false
+   },
+   "F2-3184": {
+    "acc": {
+     "qwen7b": 0.8333333333333334,
+     "falcon7b": 0.9166666666666666
+    },
+    "agree": 0.75,
+    "accepted": false,
+    "planted": true,
+    "neighbour": false
+   },
+   "F2-3186": {
+    "acc": {
+     "qwen7b": 0.875,
+     "falcon7b": 1.0
+    },
+    "agree": 0.875,
+    "accepted": false,
+    "planted": false,
+    "neighbour": true
+   },
+   "F2-3203": {
+    "acc": {
+     "qwen7b": 1.0,
+     "falcon7b": 1.0
+    },
+    "agree": 1.0,
+    "accepted": true,
+    "planted": false,
+    "neighbour": true
+   },
+   "F2-3254": {
+    "acc": {
+     "qwen7b": 0.9166666666666666,
+     "falcon7b": 0.7916666666666666
+    },
+    "agree": 0.7083333333333334,
+    "accepted": false,
+    "planted": true,
+    "neighbour": false
+   },
+   "F2-3257": {
+    "acc": {
+     "qwen7b": 1.0,
+     "falcon7b": 0.9583333333333334
+    },
+    "agree": 0.9583333333333334,
+    "accepted": true,
+    "planted": false,
+    "neighbour": false
+   },
+   "F2-3288": {
+    "acc": {
+     "qwen7b": 0.9166666666666666,
+     "falcon7b": 0.9166666666666666
+    },
+    "agree": 0.8333333333333334,
+    "accepted": false,
+    "planted": false,
+    "neighbour": false
+   },
+   "F2-3538": {
+    "acc": {
+     "qwen7b": 0.8333333333333334,
+     "falcon7b": 0.9583333333333334
+    },
+    "agree": 0.7916666666666666,
+    "accepted": false,
+    "planted": false,
+    "neighbour": true
+   },
+   "F2-3621": {
+    "acc": {
+     "qwen7b": 1.0,
+     "falcon7b": 1.0
+    },
+    "agree": 1.0,
+    "accepted": true,
+    "planted": false,
+    "neighbour": false
+   },
+   "F2-3793": {
+    "acc": {
+     "qwen7b": 0.9583333333333334,
+     "falcon7b": 1.0
+    },
+    "agree": 0.9583333333333334,
+    "accepted": true,
+    "planted": false,
+    "neighbour": true
+   },
+   "F2-3812": {
+    "acc": {
+     "qwen7b": 0.9166666666666666,
+     "falcon7b": 1.0
+    },
+    "agree": 0.9166666666666666,
+    "accepted": true,
+    "planted": false,
+    "neighbour": true
+   },
+   "F2-3824": {
+    "acc": {
+     "qwen7b": 0.9583333333333334,
+     "falcon7b": 1.0
+    },
+    "agree": 0.9583333333333334,
+    "accepted": true,
+    "planted": false,
+    "neighbour": true
+   },
+   "F2-4166": {
+    "acc": {
+     "qwen7b": 0.875,
+     "falcon7b": 1.0
+    },
+    "agree": 0.875,
+    "accepted": false,
+    "planted": false,
+    "neighbour": true
+   },
+   "F2-4189": {
+    "acc": {
+     "qwen7b": 0.75,
+     "falcon7b": 0.875
+    },
+    "agree": 0.625,
+    "accepted": false,
+    "planted": true,
+    "neighbour": false
+   },
+   "F2-4222": {
+    "acc": {
+     "qwen7b": 0.9583333333333334,
+     "falcon7b": 1.0
+    },
+    "agree": 0.9583333333333334,
+    "accepted": true,
+    "planted": false,
+    "neighbour": true
+   },
+   "F2-4252": {
+    "acc": {
+     "qwen7b": 1.0,
+     "falcon7b": 0.9583333333333334
+    },
+    "agree": 0.9583333333333334,
+    "accepted": true,
+    "planted": false,
+    "neighbour": true
+   },
+   "F2-4273": {
+    "acc": {
+     "qwen7b": 0.9166666666666666,
+     "falcon7b": 1.0
+    },
+    "agree": 0.9166666666666666,
+    "accepted": true,
+    "planted": false,
+    "neighbour": true
+   },
+   "F2-4297": {
+    "acc": {
+     "qwen7b": 1.0,
+     "falcon7b": 0.9583333333333334
+    },
+    "agree": 0.9583333333333334,
+    "accepted": true,
+    "planted": false,
+    "neighbour": true
+   },
+   "F2-4303": {
+    "acc": {
+     "qwen7b": 0.9583333333333334,
+     "falcon7b": 0.9166666666666666
+    },
+    "agree": 0.875,
+    "accepted": false,
+    "planted": false,
+    "neighbour": true
+   },
+   "F2-4353": {
+    "acc": {
+     "qwen7b": 0.9166666666666666,
+     "falcon7b": 1.0
+    },
+    "agree": 0.9166666666666666,
+    "accepted": true,
+    "planted": false,
+    "neighbour": false
+   },
+   "F2-4423": {
+    "acc": {
+     "qwen7b": 0.5,
+     "falcon7b": 0.5416666666666666
+    },
+    "agree": 0.3333333333333333,
+    "accepted": false,
+    "planted": false,
+    "neighbour": true
+   },
+   "F2-4482": {
+    "acc": {
+     "qwen7b": 0.20833333333333334,
+     "falcon7b": 0.16666666666666666
+    },
+    "agree": 0.75,
+    "accepted": false,
+    "planted": true,
+    "neighbour": false
+   },
+   "F2-4567": {
+    "acc": {
+     "qwen7b": 0.9583333333333334,
+     "falcon7b": 0.9166666666666666
+    },
+    "agree": 0.875,
+    "accepted": false,
+    "planted": false,
+    "neighbour": false
+   },
+   "F2-4576": {
+    "acc": {
+     "qwen7b": 0.5,
+     "falcon7b": 0.5833333333333334
+    },
+    "agree": 0.875,
+    "accepted": false,
+    "planted": true,
+    "neighbour": false
+   },
+   "F2-4618": {
+    "acc": {
+     "qwen7b": 0.9166666666666666,
+     "falcon7b": 0.9583333333333334
+    },
+    "agree": 0.875,
+    "accepted": false,
+    "planted": false,
+    "neighbour": true
+   },
+   "F2-4709": {
+    "acc": {
+     "qwen7b": 0.9583333333333334,
+     "falcon7b": 0.9166666666666666
+    },
+    "agree": 0.9583333333333334,
+    "accepted": true,
+    "planted": false,
+    "neighbour": true
+   },
+   "F2-4734": {
+    "acc": {
+     "qwen7b": 1.0,
+     "falcon7b": 0.9583333333333334
+    },
+    "agree": 0.9583333333333334,
+    "accepted": true,
+    "planted": false,
+    "neighbour": true
+   },
+   "F2-4835": {
+    "acc": {
+     "qwen7b": 0.9583333333333334,
+     "falcon7b": 0.9166666666666666
+    },
+    "agree": 0.875,
+    "accepted": false,
+    "planted": false,
+    "neighbour": true
+   },
+   "F2-4839": {
+    "acc": {
+     "qwen7b": 0.75,
+     "falcon7b": 1.0
+    },
+    "agree": 0.75,
+    "accepted": false,
+    "planted": false,
+    "neighbour": false
+   },
+   "F2-4950": {
+    "acc": {
+     "qwen7b": 0.9583333333333334,
+     "falcon7b": 0.875
+    },
+    "agree": 0.8333333333333334,
+    "accepted": false,
+    "planted": false,
+    "neighbour": true
+   },
+   "F2-5191": {
+    "acc": {
+     "qwen7b": 0.9166666666666666,
+     "falcon7b": 0.9166666666666666
+    },
+    "agree": 0.8333333333333334,
+    "accepted": false,
+    "planted": false,
+    "neighbour": true
+   },
+   "F2-5272": {
+    "acc": {
+     "qwen7b": 0.9583333333333334,
+     "falcon7b": 0.9583333333333334
+    },
+    "agree": 0.9166666666666666,
+    "accepted": true,
+    "planted": false,
+    "neighbour": true
+   },
+   "F2-5326": {
+    "acc": {
+     "qwen7b": 0.9166666666666666,
+     "falcon7b": 0.9583333333333334
+    },
+    "agree": 0.875,
+    "accepted": false,
+    "planted": false,
+    "neighbour": true
+   },
+   "F2-5337": {
+    "acc": {
+     "qwen7b": 0.9583333333333334,
+     "falcon7b": 1.0
+    },
+    "agree": 0.9583333333333334,
+    "accepted": true,
+    "planted": false,
+    "neighbour": true
+   },
+   "F2-5391": {
+    "acc": {
+     "qwen7b": 1.0,
+     "falcon7b": 0.9583333333333334
+    },
+    "agree": 0.9583333333333334,
+    "accepted": true,
+    "planted": false,
+    "neighbour": false
+   },
+   "F2-5454": {
+    "acc": {
+     "qwen7b": 0.875,
+     "falcon7b": 1.0
+    },
+    "agree": 0.875,
+    "accepted": false,
+    "planted": false,
+    "neighbour": true
+   },
+   "F2-5548": {
+    "acc": {
+     "qwen7b": 0.9583333333333334,
+     "falcon7b": 0.9583333333333334
+    },
+    "agree": 0.9166666666666666,
+    "accepted": true,
+    "planted": false,
+    "neighbour": false
+   },
+   "F2-5606": {
+    "acc": {
+     "qwen7b": 0.9583333333333334,
+     "falcon7b": 0.9166666666666666
+    },
+    "agree": 0.9583333333333334,
+    "accepted": true,
+    "planted": false,
+    "neighbour": true
+   },
+   "F2-5702": {
+    "acc": {
+     "qwen7b": 0.9166666666666666,
+     "falcon7b": 0.9583333333333334
+    },
+    "agree": 0.875,
+    "accepted": false,
+    "planted": false,
+    "neighbour": false
+   },
+   "F2-5719": {
+    "acc": {
+     "qwen7b": 0.875,
+     "falcon7b": 0.9583333333333334
+    },
+    "agree": 0.8333333333333334,
+    "accepted": false,
+    "planted": false,
+    "neighbour": false
+   },
+   "F2-5757": {
+    "acc": {
+     "qwen7b": 0.5416666666666666,
+     "falcon7b": 0.5833333333333334
+    },
+    "agree": 0.5,
+    "accepted": false,
+    "planted": false,
+    "neighbour": true
+   },
+   "F2-5812": {
+    "acc": {
+     "qwen7b": 0.7083333333333334,
+     "falcon7b": 0.9166666666666666
+    },
+    "agree": 0.625,
+    "accepted": false,
+    "planted": false,
+    "neighbour": true
+   },
+   "F2-5837": {
+    "acc": {
+     "qwen7b": 0.9583333333333334,
+     "falcon7b": 0.9583333333333334
+    },
+    "agree": 0.9166666666666666,
+    "accepted": true,
+    "planted": false,
+    "neighbour": true
+   },
+   "F2-5857": {
+    "acc": {
+     "qwen7b": 0.9583333333333334,
+     "falcon7b": 0.9166666666666666
+    },
+    "agree": 0.875,
+    "accepted": false,
+    "planted": false,
+    "neighbour": false
+   },
+   "F2-5933": {
+    "acc": {
+     "qwen7b": 0.9583333333333334,
+     "falcon7b": 0.9583333333333334
+    },
+    "agree": 0.9166666666666666,
+    "accepted": true,
+    "planted": false,
+    "neighbour": true
+   },
+   "F2-6037": {
+    "acc": {
+     "qwen7b": 0.9166666666666666,
+     "falcon7b": 0.9583333333333334
+    },
+    "agree": 0.875,
+    "accepted": false,
+    "planted": false,
+    "neighbour": true
+   },
+   "F2-6046": {
+    "acc": {
+     "qwen7b": 0.8333333333333334,
+     "falcon7b": 1.0
+    },
+    "agree": 0.8333333333333334,
+    "accepted": false,
+    "planted": false,
+    "neighbour": false
+   },
+   "F2-6053": {
+    "acc": {
+     "qwen7b": 0.9166666666666666,
+     "falcon7b": 1.0
+    },
+    "agree": 0.9166666666666666,
+    "accepted": true,
+    "planted": false,
+    "neighbour": true
+   },
+   "F2-6122": {
+    "acc": {
+     "qwen7b": 0.8333333333333334,
+     "falcon7b": 0.9166666666666666
+    },
+    "agree": 0.9166666666666666,
+    "accepted": false,
+    "planted": false,
+    "neighbour": true
+   },
+   "F2-6172": {
+    "acc": {
+     "qwen7b": 1.0,
+     "falcon7b": 1.0
+    },
+    "agree": 1.0,
+    "accepted": true,
+    "planted": false,
+    "neighbour": true
+   },
+   "F2-6201": {
+    "acc": {
+     "qwen7b": 0.9166666666666666,
+     "falcon7b": 0.9166666666666666
+    },
+    "agree": 0.8333333333333334,
+    "accepted": false,
+    "planted": false,
+    "neighbour": true
+   },
+   "F2-6462": {
+    "acc": {
+     "qwen7b": 0.875,
+     "falcon7b": 1.0
+    },
+    "agree": 0.875,
+    "accepted": false,
+    "planted": false,
+    "neighbour": true
+   },
+   "F2-6681": {
+    "acc": {
+     "qwen7b": 0.9583333333333334,
+     "falcon7b": 0.9583333333333334
+    },
+    "agree": 0.9166666666666666,
+    "accepted": true,
+    "planted": false,
+    "neighbour": true
+   },
+   "F2-6699": {
+    "acc": {
+     "qwen7b": 0.7083333333333334,
+     "falcon7b": 0.75
+    },
+    "agree": 0.625,
+    "accepted": false,
+    "planted": false,
+    "neighbour": true
+   },
+   "F2-6713": {
+    "acc": {
+     "qwen7b": 0.5,
+     "falcon7b": 0.5416666666666666
+    },
+    "agree": 0.375,
+    "accepted": false,
+    "planted": false,
+    "neighbour": true
+   },
+   "F2-6770": {
+    "acc": {
+     "qwen7b": 0.9583333333333334,
+     "falcon7b": 0.9166666666666666
+    },
+    "agree": 0.875,
+    "accepted": false,
+    "planted": false,
+    "neighbour": true
+   },
+   "F2-6794": {
+    "acc": {
+     "qwen7b": 0.3333333333333333,
+     "falcon7b": 0.4583333333333333
+    },
+    "agree": 0.375,
+    "accepted": false,
+    "planted": true,
+    "neighbour": false
+   },
+   "F2-6943": {
+    "acc": {
+     "qwen7b": 0.8333333333333334,
+     "falcon7b": 0.9583333333333334
+    },
+    "agree": 0.7916666666666666,
+    "accepted": false,
+    "planted": false,
+    "neighbour": true
+   },
+   "F2-7011": {
+    "acc": {
+     "qwen7b": 0.9583333333333334,
+     "falcon7b": 0.875
+    },
+    "agree": 0.8333333333333334,
+    "accepted": false,
+    "planted": false,
+    "neighbour": false
+   },
+   "F2-7088": {
+    "acc": {
+     "qwen7b": 0.875,
+     "falcon7b": 1.0
+    },
+    "agree": 0.875,
+    "accepted": false,
+    "planted": false,
+    "neighbour": true
+   },
+   "F2-7267": {
+    "acc": {
+     "qwen7b": 0.875,
+     "falcon7b": 1.0
+    },
+    "agree": 0.875,
+    "accepted": false,
+    "planted": false,
+    "neighbour": true
+   },
+   "F2-7526": {
+    "acc": {
+     "qwen7b": 1.0,
+     "falcon7b": 0.875
+    },
+    "agree": 0.875,
+    "accepted": false,
+    "planted": false,
+    "neighbour": true
+   },
+   "F2-7680": {
+    "acc": {
+     "qwen7b": 0.625,
+     "falcon7b": 0.6666666666666666
+    },
+    "agree": 0.5416666666666666,
+    "accepted": false,
+    "planted": false,
+    "neighbour": true
+   },
+   "F2-7746": {
+    "acc": {
+     "qwen7b": 0.9583333333333334,
+     "falcon7b": 0.9583333333333334
+    },
+    "agree": 0.9166666666666666,
+    "accepted": true,
+    "planted": false,
+    "neighbour": true
+   },
+   "F2-7773": {
+    "acc": {
+     "qwen7b": 0.9166666666666666,
+     "falcon7b": 0.9583333333333334
+    },
+    "agree": 0.875,
+    "accepted": false,
+    "planted": false,
+    "neighbour": false
+   },
+   "F2-8054": {
+    "acc": {
+     "qwen7b": 0.9583333333333334,
+     "falcon7b": 0.9583333333333334
+    },
+    "agree": 0.9166666666666666,
+    "accepted": true,
+    "planted": false,
+    "neighbour": true
+   },
+   "F2-8130": {
+    "acc": {
+     "qwen7b": 0.9166666666666666,
+     "falcon7b": 1.0
+    },
+    "agree": 0.9166666666666666,
+    "accepted": true,
+    "planted": false,
+    "neighbour": true
+   },
+   "F2-8136": {
+    "acc": {
+     "qwen7b": 1.0,
+     "falcon7b": 0.9583333333333334
+    },
+    "agree": 0.9583333333333334,
+    "accepted": true,
+    "planted": false,
+    "neighbour": false
+   },
+   "F2-8155": {
+    "acc": {
+     "qwen7b": 0.9583333333333334,
+     "falcon7b": 1.0
+    },
+    "agree": 0.9583333333333334,
+    "accepted": true,
+    "planted": false,
+    "neighbour": true
+   },
+   "F2-8192": {
+    "acc": {
+     "qwen7b": 0.9583333333333334,
+     "falcon7b": 0.9583333333333334
+    },
+    "agree": 0.9166666666666666,
+    "accepted": true,
+    "planted": false,
+    "neighbour": true
+   },
+   "F2-8331": {
+    "acc": {
+     "qwen7b": 0.9583333333333334,
+     "falcon7b": 0.9583333333333334
+    },
+    "agree": 0.9166666666666666,
+    "accepted": true,
+    "planted": false,
+    "neighbour": true
+   },
+   "F2-8455": {
+    "acc": {
+     "qwen7b": 0.875,
+     "falcon7b": 1.0
+    },
+    "agree": 0.875,
+    "accepted": false,
+    "planted": false,
+    "neighbour": true
+   },
+   "F2-8490": {
+    "acc": {
+     "qwen7b": 0.9166666666666666,
+     "falcon7b": 1.0
+    },
+    "agree": 0.9166666666666666,
+    "accepted": true,
+    "planted": false,
+    "neighbour": true
+   },
+   "F2-8795": {
+    "acc": {
+     "qwen7b": 0.5833333333333334,
+     "falcon7b": 0.4583333333333333
+    },
+    "agree": 0.875,
+    "accepted": false,
+    "planted": true,
+    "neighbour": false
+   },
+   "F2-8880": {
+    "acc": {
+     "qwen7b": 1.0,
+     "falcon7b": 0.9583333333333334
+    },
+    "agree": 0.9583333333333334,
+    "accepted": true,
+    "planted": false,
+    "neighbour": true
+   },
+   "F2-8912": {
+    "acc": {
+     "qwen7b": 0.875,
+     "falcon7b": 0.9583333333333334
+    },
+    "agree": 0.8333333333333334,
+    "accepted": false,
+    "planted": false,
+    "neighbour": true
+   },
+   "F2-8917": {
+    "acc": {
+     "qwen7b": 0.9583333333333334,
+     "falcon7b": 0.9166666666666666
+    },
+    "agree": 0.875,
+    "accepted": false,
+    "planted": false,
+    "neighbour": true
+   },
+   "F2-9009": {
+    "acc": {
+     "qwen7b": 0.875,
+     "falcon7b": 1.0
+    },
+    "agree": 0.875,
+    "accepted": false,
+    "planted": false,
+    "neighbour": true
+   },
+   "F2-9020": {
+    "acc": {
+     "qwen7b": 0.875,
+     "falcon7b": 0.9166666666666666
+    },
+    "agree": 0.7916666666666666,
+    "accepted": false,
+    "planted": false,
+    "neighbour": true
+   },
+   "F2-9097": {
+    "acc": {
+     "qwen7b": 0.8333333333333334,
+     "falcon7b": 0.9583333333333334
+    },
+    "agree": 0.7916666666666666,
+    "accepted": false,
+    "planted": false,
+    "neighbour": false
+   },
+   "F2-9099": {
+    "acc": {
+     "qwen7b": 0.7916666666666666,
+     "falcon7b": 1.0
+    },
+    "agree": 0.7916666666666666,
+    "accepted": false,
+    "planted": false,
+    "neighbour": true
+   },
+   "F2-9115": {
+    "acc": {
+     "qwen7b": 1.0,
+     "falcon7b": 1.0
+    },
+    "agree": 1.0,
+    "accepted": true,
+    "planted": false,
+    "neighbour": true
+   },
+   "F2-9281": {
+    "acc": {
+     "qwen7b": 0.9583333333333334,
+     "falcon7b": 0.9166666666666666
+    },
+    "agree": 0.875,
+    "accepted": false,
+    "planted": false,
+    "neighbour": false
+   },
+   "F2-9291": {
+    "acc": {
+     "qwen7b": 0.9583333333333334,
+     "falcon7b": 1.0
+    },
+    "agree": 0.9583333333333334,
+    "accepted": true,
+    "planted": false,
+    "neighbour": true
+   },
+   "F2-9292": {
+    "acc": {
+     "qwen7b": 0.875,
+     "falcon7b": 1.0
+    },
+    "agree": 0.875,
+    "accepted": false,
+    "planted": false,
+    "neighbour": true
+   },
+   "F2-9353": {
+    "acc": {
+     "qwen7b": 0.375,
+     "falcon7b": 0.3333333333333333
+    },
+    "agree": 0.7916666666666666,
+    "accepted": false,
+    "planted": true,
+    "neighbour": false
+   },
+   "F2-9358": {
+    "acc": {
+     "qwen7b": 0.4583333333333333,
+     "falcon7b": 0.5833333333333334
+    },
+    "agree": 0.875,
+    "accepted": false,
+    "planted": true,
+    "neighbour": false
+   },
+   "F2-9451": {
+    "acc": {
+     "qwen7b": 0.875,
+     "falcon7b": 0.9583333333333334
+    },
+    "agree": 0.8333333333333334,
+    "accepted": false,
+    "planted": false,
+    "neighbour": true
+   },
+   "F2-9508": {
+    "acc": {
+     "qwen7b": 0.625,
+     "falcon7b": 0.5833333333333334
+    },
+    "agree": 0.4583333333333333,
+    "accepted": false,
+    "planted": false,
+    "neighbour": true
+   },
+   "F2-9520": {
+    "acc": {
+     "qwen7b": 0.9583333333333334,
+     "falcon7b": 0.9583333333333334
+    },
+    "agree": 0.9166666666666666,
+    "accepted": true,
+    "planted": false,
+    "neighbour": true
+   },
+   "F2-9615": {
+    "acc": {
+     "qwen7b": 0.9166666666666666,
+     "falcon7b": 0.875
+    },
+    "agree": 0.875,
+    "accepted": false,
+    "planted": false,
+    "neighbour": true
+   },
+   "F2-9640": {
+    "acc": {
+     "qwen7b": 0.9583333333333334,
+     "falcon7b": 1.0
+    },
+    "agree": 0.9583333333333334,
+    "accepted": true,
+    "planted": false,
+    "neighbour": true
+   }
+  },
+  "honest_accept": {
+   "point": 0.4333,
+   "lower95": 0.3157,
+   "k": 26,
+   "n": 60,
+   "verdict": "not met"
+  },
+  "planted_reject": {
+   "point": 1.0,
+   "lower95": 0.862,
+   "k": 24,
+   "n": 24,
+   "verdict": "met in sample"
+  },
+  "planted_reject_by_type": {
+   "changed_constant": {
+    "n": 8,
+    "rejected": 8,
+    "unknown_implying": false
+   },
+   "deleted_negation": {
+    "n": 8,
+    "rejected": 8,
+    "unknown_implying": true
+   },
+   "mismatched_definition": {
+    "n": 8,
+    "rejected": 8,
+    "unknown_implying": true
+   }
+  },
+  "neighbour_accept": {
+   "n": 180,
+   "accepted": 90
+  }
+ },
+ "testgate_vs_repo_target": {
+  "per_entry": {
+   "F1-0197": {
+    "acc": {
+     "qwen7b": 1.0,
+     "falcon7b": 1.0
+    },
+    "agree": 1.0,
+    "accepted": true,
+    "planted": false,
+    "neighbour": false
+   },
+   "F1-0579": {
+    "acc": {
+     "qwen7b": 0.5,
+     "falcon7b": 0.6666666666666666
+    },
+    "agree": 0.75,
+    "accepted": false,
+    "planted": true,
+    "neighbour": false
+   },
+   "F1-1190": {
+    "acc": {
+     "qwen7b": 0.75,
+     "falcon7b": 0.9166666666666666
+    },
+    "agree": 0.75,
+    "accepted": false,
+    "planted": false,
+    "neighbour": false
+   },
+   "F1-1261": {
+    "acc": {
+     "qwen7b": 0.6666666666666666,
+     "falcon7b": 0.5833333333333334
+    },
+    "agree": 0.7916666666666666,
+    "accepted": false,
+    "planted": true,
+    "neighbour": false
+   },
+   "F1-1263": {
+    "acc": {
+     "qwen7b": 1.0,
+     "falcon7b": 0.9583333333333334
+    },
+    "agree": 0.9583333333333334,
+    "accepted": true,
+    "planted": false,
+    "neighbour": false
+   },
+   "F1-1288": {
+    "acc": {
+     "qwen7b": 1.0,
+     "falcon7b": 0.9583333333333334
+    },
+    "agree": 0.9583333333333334,
+    "accepted": true,
+    "planted": false,
+    "neighbour": false
+   },
+   "F1-1354": {
+    "acc": {
+     "qwen7b": 0.5833333333333334,
+     "falcon7b": 0.4166666666666667
+    },
+    "agree": 0.6666666666666666,
+    "accepted": false,
+    "planted": true,
+    "neighbour": false
+   },
+   "F1-1851": {
+    "acc": {
+     "qwen7b": 1.0,
+     "falcon7b": 1.0
+    },
+    "agree": 1.0,
+    "accepted": true,
+    "planted": false,
+    "neighbour": false
+   },
+   "F1-2194": {
+    "acc": {
+     "qwen7b": 1.0,
+     "falcon7b": 1.0
+    },
+    "agree": 1.0,
+    "accepted": true,
+    "planted": false,
+    "neighbour": false
+   },
+   "F1-2262": {
+    "acc": {
+     "qwen7b": 0.375,
+     "falcon7b": 0.375
+    },
+    "agree": 1.0,
+    "accepted": false,
+    "planted": true,
+    "neighbour": false
+   },
+   "F1-2632": {
+    "acc": {
+     "qwen7b": 0.9166666666666666,
+     "falcon7b": 0.9166666666666666
+    },
+    "agree": 0.9166666666666666,
+    "accepted": true,
+    "planted": true,
+    "neighbour": false
+   },
+   "F1-2677": {
+    "acc": {
+     "qwen7b": 0.8333333333333334,
+     "falcon7b": 0.9166666666666666
+    },
+    "agree": 0.9166666666666666,
+    "accepted": false,
+    "planted": true,
+    "neighbour": false
+   },
+   "F1-2678": {
+    "acc": {
+     "qwen7b": 0.75,
+     "falcon7b": 0.875
+    },
+    "agree": 0.7916666666666666,
+    "accepted": false,
+    "planted": false,
+    "neighbour": false
+   },
+   "F1-2708": {
+    "acc": {
+     "qwen7b": 1.0,
+     "falcon7b": 1.0
+    },
+    "agree": 1.0,
+    "accepted": true,
+    "planted": false,
+    "neighbour": false
+   },
+   "F1-2910": {
+    "acc": {
+     "qwen7b": 0.7916666666666666,
+     "falcon7b": 1.0
+    },
+    "agree": 0.7916666666666666,
+    "accepted": false,
+    "planted": false,
+    "neighbour": false
+   },
+   "F1-2953": {
+    "acc": {
+     "qwen7b": 0.7083333333333334,
+     "falcon7b": 0.7083333333333334
+    },
+    "agree": 0.9166666666666666,
+    "accepted": false,
+    "planted": false,
+    "neighbour": false
+   },
+   "F1-3008": {
+    "acc": {
+     "qwen7b": 0.2916666666666667,
+     "falcon7b": 0.2916666666666667
+    },
+    "agree": 0.8333333333333334,
+    "accepted": false,
+    "planted": true,
+    "neighbour": false
+   },
+   "F1-3023": {
+    "acc": {
+     "qwen7b": 0.7916666666666666,
+     "falcon7b": 0.9166666666666666
+    },
+    "agree": 0.7916666666666666,
+    "accepted": false,
+    "planted": false,
+    "neighbour": false
+   },
+   "F1-3047": {
+    "acc": {
+     "qwen7b": 0.4166666666666667,
+     "falcon7b": 0.5833333333333334
+    },
+    "agree": 0.75,
+    "accepted": false,
+    "planted": true,
+    "neighbour": false
+   },
+   "F1-3067": {
+    "acc": {
+     "qwen7b": 0.7083333333333334,
+     "falcon7b": 0.875
+    },
+    "agree": 0.6666666666666666,
+    "accepted": false,
+    "planted": false,
+    "neighbour": false
+   },
+   "F1-3471": {
+    "acc": {
+     "qwen7b": 0.375,
+     "falcon7b": 0.25
+    },
+    "agree": 0.875,
+    "accepted": false,
+    "planted": true,
+    "neighbour": false
+   },
+   "F1-3549": {
+    "acc": {
+     "qwen7b": 0.5,
+     "falcon7b": 0.4166666666666667
+    },
+    "agree": 0.9166666666666666,
+    "accepted": false,
+    "planted": true,
+    "neighbour": false
+   },
+   "F1-3751": {
+    "acc": {
+     "qwen7b": 0.375,
+     "falcon7b": 0.3333333333333333
+    },
+    "agree": 0.9583333333333334,
+    "accepted": false,
+    "planted": true,
+    "neighbour": false
+   },
+   "F1-3757": {
+    "acc": {
+     "qwen7b": 1.0,
+     "falcon7b": 1.0
+    },
+    "agree": 1.0,
+    "accepted": true,
+    "planted": false,
+    "neighbour": false
+   },
+   "F1-3877": {
+    "acc": {
+     "qwen7b": 0.4583333333333333,
+     "falcon7b": 0.3333333333333333
+    },
+    "agree": 0.7916666666666666,
+    "accepted": false,
+    "planted": true,
+    "neighbour": false
+   },
+   "F1-3917": {
+    "acc": {
+     "qwen7b": 1.0,
+     "falcon7b": 1.0
+    },
+    "agree": 1.0,
+    "accepted": true,
+    "planted": false,
+    "neighbour": false
+   },
+   "F1-4977": {
+    "acc": {
+     "qwen7b": 0.7083333333333334,
+     "falcon7b": 0.7083333333333334
+    },
+    "agree": 0.8333333333333334,
+    "accepted": false,
+    "planted": false,
+    "neighbour": false
+   },
+   "F1-5100": {
+    "acc": {
+     "qwen7b": 0.7083333333333334,
+     "falcon7b": 0.8333333333333334
+    },
+    "agree": 0.7083333333333334,
+    "accepted": false,
+    "planted": false,
+    "neighbour": false
+   },
+   "F1-5157": {
+    "acc": {
+     "qwen7b": 0.6666666666666666,
+     "falcon7b": 0.875
+    },
+    "agree": 0.7083333333333334,
+    "accepted": false,
+    "planted": false,
+    "neighbour": false
+   },
+   "F1-5715": {
+    "acc": {
+     "qwen7b": 0.7083333333333334,
+     "falcon7b": 0.9166666666666666
+    },
+    "agree": 0.7916666666666666,
+    "accepted": false,
+    "planted": false,
+    "neighbour": false
+   },
+   "F1-5988": {
+    "acc": {
+     "qwen7b": 0.7083333333333334,
+     "falcon7b": 0.75
+    },
+    "agree": 0.875,
+    "accepted": false,
+    "planted": false,
+    "neighbour": false
+   },
+   "F1-6338": {
+    "acc": {
+     "qwen7b": 0.4583333333333333,
+     "falcon7b": 0.4166666666666667
+    },
+    "agree": 0.8333333333333334,
+    "accepted": false,
+    "planted": true,
+    "neighbour": false
+   },
+   "F1-6553": {
+    "acc": {
+     "qwen7b": 0.375,
+     "falcon7b": 0.6666666666666666
+    },
+    "agree": 0.7083333333333334,
+    "accepted": false,
+    "planted": true,
+    "neighbour": false
+   },
+   "F1-7243": {
+    "acc": {
+     "qwen7b": 1.0,
+     "falcon7b": 1.0
+    },
+    "agree": 1.0,
+    "accepted": true,
+    "planted": false,
+    "neighbour": false
+   },
+   "F1-7415": {
+    "acc": {
+     "qwen7b": 0.375,
+     "falcon7b": 0.375
+    },
+    "agree": 1.0,
+    "accepted": false,
+    "planted": true,
+    "neighbour": false
+   },
+   "F1-7592": {
+    "acc": {
+     "qwen7b": 0.75,
+     "falcon7b": 0.625
+    },
+    "agree": 0.7916666666666666,
+    "accepted": false,
+    "planted": true,
+    "neighbour": false
+   },
+   "F1-7703": {
+    "acc": {
+     "qwen7b": 0.7916666666666666,
+     "falcon7b": 0.7916666666666666
+    },
+    "agree": 0.8333333333333334,
+    "accepted": false,
+    "planted": false,
+    "neighbour": false
+   },
+   "F1-7808": {
+    "acc": {
+     "qwen7b": 0.875,
+     "falcon7b": 0.9166666666666666
+    },
+    "agree": 0.9583333333333334,
+    "accepted": false,
+    "planted": true,
+    "neighbour": false
+   },
+   "F1-7997": {
+    "acc": {
+     "qwen7b": 0.375,
+     "falcon7b": 0.375
+    },
+    "agree": 1.0,
+    "accepted": false,
+    "planted": true,
+    "neighbour": false
+   },
+   "F1-8105": {
+    "acc": {
+     "qwen7b": 0.8333333333333334,
+     "falcon7b": 0.9166666666666666
+    },
+    "agree": 0.75,
+    "accepted": false,
+    "planted": false,
+    "neighbour": false
+   },
+   "F1-8140": {
+    "acc": {
+     "qwen7b": 1.0,
+     "falcon7b": 1.0
+    },
+    "agree": 1.0,
+    "accepted": true,
+    "planted": false,
+    "neighbour": false
+   },
+   "F1-8158": {
+    "acc": {
+     "qwen7b": 0.625,
+     "falcon7b": 0.8333333333333334
+    },
+    "agree": 0.7083333333333334,
+    "accepted": false,
+    "planted": false,
+    "neighbour": false
+   },
+   "F1-8707": {
+    "acc": {
+     "qwen7b": 0.625,
+     "falcon7b": 0.8333333333333334
+    },
+    "agree": 0.7083333333333334,
+    "accepted": false,
+    "planted": false,
+    "neighbour": false
+   },
+   "F1-8736": {
+    "acc": {
+     "qwen7b": 1.0,
+     "falcon7b": 0.9166666666666666
+    },
+    "agree": 0.9166666666666666,
+    "accepted": true,
+    "planted": false,
+    "neighbour": false
+   },
+   "F1-9285": {
+    "acc": {
+     "qwen7b": 0.16666666666666666,
+     "falcon7b": 0.16666666666666666
+    },
+    "agree": 1.0,
+    "accepted": false,
+    "planted": true,
+    "neighbour": false
+   },
+   "F1-9367": {
+    "acc": {
+     "qwen7b": 0.875,
+     "falcon7b": 0.6666666666666666
+    },
+    "agree": 0.7916666666666666,
+    "accepted": false,
+    "planted": false,
+    "neighbour": false
+   },
+   "F1-9453": {
+    "acc": {
+     "qwen7b": 0.7083333333333334,
+     "falcon7b": 0.625
+    },
+    "agree": 0.8333333333333334,
+    "accepted": false,
+    "planted": true,
+    "neighbour": false
+   },
+   "F1-9524": {
+    "acc": {
+     "qwen7b": 0.75,
+     "falcon7b": 0.75
+    },
+    "agree": 0.8333333333333334,
+    "accepted": false,
+    "planted": false,
+    "neighbour": false
+   },
+   "F1-9630": {
+    "acc": {
+     "qwen7b": 0.75,
+     "falcon7b": 0.8333333333333334
+    },
+    "agree": 0.75,
+    "accepted": false,
+    "planted": false,
+    "neighbour": false
+   },
+   "F1-9766": {
+    "acc": {
+     "qwen7b": 1.0,
+     "falcon7b": 1.0
+    },
+    "agree": 1.0,
+    "accepted": true,
+    "planted": false,
+    "neighbour": false
+   },
+   "F2-0030": {
+    "acc": {
+     "qwen7b": 1.0,
+     "falcon7b": 0.9166666666666666
+    },
+    "agree": 0.9166666666666666,
+    "accepted": true,
+    "planted": false,
+    "neighbour": false
+   },
+   "F2-0146": {
+    "acc": {
+     "qwen7b": 0.9166666666666666,
+     "falcon7b": 0.9583333333333334
+    },
+    "agree": 0.875,
+    "accepted": false,
+    "planted": false,
+    "neighbour": false
+   },
+   "F2-0458": {
+    "acc": {
+     "qwen7b": 0.4166666666666667,
+     "falcon7b": 0.5833333333333334
+    },
+    "agree": 0.7083333333333334,
+    "accepted": false,
+    "planted": true,
+    "neighbour": false
+   },
+   "F2-0677": {
+    "acc": {
+     "qwen7b": 0.9583333333333334,
+     "falcon7b": 0.9583333333333334
+    },
+    "agree": 0.9166666666666666,
+    "accepted": true,
+    "planted": false,
+    "neighbour": false
+   },
+   "F2-0847": {
+    "acc": {
+     "qwen7b": 1.0,
+     "falcon7b": 0.9583333333333334
+    },
+    "agree": 0.9583333333333334,
+    "accepted": true,
+    "planted": false,
+    "neighbour": false
+   },
+   "F2-1021": {
+    "acc": {
+     "qwen7b": 0.9583333333333334,
+     "falcon7b": 0.9583333333333334
+    },
+    "agree": 0.9166666666666666,
+    "accepted": true,
+    "planted": false,
+    "neighbour": false
+   },
+   "F2-1325": {
+    "acc": {
+     "qwen7b": 0.8333333333333334,
+     "falcon7b": 1.0
+    },
+    "agree": 0.8333333333333334,
+    "accepted": false,
+    "planted": false,
+    "neighbour": false
+   },
+   "F2-1384": {
+    "acc": {
+     "qwen7b": 1.0,
+     "falcon7b": 1.0
+    },
+    "agree": 1.0,
+    "accepted": true,
+    "planted": false,
+    "neighbour": false
+   },
+   "F2-1472": {
+    "acc": {
+     "qwen7b": 0.9166666666666666,
+     "falcon7b": 0.9583333333333334
+    },
+    "agree": 0.875,
+    "accepted": false,
+    "planted": false,
+    "neighbour": false
+   },
+   "F2-1609": {
+    "acc": {
+     "qwen7b": 0.5416666666666666,
+     "falcon7b": 0.4583333333333333
+    },
+    "agree": 0.6666666666666666,
+    "accepted": false,
+    "planted": true,
+    "neighbour": false
+   },
+   "F2-2005": {
+    "acc": {
+     "qwen7b": 0.9583333333333334,
+     "falcon7b": 0.9583333333333334
+    },
+    "agree": 0.9166666666666666,
+    "accepted": true,
+    "planted": false,
+    "neighbour": false
+   },
+   "F2-2336": {
+    "acc": {
+     "qwen7b": 0.875,
+     "falcon7b": 1.0
+    },
+    "agree": 0.875,
+    "accepted": false,
+    "planted": false,
+    "neighbour": false
+   },
+   "F2-2463": {
+    "acc": {
+     "qwen7b": 0.20833333333333334,
+     "falcon7b": 0.20833333333333334
+    },
+    "agree": 0.7916666666666666,
+    "accepted": false,
+    "planted": true,
+    "neighbour": false
+   },
+   "F2-2489": {
+    "acc": {
+     "qwen7b": 0.9583333333333334,
+     "falcon7b": 0.875
+    },
+    "agree": 0.8333333333333334,
+    "accepted": false,
+    "planted": false,
+    "neighbour": false
+   },
+   "F2-2525": {
+    "acc": {
+     "qwen7b": 0.9583333333333334,
+     "falcon7b": 0.9583333333333334
+    },
+    "agree": 0.9166666666666666,
+    "accepted": true,
+    "planted": false,
+    "neighbour": false
+   },
+   "F2-3145": {
+    "acc": {
+     "qwen7b": 0.875,
+     "falcon7b": 1.0
+    },
+    "agree": 0.875,
+    "accepted": false,
+    "planted": false,
+    "neighbour": false
+   },
+   "F2-3257": {
+    "acc": {
+     "qwen7b": 0.9583333333333334,
+     "falcon7b": 1.0
+    },
+    "agree": 0.9583333333333334,
+    "accepted": true,
+    "planted": false,
+    "neighbour": false
+   },
+   "F2-3288": {
+    "acc": {
+     "qwen7b": 1.0,
+     "falcon7b": 0.9583333333333334
+    },
+    "agree": 0.9583333333333334,
+    "accepted": true,
+    "planted": false,
+    "neighbour": false
+   },
+   "F2-3621": {
+    "acc": {
+     "qwen7b": 1.0,
+     "falcon7b": 0.9583333333333334
+    },
+    "agree": 0.9583333333333334,
+    "accepted": true,
+    "planted": false,
+    "neighbour": false
+   },
+   "F2-4236": {
+    "acc": {
+     "qwen7b": 0.16666666666666666,
+     "falcon7b": 0.125
+    },
+    "agree": 0.875,
+    "accepted": false,
+    "planted": true,
+    "neighbour": false
+   },
+   "F2-4353": {
+    "acc": {
+     "qwen7b": 0.9583333333333334,
+     "falcon7b": 0.9583333333333334
+    },
+    "agree": 0.9166666666666666,
+    "accepted": true,
+    "planted": false,
+    "neighbour": false
+   },
+   "F2-4567": {
+    "acc": {
+     "qwen7b": 0.8333333333333334,
+     "falcon7b": 0.9583333333333334
+    },
+    "agree": 0.7916666666666666,
+    "accepted": false,
+    "planted": false,
+    "neighbour": false
+   },
+   "F2-4839": {
+    "acc": {
+     "qwen7b": 0.8333333333333334,
+     "falcon7b": 0.9583333333333334
+    },
+    "agree": 0.7916666666666666,
+    "accepted": false,
+    "planted": false,
+    "neighbour": false
+   },
+   "F2-5260": {
+    "acc": {
+     "qwen7b": 0.6666666666666666,
+     "falcon7b": 0.875
+    },
+    "agree": 0.625,
+    "accepted": false,
+    "planted": true,
+    "neighbour": false
+   },
+   "F2-5289": {
+    "acc": {
+     "qwen7b": 0.25,
+     "falcon7b": 0.125
+    },
+    "agree": 0.8333333333333334,
+    "accepted": false,
+    "planted": true,
+    "neighbour": false
+   },
+   "F2-5391": {
+    "acc": {
+     "qwen7b": 1.0,
+     "falcon7b": 0.9583333333333334
+    },
+    "agree": 0.9583333333333334,
+    "accepted": true,
+    "planted": false,
+    "neighbour": false
+   },
+   "F2-5463": {
+    "acc": {
+     "qwen7b": 0.375,
+     "falcon7b": 0.375
+    },
+    "agree": 1.0,
+    "accepted": false,
+    "planted": true,
+    "neighbour": false
+   },
+   "F2-5548": {
+    "acc": {
+     "qwen7b": 1.0,
+     "falcon7b": 0.9166666666666666
+    },
+    "agree": 0.9166666666666666,
+    "accepted": true,
+    "planted": false,
+    "neighbour": false
+   },
+   "F2-5638": {
+    "acc": {
+     "qwen7b": 0.5833333333333334,
+     "falcon7b": 0.5
+    },
+    "agree": 0.625,
+    "accepted": false,
+    "planted": true,
+    "neighbour": false
+   },
+   "F2-5702": {
+    "acc": {
+     "qwen7b": 0.9166666666666666,
+     "falcon7b": 1.0
+    },
+    "agree": 0.9166666666666666,
+    "accepted": true,
+    "planted": false,
+    "neighbour": false
+   },
+   "F2-5719": {
+    "acc": {
+     "qwen7b": 1.0,
+     "falcon7b": 1.0
+    },
+    "agree": 1.0,
+    "accepted": true,
+    "planted": false,
+    "neighbour": false
+   },
+   "F2-5857": {
+    "acc": {
+     "qwen7b": 0.9166666666666666,
+     "falcon7b": 0.9583333333333334
+    },
+    "agree": 0.875,
+    "accepted": false,
+    "planted": false,
+    "neighbour": false
+   },
+   "F2-6046": {
+    "acc": {
+     "qwen7b": 0.9166666666666666,
+     "falcon7b": 1.0
+    },
+    "agree": 0.9166666666666666,
+    "accepted": true,
+    "planted": false,
+    "neighbour": false
+   },
+   "F2-6256": {
+    "acc": {
+     "qwen7b": 0.375,
+     "falcon7b": 0.4583333333333333
+    },
+    "agree": 0.9166666666666666,
+    "accepted": false,
+    "planted": true,
+    "neighbour": false
+   },
+   "F2-7000": {
+    "acc": {
+     "qwen7b": 0.5,
+     "falcon7b": 0.4166666666666667
+    },
+    "agree": 0.7083333333333334,
+    "accepted": false,
+    "planted": true,
+    "neighbour": false
+   },
+   "F2-7011": {
+    "acc": {
+     "qwen7b": 0.9583333333333334,
+     "falcon7b": 0.9583333333333334
+    },
+    "agree": 0.9166666666666666,
+    "accepted": true,
+    "planted": false,
+    "neighbour": false
+   },
+   "F2-7269": {
+    "acc": {
+     "qwen7b": 0.5,
+     "falcon7b": 0.5416666666666666
+    },
+    "agree": 0.7083333333333334,
+    "accepted": false,
+    "planted": true,
+    "neighbour": false
+   },
+   "F2-7563": {
+    "acc": {
+     "qwen7b": 0.5,
+     "falcon7b": 0.4583333333333333
+    },
+    "agree": 0.75,
+    "accepted": false,
+    "planted": true,
+    "neighbour": false
+   },
+   "F2-7678": {
+    "acc": {
+     "qwen7b": 0.625,
+     "falcon7b": 0.875
+    },
+    "agree": 0.6666666666666666,
+    "accepted": false,
+    "planted": true,
+    "neighbour": false
+   },
+   "F2-7773": {
+    "acc": {
+     "qwen7b": 0.9583333333333334,
+     "falcon7b": 0.9583333333333334
+    },
+    "agree": 0.9166666666666666,
+    "accepted": true,
+    "planted": false,
+    "neighbour": false
+   },
+   "F2-7822": {
+    "acc": {
+     "qwen7b": 0.6666666666666666,
+     "falcon7b": 0.5833333333333334
+    },
+    "agree": 0.625,
+    "accepted": false,
+    "planted": true,
+    "neighbour": false
+   },
+   "F2-8136": {
+    "acc": {
+     "qwen7b": 1.0,
+     "falcon7b": 1.0
+    },
+    "agree": 1.0,
+    "accepted": true,
+    "planted": false,
+    "neighbour": false
+   },
+   "F2-8294": {
+    "acc": {
+     "qwen7b": 0.20833333333333334,
+     "falcon7b": 0.16666666666666666
+    },
+    "agree": 0.9583333333333334,
+    "accepted": false,
+    "planted": true,
+    "neighbour": false
+   },
+   "F2-8433": {
+    "acc": {
+     "qwen7b": 0.375,
+     "falcon7b": 0.375
+    },
+    "agree": 1.0,
+    "accepted": false,
+    "planted": true,
+    "neighbour": false
+   },
+   "F2-8519": {
+    "acc": {
+     "qwen7b": 0.5,
+     "falcon7b": 0.4166666666666667
+    },
+    "agree": 0.7083333333333334,
+    "accepted": false,
+    "planted": true,
+    "neighbour": false
+   },
+   "F2-8996": {
+    "acc": {
+     "qwen7b": 0.3333333333333333,
+     "falcon7b": 0.3333333333333333
+    },
+    "agree": 0.9166666666666666,
+    "accepted": false,
+    "planted": true,
+    "neighbour": false
+   },
+   "F2-9097": {
+    "acc": {
+     "qwen7b": 0.7916666666666666,
+     "falcon7b": 0.9583333333333334
+    },
+    "agree": 0.75,
+    "accepted": false,
+    "planted": false,
+    "neighbour": false
+   },
+   "F2-9281": {
+    "acc": {
+     "qwen7b": 1.0,
+     "falcon7b": 0.9583333333333334
+    },
+    "agree": 0.9583333333333334,
+    "accepted": true,
+    "planted": false,
+    "neighbour": false
+   },
+   "F2-9306": {
+    "acc": {
+     "qwen7b": 0.375,
+     "falcon7b": 0.2916666666666667
+    },
+    "agree": 0.875,
+    "accepted": false,
+    "planted": true,
+    "neighbour": false
+   },
+   "F2-9380": {
+    "acc": {
+     "qwen7b": 0.16666666666666666,
+     "falcon7b": 0.16666666666666666
+    },
+    "agree": 1.0,
+    "accepted": false,
+    "planted": true,
+    "neighbour": false
+   }
+  },
+  "honest_accept": {
+   "point": 0.5333,
+   "lower95": 0.4089,
+   "k": 32,
+   "n": 60,
+   "verdict": "not met"
+  },
+  "planted_reject": {
+   "point": 0.975,
+   "lower95": 0.8712,
+   "k": 39,
+   "n": 40,
+   "verdict": "met in sample"
+  },
+  "planted_reject_by_type": {
+   "dropped_clause": {
+    "n": 10,
+    "rejected": 10,
+    "unknown_implying": true
+   },
+   "inverted_comparison": {
+    "n": 10,
+    "rejected": 10,
+    "unknown_implying": false
+   },
+   "near_miss_polarity": {
+    "n": 10,
+    "rejected": 9,
+    "unknown_implying": true
+   },
+   "swapped_roles": {
+    "n": 10,
+    "rejected": 10,
+    "unknown_implying": false
+   }
+  },
+  "neighbour_accept": {
+   "n": 0,
+   "accepted": 0
+  }
+ },
+ "manipulation": {
+  "n": 111,
+  "follow_rate": 0.3783783783783784
+ },
+ "note": "Accepted list FIXED from calibration (A1.3); TEST-gate only evaluates it. 'met in sample' != 'met at 95% confidence'. None of these bars is the POC success criterion. Answer agreement alone cannot detect a reader that silently reconstructs the intended rule; rejection of UNKNOWN-implying plants is reported separately (A5).",
+ "not_checked_repository": "B1 failed: B2/B3 still run, but the combined pipeline is NOT a checked repository; gate acceptance, coverage and abstentions are reported with every number"
+}
