@@ -254,7 +254,7 @@
   }
  },
  "a9": {
-  "status": "draft",
+  "status": "frozen",
   "amendment": "A9",
   "label": "POST-HOC follow-up (A8 pair); B0 primary result stays NO_QUALIFYING_PAIR",
   "pair": [
@@ -338,6 +338,7 @@
   "batch_check_arith": 60,
   "batch_check_probe": 60,
   "gate_policy": "ungated",
-  "gate_note": "Stefan (PI), 2026-10-14, after seeing qualification scores: B2/B3 run ungated; per-entry bar (>=22/24) still computed in B1 and reported descriptively; no checked-repository or corruption-protection claim"
+  "gate_note": "Stefan (PI), 2026-10-14, after seeing qualification scores: B2/B3 run ungated; per-entry bar (>=22/24) still computed in B1 and reported descriptively; no checked-repository or corruption-protection claim",
+  "frozen": "2026-10-14 (AEDT), tag prereg-e1b-a9; approved by Grok + GPT (round 4b, pinned b3edce6)"
  }
 }

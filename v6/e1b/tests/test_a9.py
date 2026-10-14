@@ -23,7 +23,7 @@ ATTR = "Falcon3-7B-Instruct results were produced using artificial intelligence 
 class A9Config(unittest.TestCase):
     def test_draft_and_terms(self):
         X = load_cfg()["a9"]
-        self.assertEqual(X["status"], "draft"); self.assertEqual(X["pair"], ["qwen7b", "falcon7b"]); self.assertEqual(X["reuse"], [])
+        self.assertEqual(X["status"], "frozen"); self.assertEqual(X["pair"], ["qwen7b", "falcon7b"]); self.assertEqual(X["reuse"], [])
         self.assertNotIn("mistral", json.dumps(X).lower()); self.assertEqual(X["attribution"], ATTR); self.assertIn("POST-HOC", X["label"])
     def test_ladder_choice_from_b0x_timings(self):
         cfg = load_cfg(); X = cfg["a9"]; r = A9.choose(cfg, A9.pilot_timings(ROOT / "results"))

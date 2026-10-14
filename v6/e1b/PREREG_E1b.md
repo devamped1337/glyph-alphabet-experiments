@@ -497,9 +497,12 @@ Estimated from E1's measured CPU rates (Qwen-3B 2.25 s/call, Smol 1.31 s/call; p
    - a second abort or a post-scoring interrupt counting as not qualified;
    - a full B0x → validator run (B0x registered in the validator's stages, expected files, uniqueness, prompt resolution and reuse-hash checks), including a duplicate key, a missing prompt log and a tampered reused file. The Kaggle notebook defaults to `E1B_STAGE=B0x` at tag `prereg-e1b-a8`, which does not exist until A8 is frozen. **The kernel has not been pushed.**
 
-### A9 (DRAFT, NOT FROZEN; revised after review round 4 → "4b"): 2026-10-14 (AEDT), B1–B3 for the post-hoc pair Qwen2.5-7B + Falcon3-7B-Instruct
+### A9 (FROZEN 2026-10-14; revised after review round 4 → "4b"): 2026-10-14 (AEDT), B1–B3 for the post-hoc pair Qwen2.5-7B + Falcon3-7B-Instruct
 
-**Status: DRAFT.** Nothing in A9 has run. Config `a9.status` is `"draft"`, and stages `B1c`, `B1`, `B2` and `B3` refuse to run while it is (exit 13). A9 is frozen only after Grok, Claude and GPT all approve, by a dated, hash-pinned commit, tag `prereg-e1b-a9`, and `a9.status = "frozen"`. **No Kaggle kernel has been pushed for A9.**
+**Status: FROZEN 2026-10-14 (AEDT).** Tag `prereg-e1b-a9`. Config `a9.status = "frozen"`; the code hash is recorded in `CODE_HASH.txt`.
+- **Final votes:** Grok and GPT voted YES at `b3edce6` (`reviews/grok_A9_final.md`, `reviews/gpt_A9_final.md`; both are summaries).
+- **Claude:** no A9 review is on file. A9 was frozen on the two votes at Stefan's instruction. This departs from the three-reviewer wording of the earlier drafts and is disclosed here.
+- **Nothing in A9 has run, and no Kaggle kernel has been pushed.** Every stage still refuses to run without `E1B_GO=<stage>`, which is set only on Stefan's explicit go.
 
 Round-4 reviews: `reviews/grok_A9.md` and `reviews/gpt_A9.md` (both are summaries). Both said yes-with-changes. The changes are applied below, and **4b** marks what changed.
 
@@ -627,3 +630,5 @@ Round-4 reviews: `reviews/grok_A9.md` and `reviews/gpt_A9.md` (both are summarie
      - a full fake-backend B1c → B3 → validator run, with B3 ungated.
 
      **All 95 tests pass.**
+
+**A9 errata (non-blocking, GPT final):** B1's projection averages both models' batch-1 latency for the manipulation check, which runs on Falcon only. Using Falcon's batch-1 latency (6.37 s) adds about 0.029 h, so B1 projects about 2.55 h. The B1 cap stays **3.20**, and the total stays 12.00. Neither the frozen level nor any cap changes.
