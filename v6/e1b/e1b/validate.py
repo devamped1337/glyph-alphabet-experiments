@@ -142,6 +142,26 @@ def run(root, inputs_only=False):
         if sr.exists():
             o = {r["key"]: r["raw"] for r in jl(res / "B3" / f"select_{a}.jsonl")}; n = jl(sr)
             chk(len(n) == len(o) and all(o.get(r["key"]) == r["raw"] for r in n), "B3r: every sender reply is the archived B3 reply (re-parsed, never regenerated)")
+        if stage_status(res / "B3r") == "complete":   # GPT A10 r1: exact counts, coverage and verbatim reuse
+            n = jl(sr); arch = jl(res / "B3" / f"select_{a}.jsonl"); ents = {r["entry"] for r in arch}
+            chk(len(n) == 60 and len({r["key"] for r in n}) == 60 and {r["entry"] for r in n} == ents and len(ents) == 60,
+                f"B3r: exactly 60 unique archived selections ({len(n)} rows)")
+            want = {(c["entry"], c["text"]) for c in B9["cases"]["test"] if c["entry"] in ents} if P9 is not None else set()
+            X = jl(res / "B3r" / f"exchange_{a}_to_{b}.jsonl")
+            for cond in ("id_selected", "prose"):
+                rows = [r for r in X if r.get("cond") == cond]; ks = [(r["entry"], r["case"]) for r in rows]
+                chk(len(rows) == 240 and len(set(ks)) == 240 and set(ks) == want, f"B3r: {cond} has exactly 240 rows covering the scheduled (entry, case) set ({len(rows)} rows, {len(set(ks) & want)}/{len(want)} covered)")
+            src = {r["key"]: r for r in jl(res / "B3" / f"exchange_{a}_to_{b}.jsonl") if r.get("cond") == "prose"}
+            pro = [r for r in X if r.get("cond") == "prose"]
+            chk(all(r.get("reused_from") == f"B3/exchange_{a}_to_{b}.jsonl" and {k: v for k, v in r.items() if k != "reused_from"} == src.get(r["key"]) for r in pro),
+                "B3r: every prose row equals its pinned B3 source row (only reused_from added)")
+    if (res / "B3f").is_dir() and "a10" in cfg and stage_status(res / "B3f") == "complete" and P9 is not None:
+        k = cfg["a10"]["b3f_orders_per_entry"]; keys = {f"{e}|o{j}" for fam in cfg["families_core"] for e in B9["groups"][f"pilot_{fam}"] for j in range(k)}
+        T9e = {c["entry"] for c in B9["cases"]["test"]}
+        for m in cfg["a9"]["pair"]:
+            rows = jl(res / "B3f" / f"format_{m}.jsonl")
+            chk(len(rows) == len(keys) == 24 and {r["key"] for r in rows} == keys and not any(r["entry"] in T9e for r in rows),
+                f"B3f format_{m}: exactly 24 scheduled non-TEST views ({len(rows)} rows)")
     # unknown-ID: 48/48 deterministic, no model call
     U = jl(res / "B2" / "unknown.jsonl")
     if U: chk(len(U) == cfg["unknown_id_messages"] and all(not r["resolved"] and not r["model_called"] for r in U), "unknown-ID 48/48 deterministic UNKNOWN, no model call")

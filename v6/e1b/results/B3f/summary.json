@@ -1,0 +1,21 @@
+{
+ "label": "POST-HOC DIAGNOSTIC COMPLETION (A10) on an already-seen TEST set; secondary; cannot overturn the A9 B3 verdict (POC FAILED)",
+ "non_test_only": true,
+ "per_model": {
+  "qwen7b": {
+   "n": 24,
+   "frozen_valid": 24,
+   "a10_valid": 24,
+   "changed": 0,
+   "correct": 22
+  },
+  "falcon7b": {
+   "n": 24,
+   "frozen_valid": 0,
+   "a10_valid": 24,
+   "changed": 0,
+   "correct": 24
+  }
+ },
+ "note": "descriptive; reviewers decide the freeze"
+}

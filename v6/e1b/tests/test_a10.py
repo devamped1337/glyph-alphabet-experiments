@@ -97,4 +97,41 @@ class A10Stages(unittest.TestCase):
         with contextlib.redirect_stdout(buf): rc = validate.run(self.tmp)
         self.assertEqual(rc, 0, [l for l in buf.getvalue().splitlines() if l.startswith("FAIL")])
 
+    def _done_and_validate_after(self, mutate):
+        """GPT A10 r1: run B3f -> B3r, apply one mutation, regenerate the manifest, and return (rc, FAIL lines)."""
+        from e1b import validate
+        self.assertIn(self._run("B3f", self._cfg("draft")), (None, 0)); self.assertIn(self._run("B3r", self._cfg()), (None, 0))
+        mutate(); validate.write_manifest(self.tmp); buf = io.StringIO()
+        with contextlib.redirect_stdout(buf): rc = validate.run(self.tmp)
+        return rc, [l for l in buf.getvalue().splitlines() if l.startswith("FAIL")]
+    def _edit(self, rel, fn):
+        p = self.res / rel; rows = [json.loads(l) for l in open(p)]; rows = fn(rows)
+        p.write_text("".join(json.dumps(r) + "\n" for r in rows))
+    def _first(self, cond):
+        return lambda rows: [r for i, r in enumerate(rows) if not (r.get("cond") == cond and i == next(j for j, x in enumerate(rows) if x.get("cond") == cond))]
+    def test_missing_prose_row_fails(self):
+        rc, f = self._done_and_validate_after(lambda: self._edit("B3r/exchange_falcon7b_to_qwen7b.jsonl", self._first("prose")))
+        self.assertNotEqual(rc, 0); self.assertTrue(any("prose has exactly 240" in l for l in f), f)
+    def test_missing_id_selected_row_fails(self):
+        rc, f = self._done_and_validate_after(lambda: self._edit("B3r/exchange_falcon7b_to_qwen7b.jsonl", self._first("id_selected")))
+        self.assertNotEqual(rc, 0); self.assertTrue(any("id_selected has exactly 240" in l for l in f), f)
+    def test_altered_copied_prose_fails(self):
+        def alt(rows):
+            i = next(j for j, r in enumerate(rows) if r.get("cond") == "prose"); rows[i] = dict(rows[i], correct=not rows[i]["correct"]); return rows
+        rc, f = self._done_and_validate_after(lambda: self._edit("B3r/exchange_falcon7b_to_qwen7b.jsonl", alt))
+        self.assertNotEqual(rc, 0); self.assertTrue(any("equals its pinned B3 source row" in l for l in f), f)
+    def test_extra_field_on_copied_prose_fails(self):
+        def alt(rows):
+            i = next(j for j, r in enumerate(rows) if r.get("cond") == "prose"); rows[i] = dict(rows[i], note="x"); return rows
+        rc, f = self._done_and_validate_after(lambda: self._edit("B3r/exchange_falcon7b_to_qwen7b.jsonl", alt))
+        self.assertNotEqual(rc, 0)
+    def test_missing_selection_fails(self):
+        rc, f = self._done_and_validate_after(lambda: self._edit("B3r/select_falcon7b.jsonl", lambda rows: rows[1:]))
+        self.assertNotEqual(rc, 0); self.assertTrue(any("exactly 60 unique archived selections" in l for l in f), f)
+    def test_missing_format_view_fails(self):
+        rc, f = self._done_and_validate_after(lambda: self._edit("B3f/format_qwen7b.jsonl", lambda rows: rows[1:]))
+        self.assertNotEqual(rc, 0); self.assertTrue(any("exactly 24 scheduled non-TEST views" in l for l in f), f)
+    def test_clean_run_passes(self):
+        rc, f = self._done_and_validate_after(lambda: None); self.assertEqual(rc, 0, f)
+
 if __name__ == "__main__": unittest.main()

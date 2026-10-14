@@ -671,7 +671,7 @@ Round-4 reviews: `reviews/grok_A9.md` and `reviews/gpt_A9.md` (both are summarie
 - **(c) Prose arm: reused, not rerun.**
   - The 240 `prose` rows of `B3/exchange_falcon7b_to_qwen7b.jsonl` are copied verbatim, with `reused_from`, and their rendered prompts are copied too.
   - Reason: rerunning prose would add a second, selectable prose measurement.
-  - Known limitation: the id_selected arm runs in a later session, with different batch neighbours from the prose arm. B1c's 120/120 batch conformance and B2's 20/20 paired identity bound that risk but do not remove it.
+  - Known limitation: the id_selected arm runs in a later session, with different batch neighbours from the prose arm. B1c's 120/120 batch conformance and B2's 20/20 paired identity provide supporting checks but do not quantify or eliminate cross-session effects. **The bootstrap CI does not account for any cross-session bias** between the reused prose arm and the new id_selected arm (GPT A10 r1).
 - **(d) Pinned fingerprints.** Every reused input carries a pinned sha256 (`a10.reuse_sha256`); B3f and B3r refuse (exit 15) and the validator fails on any mismatch:
 
 | Reused file | sha256 |
@@ -697,7 +697,8 @@ Round-4 reviews: `reviews/grok_A9.md` and `reviews/gpt_A9.md` (both are summarie
   - Both models get the frozen sender prompt and settings on the A9 **pilot** entries, which are never TEST: 2 per core family, each in 6 seeded candidate orders, so 24 views per model.
   - Raw replies are logged and parsed by both parsers. Neither the TEST set nor any receiver is used.
   - This is the only way to see Falcon's sender formatting on non-TEST data: B0x's pilot sender calls did not keep the text.
-  - **Reviewers see B3f before the freeze.** The proposed bar is: A10 gives a valid parse for at least 22/24 replies per model, with 0 changed frozen decisions. If it fails, A10 is not frozen as written.
+  - **Reviewers see B3f before the freeze.** **Bar (kept, GPT A10 r1): A10 gives a valid parse for at least 22/24 replies per model, with 0 changed previously-accepted decisions.** If it fails, A10 is not frozen as written.
+  - The 24 views per model cover only **4 pilot entries**. Because seeded shuffles of 4 candidates can repeat, the 24 views contain only **19 distinct entry/order combinations** (counted on the B3f results; GPT's review estimated 20). They are **not independent semantic tests**; B3f checks reply format, not selection skill.
 - **Unit tests** (`tests/test_a10.py`): unambiguous replies, candidate-ID fragments, bare fragments, conflicting choices, no changed frozen decision, the offline invariants above, launch gates, tampered reuse, the one-start rule, caps, and a fake-backend B3f → B3r → validator run on the real archived A9 results.
 
 **6. Budget, attempts and launch (GPT A10 #6).**
@@ -721,6 +722,32 @@ Round-4 reviews: `reviews/grok_A9.md` and `reviews/gpt_A9.md` (both are summarie
 - The earlier wording ("every loss came from the wrong picks") was wrong and is corrected in `B3_REPORT.md`.
 - The forum posts of 2026-10-15 06:23 AEDT carry the same wrong wording; a correction is pending Stefan's go.
 
-**8. Reporting.**
+**8. Reporting (GPT A10 r1, Q4).**
+- B3r goes in a **separate secondary section**, after the A9 verdict, which is stated first and prominently: **A9 B3: POC FAILED.**
+- The original A9 Falcon→Qwen result is described as **a frozen-parser failure with zero ID receiver calls** (all 60 sender replies `invalid_multiple`, 240 `sender_invalid`). It is not described as a communication result in either direction.
 - `B3R_REPORT.md` will carry: the A10 label, the unchanged A9 verdict first, the parse paths (frozen vs A10) for all 60, the selection accuracy and baselines, the pipeline accuracy vs the reused prose arm with its CI and label, and the bytes and costs.
 - It also carries the TII attribution line: Falcon3-7B-Instruct results were produced using artificial intelligence technology from the Technology Innovation Institute (TII Falcon License).
+
+**A10 round 5 (GPT A10 r1: CHANGE before freeze), 2026-10-15. Applied:**
+- **Validator hardened.** The defect: after a fake B3f→B3r run, deleting one copied prose row and regenerating the manifest still passed (240 id_selected vs 239 prose, rc 0). The validator now enforces:
+  - exactly 60 unique archived selections, with the same entries as A9 B3;
+  - exactly 240 rows per exchange condition, with unique (entry, case) keys covering exactly the scheduled TEST cases of those entries;
+  - every copied prose row equal to its pinned B3 source row, with only `reused_from` added;
+  - exactly 24 scheduled non-TEST format views per model in B3f.
+- **Regression tests** (`tests/test_a10.py`): a missing prose row, a missing id_selected row, an altered copied prose row, an extra field on a copied prose row, a missing selection and a missing format view all fail validation. A clean run passes.
+- **Text:** Q1 (cross-session effects; the CI does not cover that bias), Q2 (bar kept; 4 entries, 19 distinct views, not independent), Q4 (separate secondary section; frozen-parser failure with zero ID receiver calls). Q3 was accepted as is.
+- **Q5: not frozen.** `a10.status` stays `draft`.
+
+**B3f result (ran 2026-10-15 09:09–09:18 AEDT, kernel `devamped13/e1b-stage-b3f` v1, commit `6a60c8d`, 0.153 of 0.25 GPU-h).**
+- GPU preflight passed on T4 nf4 for both models; canaries 20/20 for both.
+- 24/24 scheduled non-TEST views per model; validator passed (fixed validator).
+
+| Model | Frozen parser valid | A10 parser valid | Changed accepted decisions | Bar (≥22/24 and 0 changed) |
+| --- | --- | --- | --- | --- |
+| qwen7b | 24/24 (bare letter, 1 token) | 24/24 | 0 | **PASS** |
+| falcon7b | 0/24 (all `X) F1` / `X) F2`, 4 tokens) | 24/24 | 0 | **PASS** |
+
+- This reproduces the B3 defect on non-TEST data: Falcon writes "X) Fn" every time.
+- Selection on these views (descriptive, not a test): qwen 22/24, falcon 24/24.
+- Cumulative A9 + A10: 6.15 + 0.15 = **6.30 / 12.0 GPU-h**. A10 so far: 0.15 / 1.0.
+- **Code hash:** the validator change moves the A10 draft hash from `543a369c…` (the B3f run) to `c484991e…`. The stage code that B3f ran is unchanged; only `validate.py` changed.
