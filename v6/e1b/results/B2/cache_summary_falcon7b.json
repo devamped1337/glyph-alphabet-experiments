@@ -1,0 +1,61 @@
+{
+ "fixed": {
+  "n_prompts": 100,
+  "invalid_runs": 0,
+  "cold_cold": {
+   "pred_changed": 0,
+   "token_changed": 0
+  },
+  "warm_warm": {
+   "pred_changed": 0,
+   "token_changed": 0
+  },
+  "cold_warm_1": {
+   "pred_changed": 2,
+   "token_changed": 6
+  },
+  "cold_warm_2": {
+   "pred_changed": 2,
+   "token_changed": 6
+  },
+  "cold_coldsplit": {
+   "pred_changed": 2,
+   "token_changed": 6
+  },
+  "coldsplit_warm": {
+   "pred_changed": 0,
+   "token_changed": 0
+  }
+ },
+ "stress": {
+  "n_prompts": 20,
+  "invalid_runs": 0,
+  "cold_cold": {
+   "pred_changed": 0,
+   "token_changed": 0
+  },
+  "warm_warm": {
+   "pred_changed": 0,
+   "token_changed": 0
+  },
+  "cold_warm_1": {
+   "pred_changed": 0,
+   "token_changed": 0
+  },
+  "cold_warm_2": {
+   "pred_changed": 0,
+   "token_changed": 0
+  },
+  "cold_coldsplit": {
+   "pred_changed": 0,
+   "token_changed": 0
+  },
+  "coldsplit_warm": {
+   "pred_changed": 0,
+   "token_changed": 0
+  }
+ },
+ "claim_allowed": false,
+ "rule_of_three_upper_95_per_prompt": 0.03,
+ "wording": "cache claim WITHHELD: changed or invalid predictions observed; all claims in this runtime use uncached runs"
+}

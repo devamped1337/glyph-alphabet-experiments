@@ -82,5 +82,21 @@
  "B1c/prompts_qwen7b.jsonl": "d222c775cbe1e5800760eeb57bb1d2f25eaa4c9f9a68e5653d7f996210a13a38",
  "B1c/stage_log.jsonl": "1ad05944925e9940378dc3de5e52af4c46d324bf807e9536c4ad57e6ee7e164a",
  "B1c/summary.json": "90241ff3e5e93fd55dff17852c57e26348209c7d0b4f275d62cb6dcee6900bc5",
- "budget_ledger.json": "a1508fe3b2448bec30b48e983b8dac070327889163eba1923cb88ce59c05668f"
+ "B2/.done": "2bd02971b9c74cf0f80965bc9fc7217e7d265483eb5b1478300870c41def88ef",
+ "B2/a9_state.json": "1ba67d0887f18066057a97126dddcd8ff030133a0846a200dd52775087d719bf",
+ "B2/byte_identity.json": "fafc6e4622d0235b44f052f62ce168258a3a20f0fa5b307b43a66337ffd45340",
+ "B2/cache_falcon7b.jsonl": "d3526b5ca7d978cf267ba2fa70b314ba488dd03dbd956a50a123b695531028c2",
+ "B2/cache_qwen7b.jsonl": "6a7fb3cd4c1f8990552d525c503046079d2d11a6991cfb914945b33b867317b6",
+ "B2/cache_summary_falcon7b.json": "107f6775c9e682e54f51480a11daeb7f5a1c70ac9a5a09dc97af52485b616c0c",
+ "B2/cache_summary_qwen7b.json": "cce70deb068e26ab5ca91ea644be28d08f7f6dc114ba5dcffcc281ae298c13a6",
+ "B2/canary_falcon7b.jsonl": "2097f8e56bdefbdde570caab53c1fa5099843114a8b5aca84716cda6c3df821a",
+ "B2/canary_qwen7b.jsonl": "0595c304d034259ccb2b082fbb9c71de18149dd5e60d3cda819a2bf8afd377e9",
+ "B2/main_falcon7b.jsonl": "9fc53d2752272f8cbe0b7173e92749fe0076325c4cc36d2ea108d47089786a86",
+ "B2/main_qwen7b.jsonl": "5430055c4aa12f6fa9103af471fd69e5bee2b35834950ba3713fb2c1c976d509",
+ "B2/prompts_falcon7b.jsonl": "798d464d0e67eb61e0f2c38e0d6e9977e052bf877dd03ea4317f9277269bd503",
+ "B2/prompts_qwen7b.jsonl": "44191d328bbfb00697b74bc923a84f8b67d19fcf7554ced29093572d40ae957a",
+ "B2/stage_log.jsonl": "1db07118df162d66032f73df6bb7395cd063b0c5ec60fc6c93d61fea6db0bb66",
+ "B2/summary.json": "bd011f02f26cf1ddceb3e35be6dab1785715e67d0bfb7a8d8d6eb9db608ac373",
+ "B2/unknown.jsonl": "08e758b143ddc1e7987aaa47b090a05031ac79a461a09fc94faea6cc8a2e7bb1",
+ "budget_ledger.json": "89449fd9082498efbd490d75f7f7a604e8c8df8d3892f237d6d43d7c8a49117f"
 }

@@ -1,0 +1,333 @@
+{
+ "byte_identity": {
+  "n": 240,
+  "all_identical": true
+ },
+ "note": "id_oracle vs direct_text is ZERO BY CONSTRUCTION (byte-identical prompts); B2 content = prose comparison + cost table",
+ "unknown_id": {
+  "n": 48,
+  "deterministic_unknown": 48
+ },
+ "qwen7b": {
+  "acc_by_cond_fam": {
+   "direct_text": {
+    "F1": {
+     "acc": 1.0,
+     "n": 120
+    },
+    "F2": {
+     "acc": 0.9916666666666667,
+     "n": 120
+    }
+   },
+   "id_raw": {
+    "F1": {
+     "acc": 0.0,
+     "n": 60
+    },
+    "F2": {
+     "acc": 0.0,
+     "n": 60
+    }
+   },
+   "placebo": {
+    "F1": {
+     "acc": 0.0,
+     "n": 60
+    },
+    "F2": {
+     "acc": 0.0,
+     "n": 60
+    }
+   },
+   "prose": {
+    "F1": {
+     "acc": 1.0,
+     "n": 120
+    },
+    "F2": {
+     "acc": 0.9833333333333333,
+     "n": 120
+    }
+   }
+  },
+  "direct_minus_prose_core": {
+   "est": 0.004166666666666667,
+   "ci": [
+    -0.008333333333333333,
+    0.020833333333333332
+   ],
+   "label": "non-inferior"
+  },
+  "id_oracle_paired": {
+   "n": 20,
+   "identical_outputs": 20
+  },
+  "cost_cold": {
+   "direct_text": {
+    "n": 240,
+    "latency_s": 2.1249841666666667,
+    "prompt_tokens": 123.775,
+    "new_prompt_tokens": 123.775,
+    "gen_tokens": 54.295833333333334,
+    "flops_new_tokens": 2706676666666.6665,
+    "batch": "mixed",
+    "cached": false
+   },
+   "id_raw": {
+    "n": 120,
+    "latency_s": 2.128845,
+    "prompt_tokens": 105.0,
+    "new_prompt_tokens": 105.0,
+    "gen_tokens": 41.71666666666667,
+    "flops_new_tokens": 2230093333333.3335,
+    "batch": "mixed",
+    "cached": false
+   },
+   "placebo": {
+    "n": 120,
+    "latency_s": 2.128845,
+    "prompt_tokens": 121.8,
+    "new_prompt_tokens": 121.8,
+    "gen_tokens": 56.55,
+    "flops_new_tokens": 2710920000000.0,
+    "batch": "mixed",
+    "cached": false
+   },
+   "prose": {
+    "n": 240,
+    "latency_s": 2.1249841666666667,
+    "prompt_tokens": 127.10833333333333,
+    "new_prompt_tokens": 127.10833333333333,
+    "gen_tokens": 53.983333333333334,
+    "flops_new_tokens": 2752593333333.3335,
+    "batch": "mixed",
+    "cached": false
+   }
+  },
+  "cost_prefix_cached": {},
+  "cache": {
+   "fixed": {
+    "n_prompts": 100,
+    "invalid_runs": 0,
+    "cold_cold": {
+     "pred_changed": 0,
+     "token_changed": 0
+    },
+    "warm_warm": {
+     "pred_changed": 0,
+     "token_changed": 0
+    },
+    "cold_warm_1": {
+     "pred_changed": 1,
+     "token_changed": 7
+    },
+    "cold_warm_2": {
+     "pred_changed": 1,
+     "token_changed": 7
+    },
+    "cold_coldsplit": {
+     "pred_changed": 1,
+     "token_changed": 7
+    },
+    "coldsplit_warm": {
+     "pred_changed": 0,
+     "token_changed": 0
+    }
+   },
+   "stress": {
+    "n_prompts": 20,
+    "invalid_runs": 0,
+    "cold_cold": {
+     "pred_changed": 0,
+     "token_changed": 0
+    },
+    "warm_warm": {
+     "pred_changed": 0,
+     "token_changed": 0
+    },
+    "cold_warm_1": {
+     "pred_changed": 0,
+     "token_changed": 0
+    },
+    "cold_warm_2": {
+     "pred_changed": 0,
+     "token_changed": 0
+    },
+    "cold_coldsplit": {
+     "pred_changed": 0,
+     "token_changed": 0
+    },
+    "coldsplit_warm": {
+     "pred_changed": 0,
+     "token_changed": 0
+    }
+   },
+   "claim_allowed": false,
+   "rule_of_three_upper_95_per_prompt": 0.03,
+   "wording": "cache claim WITHHELD: changed or invalid predictions observed; all claims in this runtime use uncached runs"
+  },
+  "cost_note": "cached timing is batch-1 only; FLOPs = 2*params*(newly processed + generated tokens); uncached always shown"
+ },
+ "falcon7b": {
+  "acc_by_cond_fam": {
+   "direct_text": {
+    "F1": {
+     "acc": 1.0,
+     "n": 120
+    },
+    "F2": {
+     "acc": 0.9916666666666667,
+     "n": 120
+    }
+   },
+   "id_raw": {
+    "F1": {
+     "acc": 0.0,
+     "n": 60
+    },
+    "F2": {
+     "acc": 0.0,
+     "n": 60
+    }
+   },
+   "placebo": {
+    "F1": {
+     "acc": 0.0,
+     "n": 60
+    },
+    "F2": {
+     "acc": 0.0,
+     "n": 60
+    }
+   },
+   "prose": {
+    "F1": {
+     "acc": 1.0,
+     "n": 120
+    },
+    "F2": {
+     "acc": 1.0,
+     "n": 120
+    }
+   }
+  },
+  "direct_minus_prose_core": {
+   "est": -0.004166666666666667,
+   "ci": [
+    -0.0125,
+    0.0
+   ],
+   "label": "non-inferior"
+  },
+  "id_oracle_paired": {
+   "n": 20,
+   "identical_outputs": 19
+  },
+  "cost_cold": {
+   "direct_text": {
+    "n": 240,
+    "latency_s": 3.445313333333333,
+    "prompt_tokens": 132.70416666666668,
+    "new_prompt_tokens": 132.70416666666668,
+    "gen_tokens": 77.77083333333333,
+    "flops_new_tokens": 3138413967820.8,
+    "batch": "mixed",
+    "cached": false
+   },
+   "id_raw": {
+    "n": 120,
+    "latency_s": 3.64891,
+    "prompt_tokens": 113.76666666666667,
+    "new_prompt_tokens": 113.76666666666667,
+    "gen_tokens": 61.85,
+    "flops_new_tokens": 2618637841305.6,
+    "batch": "mixed",
+    "cached": false
+   },
+   "placebo": {
+    "n": 120,
+    "latency_s": 3.64891,
+    "prompt_tokens": 132.4,
+    "new_prompt_tokens": 132.4,
+    "gen_tokens": 71.18333333333334,
+    "flops_new_tokens": 3035651630592.0,
+    "batch": "mixed",
+    "cached": false
+   },
+   "prose": {
+    "n": 240,
+    "latency_s": 3.445313333333333,
+    "prompt_tokens": 137.97083333333333,
+    "new_prompt_tokens": 137.97083333333333,
+    "gen_tokens": 74.3125,
+    "flops_new_tokens": 3165378208665.6,
+    "batch": "mixed",
+    "cached": false
+   }
+  },
+  "cost_prefix_cached": {},
+  "cache": {
+   "fixed": {
+    "n_prompts": 100,
+    "invalid_runs": 0,
+    "cold_cold": {
+     "pred_changed": 0,
+     "token_changed": 0
+    },
+    "warm_warm": {
+     "pred_changed": 0,
+     "token_changed": 0
+    },
+    "cold_warm_1": {
+     "pred_changed": 2,
+     "token_changed": 6
+    },
+    "cold_warm_2": {
+     "pred_changed": 2,
+     "token_changed": 6
+    },
+    "cold_coldsplit": {
+     "pred_changed": 2,
+     "token_changed": 6
+    },
+    "coldsplit_warm": {
+     "pred_changed": 0,
+     "token_changed": 0
+    }
+   },
+   "stress": {
+    "n_prompts": 20,
+    "invalid_runs": 0,
+    "cold_cold": {
+     "pred_changed": 0,
+     "token_changed": 0
+    },
+    "warm_warm": {
+     "pred_changed": 0,
+     "token_changed": 0
+    },
+    "cold_warm_1": {
+     "pred_changed": 0,
+     "token_changed": 0
+    },
+    "cold_warm_2": {
+     "pred_changed": 0,
+     "token_changed": 0
+    },
+    "cold_coldsplit": {
+     "pred_changed": 0,
+     "token_changed": 0
+    },
+    "coldsplit_warm": {
+     "pred_changed": 0,
+     "token_changed": 0
+    }
+   },
+   "claim_allowed": false,
+   "rule_of_three_upper_95_per_prompt": 0.03,
+   "wording": "cache claim WITHHELD: changed or invalid predictions observed; all claims in this runtime use uncached runs"
+  },
+  "cost_note": "cached timing is batch-1 only; FLOPs = 2*params*(newly processed + generated tokens); uncached always shown"
+ }
+}
