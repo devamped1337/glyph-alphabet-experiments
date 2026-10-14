@@ -31,3 +31,16 @@ def parse_answer(txt):
 def score_answer(parsed, gold):
     """Correct iff pred == gold. Abstention and invalid are not correct."""
     return parsed["pred"] is not None and not parsed["abstained"] and parsed["pred"] == str(gold)
+
+
+# ---------------------------------------------------------------- A10 (DRAFT): sender reply handling
+# Candidate IDs are rendered "F1-1434@v1#ed92089f" (families F1, F2, F3L). A reply such as "B) F1" (letter, then the
+# start of the candidate ID, cut at the frozen 4-token limit) was rejected by parse_letter because the "F" of "F1"
+# reads as a second standalone letter. A10 removes candidate-ID fragments first, then applies parse_letter UNCHANGED:
+# a bare "F1" -> invalid_none; two different option letters -> invalid_multiple; no broad first-letter rule.
+_ID_FRAG = re.compile(r"(?<![A-Za-z0-9])F(?:1|2|3L)(?:-\d*)?(?:@v?\d*)?(?:#[0-9a-f]*)?(?![A-Za-z0-9])")
+
+def parse_letter_a10(txt):
+    """A10 sender parser: parse_letter after deleting candidate-ID fragments (F1 / F2 / F3L, optionally
+    -NNNN@vN#hash, possibly truncated). Returns (letter|None, path)."""
+    return parse_letter(_ID_FRAG.sub(" ", txt))

@@ -1,7 +1,7 @@
 """Per-stage entrypoints (PREREG_E1b §2, §7, §9 + A1). Each stage writes v6/e1b/results/<stage>/*.jsonl,
 summary.json and a .done marker; it is resumable (rows already written are skipped by key) and stops on
 its wall-clock budget (writes BUDGET_EXHAUSTED, exit 3) — never shrinks N or drops conditions."""
-import json, os, sys, time, random, platform, subprocess
+import hashlib, json, os, sys, time, random, platform, subprocess
 from pathlib import Path
 from . import HERE, load_cfg, sha256_text
 
@@ -907,3 +907,121 @@ def stage_build(cfg):
     B = get_book(cfg); print(json.dumps({k: len(v) for k, v in B["cases"].items()}), "entries", len(B["entries"]))
 
 STAGES = dict(build=stage_build, A=stage_A, B0=stage_B0, B0x=stage_B0x, B0b=stage_B0b, B1c=_a9_guard(stage_B1c), B1=_a9_guard(stage_B1), B2=_a9_guard(stage_B2), B3=_a9_guard(stage_B3))
+
+# ================================================================ A10 (DRAFT): post-hoc diagnostic completion of B3 falcon7b -> qwen7b
+A10_TERMINAL = A9_TERMINAL
+
+def _a10_start(cfg, name):
+    """A10: B3f may run pre-freeze (non-TEST only); B3r needs a10 frozen. Both need E1B_GO == name, A9 B3 finished,
+    every reused input matching its pinned sha256, one authorised start, and room in the 1 h A10 cap and the 12 h total."""
+    from . import a9 as A9
+    X = cfg.get("a10")
+    if not X: print(f"{name} refused: no a10 block"); sys.exit(13)
+    if name == "B3r" and X.get("status") != "frozen": print("B3r refused: A10 is not frozen (a10.status != 'frozen')"); sys.exit(13)
+    if os.environ.get("E1B_GO") != name: print(f"{name} refused: no explicit go (E1B_GO must equal '{name}')"); sys.exit(14)
+    if not (RES / "B3" / ".done").exists(): print(f"{name} refused: A9 B3 not finished"); sys.exit(19)
+    bad = [p for p, h in X["reuse_sha256"].items() if not (RES / p).exists() or hashlib.sha256((RES / p).read_bytes()).hexdigest() != h]
+    if bad: print(f"{name} refused: reused inputs missing or changed: {bad}"); sys.exit(15)
+    B = A9.get_book(cfg); d = RES / name
+    if (d / ".done").exists(): print(f"{name} already finished (A10)"); sys.exit(0)
+    term = [m for m in A10_TERMINAL if (d / m).exists()]
+    if term: print(f"{name}: terminal marker {term} -> stop and report"); sys.exit(18)
+    if name == "B3r" and not (RES / "B3f" / ".done").exists(): print("B3r refused: B3f (format check) not finished"); sys.exit(19)
+    L = json.load(open(RES / "budget_ledger.json")) if (RES / "budget_ledger.json").exists() else {}
+    a10 = sum(v for k, v in L.items() if k.startswith("A10_")) / 3600; tot = sum(v for k, v in L.items() if k.startswith(("A9_", "A10_"))) / 3600
+    if a10 + X["caps_h"][name] > X["total_cap_h"] + 1e-9 or tot + X["caps_h"][name] > X["allowance_total_h"] + 1e-9:
+        print(f"{name} refused: cap would exceed A10 {X['total_cap_h']} h or A9+A10 {X['allowance_total_h']} h"); sys.exit(6)
+    d.mkdir(parents=True, exist_ok=True); stp = d / "a10_state.json"
+    st = json.load(open(stp)) if stp.exists() else dict(starts=0, cap_h=X["caps_h"][name])
+    if st["starts"] >= X["max_starts"]:
+        (d / "ATTEMPT_INCOMPLETE").write_text(f"{name}: the one authorised start was used; INCOMPLETE (A10)\n"); sys.exit(17)
+    st["starts"] += 1; json.dump(st, open(stp, "w"), indent=1)
+    _A9.clear(); _A9["on"] = True; _A9["cfg"] = A9.a9_cfg(cfg)[0]; _A9["dir"] = d
+    br = RES / "B1c" / "batch_rule.json"; _A9["batch_size"] = json.load(open(br))["batch_size"]
+    S = Stage(name, st["cap_h"], cfg, alloc=f"A10_{name}"); _require_gpu(S)
+    S.log("a10", label=X["label"], cap_h=st["cap_h"], starts=st["starts"], reuse_sha256=X["reuse_sha256"], parser=X["parser"])
+    return X, B, S
+
+def b3f_views(B, cfg, k):
+    """Non-TEST sender views: the A9 pilot entries (never TEST), each in k seeded candidate orders."""
+    out = []
+    for fam in cfg["families_core"]:
+        for eid in B["groups"][f"pilot_{fam}"]:
+            for j in range(k): out.append((f"{eid}|o{j}", eid, sender_view(B, eid, random.Random(seed_of(cfg["seeds"]["generator"], "a10_fmt", eid, j)))))
+    return out
+
+def stage_B3f(cfg):
+    """A10 pre-freeze format check: both models, frozen sender prompt and settings, non-TEST views only; raw replies
+    logged and parsed by both parsers. Descriptive input to the freeze decision; no TEST data, no headline."""
+    from .parsing import parse_letter_a10
+    X, B, S = _a10_start(cfg, "B3f"); cfg = _A9["cfg"]; views = b3f_views(B, cfg, X["b3f_orders_per_entry"]); summ = {}
+    for m in cfg["a9"]["pair"]:
+        b, _ = load_B(m, cfg, S); require_canaries(b, m, cfg, B, S); f = f"format_{m}.jsonl"
+        for key, eid, v in views:
+            if key in S.done_keys(f): continue
+            S.check_budget(); s, p, u = sender_parts(v); r = b.generate(s, p, u, cfg["sender_max_new_tokens"])
+            o, n = parse_letter(r["text"]), parse_letter_a10(r["text"]); pick = v["candidates"]["ABCD".index(n[0])] if n[0] else None
+            S.write(f, rec(m, "B3f", "format", key, entry=eid, sender_view=v, raw=r["text"], frozen=list(o), a10=list(n), pick=pick, correct=pick == eid,
+                           gen_tokens=r["gen_tokens"], latency_s=r["latency_s"]))
+        del b
+        R = [json.loads(l) for l in open(S.dir / f)]
+        summ[m] = dict(n=len(R), frozen_valid=sum(r["frozen"][0] is not None for r in R), a10_valid=sum(r["a10"][0] is not None for r in R),
+                       changed=sum(r["frozen"][0] is not None and r["frozen"] != r["a10"] for r in R), correct=sum(r["correct"] for r in R))
+    S.finish(dict(label=X["label"], non_test_only=True, per_model=summ, note="descriptive; reviewers decide the freeze"))
+
+def stage_B3r(cfg):
+    """A10 B3r: re-parse the 60 ARCHIVED falcon7b sender replies with parse_letter_a10 (no new sender call, no
+    attempt choice), run ONLY the missing qwen7b receiver id_selected arm, reuse the pinned B3 prose arm verbatim,
+    and analyse with the unchanged summarize_B3 code. Secondary, post hoc."""
+    import shutil
+    from .parsing import parse_letter_a10
+    X, B, S = _a10_start(cfg, "B3r"); cfg = _A9["cfg"]; snd, rcv = X["direction"]; E = B["entries"]; D = Dictionary(B, accepted=None)
+    src = [json.loads(l) for l in open(RES / "B3" / f"select_{snd}.jsonl")]
+    fs = f"select_{snd}.jsonl"
+    for r in src:
+        if r["key"] in S.done_keys(fs): continue
+        L, path = parse_letter_a10(r["raw"]); v = r["sender_view"]; pick = v["candidates"]["ABCD".index(L)] if L else None
+        S.write(fs, dict(r, stage="B3r", letter=L, parse_path=path, pick=pick, correct=pick == r["entry"],
+                         picked_ntype=(E[pick].get("ntype") if pick and pick != r["entry"] else None),
+                         frozen_parse=dict(letter=r["letter"], parse_path=r["parse_path"], pick=r["pick"]), reparsed_from="B3/" + fs))
+    picks = {json.loads(l)["entry"]: json.loads(l) for l in open(S.dir / fs)}
+    fx = f"exchange_{snd}_to_{rcv}.jsonl"; old = [json.loads(l) for l in open(RES / "B3" / fx)]
+    for r in old:   # prose arm: reused verbatim (pinned sha); its rendered prompts copied so A2 resolves
+        if r["cond"] == "prose" and r["key"] not in S.done_keys(fx): S.write(fx, dict(r, reused_from="B3/" + fx))
+    pf = S.dir / f"prompts_{rcv}.jsonl"; need = {r["prompt_sha"] for r in old if r["cond"] == "prose" and r.get("prompt_sha")}
+    have = {json.loads(l)["prompt_sha"] for l in open(pf)} if pf.exists() else set()
+    with open(pf, "a") as g:
+        for l in open(RES / "B3" / f"prompts_{rcv}.jsonl"):
+            ps = json.loads(l)["prompt_sha"]
+            if ps in need and ps not in have: g.write(l); have.add(ps)
+    b, _ = load_B(rcv, cfg, S); require_canaries(b, rcv, cfg, B, S); jobs = []
+    for r in old:
+        if r["cond"] != "id_selected": continue
+        k = r["key"]; e = E[r["entry"]]; c = dict(text=r["case"], gold=r["gold"], entry=r["entry"]); sel = picks[r["entry"]]
+        if k in S.done_keys(fx): continue
+        if sel["pick"] is None:
+            S.write(fx, rec(rcv, "B3r", "exchange", k, cond="id_selected", entry=e["id"], fam=e["fam"], case=c["text"], gold=c["gold"], pred=None, correct=False,
+                            abstained=False, model_called=False, reason="sender_invalid", sender=snd, receiver=rcv, gated=False, **bytes_record("id_selected", "", c)))
+            continue
+        ent, why = D.resolve(framed_id(E[sel["pick"]]))
+        if ent is None:
+            S.write(fx, rec(rcv, "B3r", "exchange", k, cond="id_selected", entry=e["id"], fam=e["fam"], case=c["text"], gold=c["gold"], pred="UNKNOWN", abstained=True,
+                            correct=False, model_called=False, reason=why, sender=snd, receiver=rcv, gated=False, **bytes_record("id_selected", framed_id(E[sel["pick"]]), c)))
+            continue
+        jobs.append((k, ent, c, dict(selected=ent["id"], selection_correct=ent["id"] == e["id"], sender=snd, receiver=rcv, gated=False, entry=e["id"], fam=e["fam"])))
+    tc = {t["text"]: t for t in B["cases"]["test"]}
+    for ch in chunks(jobs, bs(cfg)):
+        S.check_budget()
+        for (k, ent, c, x), r in zip(ch, ask_arith_many(b, rcv, [("id_selected", ent, tc[c["text"]], None) for k, ent, c, x in ch], cfg)):
+            r.update(x); S.write(fx, rec(rcv, "B3r", "exchange", k, **r))
+    del b
+    from .analysis import summarize_B3
+    view = RES / ".B3r_view"; shutil.rmtree(view, ignore_errors=True); view.mkdir()
+    for f in (fs, fx): shutil.copy(S.dir / f, view / f)
+    for f in (f"select_{rcv}.jsonl", f"exchange_{rcv}_to_{snd}.jsonl"): shutil.copy(RES / "B3" / f, view / f)   # unchanged A9 direction, needed by the unchanged code
+    sm = summarize_B3(view, cfg["a9"]["pair"], cfg, B, False); shutil.rmtree(view)
+    S.finish(dict(label=X["label"], primary_result_unchanged="A9 B3: POC FAILED (both directions inferior); A10 cannot overturn it",
+                  direction=f"{snd}->{rcv}", parser=X["parser"], prose_arm=X["prose_arm"], reuse_sha256=X["reuse_sha256"],
+                  result=sm.get(f"{snd}->{rcv}"), not_checked_repository=True))
+
+STAGES.update(B3f=_a9_guard(stage_B3f), B3r=_a9_guard(stage_B3r))

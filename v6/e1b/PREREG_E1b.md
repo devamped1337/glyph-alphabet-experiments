@@ -632,3 +632,95 @@ Round-4 reviews: `reviews/grok_A9.md` and `reviews/gpt_A9.md` (both are summarie
      **All 95 tests pass.**
 
 **A9 errata (non-blocking, GPT final):** B1's projection averages both models' batch-1 latency for the manipulation check, which runs on Falcon only. Using Falcon's batch-1 latency (6.37 s) adds about 0.029 h, so B1 projects about 2.55 h. The B1 cap stays **3.20**, and the total stays 12.00. Neither the frozen level nor any cap changes.
+
+---
+
+### A10 (DRAFT, NOT FROZEN): 2026-10-15 (AEDT). Post-hoc diagnostic completion of B3, Falcon sends → Qwen receives
+
+**What A10 is (GPT A10 #1).** A10 is a **post-hoc diagnostic completion on a TEST set we have already seen.** It was written **after** we saw the A9 B3 results, including the exploratory first-letter re-parse that gave 56/60.
+- **The A9 B3 verdict stands as the primary result: POC FAILED** (§10; both directions inferior).
+- A10 results are **secondary**, are labelled `POST-HOC DIAGNOSTIC COMPLETION (A10)` everywhere, and **cannot overturn the two-direction claim**, whatever they show.
+- A9's results, summaries and reports are not edited, apart from the factual correction in item 7.
+- The gate stays dropped (A9 4b), so there is no checked-repository claim.
+
+**1. The defect.**
+- Under the frozen sender settings (4 new tokens), Falcon3-7B answered all 60 B3 sender prompts as `X) F1` or `X) F2`: the option letter, then the start of the candidate ID (`F1-1434@v1#…`), cut off at the token limit.
+- The frozen `parse_letter` treats the `F` of `F1` as a second standalone letter, so it returned `invalid_multiple` for all 60. No Falcon pick was valid, and the Qwen receiver was never called on id_selected (`sender_invalid` × 240).
+- So that direction tested nothing about communication.
+
+**2. Parser fix (GPT A10 #3), `parsing.parse_letter_a10`.**
+- It deletes **candidate-ID fragments** first: `F1`, `F2` or `F3L`, optionally followed by `-NNNN`, `@vN` and `#hash`, possibly truncated, and only as a whole token.
+- It then applies the frozen `parse_letter` **unchanged**:
+  - a bare `F1` / `F2-1434` → `invalid_none`;
+  - `F` or `E` → `invalid_letter`;
+  - two different option letters (`B or C`, `B) F1 C)`) → `invalid_multiple`.
+- **There is no broad first-letter rule.**
+- The frozen `parse_letter` is kept for every A9 result.
+
+**3. Unchanged.**
+- The sender prompt, the generation settings (greedy, `sender_max_new_tokens = 4`), the candidate order (`b3_view` seeds) and the TEST book (`19f8d46d…`).
+- The cases, scoring, the −0.05 non-inferiority margin, the paired cluster bootstrap (2000 resamples, A9 bootstrap seed) and the analysis code (`summarize_B3`, unchanged).
+- This replaces the earlier idea of raising max tokens or changing the prompt. That idea is dropped.
+
+**4. Design (GPT A10 #4).**
+- **(a) Sender: no new sender call.**
+  - All 60 **archived** Falcon replies (`B3/select_falcon7b.jsonl`) are re-parsed with `parse_letter_a10`.
+  - Every reply is kept byte for byte (the validator checks this), alongside its frozen parse.
+  - No sender attempt is regenerated or chosen.
+- **(b) Receiver: only the missing arm is run.** qwen7b answers the 240 `id_selected` items for the re-parsed picks. It is a fresh load with canaries, B1c batch 8, and the frozen receiver prompt and settings.
+- **(c) Prose arm: reused, not rerun.**
+  - The 240 `prose` rows of `B3/exchange_falcon7b_to_qwen7b.jsonl` are copied verbatim, with `reused_from`, and their rendered prompts are copied too.
+  - Reason: rerunning prose would add a second, selectable prose measurement.
+  - Known limitation: the id_selected arm runs in a later session, with different batch neighbours from the prose arm. B1c's 120/120 batch conformance and B2's 20/20 paired identity bound that risk but do not remove it.
+- **(d) Pinned fingerprints.** Every reused input carries a pinned sha256 (`a10.reuse_sha256`); B3f and B3r refuse (exit 15) and the validator fails on any mismatch:
+
+| Reused file | sha256 |
+| --- | --- |
+| `B3/select_falcon7b.jsonl` | `6d2494fb966d9304d880960dd10e23d1e4606c901c31fd6f830be04c2737ce06` |
+| `B3/exchange_falcon7b_to_qwen7b.jsonl` | `cd7121960fa186fde50a8437110068f052882d9775f76678787f485e5d77d1be` |
+| `B3/prompts_qwen7b.jsonl` | `d0cdca2c15a7eae44298e7010672ccd1a8f6e0b56e6e49d5d9cc797395b1fd17` |
+| `B3/select_qwen7b.jsonl` (unchanged direction, analysis input) | `d7a301d2be10c25c9806424f830378ac329ddef2a0f3585fb40a73c2b4be4d01` |
+| `B3/exchange_qwen7b_to_falcon7b.jsonl` (same) | `0d89fe4d9a1239035ee9553b1ca6bf124a808f66f948bf8b7552c5276b335f96` |
+| `B3/summary.json` (A9 verdict) | `42cf348edc8ae3c652a44d38f713839b4b1f706dfa2211235748583462ea58e7` |
+
+  The TEST book is still checked against `a9.book_sha256`.
+- **(e) Analysis.** The unchanged `summarize_B3` runs on the A10 Falcon→Qwen files, alongside the unchanged A9 Qwen→Falcon files. **Only the Falcon→Qwen block is reported**, as secondary.
+- **(f) Dropped (GPT A10 #4):** the optional symmetric re-run of the Qwen-sends direction. Its frozen parse is identical under A10 (60/60 same), so it would only buy a second draw.
+
+**5. Checks before the freeze (GPT A10 #5).**
+- **Offline pilot, done** (`tools/a10_offline_pilot.py` → `a10_offline_pilot.json`). Both parsers were applied to all 22,296 archived letter-parsed replies of both models (B0x, B1c, B1 probes; B3 sender):
+  - **22,236 identical**;
+  - **0 changed decisions**;
+  - **60 rescued**: all 60 Falcon B3 sender replies, of which 56 picks are correct (exploratory; already seen).
+  - The 60 Qwen sender replies parse identically.
+- **B3f, a non-TEST sender format check (GPU, small; may run before the freeze on `E1B_GO=B3f`).**
+  - Both models get the frozen sender prompt and settings on the A9 **pilot** entries, which are never TEST: 2 per core family, each in 6 seeded candidate orders, so 24 views per model.
+  - Raw replies are logged and parsed by both parsers. Neither the TEST set nor any receiver is used.
+  - This is the only way to see Falcon's sender formatting on non-TEST data: B0x's pilot sender calls did not keep the text.
+  - **Reviewers see B3f before the freeze.** The proposed bar is: A10 gives a valid parse for at least 22/24 replies per model, with 0 changed frozen decisions. If it fails, A10 is not frozen as written.
+- **Unit tests** (`tests/test_a10.py`): unambiguous replies, candidate-ID fragments, bare fragments, conflicting choices, no changed frozen decision, the offline invariants above, launch gates, tampered reuse, the one-start rule, caps, and a fake-backend B3f → B3r → validator run on the real archived A9 results.
+
+**6. Budget, attempts and launch (GPT A10 #6).**
+- **Results** go in separate directories, `results/B3f` and `results/B3r`. A9's `results/B3` is read only.
+- **One authorised start per stage** (`a10.max_starts = 1`). There is no infra retry; a second start writes `ATTEMPT_INCOMPLETE`. The terminal markers are A9's.
+- **Persistent caps**, in their own ledger allocations: B3f **0.25 h** (`A10_B3f`) and B3r **0.50 h** (`A10_B3r`). The A10 total cap is **1.0 h**, and the cumulative A9 + A10 cap is **12.0 h**.
+  - A9 has used 6.15 h, so the worst case is 6.90 h.
+  - A stage refuses (exit 6) if its cap would break either limit. Every check runs before a start is consumed.
+- **Estimates:**
+  - B3f: about 0.15 GPU-h (two model loads of ~170 + 145 s, canaries ~70 + 135 s, 48 sender calls at ~0.55 s).
+  - B3r: about 0.21 GPU-h (one Qwen load ~170 s, canaries ~70 s, 240 receiver calls at ~2.1 s at batch 8).
+  - Total about **0.36 GPU-h**.
+- **Gates:**
+  - `B3r` refuses unless `a10.status == "frozen"` and `E1B_GO == "B3r"`, A9 B3 is `.done`, and B3f is `.done`.
+  - `B3f` needs `E1B_GO == "B3f"`.
+  - **A10 is frozen only after Grok and GPT review. Both stages launch only on Stefan's explicit go**, with no automation and no Mistral.
+  - **Code hash.** A9's frozen hash `d0203f22…` stays pinned by the tag `prereg-e1b-a9`, and every A9 result logs it. `CODE_HASH.txt` now records the A10 draft code, `543a369c…`; B3f runs at that draft commit, under the `run.sh` hash check. At the freeze, `a10.status` becomes `frozen`, which changes the config and therefore the hash; the new hash is recorded and the commit is tagged `prereg-e1b-a10`.
+
+**7. Correction to B3_REPORT (GPT A10 #2), verified from the raw results at `3973107`.**
+- In Qwen→Falcon id_selected, there were **37 errors**: **36 came from the 9 wrong selections**, and **1 (F2-3288) happened despite a correct selection**.
+- The earlier wording ("every loss came from the wrong picks") was wrong and is corrected in `B3_REPORT.md`.
+- The forum posts of 2026-10-15 06:23 AEDT carry the same wrong wording; a correction is pending Stefan's go.
+
+**8. Reporting.**
+- `B3R_REPORT.md` will carry: the A10 label, the unchanged A9 verdict first, the parse paths (frozen vs A10) for all 60, the selection accuracy and baselines, the pipeline accuracy vs the reused prose arm with its CI and label, and the bytes and costs.
+- It also carries the TII attribution line: Falcon3-7B-Instruct results were produced using artificial intelligence technology from the Technology Innovation Institute (TII Falcon License).

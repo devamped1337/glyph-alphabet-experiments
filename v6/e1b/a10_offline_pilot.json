@@ -1,0 +1,151 @@
+{
+ "files": {
+  "B0x/probediag_falcon7b.jsonl": {
+   "n": 1800,
+   "sha256": "524110f3bfe1a4aa5636bb83140f74f3f43a356b4d3ad1b100a2263a9704fd5b",
+   "same": 1800,
+   "a10_valid": 1800,
+   "examples": []
+  },
+  "B0x/probediag_qwen7b.jsonl": {
+   "n": 1800,
+   "sha256": "c468a66404048ab0e4c575294076c1dfe9fcd99c30c335473135f0644601e402",
+   "same": 1800,
+   "a10_valid": 1800,
+   "examples": []
+  },
+  "B0x/qual_falcon7b.jsonl": {
+   "n": 432,
+   "sha256": "426921c7a168fa719df685f05bd3fd54ff6210c0092dd87c85d405321b67daa9",
+   "same": 432,
+   "a10_valid": 432,
+   "examples": []
+  },
+  "B0x/qual_qwen7b.jsonl": {
+   "n": 432,
+   "sha256": "799a4e78dcde763427155d6b55c1e5d94a3ed58130d9adf3aef7f8dd4ba1e671",
+   "same": 432,
+   "a10_valid": 432,
+   "examples": []
+  },
+  "B1/calib_falcon7b.jsonl": {
+   "n": 6336,
+   "sha256": "e50e59bf22db2f7f3554d3ad66ee7ce4379f5a22f7b5a4c13f969d0a98272638",
+   "same": 6336,
+   "a10_valid": 6336,
+   "examples": []
+  },
+  "B1/calib_qwen7b.jsonl": {
+   "n": 6336,
+   "sha256": "6496936fa7e5d99f9691502326509325ecdc9d7d6dfb88f6d1351913f8191de3",
+   "same": 6336,
+   "a10_valid": 6336,
+   "examples": []
+  },
+  "B1/testgate_falcon7b.jsonl": {
+   "n": 2400,
+   "sha256": "f78b9252c4d598d02663b95140fb4d4771b612ac5abb05fd7e54b5f544dc38a8",
+   "same": 2400,
+   "a10_valid": 2400,
+   "examples": []
+  },
+  "B1/testgate_qwen7b.jsonl": {
+   "n": 2400,
+   "sha256": "d54c90a5301d3f68bdffda3e8044e271a03a3815563fb95efbc0c33d37b8e5df",
+   "same": 2400,
+   "a10_valid": 2400,
+   "examples": []
+  },
+  "B1c/batchcheck_falcon7b.jsonl": {
+   "n": 120,
+   "sha256": "45f2e716a6c2db3788ff8979035e8b97a47e3c1fa234cc77d0e1576cda03c812",
+   "same": 120,
+   "a10_valid": 120,
+   "examples": []
+  },
+  "B1c/batchcheck_qwen7b.jsonl": {
+   "n": 120,
+   "sha256": "49386a3b9cb5c3f9d0f4d3adf58fb5ee863b83697487b39d6b831cf0d13e23d8",
+   "same": 120,
+   "a10_valid": 120,
+   "examples": []
+  },
+  "B3/select_falcon7b.jsonl": {
+   "n": 60,
+   "sha256": "6d2494fb966d9304d880960dd10e23d1e4606c901c31fd6f830be04c2737ce06",
+   "rescued": 60,
+   "a10_valid": 60,
+   "examples": [
+    {
+     "raw": "B) F1",
+     "old": [
+      null,
+      "invalid_multiple"
+     ],
+     "new": [
+      "B",
+      "letter"
+     ]
+    },
+    {
+     "raw": "D) F1",
+     "old": [
+      null,
+      "invalid_multiple"
+     ],
+     "new": [
+      "D",
+      "letter"
+     ]
+    },
+    {
+     "raw": "B) F1",
+     "old": [
+      null,
+      "invalid_multiple"
+     ],
+     "new": [
+      "B",
+      "letter"
+     ]
+    },
+    {
+     "raw": "A) F1",
+     "old": [
+      null,
+      "invalid_multiple"
+     ],
+     "new": [
+      "A",
+      "letter"
+     ]
+    },
+    {
+     "raw": "D) F1",
+     "old": [
+      null,
+      "invalid_multiple"
+     ],
+     "new": [
+      "D",
+      "letter"
+     ]
+    }
+   ]
+  },
+  "B3/select_qwen7b.jsonl": {
+   "n": 60,
+   "sha256": "d7a301d2be10c25c9806424f830378ac329ddef2a0f3585fb40a73c2b4be4d01",
+   "same": 60,
+   "a10_valid": 60,
+   "examples": []
+  }
+ },
+ "totals": {
+  "n": 22296,
+  "same": 22236,
+  "rescued": 60,
+  "changed": 0
+ },
+ "note": "raw outputs reused verbatim; no model call. 'changed' = a decision the frozen parser accepted that A10 alters (must be 0)."
+}

@@ -215,7 +215,7 @@
  },
  "n_threads": 8,
  "stageB_batch_size": 8,
- "stageB_batch_note": "A5 conformance (PREREG \u00a79 'batched generation for B1-B3'); cache test stays batch-1",
+ "stageB_batch_note": "A5 conformance (PREREG §9 'batched generation for B1-B3'); cache test stays batch-1",
  "b0_resume": {
   "alloc": "reserve",
   "reserve_use": "c",
@@ -340,5 +340,37 @@
   "gate_policy": "ungated",
   "gate_note": "Stefan (PI), 2026-10-14, after seeing qualification scores: B2/B3 run ungated; per-entry bar (>=22/24) still computed in B1 and reported descriptively; no checked-repository or corruption-protection claim",
   "frozen": "2026-10-14 (AEDT), tag prereg-e1b-a9; approved by Grok + GPT (round 4b, pinned b3edce6)"
+ },
+ "a10": {
+  "status": "draft",
+  "amendment": "A10",
+  "label": "POST-HOC DIAGNOSTIC COMPLETION (A10) on an already-seen TEST set; secondary; cannot overturn the A9 B3 verdict (POC FAILED)",
+  "direction": [
+   "falcon7b",
+   "qwen7b"
+  ],
+  "parser": "parse_letter_a10",
+  "stages": [
+   "B3f",
+   "B3r"
+  ],
+  "caps_h": {
+   "B3f": 0.25,
+   "B3r": 0.5
+  },
+  "total_cap_h": 1.0,
+  "max_starts": 1,
+  "allowance_total_h": 12.0,
+  "b3f_orders_per_entry": 6,
+  "reuse_sha256": {
+   "B3/select_falcon7b.jsonl": "6d2494fb966d9304d880960dd10e23d1e4606c901c31fd6f830be04c2737ce06",
+   "B3/exchange_falcon7b_to_qwen7b.jsonl": "cd7121960fa186fde50a8437110068f052882d9775f76678787f485e5d77d1be",
+   "B3/prompts_qwen7b.jsonl": "d0cdca2c15a7eae44298e7010672ccd1a8f6e0b56e6e49d5d9cc797395b1fd17",
+   "B3/select_qwen7b.jsonl": "d7a301d2be10c25c9806424f830378ac329ddef2a0f3585fb40a73c2b4be4d01",
+   "B3/exchange_qwen7b_to_falcon7b.jsonl": "0d89fe4d9a1239035ee9553b1ca6bf124a808f66f948bf8b7552c5276b335f96",
+   "B3/summary.json": "42cf348edc8ae3c652a44d38f713839b4b1f706dfa2211235748583462ea58e7"
+  },
+  "prose_arm": "reused verbatim from B3 (pinned sha); not rerun",
+  "note": "B3f (non-TEST sender format check) may run before the freeze on E1B_GO=B3f; B3r refuses unless a10.status=='frozen' and E1B_GO=='B3r'"
  }
 }

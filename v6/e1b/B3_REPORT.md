@@ -27,7 +27,8 @@ Falcon3-7B-Instruct results were produced using artificial intelligence technolo
 - Sender selection 51/60 = **0.85** (CI 0.75–0.93). Chance is 0.25 and the best baseline (regex) scores 0.75; the sender beats it by +0.10 (CI 0.02–0.18), so the secondary claim is **met**.
 - Avoidance of neighbour candidates: 0.90 for swapped, 0.98 for shifted, 0.97 for both. Selection was weak on derived (0.50) and spelled (0.63) message styles.
 - Pipeline accuracy: id_selected **0.846** vs prose **1.000**. The difference is **−0.154 (CI −0.25 to −0.07): inferior**. By family (descriptive): F1 −0.23, F2 −0.08.
-- When the selection was correct, the receiver was right on 203/204 items. Every loss comes from the 9 wrong selections (0/36 items correct).
+- id_selected had 37 errors in 240 items. **36 of the 37 come from the 9 wrong selections** (0/36 items correct). **1 error happened despite a correct selection** (F2-3288: the receiver answered 60, gold 40); with a correct pick the receiver got 203/204.
+- *Correction (2026-10-15, GPT A10 review; re-verified from the raw results at `3973107`): an earlier version of this report said "every loss" came from wrong selections. That was wrong: 36 of 37.*
 - Bytes: payload −89%, whole exchange −59%. The ≥30% target is met; that saving is near-guaranteed by design.
 
 **Falcon sends → Qwen receives**

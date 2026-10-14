@@ -7,7 +7,7 @@ from .cases import verify
 from .analysis import jl, flops
 from . import cachediag
 
-STAGES = ("A", "B0", "B0x", "B0b", "B1c", "B1", "B2", "B3")
+STAGES = ("A", "B0", "B0x", "B0b", "B1c", "B1", "B2", "B3", "B3f", "B3r")
 INCOMPLETE_MARKERS = ("PROJECTION_EXCEEDS_BUDGET", "BUDGET_EXHAUSTED", "CANARY_FAIL", "NO_QUALIFYING_PAIR", "PROMPT_FIX_REQUIRED", "ATTEMPT_INCOMPLETE")
 NO_UNIQUE = ("stage_log", "prompts_", "canary_")
 
@@ -21,6 +21,9 @@ def stage_status(d):
 def expected_files(st, cfg, res):
     ch = res / "B0" / "config_choice.json"; pair = json.load(open(ch))["pair"] if ch.exists() else None
     if "a9" in cfg and (res / "B1c").is_dir() and st in ("B1c", "B1", "B2", "B3"): pair = cfg["a9"]["pair"]   # A9 run present: the B0x post-hoc pair
+    if st == "B3f": return [f"format_{m}.jsonl" for m in cfg["a9"]["pair"]] + ["summary.json", "a10_state.json"]
+    if st == "B3r":
+        a, b = cfg["a10"]["direction"]; return [f"select_{a}.jsonl", f"exchange_{a}_to_{b}.jsonl", "summary.json", "a10_state.json"]
     if st == "B1c": return [f"batchcheck_{m}.jsonl" for m in (pair or [])] + ["batch_rule.json", "summary.json", "a9_state.json"]
     mA = list(cfg["models"]["stageA"])
     if st == "A": return [f"{a}_{m}.jsonl" for m in mA for a in ("A1", "A2", "A5", "A6")] + ["A4_qwen3b.jsonl", "summary.json"]
@@ -84,7 +87,7 @@ def run(root, inputs_only=False):
     pool_of = {norm(c["text"]): p for p, cs in B["cases"].items() for c in cs}
     test_texts = {norm(c["text"]) for c in B["cases"]["test"]}
     # A9: B1c-B3 rows are checked against the fresh pinned A9 book (sha256 re-checked), never the frozen one
-    A9S = ("B1c", "B1", "B2", "B3"); a9p = root / "data" / "cases_e1b_a9.json"; P9 = T9 = None
+    A9S = ("B1c", "B1", "B2", "B3", "B3f", "B3r"); a9p = root / "data" / "cases_e1b_a9.json"; P9 = T9 = None
     if "a9" in cfg and a9p.exists() and (res / "B1c").is_dir():   # A9 stages run only after B1c
         raw9 = open(a9p).read(); chk(sha256_text(raw9) == cfg["a9"]["book_sha256"], "cases_e1b_a9.json sha256 matches a9.book_sha256")
         B9 = json.loads(raw9); P9 = {norm(c["text"]): p for p, cs in B9["cases"].items() for c in cs}; T9 = {norm(c["text"]) for c in B9["cases"]["test"]}
@@ -96,7 +99,7 @@ def run(root, inputs_only=False):
         pool_of_f, test_texts_f = (P9, T9) if (P9 is not None and st in A9S) else (pool_of, test_texts)
         unknown = [c for c in cases if c not in pool_of_f]
         chk(not unknown, f"{st}/{f.name}: all {len(cases)} case texts belong to a frozen pool")
-        is_test_file = (st == "B3" and f.name.startswith(("exchange_", "select_"))) or (st == "B2" and f.name.startswith(("main_", "prefix_")))
+        is_test_file = (st in ("B3", "B3r") and f.name.startswith(("exchange_", "select_"))) or (st == "B2" and f.name.startswith(("main_", "prefix_")))
         if is_test_file: chk(all(c in test_texts_f for c in cases), f"{st}/{f.name}: TEST cases only")
         else: chk(not any(c in test_texts_f for c in cases), f"{st}/{f.name}: no TEST case used outside B2/B3")
         for r in rows:
@@ -126,12 +129,19 @@ def run(root, inputs_only=False):
             if pf.exists(): have |= {x["prompt_sha"] for x in jl(pf)}
         chk(all(r["prompt_sha"] in have for r in rows), f"{f.parent.name}/{f.name}: rendered prompts logged (A2)")
     # sender selection logged with full view for every exchange row
-    for f in res.glob("B3/select_*.jsonl"):
+    for f in list(res.glob("B3/select_*.jsonl")) + list(res.glob("B3r/select_*.jsonl")):
         rows = jl(f); chk(all({"sender_view", "raw", "pick", "baselines", "prep_bytes", "picked_ntype", "msg_style"} <= set(r) and "regex" in r["baselines"] for r in rows), f"{f.name}: sender view/raw/pick/baselines logged")
         chk(all(len(r["sender_view"]["candidates"]) == 4 and r["entry"] in r["sender_view"]["candidates"] for r in rows), f"{f.name}: 4-way candidates incl. true entry")
-    for f in res.glob("B3/exchange_*.jsonl"):
-        snd = f.stem.split("_")[1]; sel = {r["entry"] for r in jl(res / "B3" / f"select_{snd}.jsonl")}
+    for f in list(res.glob("B3/exchange_*.jsonl")) + list(res.glob("B3r/exchange_*.jsonl")):
+        snd = f.stem.split("_")[1]; sel = {r["entry"] for r in jl(f.parent / f"select_{snd}.jsonl")}
         chk(all(r["entry"] in sel for r in jl(f)), f"{f.name}: every exchange row has a logged selection")
+    # A10: B3r reuses pinned A9 inputs; re-check them, and the archived raw replies must be unchanged
+    if (res / "B3r").is_dir() and "a10" in cfg:
+        for p, h in cfg["a10"]["reuse_sha256"].items(): chk((res / p).exists() and sha256_text((res / p).read_bytes().decode()) == h, f"A10 reused input {p} sha256 pinned")
+        a, b = cfg["a10"]["direction"]; sr = res / "B3r" / f"select_{a}.jsonl"
+        if sr.exists():
+            o = {r["key"]: r["raw"] for r in jl(res / "B3" / f"select_{a}.jsonl")}; n = jl(sr)
+            chk(len(n) == len(o) and all(o.get(r["key"]) == r["raw"] for r in n), "B3r: every sender reply is the archived B3 reply (re-parsed, never regenerated)")
     # unknown-ID: 48/48 deterministic, no model call
     U = jl(res / "B2" / "unknown.jsonl")
     if U: chk(len(U) == cfg["unknown_id_messages"] and all(not r["resolved"] and not r["model_called"] for r in U), "unknown-ID 48/48 deterministic UNKNOWN, no model call")
