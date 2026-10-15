@@ -1,0 +1,114 @@
+{
+ "stage": "T1",
+ "status": "frozen",
+ "gpu_h": null,
+ "timing_s": {
+  "load1": 239.57457852363586,
+  "send_verify_qwen7b": 253.13616609573364,
+  "load2": 271.67323756217957,
+  "send_verify_falcon7b": 310.52627420425415,
+  "recv_falcon7b": 6389.307098150253,
+  "load3": 127.9635546207428,
+  "recv_qwen7b": 3982.291062116623
+ },
+ "verifier_b1_check": {},
+ "verifier_batch_size": 8,
+ "protocol_hash": "6c6425811a552c031cc81b01d6a1ed17f4147bdb68409cea34e5aba2615907f9",
+ "selection": {
+  "qwen7b": {
+   "n": 240,
+   "complete": true,
+   "completeness": "ok",
+   "pick_acc": 0.9416666666666667,
+   "sender_invalid": 0,
+   "verifier_format_ok": 1.0,
+   "coverage": 0.9291666666666667,
+   "wrong_pick_accepted": 0,
+   "wrong_pick_accepted_rate": 0.0,
+   "wrong_pick_accepted_cp95_upper": 0.012404638050408978,
+   "correct_pick_rejected": 3,
+   "wrong_pick_caught": 14,
+   "parse_paths": {
+    "letter": 240
+   }
+  },
+  "falcon7b": {
+   "n": 240,
+   "complete": true,
+   "completeness": "ok",
+   "pick_acc": 0.9583333333333334,
+   "sender_invalid": 0,
+   "verifier_format_ok": 0.9958333333333333,
+   "coverage": 0.9541666666666667,
+   "wrong_pick_accepted": 0,
+   "wrong_pick_accepted_rate": 0.0,
+   "wrong_pick_accepted_cp95_upper": 0.012404638050408978,
+   "correct_pick_rejected": 1,
+   "wrong_pick_caught": 10,
+   "parse_paths": {
+    "letter": 240
+   }
+  }
+ },
+ "directions": {
+  "qwen7b_to_falcon7b": {
+   "status": "COMPLETE",
+   "n_entries": 240,
+   "n_messages": 960,
+   "acc_hybrid": 1,
+   "acc_prose": 0.996875,
+   "diff": 0.003125,
+   "ci": [
+    0,
+    0.008333333333333333
+   ],
+   "label": "non-inferior",
+   "coverage": 0.9291666666666667,
+   "payload_saving": 0.8321761744566125,
+   "message_saving_payload_plus_case": 0.5487549215114793,
+   "dict_bytes": 165969,
+   "payload_saving_per_message": 145.32916666666668,
+   "breakeven_messages": 1142.0212735456864,
+   "checks": {
+    "noninferior": true,
+    "coverage": true,
+    "bytes": true,
+    "breakeven": false
+   },
+   "success": false,
+   "wrong_pick_accepted": 0,
+   "wrong_pick_accepted_cp95_upper": 0.012404638050408978,
+   "byte_boundary": "sender->receiver channel only; candidate prep and verifier are sender-local"
+  },
+  "falcon7b_to_qwen7b": {
+   "status": "COMPLETE",
+   "n_entries": 240,
+   "n_messages": 960,
+   "acc_hybrid": 0.9979166666666667,
+   "acc_prose": 0.9895833333333334,
+   "diff": 0.008333333333333333,
+   "ci": [
+    0.003125,
+    0.014583333333333334
+   ],
+   "label": "non-inferior",
+   "coverage": 0.9541666666666667,
+   "payload_saving": 0.8532436236967051,
+   "message_saving_payload_plus_case": 0.5626472520167872,
+   "dict_bytes": 165969,
+   "payload_saving_per_message": 149.00833333333333,
+   "breakeven_messages": 1113.8236116548292,
+   "checks": {
+    "noninferior": true,
+    "coverage": true,
+    "bytes": true,
+    "breakeven": false
+   },
+   "success": false,
+   "wrong_pick_accepted": 0,
+   "wrong_pick_accepted_cp95_upper": 0.012404638050408978,
+   "byte_boundary": "sender->receiver channel only; candidate prep and verifier are sender-local"
+  }
+ },
+ "verdict": "NOT MET"
+}
