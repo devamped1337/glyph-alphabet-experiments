@@ -41,7 +41,7 @@ def protocol_hash(X, cfg):
 
 class ChildStage(ES.Stage):
     """r5: the stage CHILD. It never writes the ledger (the supervisor is its only writer), never writes a terminal
-    marker or .done; its only deadline is the supervisor's pre-recorded deadline_wall (admission guard below)."""
+    marker or .done; its only deadline is the supervisor's pre-recorded deadline_mono (admission guard below)."""
     def save_ledger(self, *a, **k): pass
     def check_budget(self): pass
     def finish(self, summary): raise RuntimeError("the child never marks a stage done")
@@ -54,7 +54,7 @@ def _stage(name, cap, cfg, deadline):
 
 def guard(S, est_s, what):
     """Admission guard (GPT r1 #6): never START a unit whose estimate would cross the supervisor's deadline. Exits 3
-    WITHOUT writing anything; the supervisor records BUDGET_EXHAUSTED. The hard bound is the supervisor's kill."""
+    WITHOUT writing anything; the supervisor records BUDGET_EXHAUSTED. The enforcement is the supervisor's deadline SIGKILL (not a hard real-time bound)."""
     if time.monotonic() + est_s > S.deadline:      # r6: CLOCK_MONOTONIC (system-wide, shared with the supervisor)
         S.log("budget_admission_stop", next=what, est_s=est_s); print(f"[{S.name}] next unit '{what}' would cross the deadline -> exit 3"); sys.exit(3)
 

@@ -10,7 +10,9 @@ ledger, the terminal markers, summary.json and .done. It
   5. writes the ledger, the marker, summary.json + .done, and LAST the attempt outcome.
 Clock (r6): the deadline, the wait, the elapsed charge and the completion decision all use CLOCK_MONOTONIC
 (time.monotonic, system-wide on Linux, shared with the child); wall times are recorded for audit only.
-Fail-closed: if bookkeeping fails, the attempt stays 'running', which is terminal (no retry; .done without a recorded
+Fail-closed: if bookkeeping fails BEFORE the final state replace, the attempt stays 'running', which is terminal. If
+the final os.replace succeeds but the directory fsync after it fails (exit 70), the visible state may already say
+'done' with uncertain crash durability (disclosed limitation; no transactional machinery for this pilot). Otherwise (no retry; .done without a recorded
 'done' outcome is not completion). The SIGKILL is issued by a running supervisor; OS scheduling and uninterruptible
 waits can delay the actual termination, so the deadline is an enforced kill, not a hard real-time bound."""
 import os, sys, json, time, signal, subprocess, uuid, ctypes
@@ -46,7 +48,9 @@ def decide(rc, end, deadline, complete):
     return f"crash rc={rc}", None, 10
 
 def _pdeathsig():
-    """In the child, before exec: SIGKILL it if the supervisor dies (Linux prctl PR_SET_PDEATHSIG)."""
+    """In the child, before exec: SIGKILL it if the supervisor dies (Linux prctl PR_SET_PDEATHSIG). Best effort,
+    disclosed limits: errors and the prctl return value are ignored; no parent-identity check covers a supervisor death
+    before registration; the signal reaches the child only, not its descendants."""
     try: ctypes.CDLL("libc.so.6", use_errno=True).prctl(1, signal.SIGKILL, 0, 0, 0)
     except Exception: pass
 
@@ -114,7 +118,7 @@ def supervise(cfg, name):
             atomic(d / "summary.json", json.dumps(S, indent=1)); atomic(d / ".done", time.strftime("%Y-%m-%d %H:%M:%S %Z") + "\n")
         if _TEST and os.environ.get("E1C_TEST_FAIL_FINAL_STATE") == "1": raise OSError("test: final state write fails")
         a.update(outcome=outcome, rc=rc, ended_wall=time.time(), ended_mono=end, elapsed_s=el,
-                 finalise_s=time.monotonic() - end)                # r6: post-run bookkeeping time, reported, not charged
+                 finalise_s=time.monotonic() - end)                # r6: post-run bookkeeping before the final state write (excludes that write), reported, not charged
         atomic(stp, json.dumps(st, indent=1))
     except Exception as e:
         print(f"{name}: bookkeeping failed ({type(e).__name__}); attempt stays 'running' (fail-closed)"); sys.exit(70)
