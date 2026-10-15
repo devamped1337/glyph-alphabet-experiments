@@ -159,7 +159,7 @@ class Proc(unittest.TestCase):
         self.X["sizes"]["dev"] = dict(core_per_family=6, receiver_entries_per_family=3); self.cfg["e1c"]["sizes"]["dev"] = self.X["sizes"]["dev"]
         self.bad = self.B["e1c_core"]["F2"][1]; self.wr = self.B["e1c_core"]["F1"][2]; self.nb = self.B["neighbours"][self.wr][0]
         self.pin = ROOT / "CODE_HASH.txt"; self.had = self.pin.read_text() if self.pin.exists() else None; self.pin.write_text(ST.code_hash() + "\n")
-        self.log = self.tmp / "calls.jsonl"
+        self.log = self.tmp / "calls.jsonl"; self.pids = self.tmp / "pids.txt"
     def tearDown(self):
         ST.RES = self.oldRES
         for p in (self.res, self.res / "D1"):
@@ -167,20 +167,27 @@ class Proc(unittest.TestCase):
         if self.had is None: self.pin.unlink()
         else: self.pin.write_text(self.had)
         shutil.rmtree(self.tmp, ignore_errors=True)
-    def run_stage(self, name="D1", go="D1", mode="ok", cap_h=None, frozen=False, timeout=120, fast_priors=False):
+    def run_stage(self, name="D1", go="D1", mode="ok", cap_h=None, frozen=False, timeout=120, fast_priors=False, extra={}, background=False):
         X = copy.deepcopy(self.X)
         if fast_priors: X["inflight_est_s"] = {k: 0.01 for k in X["inflight_est_s"]}   # so only the hard deadline can stop it
         if cap_h is not None: X["caps_h"][name] = cap_h
         if frozen: X["status"] = "frozen"
         X["base_config"] = str((ROOT / self.X["base_config"]).resolve()); cp = self.tmp / "cfg.json"; json.dump(X, open(cp, "w"))
         env = dict(os.environ, E1B_ALLOW_NO_GPU="1", E1C_RES=str(self.res), E1C_CONFIG=str(cp), E1C_TEST_HOOK=str(HOOK),
-                   E1C_TEST_MODE=mode, E1C_TEST_LOG=str(self.log)); env.pop("E1C_GO", None)
+                   E1C_TEST_MODE=mode, E1C_TEST_LOG=str(self.log), E1C_TEST_PIDS=str(self.pids), **extra); env.pop("E1C_GO", None)
         if go: env["E1C_GO"] = go
+        if background: return subprocess.Popen([sys.executable, str(ROOT / "run_e1c.py"), "--stage", name], env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         t = time.time(); r = subprocess.run([sys.executable, str(ROOT / "run_e1c.py"), "--stage", name], env=env, capture_output=True, text=True, timeout=timeout)
         self.wall = time.time() - t; self.out = r.stdout + r.stderr; return r.returncode
     def d(self): return self.res / "D1"
     def state(self): return json.load(open(self.d() / "e1c_state.json"))
     def ledger(self): p = self.res / "budget_ledger.json"; return json.load(open(p)).get("E1C_D1") if p.exists() else None
+    def pid(self, k):
+        for _ in range(200):
+            if self.pids.exists():
+                v = [int(l.split()[1]) for l in open(self.pids) if l.startswith(k + " ")]
+                if v: return v[-1]
+            time.sleep(0.05)
     def calls(self): return [json.loads(l) for l in open(self.log)] if self.log.exists() else []
     def au(self, *a): return AR.authorise("D1", *a, res=self.res, cfg=self.cfg)
 
@@ -212,7 +219,7 @@ class Proc(unittest.TestCase):
         self.assertIn("sizing", S); self.assertNotIn("verdict", S); self.assertEqual(S["protocol_hash"], ST.protocol_hash(self.cfg["e1c"], self.cfg))
         self.assertEqual(S["verifier_batch_size"], 8); self.assertEqual(set(S["verifier_b1_check"]), {"qwen7b", "falcon7b"})
         self.assertTrue(all(c["n"] <= 8 for c in self.calls() if c["kind"] == "batch"))
-        a = self.state()["attempts"][-1]; self.assertEqual(a["outcome"], "done"); self.assertLess(a["ended_wall"], a["deadline_wall"])
+        a = self.state()["attempts"][-1]; self.assertEqual(a["outcome"], "done"); self.assertLess(a["ended_mono"], a["deadline_mono"]); self.assertGreaterEqual(a["finalise_s"], 0)
         self.assertAlmostEqual(self.ledger(), a["elapsed_s"], places=3); self.assertAlmostEqual(S["gpu_h"], self.ledger() / 3600)
         # wrong accepted pick: neighbour's rule sent, scored on the TRUE case (GPT r1 #4)
         from e1b.parsing import parse_answer, score_answer
@@ -278,6 +285,77 @@ class Proc(unittest.TestCase):
         ex = {k: [json.loads(l) for l in open(d / f"exchange_{k}.jsonl")] for k in S["directions"]}
         sv, rv = ST.unit_costs(sel, ex); self.assertAlmostEqual(z["sender_verifier_s_per_entry"], sv); self.assertAlmostEqual(z["receiver_s_per_message"], rv)
         (d / ".done").unlink(); self.assertEqual(self.run_stage(), 17)            # never a third start
+    # --- r6
+    def test_clock_jumps(self):
+        """r6 (GPT r5): wall-clock jumps (+/- 10 days) during the run change nothing: deadline, wait, elapsed charge and
+        the completion decision use the monotonic clock. Supervisor in-process with a jumping time.time()."""
+        import types, e1c.supervisor as SV
+        cp = self.tmp / "cfg.json"; X = copy.deepcopy(self.X); X["base_config"] = str((ROOT / self.X["base_config"]).resolve()); json.dump(X, open(cp, "w"))
+        env = dict(E1B_ALLOW_NO_GPU="1", E1C_RES=str(self.res), E1C_CONFIG=str(cp), E1C_TEST_HOOK=str(HOOK), E1C_TEST_MODE="ok", E1C_GO="D1")
+        old_env = {k: os.environ.get(k) for k in env}; os.environ.update(env); oldRES, oldt = SV.RES, SV.time
+        try:
+            for jump in (+864000.0, -864000.0):
+                shutil.rmtree(self.res); self.res.mkdir(); SV.RES = self.res; n = dict(c=0)
+                def wall(j=jump): n["c"] += 1; return time.time() + (j if n["c"] > 1 else 0.0)
+                SV.time = types.SimpleNamespace(time=wall, monotonic=time.monotonic, strftime=time.strftime)
+                with self.assertRaises(SystemExit) as e: SV.supervise(self.cfg, "D1")
+                self.assertEqual(e.exception.code, 0, jump); a = self.state()["attempts"][-1]
+                self.assertEqual(a["outcome"], "done"); self.assertTrue(0 < a["elapsed_s"] < 60, a["elapsed_s"])
+                self.assertAlmostEqual(self.ledger(), a["elapsed_s"], places=3); self.assertTrue(ST.finished(self.d()))
+        finally:
+            SV.RES, SV.time = oldRES, oldt
+            for k, v in old_env.items():
+                if v is None: os.environ.pop(k, None)
+                else: os.environ[k] = v
+    def test_deadline_is_monotonic(self):
+        from e1c.supervisor import decide
+        a = dict(deadline_mono=100.0); self.assertEqual(decide(0, 100.1, a["deadline_mono"], True)[0], "deadline")
+        src = (ROOT / "e1c" / "supervisor.py").read_text()
+        self.assertNotIn("deadline_wall", src); self.assertIn("time.monotonic() + est_s > S.deadline", (ROOT / "e1c" / "stages.py").read_text())
+    def test_final_state_write_fails_after_done(self):
+        """r6 (GPT r5): .done and summary.json written, then the final state write fails -> exit 70, attempt 'running';
+        restart, retry authorisation and T1 eligibility all refuse it."""
+        self.assertEqual(self.run_stage(extra=dict(E1C_TEST_FAIL_FINAL_STATE="1")), 70, self.out); d = self.d()
+        self.assertTrue((d / ".done").exists()); self.assertTrue((d / "summary.json").exists())
+        self.assertEqual(self.state()["attempts"][-1]["outcome"], "running"); self.assertFalse(ST.finished(d))
+        ok, why = ST.t1_eligibility(self.cfg["e1c"], self.cfg); self.assertFalse(ok); self.assertIn("recorded 'done'", why)
+        for r in ("kernel_crash", "no_gpu"):
+            with self.assertRaises(SystemExit): self.au(r, 0.001, "x")
+        self.assertEqual(self.run_stage(), 17); self.assertTrue((d / "ATTEMPT_INCOMPLETE").exists()); self.assertEqual(self.run_stage(), 18)
+    def test_done_without_recorded_outcome(self):
+        d = self.d(); d.mkdir(); (d / ".done").write_text("x")
+        json.dump(dict(attempts=[dict(n=1, outcome="crash rc=1")], retry=None, cap_h=0.5), open(d / "e1c_state.json", "w"))
+        self.assertFalse(ST.finished(d)); self.assertEqual(self.run_stage(), 17)
+    def test_directory_fsync(self):
+        """r6 (GPT r5): atomic() fsyncs the file AND its directory after os.replace; new dirs fsync their parent."""
+        import e1c.supervisor as SV
+        seen = []; real = os.fsync
+        def rec(fd): seen.append(os.readlink(f"/proc/self/fd/{fd}")); real(fd)
+        os.fsync = rec
+        try:
+            q = self.tmp / "x" / "y"; SV.mkdir_durable(q); SV.atomic(q / "s.json", "{}")
+        finally: os.fsync = real
+        self.assertIn(str(self.tmp / "x"), seen); self.assertIn(str(q), seen); self.assertTrue(any(s.endswith(".tmp") for s in seen))
+        self.assertEqual(seen[-1], str(q)); self.assertEqual(json.load(open(q / "s.json")), {})
+    def _gone(self, pid, wait=5.0):
+        t = time.time()
+        while time.time() - t < wait:
+            try:
+                st = open(f"/proc/{pid}/stat").read().split(") ")[1][0]
+                if st == "Z": return True
+            except FileNotFoundError: return True
+            time.sleep(0.05)
+        return False
+    def test_grandchild_reaped_on_normal_exit(self):
+        """r6 (GPT r5 non-blocking): an ordinary grandchild still alive when the child exits 0 is killed with the group."""
+        self.assertEqual(self.run_stage(mode="grandchild"), 0, self.out); g = self.pid("grandchild"); self.assertIsNotNone(g)
+        self.assertTrue(self._gone(g)); self.assertTrue(ST.finished(self.d()))
+    def test_supervisor_death_kills_child(self):
+        """r6: if the supervisor itself dies, the child is SIGKILLed by the kernel (PR_SET_PDEATHSIG); the attempt
+        stays 'running', which is terminal."""
+        p = self.run_stage(mode="sleep_send", fast_priors=True, background=True); c = self.pid("child"); self.assertIsNotNone(c)
+        time.sleep(1.0); p.kill(); p.wait(); self.assertTrue(self._gone(c))
+        self.assertEqual(self.state()["attempts"][-1]["outcome"], "running"); self.assertEqual(self.run_stage(), 17)
     def test_resume_bound_to_protocol(self):
         d = self.d(); d.mkdir(); (d / "select_qwen7b.jsonl").write_text("")
         json.dump(dict(attempts=[dict(n=1, kind="first", outcome="crash rc=1", code_hash="old", protocol_hash="old")], retry=None, cap_h=0.5), open(d / "e1c_state.json", "w"))
@@ -312,6 +390,7 @@ class Proc(unittest.TestCase):
                     sizing=dict(wrong_pass_ok=True, projected_T1_gpu_h=2.0, max_wrong_pick_accepted_rate=0.0))
     def test_t1_eligibility(self):
         X = self.cfg["e1c"]; d = self.d(); d.mkdir(); (d / ".done").write_text("x")
+        json.dump(dict(attempts=[dict(n=1, outcome="done")], retry=None, cap_h=0.5), open(d / "e1c_state.json", "w"))
         def chk(s, cfg=None): json.dump(s, open(d / "summary.json", "w")); return ST.t1_eligibility(X if cfg is None else cfg["e1c"], cfg or self.cfg)
         g = self.good_summary(); self.assertEqual(chk(g), (True, "ok")); q, f = X["pair"]
         muts = [dict(protocol_hash="0"), dict(sizing=dict(g["sizing"], wrong_pass_ok=False)), dict(sizing=dict(g["sizing"], projected_T1_gpu_h=99)),

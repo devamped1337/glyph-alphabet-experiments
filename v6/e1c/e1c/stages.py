@@ -18,6 +18,14 @@ from e1b.parsing import parse_letter_a10
 
 TERMINAL = ("BUDGET_EXHAUSTED", "CANARY_FAIL", "ATTEMPT_INCOMPLETE")   # GPU_PREFLIGHT_FAIL = infra (retry may be authorised)
 
+def finished(d):
+    """r6 (GPT r5): a stage is finished only if .done exists AND the committed attempt state records outcome 'done'
+    for the last attempt and no attempt is still 'running'."""
+    p = d / "e1c_state.json"
+    if not (d / ".done").exists() or not p.exists(): return False
+    A = json.load(open(p)).get("attempts", [])
+    return bool(A) and A[-1].get("outcome") == "done" and not any(a.get("outcome") == "running" for a in A)
+
 def code_hash():
     sys.path.insert(0, str(HERE / "tools")); import code_hash as H; return H.compute()
 
@@ -47,7 +55,7 @@ def _stage(name, cap, cfg, deadline):
 def guard(S, est_s, what):
     """Admission guard (GPT r1 #6): never START a unit whose estimate would cross the supervisor's deadline. Exits 3
     WITHOUT writing anything; the supervisor records BUDGET_EXHAUSTED. The hard bound is the supervisor's kill."""
-    if time.time() + est_s > S.deadline:
+    if time.monotonic() + est_s > S.deadline:      # r6: CLOCK_MONOTONIC (system-wide, shared with the supervisor)
         S.log("budget_admission_stop", next=what, est_s=est_s); print(f"[{S.name}] next unit '{what}' would cross the deadline -> exit 3"); sys.exit(3)
 
 class Est:
@@ -85,6 +93,7 @@ def t1_eligibility(X, cfg):
     p = RES / "D1" / "summary.json"
     term = [m for m in TERMINAL if (RES / "D1" / m).exists()]
     if term: return False, f"D1 has terminal marker(s) {term}"     # r5: terminal markers take precedence over .done
+    if not finished(RES / "D1"): return False, "D1 has no recorded 'done' outcome"   # r6
     if not (RES / "D1" / ".done").exists() or not p.exists(): return False, "D1 not finished"
     S = json.load(open(p)); ok, why = check_d1_summary(S, X, cfg)
     if not ok: return False, why
@@ -203,7 +212,7 @@ def child_main(cfg, name):
         print("child refused: not launched by the supervisor for the running attempt"); sys.exit(15)
     c = dict(cfg); c["stageB_batch_size"] = X["batch_size"]; ES._A9.clear()
     B = load_book(cfg, "dev" if name == "D1" else "test")
-    S = _stage(name, st["cap_h"], c, a["deadline_wall"]); S.attempt = a["n"]
+    S = _stage(name, st["cap_h"], c, a["deadline_mono"]); S.attempt = a["n"]
     if os.environ.get("E1B_ALLOW_NO_GPU") == "1" and os.environ.get("E1C_TEST_HOOK"):   # test-only fake backend / faults
         import importlib.util as U; sp = U.spec_from_file_location("e1c_test_hook", os.environ["E1C_TEST_HOOK"])
         h = U.module_from_spec(sp); sp.loader.exec_module(h); h.install(sys.modules[__name__], B, a)

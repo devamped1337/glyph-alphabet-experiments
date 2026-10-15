@@ -5,7 +5,8 @@ r3 (GPT r2 #3): the reason must be CONSISTENT with the recorded failure:
   GPU_PREFLIGHT_FAIL marker or outcome 'no_gpu rc=9'     -> reason must be no_gpu (and no_gpu needs one of them)
   outcome 'crash rc=N' (recorded by the supervisor)       -> install_or_network | kernel_crash | oom_at_load
   outcome 'running' (r5: no recorded end)                 -> refused (fail-closed: terminal, INCOMPLETE)
-  no attempt recorded (no results came back)              -> install_or_network | kernel_crash | oom_at_load,
+  no attempt recorded (no results came back; EXTERNAL-LOG ADJUDICATION: the fail-closed rule cannot be checked
+  because the durable state itself is missing, so the decision rests on the Kaggle log cited in the note)             -> install_or_network | kernel_crash | oom_at_load,
                                                              attempt 1 recorded as 'manual: from Kaggle log'
   any other 'exit N' (budget, canary, gates, ...)         -> refused (not an infrastructure failure)
 charged_h must be finite, > 0 and < the stage cap (r4: a deadline hit is terminal); it is added to the stage's cumulative budget. The note is

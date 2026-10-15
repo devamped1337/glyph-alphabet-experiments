@@ -1,7 +1,9 @@
 """Test-only hook for the stage CHILD (honoured only with E1B_ALLOW_NO_GPU=1 and E1C_TEST_HOOK=<this file>).
 Installs a fake backend and the fault named by E1C_TEST_MODE:
   ok | sleep_send (first sender call sleeps 120 s) | complete_then_sleep (CHILD_COMPLETE, then sleep 120 s) |
-  crash_send:N (N-th sender call raises) | readonly_then_sleep (results dirs made read-only, then sleep 120 s)."""
+  crash_send:N (N-th sender call raises) | readonly_then_sleep (results dirs made read-only, then sleep 120 s) |
+  grandchild (spawns an ordinary `sleep 120` grandchild, then completes normally).
+E1C_TEST_PIDS: file that receives 'child <pid>' / 'grandchild <pid>' lines."""
 import os, re, sys, json, time
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent / "e1b" / "tests"))
@@ -35,7 +37,11 @@ class Fake(FakeBackend):
     def generate_batch(self, jobs, max_new): self._log("batch", len(jobs)); return [self._fix(j, r) for j, r in zip(jobs, super().generate_batch(jobs, max_new))]
 
 def install(ST, B, a):
-    mode = os.environ.get("E1C_TEST_MODE", "ok"); log = os.environ.get("E1C_TEST_LOG")
+    mode = os.environ.get("E1C_TEST_MODE", "ok"); log = os.environ.get("E1C_TEST_LOG"); pids = os.environ.get("E1C_TEST_PIDS")
+    def note(k, pid):
+        if pids:
+            with open(pids, "a") as fh: fh.write(f"{k} {pid}\n")
+    note("child", os.getpid())
     bad = B["e1c_core"]["F2"][1]; wr = B["e1c_core"]["F1"][2]; nb = B["neighbours"][wr][0]; calls = dict(n=0)
     def lb(name, cfg, S):
         f = Fake(B, [bad], {wr: nb}, name, log, a["n"]); g = f.generate
@@ -46,6 +52,10 @@ def install(ST, B, a):
             return g(*x, **kw)
         f.generate = gen; return f, "fake"
     ST.load_B = lb; ST.require_canaries = lambda *x: None
+    if mode == "grandchild":
+        import subprocess; fin0 = ST.finish_child
+        def gc(S, out): g = subprocess.Popen(["sleep", "120"]); note("grandchild", g.pid); fin0(S, out)
+        ST.finish_child = gc
     if mode in ("complete_then_sleep", "readonly_then_sleep"):
         fin = ST.finish_child
         def late(S, out):
