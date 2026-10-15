@@ -1,6 +1,6 @@
 {
  "label": "E1c (DRAFT, not frozen): verified-ID hybrid vs prose, both directions",
- "status": "draft",
+ "status": "frozen",
  "base_config": "../e1b/config_e1b.json",
  "pair": [
   "qwen7b",
@@ -61,12 +61,13 @@
  "caps_h": {
   "D1": 0.5,
   "D2": 0.8,
-  "T1": 6.0
+  "T1": 5.0
  },
  "dev_stages": ["D1", "D2"],
  "closed_stages": ["D1"],
  "t1_qualifying_dev_stage": "D2",
  "amendment_A1": "AMENDMENT_E1c_A1.md (2026-10-15): D1 ended BUDGET_EXHAUSTED (terminal, kept as recorded; diagnostics only). D2 = new dev stage, same protocol, dev book and sizes, reruns everything, cap 0.8 GPU-h set from measured D1 timings. T1 rules and success criteria unchanged; the qualifying dev stage for T1 is D2.",
+ "t1_cap_rule": "T1 cap 5.0 GPU-h, set at freeze from D2 (A1): D2 projection 3.66 h (already incl. +25%; raw 2.93 h = 3 x 261 s loads + 240 x 2.14 s sender+verifier + 240 x 4 x 2 x 4.82 s receiver). 5.0 h = 1.37 x projection = 1.71 x raw. Stress (loads 420 s each, receiver +25%): 3.70 h raw, 4.63 h with the +25% margin, still under 5.0 h.",
  "max_starts": 2,
  "max_starts_note": "one start plus one infrastructure retry. The retry needs results/<stage>/e1c_state.json to carry a retry authorisation (tools/authorise_retry.py) with a reason in infra_retry_reasons, written after inspecting the failed attempt's log; never after .done, BUDGET_EXHAUSTED, CANARY_FAIL or ATTEMPT_INCOMPLETE. Budget is cumulative across both attempts.",
  "dev_book_sha256": "a7ea724dfb856547dbfba38d04a49a8f59d781b3a9e66596f2582ce112ae78c4",

@@ -1,6 +1,6 @@
 # PREREG E1c: verified ID with prose fallback, both directions (DRAFT, NOT FROZEN)
 
-Status: **DRAFT, r6** (GPT r1–r5 fixes applied; see §11). No E1c TEST data exists. The TEST book is not built and refuses to build until `e1c.status == "frozen"`.
+Status: **FROZEN** (registration commit, tag `prereg-e1c`, after GPT/Grok acceptance of r6 and A1, and D2 meeting the T1 eligibility rule). The TEST book is built only after this commit (§9 step 4).
 Design input: `v6/e1b/reviews/gpt_E1c_design.md` (GPT memo), plus Stefan/Grok steering (2026-10-15).
 E1c is a new, separate pre-registered study. It does not change any E1b result. The E1b A9 primary stays **POC FAILED**. The A10 B3r secondary result stays **INCONCLUSIVE**.
 
@@ -101,7 +101,7 @@ E1c succeeds only if all four criteria pass in both directions. Anything else is
 |---|---|---|---|---|
 | **D1 dev pilot** | dev book: senders and verifier on 160 entries per model; receivers on 10 entries × 4 cases × 2 arms per direction | this week (after Stefan's go) | **0.5 GPU-h** | `E1C_GO=D1`, Stefan's explicit go; allowed while DRAFT |
 | **D2 dev pilot (A1)** | same as D1 (same dev book, sizes and protocol; reruns everything) | after review and Stefan's explicit go | **0.8 GPU-h** (from measured D1 timings, see AMENDMENT_E1c_A1) | `E1C_GO=D2`; D1 is closed (BUDGET_EXHAUSTED, kept as recorded); **D2 is the dev stage that qualifies T1** (§8 rules unchanged) |
-| **T1 TEST** | TEST book: 240 entries per direction | next week, after the Kaggle quota reset | **6.0 GPU-h** (placeholder; set from D2 at freeze (A1), ≤ next week's quota) | `E1C_GO=T1`, Stefan's explicit go, `status=frozen`, TEST book sha pinned, and **D2 eligibility** (§8; A1: D2 replaces D1) checked in code |
+| **T1 TEST** | TEST book: 240 entries per direction | next week, after the Kaggle quota reset | **5.0 GPU-h** (set from D2 at freeze, see below) | `E1C_GO=T1`, Stefan's explicit go, `status=frozen`, TEST book sha pinned, and **D2 eligibility** (§8; A1: D2 replaces D1) checked in code |
 
 **Rules for every stage:**
 - **Starts (r2, r3).** One start plus at most one **authorised infrastructure retry**, enforced through `results/<stage>/e1c_state.json`:
@@ -235,3 +235,5 @@ The T1 cap may be set from D2 at freeze (A1) (it is not part of the protocol has
 **r6 wording-only edits after GPT's r6 ACCEPT** (no behaviour change): final-state-replace limitation disclosed; PDEATHSIG limits disclosed; `finalise_s` scope, ChildStage (`deadline_mono`) and guard (not a hard bound) docstrings corrected.
 
 **Amendment A1 (2026-10-15):** see `AMENDMENT_E1c_A1.md`. D1 ended BUDGET_EXHAUSTED (terminal, kept); new dev stage D2 (cap 0.8 GPU-h from measured D1 timings) qualifies T1 in D1's place. T1 rules and success criteria unchanged.
+
+**Freeze (2026-10-16): T1 cap.** Set from D2's projection (`D2_REPORT.md`, e41740d): raw 2.93 GPU-h = 3 loads × 261 s + 240 entries × 2.14 s (sender + verifier, both senders) + 240 × 4 cases × 2 directions × 4.82 s (receiver per message); +25% = 3.66 h. **Cap 5.0 GPU-h** = 1.37 × the projection, 1.71 × raw. Stress: all loads at the 420 s prior and receivers 25% slower give 3.70 h raw (4.63 h with the 25% margin), still under the cap. D2 itself ran at 74% of its estimate. This is within one 12 h Kaggle session and the free weekly quota. Thresholds, endpoints, sizes and models are unchanged.

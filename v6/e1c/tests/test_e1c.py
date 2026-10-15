@@ -10,7 +10,7 @@ import authorise_retry as AR, check_freeze as CF
 class Terms(unittest.TestCase):
     def test_draft_models_and_criteria(self):
         X = load_cfg()["e1c"]; s = json.dumps(X).lower()
-        self.assertEqual(X["status"], "draft"); self.assertEqual(X["pair"], ["qwen7b", "falcon7b"])
+        self.assertEqual(X["status"], "frozen"); self.assertEqual(X["caps_h"]["T1"], 5.0); self.assertEqual(X["pair"], ["qwen7b", "falcon7b"])
         for bad in ("mistral", "llama", "gemma"): self.assertNotIn(bad, s)
         c = X["criteria"]
         self.assertEqual((c["margin"], c["coverage_min"], c["byte_saving_min"], c["breakeven_max_messages"], c["bootstrap_resamples"], c["wrong_pass_max_dev"]),
@@ -36,8 +36,8 @@ class Book(unittest.TestCase):
         ids = BK.core_ids(B, 80); self.assertEqual(len(ids), 160); self.assertEqual(len(BK.cases_for(B, ids)), 640)
         self.assertEqual(len({B["entries"][k]["text"] for k in ids}), 160)
     def test_test_book_refused_before_freeze(self):
-        with self.assertRaises(SystemExit): BK.build_book(load_cfg(), "test")
-        self.assertFalse((DATA / "book_test.json").exists())
+        c = load_cfg(); c["e1c"]["status"] = "draft"
+        with self.assertRaises(SystemExit): BK.build_book(c, "test")
 
 class Freshness(unittest.TestCase):
     """r2 (GPT r1 #8): cross-kind regression cases for exactly what check_fresh enforces."""
@@ -167,11 +167,11 @@ class Proc(unittest.TestCase):
         if self.had is None: self.pin.unlink()
         else: self.pin.write_text(self.had)
         shutil.rmtree(self.tmp, ignore_errors=True)
-    def run_stage(self, name="D2", go="D2", mode="ok", cap_h=None, frozen=False, timeout=120, fast_priors=False, extra={}, background=False):
+    def run_stage(self, name="D2", go="D2", mode="ok", cap_h=None, frozen=None, timeout=120, fast_priors=False, extra={}, background=False):
         X = copy.deepcopy(self.X)
         if fast_priors: X["inflight_est_s"] = {k: 0.01 for k in X["inflight_est_s"]}   # so only the hard deadline can stop it
         if cap_h is not None: X["caps_h"][name] = cap_h
-        if frozen: X["status"] = "frozen"
+        if frozen is not None: X["status"] = "frozen" if frozen else "draft"
         X["base_config"] = str((ROOT / self.X["base_config"]).resolve()); cp = self.tmp / "cfg.json"; json.dump(X, open(cp, "w"))
         env = dict(os.environ, E1B_ALLOW_NO_GPU="1", E1C_RES=str(self.res), E1C_CONFIG=str(cp), E1C_TEST_HOOK=str(HOOK),
                    E1C_TEST_MODE=mode, E1C_TEST_LOG=str(self.log), E1C_TEST_PIDS=str(self.pids), **extra); env.pop("E1C_GO", None)
@@ -193,7 +193,7 @@ class Proc(unittest.TestCase):
 
     # --- gates and the normal path
     def test_gates(self):
-        self.assertEqual(self.run_stage(go=None), 14); self.assertEqual(self.run_stage("T1", go="T1"), 13)
+        self.assertEqual(self.run_stage(go=None), 14); self.assertEqual(self.run_stage("T1", go="T1", frozen=False), 13)
         self.assertEqual(self.run_stage("T1", go="D2"), 14)
         self.pin.write_text("0" * 64 + "\n"); self.assertEqual(self.run_stage(), 16)
     def test_child_refuses_without_supervisor(self):
