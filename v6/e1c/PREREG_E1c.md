@@ -163,7 +163,7 @@ A1: the qualifying dev stage is **D2** (same sizes and protocol as D1); D1 ended
 
 **Projection inputs (r3, r4).** These come from **persisted per-row latencies** (sender and verifier per entry; receiver per generated row, with a fallback counted once) plus the longest model load (with canaries) **from any attempt** (loads are persisted per attempt in `loads_attempt<n>.json`). This keeps a resumed attempt from underprojecting.
 
-Any dev-driven change to these invalidates the qualifying dev stage. A new dev stage (with with its own amendment, cap and go) is then needed; old measurements do not qualify a revised implementation. There is no override flag.
+Any dev-driven change to these invalidates the qualifying dev stage. A new dev stage (with its own amendment, cap and go) is then needed; old measurements do not qualify a revised implementation. There is no override flag.
 
 **TEST size.** 240 entries per direction (fixed). If the eligibility rule fails, there is no TEST until a documented amendment.
 
