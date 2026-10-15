@@ -1,0 +1,70 @@
+{
+ "label": "E1c (DRAFT, not frozen): verified-ID hybrid vs prose, both directions",
+ "status": "draft",
+ "base_config": "../e1b/config_e1b.json",
+ "pair": [
+  "qwen7b",
+  "falcon7b"
+ ],
+ "directions": [
+  [
+   "qwen7b",
+   "falcon7b"
+  ],
+  [
+   "falcon7b",
+   "qwen7b"
+  ]
+ ],
+ "parser": "parse_letter_a10 (v6/e1b/e1b/parsing.py, A10 frozen)",
+ "seeds": {
+  "dev": {
+   "hard_messages": 91067,
+   "generator": 91062,
+   "probes_fresh": 91063,
+   "sanity_subset": 91064,
+   "cache_sample": 91065,
+   "bootstrap": 91066
+  },
+  "test": {
+   "hard_messages": 93067,
+   "generator": 93062,
+   "probes_fresh": 93063,
+   "sanity_subset": 93064,
+   "cache_sample": 93065,
+   "bootstrap": 93066
+  }
+ },
+ "sizes": {
+  "dev": {
+   "core_per_family": 40,
+   "receiver_entries_per_family": 10
+  },
+  "test": {
+   "core_per_family": 120,
+   "receiver_entries_per_family": 120
+  }
+ },
+ "cases_per_entry": 4,
+ "batch_size": 8,
+ "verifier_max_new_tokens": 48,
+ "verifier_b1_check_n": 16,
+ "criteria": {
+  "margin": 0.05,
+  "coverage_min": 0.85,
+  "byte_saving_min": 0.3,
+  "breakeven_max_messages": 1000,
+  "bootstrap_resamples": 2000,
+  "ci": 0.95,
+  "wrong_pass_max_dev": 0.02
+ },
+ "caps_h": {
+  "D1": 0.5,
+  "T1": 6.0
+ },
+ "max_starts": 2,
+ "max_starts_note": "one start plus one infrastructure retry (retry only for a crash/no-GPU/kernel failure before or during the run; never after a .done)",
+ "dev_book_sha256": "7f5827132b0c9aeddb0305fa3350ec2d95549991f3e3ac58eb9478e44629f37d",
+ "test_book_sha256": null,
+ "seed_rule": "Each book is built with 2 x core_per_family core entries per family; the E1c core is the first n per family in build order whose rule text is new. If a book fails to build at its pinned generator seed, the seed is raised by 100 until it builds; every attempt is logged. Dev: generator 91062 (attempts in data/dev_seed_attempts.txt)."
+}
