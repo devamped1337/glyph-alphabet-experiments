@@ -1,4 +1,4 @@
-"""E1c stages (PREREG_E1c §7). D1 = dev pilot (allowed while DRAFT; dev book only, never TEST). T1 = TEST (needs
+"""E1c stages (PREREG_E1c §7). D1/D2 = dev pilots (allowed while DRAFT; dev book only, never TEST; A1: D1 is closed BUDGET_EXHAUSTED, D2 qualifies T1). T1 = TEST (needs
 e1c.status == frozen, the pinned TEST book, and a qualifying D1 summary for the SAME protocol). Both need
 E1C_GO == <stage> (set only on Stefan's explicit go), one start plus at most one AUTHORISED infrastructure retry,
 and room in the cumulative stage cap. Model calls reuse the frozen E1b code paths."""
@@ -26,6 +26,8 @@ def finished(d):
     A = json.load(open(p)).get("attempts", [])
     return bool(A) and A[-1].get("outcome") == "done" and not any(a.get("outcome") == "running" for a in A)
 
+def is_dev(X, name): return name in X["dev_stages"]
+
 def code_hash():
     sys.path.insert(0, str(HERE / "tools")); import code_hash as H; return H.compute()
 
@@ -45,6 +47,11 @@ class ChildStage(ES.Stage):
     def save_ledger(self, *a, **k): pass
     def check_budget(self): pass
     def finish(self, summary): raise RuntimeError("the child never marks a stage done")
+    def log(self, ev, **kw):
+        """A1: E1b's env_info puts E1b's own CODE_HASH.txt under 'code_hash'; relabel it and add the E1c hash."""
+        if ev == "start" and isinstance(kw.get("env"), dict) and "code_hash" in kw["env"]:
+            env = dict(kw["env"]); env["e1b_code_hash"] = env.pop("code_hash"); env["e1c_code_hash"] = code_hash(); kw["env"] = env
+        super().log(ev, **kw)
 
 def _stage(name, cap, cfg, deadline):
     old = ES.RES; ES.RES = RES
@@ -89,12 +96,13 @@ def check_d1_summary(S, X, cfg):
     return True, "ok"
 
 def t1_eligibility(X, cfg):
-    """GPT r1 #2 / r2 #2 / r2 new #2: T1 needs a structurally complete D1 summary qualifying the CURRENT protocol."""
-    p = RES / "D1" / "summary.json"
-    term = [m for m in TERMINAL if (RES / "D1" / m).exists()]
-    if term: return False, f"D1 has terminal marker(s) {term}"     # r5: terminal markers take precedence over .done
-    if not finished(RES / "D1"): return False, "D1 has no recorded 'done' outcome"   # r6
-    if not (RES / "D1" / ".done").exists() or not p.exists(): return False, "D1 not finished"
+    """GPT r1 #2 / r2 #2 / r2 new #2: T1 needs a structurally complete summary of the QUALIFYING dev stage (A1: D2;
+    D1 is closed BUDGET_EXHAUSTED) for the CURRENT protocol."""
+    dv = X["t1_qualifying_dev_stage"]; dd = RES / dv; p = dd / "summary.json"
+    term = [m for m in TERMINAL if (dd / m).exists()]
+    if term: return False, f"{dv} has terminal marker(s) {term}"     # r5: terminal markers take precedence over .done
+    if not finished(dd): return False, f"{dv} has no recorded 'done' outcome"   # r6
+    if not p.exists(): return False, f"{dv} not finished"
     S = json.load(open(p)); ok, why = check_d1_summary(S, X, cfg)
     if not ok: return False, why
     z = S.get("sizing", {})
@@ -211,14 +219,14 @@ def child_main(cfg, name):
     if not os.environ.get("E1C_ATTEMPT_TOKEN") or os.environ["E1C_ATTEMPT_TOKEN"] != a.get("token") or a.get("outcome") != "running":
         print("child refused: not launched by the supervisor for the running attempt"); sys.exit(15)
     c = dict(cfg); c["stageB_batch_size"] = X["batch_size"]; ES._A9.clear()
-    B = load_book(cfg, "dev" if name == "D1" else "test")
+    B = load_book(cfg, "dev" if is_dev(X, name) else "test")
     S = _stage(name, st["cap_h"], c, a["deadline_mono"]); S.attempt = a["n"]
     if os.environ.get("E1B_ALLOW_NO_GPU") == "1" and os.environ.get("E1C_TEST_HOOK"):   # test-only fake backend / faults
         import importlib.util as U; sp = U.spec_from_file_location("e1c_test_hook", os.environ["E1C_TEST_HOOK"])
         h = U.module_from_spec(sp); sp.loader.exec_module(h); h.install(sys.modules[__name__], B, a)
     _require_gpu(S)
     S.log("e1c", stage=name, status=X["status"], attempt=a, cap_h=st["cap_h"], code_hash=code_hash(), protocol_hash=protocol_hash(X, cfg))
-    out = _run(c, name, dict(X, _kind="dev" if name == "D1" else "test"), B, S)
+    out = _run(c, name, dict(X, _kind="dev" if is_dev(X, name) else "test"), B, S)
     finish_child(S, out)
 
 def finish_child(S, out):
@@ -231,11 +239,11 @@ def _run(cfg, name, X, B, S):
     # load order: q (send+verify) -> f (send+verify; receive q->f) -> q (receive f->q)
     b, t["load1"] = load(q, cfg, B, S, est)
     t0 = time.time(); sel[q] = send_and_verify(b, q, B, ids, cfg, X, S, est, vbatch); t[f"send_verify_{q}"] = time.time() - t0
-    if name == "D1": vb[q] = verifier_b1_check(b, q, B, ids, cfg, X, S, est)
+    if is_dev(X, name): vb[q] = verifier_b1_check(b, q, B, ids, cfg, X, S, est)
     del b; free()
     b, t["load2"] = load(f, cfg, B, S, est)
     t0 = time.time(); sel[f] = send_and_verify(b, f, B, ids, cfg, X, S, est, vbatch); t[f"send_verify_{f}"] = time.time() - t0
-    if name == "D1": vb[f] = verifier_b1_check(b, f, B, ids, cfg, X, S, est)
+    if is_dev(X, name): vb[f] = verifier_b1_check(b, f, B, ids, cfg, X, S, est)
     t0 = time.time(); ex = {f"{q}_to_{f}": exchange(b, q, f, B, rids, sel[q], cfg, S, est)}; t[f"recv_{f}"] = time.time() - t0
     del b; free()
     b, t["load3"] = load(q, cfg, B, S, est)
@@ -264,7 +272,7 @@ def summarize(name, X, cfg, B, sel_rows, ex, t, vb, gpu_h, ids, rids, cases, vba
     for d, rows in ex.items():
         out["directions"][d] = direction_result(rows, sel_rows[d.split("_to_")[0]], B, X["criteria"],
                                                 seed_of(X["seeds"][X["_kind"]]["bootstrap"], d), rids, cases, ids)
-    if name == "D1":
+    if is_dev(X, name):
         out["note"] = "DEV pilot: descriptive only; no E1c verdict. Feeds the TEST eligibility and sizing rules (PREREG_E1c §8)."
         out["sizing"] = sizing(out, X, t, sel_rows, ex, loads)
     else: out["verdict"] = verdict(out, X)

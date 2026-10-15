@@ -1,4 +1,4 @@
-"""python run_e1c.py --stage D1|T1   (supervisor; needs E1C_GO=<stage>)   |   --check (code hash)
+"""python run_e1c.py --stage D2|T1 (D1 closed by A1)   (supervisor; needs E1C_GO=<stage>)   |   --check (code hash)
 --child <stage> is launched only by the supervisor (it refuses without the running attempt's token)."""
 import sys, argparse
 from pathlib import Path

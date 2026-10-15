@@ -61,6 +61,7 @@ def _killpg(pid):
 def gates(cfg, name):
     X = cfg["e1c"]
     if name not in X["caps_h"]: print(f"unknown E1c stage {name}"); sys.exit(2)
+    if name in X.get("closed_stages", []): print(f"{name} refused: closed by amendment (kept as recorded)"); sys.exit(20)
     if os.environ.get("E1C_GO") != name: print(f"{name} refused: no explicit go (E1C_GO must equal '{name}')"); sys.exit(14)
     if name == "T1":
         if X["status"] != "frozen": print("T1 refused: E1c is not frozen"); sys.exit(13)
@@ -68,7 +69,7 @@ def gates(cfg, name):
         if not ok: print(f"T1 refused: {why}"); sys.exit(19)
     p = HERE / "CODE_HASH.txt"; pin = p.read_text().strip() if p.exists() else None
     if pin != ST.code_hash(): print(f"{name} refused: code hash != CODE_HASH.txt"); sys.exit(16)
-    load_book(cfg, "dev" if name == "D1" else "test")
+    load_book(cfg, "dev" if ST.is_dev(X, name) else "test")
     return X
 
 def supervise(cfg, name):

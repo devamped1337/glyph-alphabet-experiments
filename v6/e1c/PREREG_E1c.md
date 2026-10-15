@@ -100,6 +100,7 @@ E1c succeeds only if all four criteria pass in both directions. Anything else is
 | Stage | Data | When | Cap | Gate |
 |---|---|---|---|---|
 | **D1 dev pilot** | dev book: senders and verifier on 160 entries per model; receivers on 10 entries × 4 cases × 2 arms per direction | this week (after Stefan's go) | **0.5 GPU-h** | `E1C_GO=D1`, Stefan's explicit go; allowed while DRAFT |
+| **D2 dev pilot (A1)** | same as D1 (same dev book, sizes and protocol; reruns everything) | after review and Stefan's explicit go | **0.8 GPU-h** (from measured D1 timings, see AMENDMENT_E1c_A1) | `E1C_GO=D2`; D1 is closed (BUDGET_EXHAUSTED, kept as recorded); **D2 is the dev stage that qualifies T1** (§8 rules unchanged) |
 | **T1 TEST** | TEST book: 240 entries per direction | next week, after the Kaggle quota reset | **6.0 GPU-h** (placeholder; set from D1 at freeze, ≤ next week's quota) | `E1C_GO=T1`, Stefan's explicit go, `status=frozen`, TEST book sha pinned, and **D1 eligibility** (§8) checked in code |
 
 **Rules for every stage:**
@@ -230,3 +231,5 @@ The T1 cap may be set from D1 at freeze (it is not part of the protocol hash, an
 4. Non-blocking: kill wording qualified; group kill after normal exit plus PDEATHSIG, with grandchild and supervisor-death tests; ledger scope stated, `finalise_s` reported; manual retry route labelled external-log adjudication.
 
 **r6 wording-only edits after GPT's r6 ACCEPT** (no behaviour change): final-state-replace limitation disclosed; PDEATHSIG limits disclosed; `finalise_s` scope, ChildStage (`deadline_mono`) and guard (not a hard bound) docstrings corrected.
+
+**Amendment A1 (2026-10-15):** see `AMENDMENT_E1c_A1.md`. D1 ended BUDGET_EXHAUSTED (terminal, kept); new dev stage D2 (cap 0.8 GPU-h from measured D1 timings) qualifies T1 in D1's place. T1 rules and success criteria unchanged.

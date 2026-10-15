@@ -15,7 +15,7 @@ class Terms(unittest.TestCase):
         c = X["criteria"]
         self.assertEqual((c["margin"], c["coverage_min"], c["byte_saving_min"], c["breakeven_max_messages"], c["bootstrap_resamples"], c["wrong_pass_max_dev"]),
                          (0.05, 0.85, 0.30, 1000, 2000, 0.02))
-        self.assertEqual(X["caps_h"]["D1"], 0.5); self.assertEqual(X["sizes"]["test"]["core_per_family"] * 2, 240)
+        self.assertEqual(X["caps_h"]["D1"], 0.5); self.assertEqual(X["caps_h"]["D2"], 0.8); self.assertEqual(X["sizes"]["test"]["core_per_family"] * 2, 240)
         self.assertEqual(X["sizes"]["dev"]["core_per_family"] * 2, 160)                       # r2: dev enlarged 80 -> 160 per sender
         self.assertFalse(set(X["seeds"]["dev"].values()) & set(X["seeds"]["test"].values()))
         self.assertIsNone(X["test_book_sha256"])
@@ -162,12 +162,12 @@ class Proc(unittest.TestCase):
         self.log = self.tmp / "calls.jsonl"; self.pids = self.tmp / "pids.txt"
     def tearDown(self):
         ST.RES = self.oldRES
-        for p in (self.res, self.res / "D1"):
+        for p in (self.res, self.res / "D2"):
             if p.exists(): os.chmod(p, 0o755)
         if self.had is None: self.pin.unlink()
         else: self.pin.write_text(self.had)
         shutil.rmtree(self.tmp, ignore_errors=True)
-    def run_stage(self, name="D1", go="D1", mode="ok", cap_h=None, frozen=False, timeout=120, fast_priors=False, extra={}, background=False):
+    def run_stage(self, name="D2", go="D2", mode="ok", cap_h=None, frozen=False, timeout=120, fast_priors=False, extra={}, background=False):
         X = copy.deepcopy(self.X)
         if fast_priors: X["inflight_est_s"] = {k: 0.01 for k in X["inflight_est_s"]}   # so only the hard deadline can stop it
         if cap_h is not None: X["caps_h"][name] = cap_h
@@ -179,9 +179,9 @@ class Proc(unittest.TestCase):
         if background: return subprocess.Popen([sys.executable, str(ROOT / "run_e1c.py"), "--stage", name], env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         t = time.time(); r = subprocess.run([sys.executable, str(ROOT / "run_e1c.py"), "--stage", name], env=env, capture_output=True, text=True, timeout=timeout)
         self.wall = time.time() - t; self.out = r.stdout + r.stderr; return r.returncode
-    def d(self): return self.res / "D1"
+    def d(self): return self.res / "D2"
     def state(self): return json.load(open(self.d() / "e1c_state.json"))
-    def ledger(self): p = self.res / "budget_ledger.json"; return json.load(open(p)).get("E1C_D1") if p.exists() else None
+    def ledger(self): p = self.res / "budget_ledger.json"; return json.load(open(p)).get("E1C_D2") if p.exists() else None
     def pid(self, k):
         for _ in range(200):
             if self.pids.exists():
@@ -189,12 +189,12 @@ class Proc(unittest.TestCase):
                 if v: return v[-1]
             time.sleep(0.05)
     def calls(self): return [json.loads(l) for l in open(self.log)] if self.log.exists() else []
-    def au(self, *a): return AR.authorise("D1", *a, res=self.res, cfg=self.cfg)
+    def au(self, *a): return AR.authorise("D2", *a, res=self.res, cfg=self.cfg)
 
     # --- gates and the normal path
     def test_gates(self):
         self.assertEqual(self.run_stage(go=None), 14); self.assertEqual(self.run_stage("T1", go="T1"), 13)
-        self.assertEqual(self.run_stage("T1", go="D1"), 14)
+        self.assertEqual(self.run_stage("T1", go="D2"), 14)
         self.pin.write_text("0" * 64 + "\n"); self.assertEqual(self.run_stage(), 16)
     def test_child_refuses_without_supervisor(self):
         env = dict(os.environ, E1B_ALLOW_NO_GPU="1", E1C_RES=str(self.res)); self.d().mkdir()
@@ -202,7 +202,7 @@ class Proc(unittest.TestCase):
         for tok in (None, "wrong"):
             e = dict(env); e.pop("E1C_ATTEMPT_TOKEN", None)
             if tok: e["E1C_ATTEMPT_TOKEN"] = tok
-            self.assertEqual(subprocess.run([sys.executable, str(ROOT / "run_e1c.py"), "--child", "D1"], env=e, capture_output=True).returncode, 15)
+            self.assertEqual(subprocess.run([sys.executable, str(ROOT / "run_e1c.py"), "--child", "D2"], env=e, capture_output=True).returncode, 15)
     def test_d1_dry_run(self):
         self.assertEqual(self.run_stage(), 0, self.out); d = self.d(); S = json.load(open(d / "summary.json"))
         for m in ("qwen7b", "falcon7b"):
@@ -291,14 +291,14 @@ class Proc(unittest.TestCase):
         the completion decision use the monotonic clock. Supervisor in-process with a jumping time.time()."""
         import types, e1c.supervisor as SV
         cp = self.tmp / "cfg.json"; X = copy.deepcopy(self.X); X["base_config"] = str((ROOT / self.X["base_config"]).resolve()); json.dump(X, open(cp, "w"))
-        env = dict(E1B_ALLOW_NO_GPU="1", E1C_RES=str(self.res), E1C_CONFIG=str(cp), E1C_TEST_HOOK=str(HOOK), E1C_TEST_MODE="ok", E1C_GO="D1")
+        env = dict(E1B_ALLOW_NO_GPU="1", E1C_RES=str(self.res), E1C_CONFIG=str(cp), E1C_TEST_HOOK=str(HOOK), E1C_TEST_MODE="ok", E1C_GO="D2")
         old_env = {k: os.environ.get(k) for k in env}; os.environ.update(env); oldRES, oldt = SV.RES, SV.time
         try:
             for jump in (+864000.0, -864000.0):
                 shutil.rmtree(self.res); self.res.mkdir(); SV.RES = self.res; n = dict(c=0)
                 def wall(j=jump): n["c"] += 1; return time.time() + (j if n["c"] > 1 else 0.0)
                 SV.time = types.SimpleNamespace(time=wall, monotonic=time.monotonic, strftime=time.strftime)
-                with self.assertRaises(SystemExit) as e: SV.supervise(self.cfg, "D1")
+                with self.assertRaises(SystemExit) as e: SV.supervise(self.cfg, "D2")
                 self.assertEqual(e.exception.code, 0, jump); a = self.state()["attempts"][-1]
                 self.assertEqual(a["outcome"], "done"); self.assertTrue(0 < a["elapsed_s"] < 60, a["elapsed_s"])
                 self.assertAlmostEqual(self.ledger(), a["elapsed_s"], places=3); self.assertTrue(ST.finished(self.d()))
@@ -356,6 +356,22 @@ class Proc(unittest.TestCase):
         p = self.run_stage(mode="sleep_send", fast_priors=True, background=True); c = self.pid("child"); self.assertIsNotNone(c)
         time.sleep(1.0); p.kill(); p.wait(); self.assertTrue(self._gone(c))
         self.assertEqual(self.state()["attempts"][-1]["outcome"], "running"); self.assertEqual(self.run_stage(), 17)
+    # --- A1
+    def test_D1_closed_and_D2_qualifies(self):
+        """A1: D1 is closed (exit 20, before any gate side effect); T1 eligibility reads D2 only, so a 'good' D1
+        summary qualifies nothing and D1's BUDGET_EXHAUSTED does not block D2."""
+        X = copy.deepcopy(self.X); self.assertEqual(X["closed_stages"], ["D1"]); self.assertEqual(X["t1_qualifying_dev_stage"], "D2")
+        self.assertEqual(self.run_stage("D1", go="D1"), 20); self.assertFalse((self.res / "D1").exists())
+        d1 = self.res / "D1"; d1.mkdir(); (d1 / "BUDGET_EXHAUSTED").write_text("x")
+        self.assertEqual(self.run_stage(), 0, self.out); self.assertTrue(ST.finished(self.d()))
+        good = self.good_summary(); (d1 / "BUDGET_EXHAUSTED").unlink(); (d1 / ".done").write_text("x"); json.dump(good, open(d1 / "summary.json", "w"))
+        json.dump(dict(attempts=[dict(n=1, outcome="done")]), open(d1 / "e1c_state.json", "w"))
+        shutil.rmtree(self.d()); self.assertFalse(ST.t1_eligibility(self.cfg["e1c"], self.cfg)[0])
+    def test_log_field_relabelled(self):
+        self.assertEqual(self.run_stage(), 0, self.out)
+        st = [json.loads(l) for l in open(self.d() / "stage_log.jsonl") if json.loads(l)["ev"] == "start"][0]["env"]
+        self.assertNotIn("code_hash", st); self.assertEqual(st["e1c_code_hash"], ST.code_hash())
+        self.assertEqual(st["e1b_code_hash"], (ROOT.parent / "e1b" / "CODE_HASH.txt").read_text().strip())
     def test_resume_bound_to_protocol(self):
         d = self.d(); d.mkdir(); (d / "select_qwen7b.jsonl").write_text("")
         json.dump(dict(attempts=[dict(n=1, kind="first", outcome="crash rc=1", code_hash="old", protocol_hash="old")], retry=None, cap_h=0.5), open(d / "e1c_state.json", "w"))
@@ -363,7 +379,7 @@ class Proc(unittest.TestCase):
     def test_retry_rules(self):
         d = self.d(); d.mkdir()
         json.dump(dict(attempts=[dict(n=1, kind="first", outcome="no_gpu rc=9")], retry=None, cap_h=0.5), open(d / "e1c_state.json", "w"))
-        for args in (("bad_result", 0.1, "x"), ("no_gpu", 0, "x"), ("no_gpu", float("nan"), "x"), ("no_gpu", float("inf"), "x"), ("no_gpu", 0.6, "x"), ("no_gpu", 0.1, " "), ("kernel_crash", 0.1, "x")):
+        for args in (("bad_result", 0.1, "x"), ("no_gpu", 0, "x"), ("no_gpu", float("nan"), "x"), ("no_gpu", float("inf"), "x"), ("no_gpu", 0.9, "x"), ("no_gpu", 0.1, " "), ("kernel_crash", 0.1, "x")):
             with self.assertRaises(SystemExit, msg=args): self.au(*args)
         (d / "GPU_PREFLIGHT_FAIL").write_text("no CUDA\n"); self.au("no_gpu", 0.1, "T4 not attached (log line 3)")
         with self.assertRaises(SystemExit): self.au("no_gpu", 0.1, "again")
@@ -375,7 +391,7 @@ class Proc(unittest.TestCase):
         d = self.d(); d.mkdir(); (d / "CANARY_FAIL").write_text("x")
         with self.assertRaises(SystemExit): self.au("kernel_crash", 0.1, "x")
     def test_ledger_at_cap_is_terminal(self):
-        json.dump({"E1C_D1": 0.5 * 3600}, open(self.res / "budget_ledger.json", "w"))
+        json.dump({"E1C_D2": self.X["caps_h"]["D2"] * 3600}, open(self.res / "budget_ledger.json", "w"))
         self.assertEqual(self.run_stage(), 3); self.assertTrue((self.d() / "BUDGET_EXHAUSTED").exists()); self.assertEqual(self.calls(), [])
     def test_unit_costs(self):
         sel = dict(q=[dict(sender_latency_s=1.0, verifier_latency_s=0.5)] * 4, f=[dict(sender_latency_s=2.0, verifier_latency_s=0.5)] * 4)
