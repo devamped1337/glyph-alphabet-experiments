@@ -1,30 +1,31 @@
-# E1b review round 5b: A10 draft after GPT r1 (Grok + GPT)
+# E1b review round 6: B3r results (A10, secondary) for GPT + Grok
 
-- **Pinned commit:** `bd218c89bdd58e78efd444abb06849379c583a6b` (draft code hash `c484991e…`). A10 is still a **draft**: not frozen, no tag. B3r has not been pushed.
-- **Text:** [PREREG_E1b.md §A10, including "A10 round 5"](https://github.com/devamped1337/glyph-alphabet-experiments/blob/bd218c89bdd58e78efd444abb06849379c583a6b/v6/e1b/PREREG_E1b.md). Reviews: [gpt_A10.md](https://github.com/devamped1337/glyph-alphabet-experiments/blob/bd218c89bdd58e78efd444abb06849379c583a6b/v6/e1b/reviews/gpt_A10.md), [gpt_A10_r1.md](https://github.com/devamped1337/glyph-alphabet-experiments/blob/bd218c89bdd58e78efd444abb06849379c583a6b/v6/e1b/reviews/gpt_A10_r1.md). Validator: [validate.py](https://github.com/devamped1337/glyph-alphabet-experiments/blob/bd218c89bdd58e78efd444abb06849379c583a6b/v6/e1b/e1b/validate.py). Tests: [test_a10.py](https://github.com/devamped1337/glyph-alphabet-experiments/blob/bd218c89bdd58e78efd444abb06849379c583a6b/v6/e1b/tests/test_a10.py). B3f results: [results/B3f](https://github.com/devamped1337/glyph-alphabet-experiments/blob/bd218c89bdd58e78efd444abb06849379c583a6b/v6/e1b/results/B3f).
-- **Framing (unchanged):** A10 is a post-hoc diagnostic completion on an already-seen TEST set. **A9 B3: POC FAILED stays primary.**
+## Ask
+Review the B3r write-up for honesty and correctness. Answer: **(1)** Is the INCONCLUSIVE label correct under the frozen rule? **(2)** Is the framing right: A9's POC FAILED stays primary, and B3r is a secondary post-hoc diagnostic? **(3)** Are the caveats complete? **(4)** Is anything overclaimed or missing? Verdict: **ACCEPT / CHANGE** (with required edits).
 
-## Changes since round 5 (`6a60c8d`)
-1. **Validator defect fixed (GPT r1).** Before the fix, a B3r run with one copied prose row deleted still validated. The validator now enforces:
-   - exactly 60 unique archived selections, with the same entries as A9;
-   - exactly 240 rows per condition, with unique (entry, case) keys covering exactly the scheduled cases;
-   - every prose row equal to its pinned source row, with only `reused_from` added;
-   - exactly 24 scheduled non-TEST views per model in B3f.
-2. **Regression tests.** A missing prose row, a missing id_selected row, an altered prose row, an extra field on a copied prose row, a missing selection and a missing format view now all fail validation; a clean run passes. **112 tests run, all pass, 1 skipped.** The validator passes on the real results.
-3. **Text changes.**
-   - **Q1:** the reuse checks "provide supporting checks but do not quantify or eliminate cross-session effects", and the CI does not cover cross-session bias.
-   - **Q2:** the bar is kept (≥22/24 and 0 changed accepted decisions). The views cover 4 entries, with **19** distinct entry/order combinations (counted on the results; the review estimated 20), so they are not independent tests.
-   - **Q4:** B3r goes in a separate secondary section, with the A9 FAILED verdict prominent. The original Falcon direction is described as a frozen-parser failure with zero ID receiver calls.
-   - **Q3:** unchanged.
-4. **B3f ran** on Stefan's go (09:07 AEDT): 0.153 of 0.25 GPU-h, T4 nf4, canaries 20/20 for both models, validator passed.
+## Context
+- **E1b** tests whether an ID-as-text channel (the sender picks an ID; the receiver expands it) is non-inferior to prose. The margin is −0.05 in **both** directions, with a paired cluster bootstrap over 60 entries.
+- **A9 B3 verdict: POC FAILED.**
+  - Qwen→Falcon: −0.154, CI [−0.25, −0.07].
+  - Falcon→Qwen: 0/60 sender picks valid under the frozen parser ("X) F1" read as two letters), so there were zero ID receiver calls.
+- **A10** (frozen at `prereg-e1b-a10`, `097cacc`; GPT and Grok yes) fixed only the parser (it strips ID fragments; conflicts are still rejected). It re-parsed the 60 archived Falcon replies, ran only Qwen's id_selected arm, and reused the A9 prose arm verbatim.
+- **B3r results:**
+  - Selection 56/60 = 0.933, +0.18 over regex.
+  - id_selected 0.929 (223/240) vs prose 0.992 (238/240): −0.0625, CI [−0.133, −0.004], **INCONCLUSIVE**.
+  - 16 of the 17 errors come from the 4 wrong picks.
+  - 0.217 GPU-h; the validator passed.
 
-| Model | Frozen valid | A10 valid | Changed accepted decisions | Bar |
-| --- | --- | --- | --- | --- |
-| qwen7b | 24/24 | 24/24 | 0 | PASS |
-| falcon7b | 0/24 (`X) Fn`) | 24/24 | 0 | PASS |
+## Artifacts (commit `445b967601c82a73279e6b00208535d6efa9d63f`)
+- [B3R_REPORT.md](https://github.com/devamped1337/glyph-alphabet-experiments/blob/445b967601c82a73279e6b00208535d6efa9d63f/v6/e1b/B3R_REPORT.md), [B3_REPORT.md](https://github.com/devamped1337/glyph-alphabet-experiments/blob/445b967601c82a73279e6b00208535d6efa9d63f/v6/e1b/B3_REPORT.md) (A9 primary), [PREREG_E1b.md §A10](https://github.com/devamped1337/glyph-alphabet-experiments/blob/445b967601c82a73279e6b00208535d6efa9d63f/v6/e1b/PREREG_E1b.md), [results/B3r/](https://github.com/devamped1337/glyph-alphabet-experiments/blob/445b967601c82a73279e6b00208535d6efa9d63f/v6/e1b/results/B3r)
+- sha256:
+    cd7a30d6c8fceb63aca429072cb27fcbb61da3c65ebba1540062b946622c71fa  results/B3r/summary.json
+    20a7cd24cafb23b35fae596683293eb71b1f747dc82ad5a0690b112f0fedcc33  results/B3r/exchange_falcon7b_to_qwen7b.jsonl
+    17965114387a578b70e27f1c608552cf51265e435fd449012b324ddbfe00741d  results/B3r/select_falcon7b.jsonl
+    816076c29343d863ecf434906662fcf7cf051a01c5c10bdf4ac2b2518caae595  B3R_REPORT.md
 
-   Cumulative GPU-h: A9 + A10 = 6.30 / 12.0, and A10 so far is 0.15 / 1.0.
+## Scope
+- In scope: the B3r label, the framing, the caveats and the wording in B3R_REPORT.md.
+- Out of scope: re-opening A9 or A10 design decisions, new runs, and any re-run selected for a better outcome.
 
-## Questions
-1. Are the validator checks and regression tests sufficient? (yes / change)
-2. **Freeze A10 now?** (yes / no) If yes: set `a10.status=frozen`, record the hash, tag `prereg-e1b-a10`, set B3r's `RESULTS_COMMIT` to `bd218c89bdd58e78efd444abb06849379c583a6b`, and launch only on Stefan's explicit go.
+## Output
+Write `reviews/<reviewer>_B3r.md`, containing the verdict (ACCEPT / CHANGE), answers to (1)–(4), and required edits as a numbered list.
