@@ -1,0 +1,210 @@
+{
+ "label": "POST-HOC DIAGNOSTIC COMPLETION (A10) on an already-seen TEST set; secondary; cannot overturn the A9 B3 verdict (POC FAILED)",
+ "primary_result_unchanged": "A9 B3: POC FAILED (both directions inferior); A10 cannot overturn it",
+ "direction": "falcon7b->qwen7b",
+ "parser": "parse_letter_a10",
+ "prose_arm": "reused verbatim from B3 (pinned sha); not rerun",
+ "reuse_sha256": {
+  "B3/select_falcon7b.jsonl": "6d2494fb966d9304d880960dd10e23d1e4606c901c31fd6f830be04c2737ce06",
+  "B3/exchange_falcon7b_to_qwen7b.jsonl": "cd7121960fa186fde50a8437110068f052882d9775f76678787f485e5d77d1be",
+  "B3/prompts_qwen7b.jsonl": "d0cdca2c15a7eae44298e7010672ccd1a8f6e0b56e6e49d5d9cc797395b1fd17",
+  "B3/select_qwen7b.jsonl": "d7a301d2be10c25c9806424f830378ac329ddef2a0f3585fb40a73c2b4be4d01",
+  "B3/exchange_qwen7b_to_falcon7b.jsonl": "0d89fe4d9a1239035ee9553b1ca6bf124a808f66f948bf8b7552c5276b335f96",
+  "B3/summary.json": "42cf348edc8ae3c652a44d38f713839b4b1f706dfa2211235748583462ea58e7"
+ },
+ "result": {
+  "headline": {
+   "diff_id_selected_minus_prose": -0.0625,
+   "ci95": [
+    -0.13333333333333333,
+    -0.004166666666666667
+   ],
+   "label": "inconclusive",
+   "margin": -0.05,
+   "n_entries": 60,
+   "n_items": 240,
+   "acc_id_selected": 0.9291666666666667,
+   "acc_prose": 0.9916666666666667
+  },
+  "bytes": {
+   "payload_saving": 0.8909716908951798,
+   "whole_exchange_saving": 0.5873063405254614,
+   "target_payload_saving": 0.3,
+   "payload_target_met": true,
+   "note": "reported separately from the accuracy label (A1.2); saving is near-guaranteed by design"
+  },
+  "per_family_descriptive": {
+   "F1": {
+    "diff": -0.1,
+    "ci": [
+     -0.23333333333333334,
+     0.0
+    ],
+    "label": "inconclusive",
+    "descriptive": true
+   },
+   "F2": {
+    "diff": -0.025,
+    "ci": [
+     -0.10833333333333334,
+     0.025
+    ],
+    "label": "inconclusive",
+    "descriptive": true
+   }
+  },
+  "denominators": {
+   "all_scheduled_items": 240,
+   "abstentions": 0,
+   "rejected_by_gate": 0,
+   "unresolved": 0,
+   "sender_invalid": 0
+  },
+  "selection": {
+   "acc": 0.9333333333333333,
+   "ci95": [
+    0.8666666666666667,
+    0.9833333333333333
+   ],
+   "chance": 0.25,
+   "above_chance": true,
+   "baselines": {
+    "regex": 0.75,
+    "tfidf": 0.4166666666666667,
+    "bm25": 0.4166666666666667,
+    "minilm": 0.5166666666666667
+   },
+   "best_baseline": "regex",
+   "wording": "selection among compact labelled candidates (4-way), not a repository search",
+   "trials_per_family": {
+    "F1": 30,
+    "F2": 30
+   },
+   "by_neighbour_type": {
+    "swap": {
+     "n_trials": 60,
+     "sender_picked": 3,
+     "sender_avoided_rate": 0.95,
+     "baseline_picked": {
+      "regex": 11,
+      "tfidf": 33,
+      "bm25": 29,
+      "minilm": 25
+     }
+    },
+    "shift": {
+     "n_trials": 60,
+     "sender_picked": 0,
+     "sender_avoided_rate": 1.0,
+     "baseline_picked": {
+      "regex": 2,
+      "tfidf": 0,
+      "bm25": 2,
+      "minilm": 2
+     }
+    },
+    "swap+shift": {
+     "n_trials": 60,
+     "sender_picked": 1,
+     "sender_avoided_rate": 0.9833333333333333,
+     "baseline_picked": {
+      "regex": 2,
+      "tfidf": 2,
+      "bm25": 4,
+      "minilm": 2
+     }
+    }
+   },
+   "regex_frozen_views": {
+    "derived": {
+     "n": 6,
+     "correct": 2,
+     "tie_guess": 5,
+     "tie_guess_correct": 1
+    },
+    "plain": {
+     "n": 38,
+     "correct": 38,
+     "tie_guess": 0,
+     "tie_guess_correct": 0
+    },
+    "spelled": {
+     "n": 8,
+     "correct": 2,
+     "tie_guess": 8,
+     "tie_guess_correct": 2
+    },
+    "reordered": {
+     "n": 8,
+     "correct": 3,
+     "tie_guess": 0,
+     "tie_guess_correct": 0
+    }
+   },
+   "regex_tie_guesses": 13,
+   "by_message_style": {
+    "derived": {
+     "n": 6,
+     "acc": 0.6666666666666666
+    },
+    "plain": {
+     "n": 38,
+     "acc": 1.0
+    },
+    "spelled": {
+     "n": 8,
+     "acc": 1.0
+    },
+    "reordered": {
+     "n": 8,
+     "acc": 0.75
+    }
+   },
+   "sender_minus_best_baseline": {
+    "est": 0.18333333333333332,
+    "ci": [
+     0.08333333333333333,
+     0.2833333333333333
+    ],
+    "beats": true
+   },
+   "note": "separate secondary claim; not part of the headline"
+  },
+  "costs": {
+   "sender": {
+    "latency_s": 0.7389916666666667,
+    "flops": 3979027282636.8,
+    "candidate_prep_bytes": 279.3333333333333
+   },
+   "receiver": {
+    "id_selected": {
+     "n": 240,
+     "latency_s": 2.0223133333333334,
+     "prompt_tokens": 123.775,
+     "new_prompt_tokens": 123.775,
+     "gen_tokens": 54.295833333333334,
+     "flops_new_tokens": 2706676666666.6665,
+     "batch": "mixed",
+     "cached": false
+    },
+    "prose": {
+     "n": 240,
+     "latency_s": 2.2771666666666666,
+     "prompt_tokens": 127.10833333333333,
+     "new_prompt_tokens": 127.10833333333333,
+     "gen_tokens": 53.96666666666667,
+     "flops_new_tokens": 2752340000000.0,
+     "batch": "mixed",
+     "cached": false
+    }
+   },
+   "dictionary_setup": {
+    "bytes_once": 36420,
+    "messages": 240,
+    "amortised_bytes_per_message": 151.75,
+    "break_even_messages": 234.56419063975954
+   }
+  }
+ },
+ "not_checked_repository": true
+}
