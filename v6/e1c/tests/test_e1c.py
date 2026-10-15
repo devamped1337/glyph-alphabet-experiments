@@ -269,13 +269,39 @@ class DryRun(unittest.TestCase):
         json.dump(dict(attempts=[dict(n=1, kind="first", outcome="crash RuntimeError", code_hash="old", protocol_hash="old")], retry=None, cap_h=0.5), open(d / "e1c_state.json", "w"))
         AR.authorise("D1", "kernel_crash", 0.1, "CUDA error in log", res=ST.RES, cfg=self.cfg)
         self.assertEqual(self._run("D1"), 17); self.assertIn("different code/protocol", (d / "ATTEMPT_INCOMPLETE").read_text())
-    def test_resumed_sizing_uses_persisted_latencies_r3(self):
-        """r3 (GPT r2 new #1): unit costs come from persisted per-row latencies, so a resumed attempt does not underproject."""
+    def test_unit_costs_r3(self):
         sel = dict(q=[dict(sender_latency_s=1.0, verifier_latency_s=0.5)] * 4, f=[dict(sender_latency_s=2.0, verifier_latency_s=0.5)] * 4)
         ex = dict(d=[dict(cond="prose", latency_s=3.0), dict(cond="hybrid", sent="prose", latency_s=3.0), dict(cond="prose", latency_s=3.0), dict(cond="hybrid", sent="id", latency_s=1.0)])
         sv, rv = ST.unit_costs(sel, ex); self.assertAlmostEqual(sv, 4.0); self.assertAlmostEqual(rv, 3.5)
-        # a resumed attempt that redid only 1 of 4 sender rows still yields the same per-entry cost
-        self.assertEqual(ST.unit_costs(sel, ex), ST.unit_costs({k: list(v) for k, v in sel.items()}, ex))
+    def test_interrupted_resumed_run_r4(self):
+        """r4 (GPT r3 optional): a genuine interrupted + resumed fixture. Attempt 1 crashes mid-sender; the authorised
+        retry resumes; sizing uses every persisted row latency and the loads of BOTH attempts; receiver cost is
+        checked against the batched-generation rows (a fallback shares its prose twin's generation)."""
+        os.environ["E1C_GO"] = "D1"; calls = dict(n=0); real = ST.load_B
+        def crashing(name, cfg, S):
+            f, k = real(name, cfg, S); g = f.generate
+            def gen(*a, **kw):
+                calls["n"] += 1
+                if calls["n"] == 5: raise RuntimeError("simulated CUDA error")
+                return g(*a, **kw)
+            f.generate = gen; return f, k
+        ST.load_B = crashing
+        with self.assertRaises(RuntimeError): ST.run(self.cfg, "D1")
+        st = self._state(); self.assertEqual(st["attempts"][0]["outcome"], "crash RuntimeError"); self.assertEqual(len(st["attempts"][0]["loads"]), 1)
+        part = [json.loads(l) for l in open(ST.RES / "D1" / "select_qwen7b.jsonl")] if (ST.RES / "D1" / "select_qwen7b.jsonl").exists() else []
+        ST.load_B = real; AR.authorise("D1", "kernel_crash", 0.01, "RuntimeError: CUDA error (log)", res=ST.RES, cfg=self.cfg)
+        self.assertIn(self._run("D1"), (None, 0))
+        S = json.load(open(ST.RES / "D1" / "summary.json")); z = S["sizing"]
+        sel = {m: [json.loads(l) for l in open(ST.RES / "D1" / f"select_{m}.jsonl")] for m in ("qwen7b", "falcon7b")}
+        ex = {d: [json.loads(l) for l in open(ST.RES / "D1" / f"exchange_{d}.jsonl")] for d in S["directions"]}
+        self.assertEqual(len(sel["qwen7b"]), 12); self.assertEqual(S["selection"]["qwen7b"]["complete"], True)
+        sv, rv = ST.unit_costs(sel, ex); self.assertAlmostEqual(z["sender_verifier_s_per_entry"], sv); self.assertAlmostEqual(z["receiver_s_per_message"], rv)
+        loads = ST.all_loads(ST.RES / "D1" / "e1c_state.json"); self.assertEqual(len(loads), 4); self.assertAlmostEqual(z["load_s"], max(loads))
+        for rows in ex.values():
+            for x in rows:
+                if x["cond"] == "hybrid" and x["sent"] == "prose":
+                    tw = [y for y in rows if y["cond"] == "prose" and y["case"] == x["case"]][0]
+                    self.assertEqual((x["batch_index"], x["batch_pos"], x["latency_s"]), (tw["batch_index"], tw["batch_pos"], tw["latency_s"]))
     def test_watchdog_deadline_r3(self):
         """r3 (GPT r2 #6): enforceable deadline at the cap, whatever is in flight."""
         import types, time as _t
@@ -328,5 +354,79 @@ class DryRun(unittest.TestCase):
         import hashlib
         b = b"book"; h = hashlib.sha256(b).hexdigest()
         self.assertTrue(CF.digest_ok(b, h, h + "\n")[0]); self.assertFalse(CF.digest_ok(b, h, "0" * 64)[0]); self.assertFalse(CF.digest_ok(b + b"x", h, h)[0])
+
+class Rec(ST.Watchdog):
+    inst = []
+    def __init__(self, S, exit_fn=None, **kw):
+        super().__init__(S, exit_fn=exit_fn or (lambda: (_ for _ in ()).throw(SystemExit(3))), **kw); Rec.inst.append(self); self.done_at_cancel = None
+    def cancel(self): self.done_at_cancel = (self.S.dir / ".done").exists(); super().cancel()
+
+class WatchdogR4(unittest.TestCase):
+    _run = DryRun._run; _state = DryRun._state
+    def setUp(self):
+        DryRun.setUp(self); self.oldW, self.oldS = ST.Watchdog, ST.summarize; ST.Watchdog = Rec; Rec.inst = []
+    def tearDown(self):
+        ST.Watchdog, ST.summarize = self.oldW, self.oldS; DryRun.tearDown(self)
+    def test_armed_through_summary_and_finish(self):
+        seen = []
+        def summ(*a, **k): w = Rec.inst[-1]; seen.append((w.t.is_alive(), w.cancelled)); return self.oldS(*a, **k)
+        ST.summarize = summ; os.environ["E1C_GO"] = "D1"; self.assertIn(self._run("D1"), (None, 0))
+        self.assertEqual(seen, [(True, False)]); self.assertTrue(Rec.inst[-1].cancelled); self.assertTrue(Rec.inst[-1].done_at_cancel)
+    def test_expiry_during_finalisation(self):
+        def summ(*a, **k):
+            w = Rec.inst[-1]; w.t.cancel(); w.fire()     # deadline reached while the summary is being written
+        ST.summarize = summ; os.environ["E1C_GO"] = "D1"; self.assertEqual(self._run("D1"), 3)
+        d = ST.RES / "D1"; self.assertTrue((d / "BUDGET_EXHAUSTED").exists()); self.assertFalse((d / ".done").exists())
+        self.assertEqual(self._state()["attempts"][-1]["outcome"], "exit 3"); self.assertEqual(Rec.inst[-1].done_steps, ["marker", "ledger", "log"])
+        self.assertEqual(self._run("D1"), 18)
+        with self.assertRaises(SystemExit): AR.authorise("D1", "kernel_crash", 0.1, "x", res=ST.RES, cfg=self.cfg)
+
+class LedgerR4(unittest.TestCase):
+    def setUp(self):
+        self.tmp = Path(tempfile.mkdtemp()); self.oldR = ST.RES; ST.RES = self.tmp / "results"; ST.RES.mkdir()
+        self.cfg = load_cfg(); os.environ["E1B_ALLOW_NO_GPU"] = "1"
+    def tearDown(self): ST.RES = self.oldR; shutil.rmtree(self.tmp, ignore_errors=True)
+    def test_concurrent_saves_are_safe(self):
+        import threading
+        S = ST._stage("D1", 0.5, self.cfg); errs = []
+        def hammer():
+            try:
+                for _ in range(200): S.save_ledger()
+            except Exception as e: errs.append(e)
+        ts = [threading.Thread(target=hammer) for _ in range(4)]
+        for t in ts: t.start()
+        for t in ts: t.join()
+        self.assertEqual(errs, []); L = json.load(open(ST.RES / "budget_ledger.json")); self.assertIn("E1C_D1", L)
+        self.assertEqual(list(ST.RES.glob("*.tmp")), [])
+    def test_lock_timeout(self):
+        S = ST._stage("D1", 0.5, self.cfg); ST.LEDGER_LOCK.acquire()
+        try:
+            with self.assertRaises(TimeoutError): S.save_ledger(timeout=0.1)
+        finally: ST.LEDGER_LOCK.release()
+    def test_exit_independent_of_bookkeeping(self):
+        import types, time as _t, threading
+        hit = []
+        def boom(*a, **k): raise OSError("disk full")
+        S = types.SimpleNamespace(budget_s=0.05, used_s=lambda: 0.0, save_ledger=boom, dir=self.tmp / "missing" / "dir", name="D1", log=boom)
+        w = ST.Watchdog(S, exit_fn=lambda: hit.append("exit"), grace=0.3); _t.sleep(0.5)
+        self.assertEqual(hit, ["exit"]); self.assertEqual(w.done_steps, [])
+        ev = threading.Event(); hit2 = []
+        S2 = types.SimpleNamespace(budget_s=0.05, used_s=lambda: 0.0, save_ledger=lambda **k: ev.wait(), dir=self.tmp, name="D1", log=lambda *a, **k: None)
+        t0 = _t.time(); w2 = ST.Watchdog(S2, exit_fn=lambda: hit2.append(_t.time() - t0), grace=0.3); _t.sleep(0.8)
+        self.assertEqual(len(hit2), 1); self.assertLess(hit2[0], 0.7); self.assertEqual(w2.done_steps, ["marker"]); ev.set(); _t.sleep(0.1)
+        self.assertEqual(len(hit2), 1)                                   # exit happens exactly once
+    def test_ledger_at_cap_is_terminal(self):
+        os.environ["E1C_GO"] = "D1"; old = (ST.code_hash, ST.load_B); h = ST.code_hash(); ST.code_hash = lambda: h
+        pin = ROOT / "CODE_HASH.txt"; had = pin.read_text(); pin.write_text(h + "\n")
+        try:
+            json.dump({"E1C_D1": 0.5 * 3600}, open(ST.RES / "budget_ledger.json", "w"))
+            try: ST.run(self.cfg, "D1"); code = None
+            except SystemExit as e: code = e.code
+            self.assertEqual(code, 3); self.assertTrue((ST.RES / "D1" / "BUDGET_EXHAUSTED").exists())
+            (ST.RES / "D1" / "BUDGET_EXHAUSTED").unlink()
+            with self.assertRaises(SystemExit): AR.authorise("D1", "kernel_crash", 0.2, "x", res=ST.RES, cfg=self.cfg)
+            json.dump({}, open(ST.RES / "budget_ledger.json", "w"))
+            with self.assertRaises(SystemExit): AR.authorise("D1", "kernel_crash", 0.5, "x", res=ST.RES, cfg=self.cfg)
+        finally: ST.code_hash, ST.load_B = old; pin.write_text(had); os.environ.pop("E1C_GO", None)
 
 if __name__ == "__main__": unittest.main()

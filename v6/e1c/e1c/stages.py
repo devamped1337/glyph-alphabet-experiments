@@ -31,10 +31,26 @@ def protocol_hash(X, cfg):
              f"sender_max_new={cfg['sender_max_new_tokens']}"]
     return hashlib.sha256("\x1f".join(parts).encode()).hexdigest()
 
+LEDGER_LOCK = threading.Lock()
+
+class E1cStage(ES.Stage):
+    """r4 (GPT r3): ledger writes are serialised by one process-wide lock and are atomic (unique temp file +
+    os.replace), so the watchdog thread and the main thread (incl. atexit) cannot collide. timeout=None blocks
+    (main thread); the watchdog passes a short timeout and never waits indefinitely."""
+    def save_ledger(self, timeout=None):
+        if not LEDGER_LOCK.acquire(timeout=-1 if timeout is None else timeout): raise TimeoutError("ledger lock busy")
+        try:
+            L = self._ledger(); L[self.alloc] = self.used_s(); self.res.mkdir(parents=True, exist_ok=True)
+            tmp = self.res / f"budget_ledger.json.{os.getpid()}.{threading.get_ident()}.tmp"
+            with open(tmp, "w") as fh: json.dump(L, fh); fh.flush(); os.fsync(fh.fileno())
+            os.replace(tmp, self.res / "budget_ledger.json")
+            self.prior_s, self.t0 = L[self.alloc], time.time()
+        finally: LEDGER_LOCK.release()
+
 def _stage(name, cap, cfg):
-    """E1b Stage with its directory and budget ledger under v6/e1c/results (E1b's RES restored afterwards)."""
+    """E1c Stage (E1b Stage + safe ledger) with its directory and ledger under v6/e1c/results (E1b's RES restored)."""
     old = ES.RES; ES.RES = RES
-    try: S = ES.Stage(name, cap, cfg, alloc=f"E1C_{name}")
+    try: S = E1cStage(name, cap, cfg, alloc=f"E1C_{name}")
     finally: ES.RES = old
     return S
 
@@ -46,20 +62,41 @@ def guard(S, est_s, what):
         S.log("budget_exhausted", next=what, est_s=est_s); S.save_ledger(); print(f"[{S.name}] BUDGET EXHAUSTED (in-flight guard)"); sys.exit(3)
 
 class Watchdog:
-    """r3 (GPT r2 #6): enforceable deadline. Fires when the cumulative stage time reaches the cap, whatever is in
-    flight: saves the ledger, writes BUDGET_EXHAUSTED (overrun = termination latency only) and hard-exits (code 3).
-    Rows already written are kept. The admission guard above still avoids starting units that would not fit."""
-    def __init__(self, S, exit_fn=None):
-        self.S = S; self.exit_fn = exit_fn or (lambda: os._exit(3)); self.fired = False
+    """r3/r4 (GPT r2 #6, r3): enforceable deadline covering the WHOLE stage, through summary and finalisation (it is
+    cancelled only in run()'s finally, after .done or an exit). On firing: a killer timer is armed FIRST, so the hard
+    exit (code 3) happens within `grace` seconds even if bookkeeping blocks; then, each best-effort and isolated:
+    BUDGET_EXHAUSTED marker (written first), ledger save with a lock timeout, log line; then exit. The exit never
+    depends on bookkeeping succeeding. Terminality does not depend on it either: start() refuses when the ledger
+    shows the cap used, and a retry cannot be authorised for a charge >= the cap."""
+    def __init__(self, S, exit_fn=None, grace=5.0, lock_timeout=2.0):
+        self.S = S; self.exit_fn = exit_fn or (lambda: os._exit(3)); self.grace, self.lock_timeout = grace, lock_timeout
+        self.fired = self.cancelled = self.exited = False; self.done_steps = []; self._elock = threading.Lock()
         self.t = threading.Timer(max(0.0, S.budget_s - S.used_s()), self.fire); self.t.daemon = True; self.t.start()
+    def _exit(self):
+        with self._elock:
+            if self.exited: return
+            self.exited = True
+        self.exit_fn()
     def fire(self):
+        if self.cancelled: return
         self.fired = True
+        k = threading.Timer(self.grace, self._exit); k.daemon = True; k.start()
         try:
-            self.S.save_ledger()
-            (self.S.dir / "BUDGET_EXHAUSTED").write_text(f"{self.S.name}: deadline reached at the cap ({self.S.budget_s/3600:.3f} h); in-flight work killed\n")
-            self.S.log("budget_deadline", used_s=self.S.used_s())
-        finally: self.exit_fn()
-    def cancel(self): self.t.cancel()
+            fd = os.open(str(self.S.dir / "BUDGET_EXHAUSTED"), os.O_WRONLY | os.O_CREAT | os.O_TRUNC, 0o644)
+            try: os.write(fd, f"{self.S.name}: deadline reached at the cap ({self.S.budget_s/3600:.3f} h); in-flight work killed\n".encode())
+            finally: os.close(fd)
+            self.done_steps.append("marker")
+        except Exception: pass
+        try:
+            sv = self.S.save_ledger
+            try: sv(timeout=self.lock_timeout)
+            except TypeError: sv()
+            self.done_steps.append("ledger")
+        except Exception: pass
+        try: self.S.log("budget_deadline", used_s=self.S.used_s()); self.done_steps.append("log")
+        except Exception: pass
+        self._exit()
+    def cancel(self): self.cancelled = True; self.t.cancel()
 
 class Est:
     """Per-unit duration estimate = max(configured prior, 1.2 x longest observed)."""
@@ -119,6 +156,9 @@ def start(cfg, name):
     term = [m for m in TERMINAL if (d / m).exists()]
     if term: print(f"{name}: terminal marker {term} -> stop and report"); sys.exit(18)
     d.mkdir(parents=True, exist_ok=True); stp = d / "e1c_state.json"
+    Lp = RES / "budget_ledger.json"; used = (json.load(open(Lp)) if Lp.exists() else {}).get(f"E1C_{name}", 0.0)
+    if used >= X["caps_h"][name] * 3600:   # r4: deadline stays terminal even if the marker write failed
+        (d / "BUDGET_EXHAUSTED").write_text(f"{name}: ledger shows the cap used ({used/3600:.3f} h)\n"); print(f"{name}: cap already used"); sys.exit(3)
     st = json.load(open(stp)) if stp.exists() else dict(attempts=[], retry=None, cap_h=X["caps_h"][name])
     A = st["attempts"]; R = st.get("retry")
     if len(A) == 0: kind_a = "first"
@@ -160,9 +200,17 @@ def free():
 def view_for(B, eid, X):
     return sender_view(B, eid, random.Random(seed_of(X["seeds"][X["_kind"]]["generator"], "e1c_sender", eid)))
 
+def _record_load(S, m, secs):
+    """r4 (optional): persist load(+canary) timings in the attempt record, so sizing sees every attempt's loads."""
+    st = json.load(open(S.state_path)); st["attempts"][-1].setdefault("loads", []).append(dict(model=m, s=secs))
+    json.dump(st, open(S.state_path, "w"), indent=1)
+
+def all_loads(state_path):
+    st = json.load(open(state_path)); return [x["s"] for a in st["attempts"] for x in a.get("loads", [])]
+
 def load(m, cfg, B, S, est):
     guard(S, est("load"), f"load {m}"); t = time.time(); b, _ = load_B(m, cfg, S); require_canaries(b, m, cfg, B, S)
-    est.seen("load", time.time() - t); return b, time.time() - t
+    dt = time.time() - t; est.seen("load", dt); _record_load(S, m, dt); return b, dt
 
 def run_verifier(b, jobs, cfg, X, S, est, batch):
     """Production batching path (batched_generate) at an EXPLICIT batch size; budget-guarded per chunk."""
@@ -265,8 +313,8 @@ def _run(cfg, name, X, B, S):
     cases = {}
     for c in cases_for(B, rids): cases.setdefault(c["entry"], []).append(c)
     sel_rows = {m: [json.loads(l) for l in open(S.dir / f"select_{m}.jsonl")] for m in (q, f)}
-    S.watchdog.cancel()
-    S.finish(summarize(name, X, cfg, B, sel_rows, ex, t, vb, S.used_s() / 3600, ids, rids, cases, vbatch)); _mark(S, "done")
+    # r4: the watchdog stays armed through summary + finish; run()'s finally cancels it
+    S.finish(summarize(name, X, cfg, B, sel_rows, ex, t, vb, S.used_s() / 3600, ids, rids, cases, vbatch, all_loads(S.state_path))); _mark(S, "done")
 
 def selection_stats(sel_rows, ids):
     """From the RAW selection rows (r3): complete = exactly one row per registered entry, no extras."""
@@ -280,7 +328,7 @@ def selection_stats(sel_rows, ids):
                 wrong_pick_caught=sum((r["pick"] is not None) and not r["correct"] and not r["accepted"] for r in v),
                 parse_paths={p: sum(r["parse_path"] == p for r in v) for p in sorted({r["parse_path"] for r in v})})
 
-def summarize(name, X, cfg, B, sel_rows, ex, t, vb, gpu_h, ids, rids, cases, vbatch):
+def summarize(name, X, cfg, B, sel_rows, ex, t, vb, gpu_h, ids, rids, cases, vbatch, loads=()):
     out = dict(stage=name, status=X["status"], gpu_h=gpu_h, timing_s=t, verifier_b1_check=vb, verifier_batch_size=vbatch,
                protocol_hash=protocol_hash(X, cfg), selection={m: selection_stats(r, ids) for m, r in sel_rows.items()}, directions={})
     for d, rows in ex.items():
@@ -288,7 +336,7 @@ def summarize(name, X, cfg, B, sel_rows, ex, t, vb, gpu_h, ids, rids, cases, vba
                                                 seed_of(X["seeds"][X["_kind"]]["bootstrap"], d), rids, cases, ids)
     if name == "D1":
         out["note"] = "DEV pilot: descriptive only; no E1c verdict. Feeds the TEST eligibility and sizing rules (PREREG_E1c §8)."
-        out["sizing"] = sizing(out, X, t, sel_rows, ex)
+        out["sizing"] = sizing(out, X, t, sel_rows, ex, loads)
     else: out["verdict"] = verdict(out, X)
     return out
 
@@ -316,12 +364,12 @@ def unit_costs(sel_rows, ex):
             if r["cond"] == "prose" or r.get("sent") == "id": gen += float(r.get("latency_s") or 0.0)
     return sv, gen / max(1, msgs)
 
-def sizing(out, X, t, sel_rows, ex):
+def sizing(out, X, t, sel_rows, ex, loads=()):
     """Pre-declared TEST eligibility + sizing from dev (PREREG_E1c §8), from persisted per-row latencies plus the
-    longest observed model load (+ canaries) of the final attempt."""
+    longest model load (+ canaries) observed in ANY attempt (r4: loads persisted in the attempt records)."""
     nT = X["sizes"]["test"]["core_per_family"] * 2; K = X["cases_per_entry"]
     sv, rv = unit_costs(sel_rows, ex)
-    load = max([t.get(k, 0) for k in ("load1", "load2", "load3")] + [0])
+    load = max(list(loads) + [t.get(k, 0) for k in ("load1", "load2", "load3")] + [0])
     proj_h = (3 * load + sv * nT + rv * nT * K * 2) / 3600 * 1.25     # 3 loads; 2 directions x nT entries x K cases; 25% margin
     S = out["selection"]; wp = max(s["wrong_pick_accepted_rate"] for s in S.values())
     ok_wp = wp <= X["criteria"]["wrong_pass_max_dev"]

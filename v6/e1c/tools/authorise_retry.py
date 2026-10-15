@@ -7,7 +7,7 @@ r3 (GPT r2 #3): the reason must be CONSISTENT with the recorded failure:
   no attempt recorded (no results came back)              -> install_or_network | kernel_crash | oom_at_load,
                                                              attempt 1 recorded as 'manual: from Kaggle log'
   any other 'exit N' (budget, canary, gates, ...)         -> refused (not an infrastructure failure)
-charged_h must be finite, > 0 and <= the stage cap; it is added to the stage's cumulative budget. The note is
+charged_h must be finite, > 0 and < the stage cap (r4: a deadline hit is terminal); it is added to the stage's cumulative budget. The note is
 mandatory (the log evidence)."""
 import sys, json, time, math
 from pathlib import Path
@@ -28,7 +28,9 @@ def authorise(stage, reason, charged_h, note, res=RES, cfg=None):
         if (d / m).exists(): raise SystemExit(f"{stage}: {m} present -> no retry")
     try: ch = float(charged_h)
     except (TypeError, ValueError): raise SystemExit("charged_h must be a number")
-    if not math.isfinite(ch) or ch <= 0 or ch > X["caps_h"][stage]: raise SystemExit(f"charged_h must be finite, > 0 and <= cap {X['caps_h'][stage]}")
+    if not math.isfinite(ch) or ch <= 0 or ch >= X["caps_h"][stage]: raise SystemExit(f"charged_h must be finite, > 0 and < cap {X['caps_h'][stage]}")
+    Lp = res / "budget_ledger.json"; used = (json.load(open(Lp)) if Lp.exists() else {}).get(f"E1C_{stage}", 0.0) / 3600
+    if max(used, ch) >= X["caps_h"][stage]: raise SystemExit(f"{stage}: cap already used ({max(used, ch):.3f} h) -> deadline is terminal, no retry")
     if not str(note).strip(): raise SystemExit("a note citing the failed attempt's log is required")
     d.mkdir(parents=True, exist_ok=True); p = d / "e1c_state.json"
     st = json.load(open(p)) if p.exists() else dict(attempts=[], retry=None, cap_h=X["caps_h"][stage])

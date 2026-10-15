@@ -80,5 +80,5 @@
   "receiver_chunk": 240,
   "b1_check_call": 20
  },
- "verifier_batch_rule": "T1 verifier batch = 8 if every D1 batch-1 vs batch-8 verifier reply was identical for both models, else 1 (batch 1 is the reference path)."
+ "verifier_batch_rule": "D1 compares the batch-8 production verifier path with batch 1 on 16 entries per model. If any reply differs for either model, T1 is NOT eligible: an amendment must add a new dev stage that re-measures the acceptance screen with the verifier at batch 1 (the effective batch is in the protocol hash). There is no automatic switch."
 }

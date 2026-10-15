@@ -1,6 +1,6 @@
 # PREREG E1c: verified ID with prose fallback, both directions (DRAFT, NOT FROZEN)
 
-Status: **DRAFT, r3** (GPT r1 and r2 fixes applied; see §11). No E1c TEST data exists. The TEST book is not built and refuses to build until `e1c.status == "frozen"`.
+Status: **DRAFT, r4** (GPT r1–r3 fixes applied; see §11). No E1c TEST data exists. The TEST book is not built and refuses to build until `e1c.status == "frozen"`.
 Design input: `v6/e1b/reviews/gpt_E1c_design.md` (GPT memo), plus Stefan/Grok steering (2026-10-15).
 E1c is a new, separate pre-registered study. It does not change any E1b result. The E1b A9 primary stays **POC FAILED**. The A10 B3r secondary result stays **INCONCLUSIVE**.
 
@@ -50,7 +50,7 @@ If it succeeds, the supported claim is: *"on this registered task distribution, 
      - F2: `GIVER=<word> GIVER_RATE=<int> TAKER=<word> TAKER_RATE=<int>`
 
      with keys in this order, `<word>` = `[A-Za-z]+` (compared case-insensitively), `<int>` = `-?[0-9]+`, separated by spaces or tabs. Anything else is a format error and causes fallback: extra lines, explanations, extra or duplicate keys, units ("4 credits"), articles, punctuation.
-   - Up to 48 new tokens. Batch size is explicit: 8 on the production batching path, unless the D1 conformance rule (§8) sets batch 1 for T1.
+   - Up to 48 new tokens. Batch size is explicit: 8 on the production batching path, in D1 and T1 alike. There is no automatic switch: if D1's batch-1 check disagrees, T1 is ineligible until a batch-1 dev stage is added by amendment (§7, §8).
 3. **Deterministic acceptance.** The ID is accepted only if all three hold:
    - the pick is valid;
    - the dictionary resolve passes (ID, version and hash8);
@@ -113,7 +113,12 @@ E1c succeeds only if all four criteria pass in both directions. Anything else is
   - the retry kernel overlays `v6/e1c/results` from a pinned commit (`E1C_RESULTS_COMMIT`), so the attempt history and ledger travel with it.
 - **Cumulative budget.** The stage cap covers both attempts: ledger value = max(recorded ledger, charged_h).
 - **Budget enforcement (r3).** Two layers.
-  - **Deadline (enforced):** a watchdog fires when cumulative stage time reaches the cap, whatever is in flight. It saves the ledger, writes BUDGET_EXHAUSTED and hard-exits (code 3). The overrun is bounded by termination latency (seconds), and rows already written are kept. Not covered: Kaggle wall time before the stage starts (clone, pip install), which is outside the stage ledger and reported separately from the Kaggle run time.
+  - **Deadline (enforced, r4):** a watchdog fires when cumulative stage time reaches the cap, whatever is in flight. It stays armed for the **whole stage, including the summary and `.done`**, and is cancelled only after the stage ends.
+    - On firing, it first arms a killer timer, so the hard exit (code 3) happens within 5 s even if bookkeeping blocks or fails.
+    - It then tries, each step isolated: the BUDGET_EXHAUSTED marker (written first), a ledger save (2 s lock timeout) and a log line.
+    - **The exit never depends on that bookkeeping.** Terminality doesn't either: `start()` refuses (exit 3) when the ledger shows the cap used, and a retry cannot be authorised for a charge ≥ the cap.
+    - Ledger writes are serialised by one process-wide lock (main thread, watchdog, atexit) and are atomic (unique temp file, fsync, os.replace).
+    - The overrun is bounded by the grace period, and rows already written are kept. Not covered: Kaggle wall time before the stage starts (clone, pip install), which is outside the stage ledger and reported separately from the Kaggle run time.
   - **Admission control (estimate-based, not a bound):** before any unit starts (model load + canaries, sender call, verifier chunk, receiver chunk, batch-1 check call), the run stops with BUDGET_EXHAUSTED if used time + that unit's estimate would exceed the cap. Estimate = max(configured prior, 1.2 × longest observed); priors: load 420 s, sender call 10 s, verifier chunk 120 s, receiver chunk 240 s, check call 20 s.
 - There is a code-hash gate (`CODE_HASH.txt`, covering the e1c code, config, kernel runner and the E1b modules it imports).
 - Status is checked once, a few minutes after a push: no polling and no relaunch.
@@ -148,7 +153,7 @@ D1 also runs a verifier batch-8 (production path) versus batch-1 identity check 
 3. projected T1 GPU-h (D1 timings scaled to 240 entries per direction, both directions, plus 25% margin) ≤ the frozen T1 cap;
 4. **D1's protocol hash equals the current one.** The hash covers the sender prompt, the **actual configured** sender token limit and the A10 parser, plus the verifier prompt, format, grammar, token limit and **effective batch**, and the receiver batch size.
 
-**Projection inputs (r3).** These come from **persisted per-row latencies** (sender and verifier per entry; receiver per generated row, with a fallback counted once) plus the longest observed load. This keeps a resumed attempt from underprojecting.
+**Projection inputs (r3, r4).** These come from **persisted per-row latencies** (sender and verifier per entry; receiver per generated row, with a fallback counted once) plus the longest model load (with canaries) **from any attempt** (loads are persisted in the attempt records). This keeps a resumed attempt from underprojecting.
 
 Any dev-driven change to these invalidates D1. A new dev stage (D1b, with its own amendment, cap and go) is then needed; old measurements do not qualify a revised implementation. There is no override flag.
 
@@ -200,3 +205,9 @@ The T1 cap may be set from D1 at freeze (it is not part of the protocol hash, an
 7. New, blocking: exact D1 summary and T1 verdict structure required (both directions, both senders, sizes, conformance) (§5, §8).
 8. Minor: freshness wording (§3); dev-power sampling assumption, "can lower", and the 1.86% bound (§8).
 9. Optional: `check_freeze.py` also verifies that the registration commit has no TEST book and that the execution book digest matches both pins.
+
+**r4 changes (GPT r3):**
+1. The watchdog stays armed through the summary and finalisation.
+2. Ledger writes use a lock and are atomic. The deadline exit is guaranteed by a killer timer and never depends on bookkeeping. The deadline stays terminal through the ledger checks in `start` and the retry rule.
+3. Wording: `verifier_batch_rule` and §4 now describe ineligibility plus an amendment, not an automatic switch.
+4. Optional: loads are persisted across attempts; there is a genuine interrupted-then-resumed test fixture, checked against the batched-generation rows.
