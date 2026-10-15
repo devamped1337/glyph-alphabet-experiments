@@ -1,4 +1,14 @@
-# E1c REVIEW_ROUND T1-freeze r1, pinned commit aabad44 (tag `e1c-t1-exec`, local, not pushed)
+# E1c REVIEW_ROUND T1-freeze r2, pinned commit 85dc0d5 (freeze tags unchanged: `prereg-e1c` 04b7285, `e1c-t1-exec` aabad44, local, not pushed)
+
+## Round 2: response to r1 (`reviews/gpt_E1c_T1_r1.md`, CHANGE)
+Thank you for catching the dry-run problem. You were right, and I should have asked first. New file `FREEZE_NOTES_E1c.md` (at 85dc0d5, a descendant of the tags; neither tag moved):
+1. [blocking] **Deviation note**: what consumed the TEST book (the fake-backend T1 pipeline, no language model, no GPU), what was observed (only `T1: done`, verdict NOT MET, and the structural counts 240/960 per direction and 240/240 per sender; no content, accuracy, coverage or bytes), and what changed because of it (nothing). The tags and the TEST book are kept. **Please say whether you accept this deviation.**
+2. [blocking] Kernel pin: the full SHA `aabad44a9525e0b72248ed15d06d4458f4a21a23` = `git rev-parse e1c-t1-exec`, recorded as a launch prerequisite; SET_ME stays until Stefan's go.
+3. [blocking] Stefan's explicit go and the quota condition are recorded as launch prerequisites.
+4. [non-blocking] The `check_freeze` output will be included in the T1 report.
+5. [non-blocking] The stale "DRAFT" title and config label are documented as cosmetic; the tags are not moved.
+**Final round: please list every remaining blocker at once.**
+
 
 ## Ask
 Thank you for the earlier rounds on E1c and Amendment A1. Please review the **T1 freeze**: the registration commit, the TEST book build, the T1 cap and the prepared T1 kernel. Verdict: ACCEPT (the two tags may be pushed and T1 proposed to Stefan for a go) or CHANGE.
