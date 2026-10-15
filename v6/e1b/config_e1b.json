@@ -342,7 +342,7 @@
   "frozen": "2026-10-14 (AEDT), tag prereg-e1b-a9; approved by Grok + GPT (round 4b, pinned b3edce6)"
  },
  "a10": {
-  "status": "draft",
+  "status": "frozen",
   "amendment": "A10",
   "label": "POST-HOC DIAGNOSTIC COMPLETION (A10) on an already-seen TEST set; secondary; cannot overturn the A9 B3 verdict (POC FAILED)",
   "direction": [
@@ -371,6 +371,8 @@
    "B3/summary.json": "42cf348edc8ae3c652a44d38f713839b4b1f706dfa2211235748583462ea58e7"
   },
   "prose_arm": "reused verbatim from B3 (pinned sha); not rerun",
-  "note": "B3f (non-TEST sender format check) may run before the freeze on E1B_GO=B3f; B3r refuses unless a10.status=='frozen' and E1B_GO=='B3r'"
+  "note": "B3f (non-TEST sender format check) may run before the freeze on E1B_GO=B3f; B3r refuses unless a10.status=='frozen' and E1B_GO=='B3r'",
+  "frozen": "2026-10-15 (AEDT), tag prereg-e1b-a10; approved by GPT + Grok (round 5b, pinned bd218c8)",
+  "results_commit": "bd218c89bdd58e78efd444abb06849379c583a6b"
  }
 }

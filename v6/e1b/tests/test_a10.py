@@ -55,7 +55,7 @@ class A10Stages(unittest.TestCase):
         try: S.STAGES[st](cfg); return None
         except SystemExit as e: return e.code
     def test_config(self):
-        X = load_cfg()["a10"]; self.assertEqual(X["status"], "draft"); self.assertEqual(X["direction"], ["falcon7b", "qwen7b"])
+        X = load_cfg()["a10"]; self.assertEqual(X["status"], "frozen"); self.assertEqual(X["direction"], ["falcon7b", "qwen7b"])
         self.assertLessEqual(sum(X["caps_h"].values()), X["total_cap_h"]); self.assertLessEqual(X["total_cap_h"], 1.0); self.assertEqual(X["max_starts"], 1)
         self.assertNotIn("mistral", json.dumps(X).lower()); self.assertIn("POST-HOC", X["label"])
     def test_gates(self):

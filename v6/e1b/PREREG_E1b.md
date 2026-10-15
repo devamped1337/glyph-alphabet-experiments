@@ -635,7 +635,7 @@ Round-4 reviews: `reviews/grok_A9.md` and `reviews/gpt_A9.md` (both are summarie
 
 ---
 
-### A10 (DRAFT, NOT FROZEN): 2026-10-15 (AEDT). Post-hoc diagnostic completion of B3, Falcon sends → Qwen receives
+### A10 (FROZEN 2026-10-15, tag `prereg-e1b-a10`; approved by GPT + Grok, round 5b at `bd218c8`): 2026-10-15 (AEDT). Post-hoc diagnostic completion of B3, Falcon sends → Qwen receives
 
 **What A10 is (GPT A10 #1).** A10 is a **post-hoc diagnostic completion on a TEST set we have already seen.** It was written **after** we saw the A9 B3 results, including the exploratory first-letter re-parse that gave 56/60.
 - **The A9 B3 verdict stands as the primary result: POC FAILED** (§10; both directions inferior).
@@ -715,7 +715,7 @@ Round-4 reviews: `reviews/grok_A9.md` and `reviews/gpt_A9.md` (both are summarie
   - `B3r` refuses unless `a10.status == "frozen"` and `E1B_GO == "B3r"`, A9 B3 is `.done`, and B3f is `.done`.
   - `B3f` needs `E1B_GO == "B3f"`.
   - **A10 is frozen only after Grok and GPT review. Both stages launch only on Stefan's explicit go**, with no automation and no Mistral.
-  - **Code hash.** A9's frozen hash `d0203f22…` stays pinned by the tag `prereg-e1b-a9`, and every A9 result logs it. `CODE_HASH.txt` now records the A10 draft code, `543a369c…`; B3f runs at that draft commit, under the `run.sh` hash check. At the freeze, `a10.status` becomes `frozen`, which changes the config and therefore the hash; the new hash is recorded and the commit is tagged `prereg-e1b-a10`.
+  - **Code hash.** A9's frozen hash `d0203f22…` stays pinned by the tag `prereg-e1b-a9`, and every A9 result logs it. B3f ran at the draft commit `6a60c8d` with draft hash `543a369c…`. The round-5 validator fix moved the draft hash to `c484991e…` (`bd218c8`). **Frozen A10 hash: `77eceb53a562e69c99aa82e2b30e9e0d719131a7cfdda9e380bf712b9429b77e`** (`a10.status = frozen`), tag `prereg-e1b-a10`. B3r runs at that tag, with `results/` overlaid from `bd218c8`.
 
 **7. Correction to B3_REPORT (GPT A10 #2), verified from the raw results at `3973107`.**
 - In Qwen→Falcon id_selected, there were **37 errors**: **36 came from the 9 wrong selections**, and **1 (F2-3288) happened despite a correct selection**.
@@ -736,7 +736,7 @@ Round-4 reviews: `reviews/grok_A9.md` and `reviews/gpt_A9.md` (both are summarie
   - exactly 24 scheduled non-TEST format views per model in B3f.
 - **Regression tests** (`tests/test_a10.py`): a missing prose row, a missing id_selected row, an altered copied prose row, an extra field on a copied prose row, a missing selection and a missing format view all fail validation. A clean run passes.
 - **Text:** Q1 (cross-session effects; the CI does not cover that bias), Q2 (bar kept; 4 entries, 19 distinct views, not independent), Q4 (separate secondary section; frozen-parser failure with zero ID receiver calls). Q3 was accepted as is.
-- **Q5: not frozen.** `a10.status` stays `draft`.
+- **Q5 (round 5): not frozen at that point.** A10 was frozen after round 5b; see below.
 
 **B3f result (ran 2026-10-15 09:09–09:18 AEDT, kernel `devamped13/e1b-stage-b3f` v1, commit `6a60c8d`, 0.153 of 0.25 GPU-h).**
 - GPU preflight passed on T4 nf4 for both models; canaries 20/20 for both.
@@ -751,3 +751,9 @@ Round-4 reviews: `reviews/grok_A9.md` and `reviews/gpt_A9.md` (both are summarie
 - Selection on these views (descriptive, not a test): qwen 22/24, falcon 24/24.
 - Cumulative A9 + A10: 6.15 + 0.15 = **6.30 / 12.0 GPU-h**. A10 so far: 0.15 / 1.0.
 - **Code hash:** the validator change moves the A10 draft hash from `543a369c…` (the B3f run) to `c484991e…`. The stage code that B3f ran is unchanged; only `validate.py` changed.
+
+**A10 FROZEN (2026-10-15, AEDT).**
+- Round 5b: **GPT YES** (checked `bd218c8`: hash matches, validator passes, 112 tests; 19 distinct combinations confirmed) and **Grok YES** (`reviews/gpt_A10_final.md`, `reviews/grok_A10_final.md`).
+- `a10.status = frozen`, `a10.results_commit = bd218c89bdd58e78efd444abb06849379c583a6b`.
+- Code hash **`77eceb53…`**. Tag **`prereg-e1b-a10`**.
+- B3r launches only on Stefan's explicit go (`E1B_GO=B3r`), with one start and a 0.50 GPU-h cap.
