@@ -1,0 +1,145 @@
+{
+ "stage": "D2",
+ "status": "draft",
+ "gpu_h": 0.40591621839305553,
+ "timing_s": {
+  "load1": 248.3610236644745,
+  "send_verify_qwen7b": 156.32667541503906,
+  "load2": 260.9242014884949,
+  "send_verify_falcon7b": 193.1149139404297,
+  "recv_falcon7b": 229.15766716003418,
+  "load3": 118.61482620239258,
+  "recv_qwen7b": 169.25833702087402
+ },
+ "verifier_b1_check": {
+  "qwen7b": {
+   "n": 16,
+   "identical": 16,
+   "batch1_s_per_call": 1.2834788858890533
+  },
+  "falcon7b": {
+   "n": 16,
+   "identical": 16,
+   "batch1_s_per_call": 1.281899631023407
+  }
+ },
+ "verifier_batch_size": 8,
+ "protocol_hash": "6c6425811a552c031cc81b01d6a1ed17f4147bdb68409cea34e5aba2615907f9",
+ "selection": {
+  "qwen7b": {
+   "n": 160,
+   "complete": true,
+   "completeness": "ok",
+   "pick_acc": 0.91875,
+   "sender_invalid": 0,
+   "verifier_format_ok": 1.0,
+   "coverage": 0.9125,
+   "wrong_pick_accepted": 0,
+   "wrong_pick_accepted_rate": 0.0,
+   "wrong_pick_accepted_cp95_upper": 0.018549134077503752,
+   "correct_pick_rejected": 1,
+   "wrong_pick_caught": 13,
+   "parse_paths": {
+    "letter": 160
+   }
+  },
+  "falcon7b": {
+   "n": 160,
+   "complete": true,
+   "completeness": "ok",
+   "pick_acc": 0.975,
+   "sender_invalid": 0,
+   "verifier_format_ok": 0.98125,
+   "coverage": 0.95,
+   "wrong_pick_accepted": 0,
+   "wrong_pick_accepted_rate": 0.0,
+   "wrong_pick_accepted_cp95_upper": 0.018549134077503752,
+   "correct_pick_rejected": 4,
+   "wrong_pick_caught": 4,
+   "parse_paths": {
+    "letter": 160
+   }
+  }
+ },
+ "directions": {
+  "qwen7b_to_falcon7b": {
+   "status": "COMPLETE",
+   "n_entries": 10,
+   "n_messages": 40,
+   "acc_hybrid": 1,
+   "acc_prose": 1,
+   "diff": 0,
+   "ci": [
+    0,
+    0
+   ],
+   "label": "non-inferior",
+   "coverage": 0.8,
+   "payload_saving": 0.7094555873925501,
+   "message_saving_payload_plus_case": 0.46752265861027187,
+   "dict_bytes": 6916,
+   "payload_saving_per_message": 123.8,
+   "breakeven_messages": 55.864297253634895,
+   "checks": {
+    "noninferior": true,
+    "coverage": false,
+    "bytes": true,
+    "breakeven": true
+   },
+   "success": false,
+   "wrong_pick_accepted": 0,
+   "wrong_pick_accepted_cp95_upper": 0.2588655508930523,
+   "byte_boundary": "sender->receiver channel only; candidate prep and verifier are sender-local"
+  },
+  "falcon7b_to_qwen7b": {
+   "status": "COMPLETE",
+   "n_entries": 10,
+   "n_messages": 40,
+   "acc_hybrid": 1,
+   "acc_prose": 1,
+   "diff": 0,
+   "ci": [
+    0,
+    0
+   ],
+   "label": "non-inferior",
+   "coverage": 1.0,
+   "payload_saving": 0.8911174785100286,
+   "message_saving_payload_plus_case": 0.5872356495468278,
+   "dict_bytes": 6916,
+   "payload_saving_per_message": 155.5,
+   "breakeven_messages": 44.47588424437299,
+   "checks": {
+    "noninferior": true,
+    "coverage": true,
+    "bytes": true,
+    "breakeven": true
+   },
+   "success": true,
+   "wrong_pick_accepted": 0,
+   "wrong_pick_accepted_cp95_upper": 0.2588655508930523,
+   "byte_boundary": "sender->receiver channel only; candidate prep and verifier are sender-local"
+  }
+ },
+ "note": "DEV pilot: descriptive only; no E1c verdict. Feeds the TEST eligibility and sizing rules (PREREG_E1c \u00a78).",
+ "sizing": {
+  "test_entries_per_direction": 240,
+  "projected_T1_gpu_h": 3.661903867353395,
+  "sender_verifier_s_per_entry": 2.141213889634609,
+  "receiver_s_per_message": 4.817509999999994,
+  "load_s": 260.9242014884949,
+  "max_wrong_pick_accepted_rate": 0.0,
+  "wrong_pass_ok": true,
+  "wrong_pick_accepted_cp95_upper": {
+   "qwen7b": 0.018549134077503752,
+   "falcon7b": 0.018549134077503752
+  },
+  "demonstrated_le_2pct": {
+   "qwen7b": true,
+   "falcon7b": true
+  },
+  "projection_depends_on": "dev coverage (fallback reuse), dev prompt-length mix, dev per-row latencies",
+  "rule": "screen: observed wrong-pick-accepted <= 2% for both senders AND projection <= T1 cap. The screen does not show the rate is <= 2%; under a binomial model of the generated, family-balanced entries that needs the CP95 upper bound <= 2% (0 of 160: about 1.86%)."
+ },
+ "attempt": 1
+}
