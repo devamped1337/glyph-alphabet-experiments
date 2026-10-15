@@ -2,8 +2,9 @@
 attempt's Kaggle log; the result is committed and overlaid into the retry kernel).
   python tools/authorise_retry.py <stage> <reason> <charged_h> "<note citing the log>"
 r3 (GPT r2 #3): the reason must be CONSISTENT with the recorded failure:
-  GPU_PREFLIGHT_FAIL marker or outcome 'exit 9'          -> reason must be no_gpu (and no_gpu needs one of them)
-  outcome 'crash <type>' / 'running' (killed, no record)  -> install_or_network | kernel_crash | oom_at_load
+  GPU_PREFLIGHT_FAIL marker or outcome 'no_gpu rc=9'     -> reason must be no_gpu (and no_gpu needs one of them)
+  outcome 'crash rc=N' (recorded by the supervisor)       -> install_or_network | kernel_crash | oom_at_load
+  outcome 'running' (r5: no recorded end)                 -> refused (fail-closed: terminal, INCOMPLETE)
   no attempt recorded (no results came back)              -> install_or_network | kernel_crash | oom_at_load,
                                                              attempt 1 recorded as 'manual: from Kaggle log'
   any other 'exit N' (budget, canary, gates, ...)         -> refused (not an infrastructure failure)
@@ -17,8 +18,9 @@ from e1c import load_cfg, RES
 NON_GPU = {"install_or_network", "kernel_crash", "oom_at_load"}
 
 def allowed_reasons(outcome, gpu_marker):
-    if gpu_marker or outcome == "exit 9": return {"no_gpu"}
-    if outcome is None or outcome == "running" or outcome.startswith("crash ") or outcome.startswith("manual:"): return set(NON_GPU)
+    if outcome == "running": return set()     # r5: fail-closed, an attempt without a supervisor-recorded end is terminal
+    if gpu_marker or outcome == "no_gpu rc=9": return {"no_gpu"}
+    if outcome is None or outcome.startswith("crash rc=") or outcome.startswith("manual:"): return set(NON_GPU)
     return set()
 
 def authorise(stage, reason, charged_h, note, res=RES, cfg=None):

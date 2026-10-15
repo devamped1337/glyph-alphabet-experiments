@@ -1,6 +1,6 @@
 # PREREG E1c: verified ID with prose fallback, both directions (DRAFT, NOT FROZEN)
 
-Status: **DRAFT, r4** (GPT r1–r3 fixes applied; see §11). No E1c TEST data exists. The TEST book is not built and refuses to build until `e1c.status == "frozen"`.
+Status: **DRAFT, r5** (GPT r1–r4 fixes applied; see §11). No E1c TEST data exists. The TEST book is not built and refuses to build until `e1c.status == "frozen"`.
 Design input: `v6/e1b/reviews/gpt_E1c_design.md` (GPT memo), plus Stefan/Grok steering (2026-10-15).
 E1c is a new, separate pre-registered study. It does not change any E1b result. The E1b A9 primary stays **POC FAILED**. The A10 B3r secondary result stays **INCONCLUSIVE**.
 
@@ -108,18 +108,20 @@ E1c succeeds only if all four criteria pass in both directions. Anything else is
   - a second start is allowed only if the state carries a retry authorisation written by `tools/authorise_retry.py` after the failed attempt's Kaggle log has been read. The reason must be one of `no_gpu`, `install_or_network`, `kernel_crash`, `oom_at_load`. The authorisation records the GPU-h already used (charged_h);
   - there is never a retry after `.done`, BUDGET_EXHAUSTED, CANARY_FAIL or ATTEMPT_INCOMPLETE (these are terminal), and never a third start;
   - **GPU_PREFLIGHT_FAIL** (no CUDA device) is an infrastructure failure, **not** terminal. It permits the retry only with reason `no_gpu`; this resolves the r1 conflict;
-  - **reason consistency (r3):** the reason must match the recorded failure. A GPU_PREFLIGHT_FAIL marker or `exit 9` means `no_gpu`, and `no_gpu` needs one of them. `crash <type>` or a run killed while `running` means `install_or_network`, `kernel_crash` or `oom_at_load`. Any other `exit N` (budget, canary, gate) is refused. If no results came back, attempt 1 is recorded by hand as "manual: from Kaggle log" with one of the non-GPU reasons. A note citing the log is mandatory. charged_h must be finite, > 0 and ≤ the stage cap;
+  - **reason consistency (r3):** the reason must match the recorded failure. A GPU_PREFLIGHT_FAIL marker or the supervisor outcome `no_gpu rc=9` means `no_gpu`, and `no_gpu` needs one of them. A supervisor-recorded `crash rc=N` means `install_or_network`, `kernel_crash` or `oom_at_load`. Any other outcome (deadline, budget admission, canary, gate) is refused. **r5: an attempt still recorded as `running` (no supervisor-recorded end) is never retried: fail-closed, it is terminal and the next start writes ATTEMPT_INCOMPLETE.** If no results came back, attempt 1 is recorded by hand as "manual: from Kaggle log" with one of the non-GPU reasons. A note citing the log is mandatory. charged_h must be finite, > 0 and ≤ the stage cap;
   - **resume binding (r3):** if attempt 1 left selection or exchange rows, the retry refuses (ATTEMPT_INCOMPLETE) unless attempt 1's recorded code hash and protocol hash equal the current ones. Reused rows therefore always come from the qualified protocol;
   - the retry kernel overlays `v6/e1c/results` from a pinned commit (`E1C_RESULTS_COMMIT`), so the attempt history and ledger travel with it.
 - **Cumulative budget.** The stage cap covers both attempts: ledger value = max(recorded ledger, charged_h).
 - **Budget enforcement (r3).** Two layers.
-  - **Deadline (enforced, r4):** a watchdog fires when cumulative stage time reaches the cap, whatever is in flight. It stays armed for the **whole stage, including the summary and `.done`**, and is cancelled only after the stage ends.
-    - On firing, it first arms a killer timer, so the hard exit (code 3) happens within 5 s even if bookkeeping blocks or fails.
-    - It then tries, each step isolated: the BUDGET_EXHAUSTED marker (written first), a ledger save (2 s lock timeout) and a log line.
-    - **The exit never depends on that bookkeeping.** Terminality doesn't either: `start()` refuses (exit 3) when the ledger shows the cap used, and a retry cannot be authorised for a charge ≥ the cap.
-    - Ledger writes are serialised by one process-wide lock (main thread, watchdog, atexit) and are atomic (unique temp file, fsync, os.replace).
-    - The overrun is bounded by the grace period, and rows already written are kept. Not covered: Kaggle wall time before the stage starts (clone, pip install), which is outside the stage ledger and reported separately from the Kaggle run time.
-  - **Admission control (estimate-based, not a bound):** before any unit starts (model load + canaries, sender call, verifier chunk, receiver chunk, batch-1 check call), the run stops with BUDGET_EXHAUSTED if used time + that unit's estimate would exceed the cap. Estimate = max(configured prior, 1.2 × longest observed); priors: load 420 s, sender call 10 s, verifier chunk 120 s, receiver chunk 240 s, check call 20 s.
+  - **Deadline (enforced, r5: supervisor process).** `run_e1c.py --stage` is a **supervisor**; the stage runs in a separate **child** process (`--child`). The supervisor is the only writer of the attempt state, the ledger, the terminal markers, `summary.json` and `.done`.
+    - Before launching, it computes the remaining budget (cap − cumulative ledger) and **durably records** the attempt (token, `started_wall`, `deadline_wall`; fsync + atomic replace). If that write fails, nothing is launched.
+    - The child runs in its own process group. At `deadline_wall` the supervisor SIGKILLs the whole group (outcome `deadline`, BUDGET_EXHAUSTED, the full remaining budget charged). The hard bound is the kill itself, not a cooperative check.
+    - `.done` is written only if the child exited 0, wrote CHILD_COMPLETE (its last act) **and** exited no later than the deadline. A child that completes but is still alive at the deadline, or exits after it, ends as `deadline`. The child never writes `.done`, the ledger or any terminal marker, and it refuses to run without the running attempt's token.
+    - Child exit codes: 3 = admission stop (BUDGET_EXHAUSTED), 8 = canary failure (CANARY_FAIL), 9 = no GPU (infra, GPU_PREFLIGHT_FAIL), anything else = `crash rc=N`.
+    - After the child ends, the supervisor writes, in order: the ledger (elapsed wall time added), the marker, `summary.json` + `.done` (when done), and **last** the attempt outcome. **Fail-closed:** if any of these writes fails, the supervisor exits 70 and the attempt stays `running`, which is terminal (see Starts).
+    - Precedence (r5): terminal markers are checked **before** `.done`, both at start and in the T1 eligibility check; a D1 with any terminal marker never qualifies T1. `start` also refuses (exit 3) when the ledger shows the cap used.
+    - Rows already written are kept. Not covered: Kaggle wall time before the supervisor starts (clone, pip install), which is outside the stage ledger and reported separately.
+  - **Admission control (estimate-based, not a bound):** the child does not start a unit (model load + canaries, sender call, verifier chunk, receiver chunk, batch-1 check call) whose estimate would cross the deadline; it exits 3 and the supervisor records BUDGET_EXHAUSTED. Estimate = max(configured prior, 1.2 × longest observed); priors: load 420 s, sender call 10 s, verifier chunk 120 s, receiver chunk 240 s, check call 20 s.
 - There is a code-hash gate (`CODE_HASH.txt`, covering the e1c code, config, kernel runner and the E1b modules it imports).
 - Status is checked once, a few minutes after a push: no polling and no relaunch.
 
@@ -153,7 +155,7 @@ D1 also runs a verifier batch-8 (production path) versus batch-1 identity check 
 3. projected T1 GPU-h (D1 timings scaled to 240 entries per direction, both directions, plus 25% margin) ≤ the frozen T1 cap;
 4. **D1's protocol hash equals the current one.** The hash covers the sender prompt, the **actual configured** sender token limit and the A10 parser, plus the verifier prompt, format, grammar, token limit and **effective batch**, and the receiver batch size.
 
-**Projection inputs (r3, r4).** These come from **persisted per-row latencies** (sender and verifier per entry; receiver per generated row, with a fallback counted once) plus the longest model load (with canaries) **from any attempt** (loads are persisted in the attempt records). This keeps a resumed attempt from underprojecting.
+**Projection inputs (r3, r4).** These come from **persisted per-row latencies** (sender and verifier per entry; receiver per generated row, with a fallback counted once) plus the longest model load (with canaries) **from any attempt** (loads are persisted per attempt in `loads_attempt<n>.json`). This keeps a resumed attempt from underprojecting.
 
 Any dev-driven change to these invalidates D1. A new dev stage (D1b, with its own amendment, cap and go) is then needed; old measurements do not qualify a revised implementation. There is no override flag.
 
@@ -211,3 +213,9 @@ The T1 cap may be set from D1 at freeze (it is not part of the protocol hash, an
 2. Ledger writes use a lock and are atomic. The deadline exit is guaranteed by a killer timer and never depends on bookkeeping. The deadline stays terminal through the ledger checks in `start` and the retry rule.
 3. Wording: `verifier_batch_rule` and §4 now describe ineligibility plus an amendment, not an automatic switch.
 4. Optional: loads are persisted across attempts; there is a genuine interrupted-then-resumed test fixture, checked against the batched-generation rows.
+
+**r5 changes (GPT r4):**
+1. Supervisor-process redesign (§7): the stage runs as a child process killed at a deadline recorded durably before launch; the supervisor alone owns the state, ledger, terminal markers and `.done`; a late or concurrent finish is never `.done`; the watchdog thread, the ledger lock and the in-process ledger writes are removed.
+2. Fail-closed: if the post-run bookkeeping fails, the attempt stays `running`, which is terminal (no retry, next start INCOMPLETE).
+3. Precedence: terminal markers before `.done` in `start` and in the T1 eligibility check.
+4. Real separate-process tests: deadline kill, admission stop, concurrent finish after the deadline, both writes failing (read-only results directories), a resume after a crash in the Falcon sender with Qwen's 12 selection rows already saved (byte-identical after resume, not re-sent), and the child refusing to run without the supervisor's token.

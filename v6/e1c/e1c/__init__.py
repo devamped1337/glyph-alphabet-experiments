@@ -4,9 +4,12 @@ from pathlib import Path
 HERE = Path(__file__).resolve().parent.parent
 E1B = HERE.parent / "e1b"
 if str(E1B) not in sys.path: sys.path.insert(0, str(E1B))
+import os
 RES = HERE / "results"; DATA = HERE / "data"
+if os.environ.get("E1B_ALLOW_NO_GPU") == "1" and os.environ.get("E1C_RES"): RES = Path(os.environ["E1C_RES"])   # tests only
 def load_cfg(path=None):
     """E1c cfg = E1b base config (unchanged) + the e1c block."""
+    if path is None and os.environ.get("E1B_ALLOW_NO_GPU") == "1" and os.environ.get("E1C_CONFIG"): path = os.environ["E1C_CONFIG"]   # tests only
     X = json.load(open(path or HERE / "config_e1c.json"))
     base = json.load(open((HERE / X["base_config"]).resolve()))
     c = copy.deepcopy(base); c["e1c"] = X; return c

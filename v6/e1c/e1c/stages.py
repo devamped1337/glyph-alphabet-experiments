@@ -2,7 +2,7 @@
 e1c.status == frozen, the pinned TEST book, and a qualifying D1 summary for the SAME protocol). Both need
 E1C_GO == <stage> (set only on Stefan's explicit go), one start plus at most one AUTHORISED infrastructure retry,
 and room in the cumulative stage cap. Model calls reuse the frozen E1b code paths."""
-import os, sys, json, time, random, hashlib, inspect, math, threading
+import os, sys, json, time, random, hashlib, inspect, math
 from statistics import mean
 from . import RES, HERE, E1B
 from .book import load_book, core_ids, cases_for
@@ -31,72 +31,24 @@ def protocol_hash(X, cfg):
              f"sender_max_new={cfg['sender_max_new_tokens']}"]
     return hashlib.sha256("\x1f".join(parts).encode()).hexdigest()
 
-LEDGER_LOCK = threading.Lock()
+class ChildStage(ES.Stage):
+    """r5: the stage CHILD. It never writes the ledger (the supervisor is its only writer), never writes a terminal
+    marker or .done; its only deadline is the supervisor's pre-recorded deadline_wall (admission guard below)."""
+    def save_ledger(self, *a, **k): pass
+    def check_budget(self): pass
+    def finish(self, summary): raise RuntimeError("the child never marks a stage done")
 
-class E1cStage(ES.Stage):
-    """r4 (GPT r3): ledger writes are serialised by one process-wide lock and are atomic (unique temp file +
-    os.replace), so the watchdog thread and the main thread (incl. atexit) cannot collide. timeout=None blocks
-    (main thread); the watchdog passes a short timeout and never waits indefinitely."""
-    def save_ledger(self, timeout=None):
-        if not LEDGER_LOCK.acquire(timeout=-1 if timeout is None else timeout): raise TimeoutError("ledger lock busy")
-        try:
-            L = self._ledger(); L[self.alloc] = self.used_s(); self.res.mkdir(parents=True, exist_ok=True)
-            tmp = self.res / f"budget_ledger.json.{os.getpid()}.{threading.get_ident()}.tmp"
-            with open(tmp, "w") as fh: json.dump(L, fh); fh.flush(); os.fsync(fh.fileno())
-            os.replace(tmp, self.res / "budget_ledger.json")
-            self.prior_s, self.t0 = L[self.alloc], time.time()
-        finally: LEDGER_LOCK.release()
-
-def _stage(name, cap, cfg):
-    """E1c Stage (E1b Stage + safe ledger) with its directory and ledger under v6/e1c/results (E1b's RES restored)."""
+def _stage(name, cap, cfg, deadline):
     old = ES.RES; ES.RES = RES
-    try: S = E1cStage(name, cap, cfg, alloc=f"E1C_{name}")
+    try: S = ChildStage(name, cap, cfg, alloc=f"E1C_{name}")
     finally: ES.RES = old
-    return S
+    S.deadline = deadline; return S
 
 def guard(S, est_s, what):
-    """Hard cap incl. in-flight work (GPT r1 #6): never START a unit whose estimated duration would cross the cap."""
-    S.check_budget()
-    if S.used_s() + est_s > S.budget_s:
-        (S.dir / "BUDGET_EXHAUSTED").write_text(f"{S.name}: next unit '{what}' (~{est_s:.0f}s) would exceed the cap; stopped, not shrunk\n")
-        S.log("budget_exhausted", next=what, est_s=est_s); S.save_ledger(); print(f"[{S.name}] BUDGET EXHAUSTED (in-flight guard)"); sys.exit(3)
-
-class Watchdog:
-    """r3/r4 (GPT r2 #6, r3): enforceable deadline covering the WHOLE stage, through summary and finalisation (it is
-    cancelled only in run()'s finally, after .done or an exit). On firing: a killer timer is armed FIRST, so the hard
-    exit (code 3) happens within `grace` seconds even if bookkeeping blocks; then, each best-effort and isolated:
-    BUDGET_EXHAUSTED marker (written first), ledger save with a lock timeout, log line; then exit. The exit never
-    depends on bookkeeping succeeding. Terminality does not depend on it either: start() refuses when the ledger
-    shows the cap used, and a retry cannot be authorised for a charge >= the cap."""
-    def __init__(self, S, exit_fn=None, grace=5.0, lock_timeout=2.0):
-        self.S = S; self.exit_fn = exit_fn or (lambda: os._exit(3)); self.grace, self.lock_timeout = grace, lock_timeout
-        self.fired = self.cancelled = self.exited = False; self.done_steps = []; self._elock = threading.Lock()
-        self.t = threading.Timer(max(0.0, S.budget_s - S.used_s()), self.fire); self.t.daemon = True; self.t.start()
-    def _exit(self):
-        with self._elock:
-            if self.exited: return
-            self.exited = True
-        self.exit_fn()
-    def fire(self):
-        if self.cancelled: return
-        self.fired = True
-        k = threading.Timer(self.grace, self._exit); k.daemon = True; k.start()
-        try:
-            fd = os.open(str(self.S.dir / "BUDGET_EXHAUSTED"), os.O_WRONLY | os.O_CREAT | os.O_TRUNC, 0o644)
-            try: os.write(fd, f"{self.S.name}: deadline reached at the cap ({self.S.budget_s/3600:.3f} h); in-flight work killed\n".encode())
-            finally: os.close(fd)
-            self.done_steps.append("marker")
-        except Exception: pass
-        try:
-            sv = self.S.save_ledger
-            try: sv(timeout=self.lock_timeout)
-            except TypeError: sv()
-            self.done_steps.append("ledger")
-        except Exception: pass
-        try: self.S.log("budget_deadline", used_s=self.S.used_s()); self.done_steps.append("log")
-        except Exception: pass
-        self._exit()
-    def cancel(self): self.cancelled = True; self.t.cancel()
+    """Admission guard (GPT r1 #6): never START a unit whose estimate would cross the supervisor's deadline. Exits 3
+    WITHOUT writing anything; the supervisor records BUDGET_EXHAUSTED. The hard bound is the supervisor's kill."""
+    if time.time() + est_s > S.deadline:
+        S.log("budget_admission_stop", next=what, est_s=est_s); print(f"[{S.name}] next unit '{what}' would cross the deadline -> exit 3"); sys.exit(3)
 
 class Est:
     """Per-unit duration estimate = max(configured prior, 1.2 x longest observed)."""
@@ -131,6 +83,8 @@ def check_d1_summary(S, X, cfg):
 def t1_eligibility(X, cfg):
     """GPT r1 #2 / r2 #2 / r2 new #2: T1 needs a structurally complete D1 summary qualifying the CURRENT protocol."""
     p = RES / "D1" / "summary.json"
+    term = [m for m in TERMINAL if (RES / "D1" / m).exists()]
+    if term: return False, f"D1 has terminal marker(s) {term}"     # r5: terminal markers take precedence over .done
     if not (RES / "D1" / ".done").exists() or not p.exists(): return False, "D1 not finished"
     S = json.load(open(p)); ok, why = check_d1_summary(S, X, cfg)
     if not ok: return False, why
@@ -140,57 +94,11 @@ def t1_eligibility(X, cfg):
     if not isinstance(ph, (int, float)) or not math.isfinite(ph) or ph > X["caps_h"]["T1"]: return False, f"projected T1 {ph} h > T1 cap {X['caps_h']['T1']}"
     return True, "ok"
 
-def start(cfg, name):
-    X = cfg["e1c"]
-    if name not in X["caps_h"]: print(f"unknown E1c stage {name}"); sys.exit(2)
-    if os.environ.get("E1C_GO") != name: print(f"{name} refused: no explicit go (E1C_GO must equal '{name}')"); sys.exit(14)
-    if name == "T1":
-        if X["status"] != "frozen": print("T1 refused: E1c is not frozen"); sys.exit(13)
-        ok, why = t1_eligibility(X, cfg)
-        if not ok: print(f"T1 refused: {why}"); sys.exit(19)
-    p = HERE / "CODE_HASH.txt"; pin = p.read_text().strip() if p.exists() else None
-    if pin != code_hash(): print(f"{name} refused: code hash != CODE_HASH.txt"); sys.exit(16)
-    kind = "dev" if name == "D1" else "test"; B = load_book(cfg, kind)
-    d = RES / name
-    if (d / ".done").exists(): print(f"{name} already finished"); sys.exit(0)
-    term = [m for m in TERMINAL if (d / m).exists()]
-    if term: print(f"{name}: terminal marker {term} -> stop and report"); sys.exit(18)
-    d.mkdir(parents=True, exist_ok=True); stp = d / "e1c_state.json"
-    Lp = RES / "budget_ledger.json"; used = (json.load(open(Lp)) if Lp.exists() else {}).get(f"E1C_{name}", 0.0)
-    if used >= X["caps_h"][name] * 3600:   # r4: deadline stays terminal even if the marker write failed
-        (d / "BUDGET_EXHAUSTED").write_text(f"{name}: ledger shows the cap used ({used/3600:.3f} h)\n"); print(f"{name}: cap already used"); sys.exit(3)
-    st = json.load(open(stp)) if stp.exists() else dict(attempts=[], retry=None, cap_h=X["caps_h"][name])
-    A = st["attempts"]; R = st.get("retry")
-    if len(A) == 0: kind_a = "first"
-    elif len(A) == 1 and R and R.get("for_attempt") == 1 and R.get("reason") in X["infra_retry_reasons"]:
-        kind_a = "infra_retry"
-        old = A[0]   # r3 (GPT r2 #3): results kept from attempt 1 must come from the SAME code and protocol
-        rows_exist = any(d.glob("select_*.jsonl")) or any(d.glob("exchange_*.jsonl"))
-        if rows_exist and (old.get("code_hash") != code_hash() or old.get("protocol_hash") != protocol_hash(X, cfg)):
-            (d / "ATTEMPT_INCOMPLETE").write_text(f"{name}: attempt-1 rows exist from a different code/protocol; cannot resume\n"); sys.exit(17)
-        if (d / "GPU_PREFLIGHT_FAIL").exists(): (d / "GPU_PREFLIGHT_FAIL").rename(d / "GPU_PREFLIGHT_FAIL.attempt1")
-        L = RES / "budget_ledger.json"; led = json.load(open(L)) if L.exists() else {}
-        led[f"E1C_{name}"] = max(led.get(f"E1C_{name}", 0.0), float(R["charged_h"]) * 3600)   # cumulative across attempts
-        json.dump(led, open(L, "w"))
-    else:
-        (d / "ATTEMPT_INCOMPLETE").write_text(f"{name}: no further start allowed (attempts={len(A)}, retry={R}); INCOMPLETE\n"); sys.exit(17)
-    A.append(dict(n=len(A) + 1, kind=kind_a, t=time.time(), code_hash=code_hash(), protocol_hash=protocol_hash(X, cfg), outcome="running"))
-    json.dump(st, open(stp, "w"), indent=1)
-    c = dict(cfg); c["stageB_batch_size"] = X["batch_size"]; ES._A9.clear()
-    S = _stage(name, st["cap_h"], c); S.state_path = stp
-    _require_gpu(S); S.watchdog = Watchdog(S)
-    S.log("e1c", stage=name, status=X["status"], attempt=A[-1], cap_h=st["cap_h"], book=kind,
-          book_sha256=X[f"{kind}_book_sha256"], code_hash=code_hash(), protocol_hash=protocol_hash(X, cfg))
-    return X, B, S, c
-
-def _mark(S, outcome):
-    st = json.load(open(S.state_path)); st["attempts"][-1]["outcome"] = outcome; json.dump(st, open(S.state_path, "w"), indent=1)
-
 def require_canaries(b, name, cfg, B, S):
     ref = json.load(open(E1B / "results" / "B0x" / "canaries_ref.json")).get(name)
     now = canaries(b, name, cfg, B, S); bad = canary_regressions(ref, now) if ref is not None else ["no_ref"]
     if bad:
-        (S.dir / "CANARY_FAIL").write_text(f"{name}: {bad}\n"); S.log("canary_fail", model=name, bad=bad); sys.exit(8)
+        S.log("canary_fail", model=name, bad=bad); print(f"CANARY_FAIL {name}: {bad}"); sys.exit(8)   # r5: the supervisor writes the marker
 
 def free():
     try:
@@ -201,12 +109,12 @@ def view_for(B, eid, X):
     return sender_view(B, eid, random.Random(seed_of(X["seeds"][X["_kind"]]["generator"], "e1c_sender", eid)))
 
 def _record_load(S, m, secs):
-    """r4 (optional): persist load(+canary) timings in the attempt record, so sizing sees every attempt's loads."""
-    st = json.load(open(S.state_path)); st["attempts"][-1].setdefault("loads", []).append(dict(model=m, s=secs))
-    json.dump(st, open(S.state_path, "w"), indent=1)
+    """r4/r5: load(+canary) timings persisted per attempt in a CHILD file (loads_attempt<n>.json), for sizing."""
+    p = S.dir / f"loads_attempt{S.attempt}.json"; L = json.load(open(p)) if p.exists() else []
+    L.append(dict(model=m, s=secs)); json.dump(L, open(p, "w"))
 
-def all_loads(state_path):
-    st = json.load(open(state_path)); return [x["s"] for a in st["attempts"] for x in a.get("loads", [])]
+def all_loads(d):
+    return [x["s"] for p in sorted(d.glob("loads_attempt*.json")) for x in json.load(open(p))]
 
 def load(m, cfg, B, S, est):
     guard(S, est("load"), f"load {m}"); t = time.time(); b, _ = load_B(m, cfg, S); require_canaries(b, m, cfg, B, S)
@@ -286,13 +194,27 @@ def exchange(b, snd, rcv, B, ids, sel, cfg, S, est):
             S.write(fx, rec(rcv, S.name, "exchange", k, **r))
     return [json.loads(l) for l in open(S.dir / fx)]
 
-def run(cfg, name):
-    X, B, S, cfg = start(cfg, name); X = dict(X, _kind="dev" if name == "D1" else "test")
-    try: _run(cfg, name, X, B, S)
-    except SystemExit as e: _mark(S, f"exit {e.code}"); raise
-    except Exception as e: _mark(S, f"crash {type(e).__name__}"); raise
-    finally:
-        if getattr(S, "watchdog", None): S.watchdog.cancel()
+def child_main(cfg, name):
+    """r5: entry point of the stage child (run_e1c.py --child). Only the supervisor launches it: the token must
+    match the attempt the supervisor durably recorded as running; the deadline is read from that record. Writes rows,
+    loads_attempt<n>.json, summary.child.json and, LAST, CHILD_COMPLETE. Nothing else."""
+    X = cfg["e1c"]; d = RES / name; st = json.load(open(d / "e1c_state.json")); a = st["attempts"][-1]
+    if not os.environ.get("E1C_ATTEMPT_TOKEN") or os.environ["E1C_ATTEMPT_TOKEN"] != a.get("token") or a.get("outcome") != "running":
+        print("child refused: not launched by the supervisor for the running attempt"); sys.exit(15)
+    c = dict(cfg); c["stageB_batch_size"] = X["batch_size"]; ES._A9.clear()
+    B = load_book(cfg, "dev" if name == "D1" else "test")
+    S = _stage(name, st["cap_h"], c, a["deadline_wall"]); S.attempt = a["n"]
+    if os.environ.get("E1B_ALLOW_NO_GPU") == "1" and os.environ.get("E1C_TEST_HOOK"):   # test-only fake backend / faults
+        import importlib.util as U; sp = U.spec_from_file_location("e1c_test_hook", os.environ["E1C_TEST_HOOK"])
+        h = U.module_from_spec(sp); sp.loader.exec_module(h); h.install(sys.modules[__name__], B, a)
+    _require_gpu(S)
+    S.log("e1c", stage=name, status=X["status"], attempt=a, cap_h=st["cap_h"], code_hash=code_hash(), protocol_hash=protocol_hash(X, cfg))
+    out = _run(c, name, dict(X, _kind="dev" if name == "D1" else "test"), B, S)
+    finish_child(S, out)
+
+def finish_child(S, out):
+    json.dump(out, open(S.dir / "summary.child.json", "w"), indent=1)
+    (S.dir / "CHILD_COMPLETE").write_text(f"attempt {S.attempt}\n"); S.log("child_complete")
 
 def _run(cfg, name, X, B, S):
     kind = X["_kind"]; n = X["sizes"][kind]["core_per_family"]; nr = X["sizes"][kind]["receiver_entries_per_family"]
@@ -309,12 +231,11 @@ def _run(cfg, name, X, B, S):
     del b; free()
     b, t["load3"] = load(q, cfg, B, S, est)
     t0 = time.time(); ex[f"{f}_to_{q}"] = exchange(b, f, q, B, rids, sel[f], cfg, S, est); t[f"recv_{q}"] = time.time() - t0
-    del b; free(); S.save_ledger()
+    del b; free()
     cases = {}
     for c in cases_for(B, rids): cases.setdefault(c["entry"], []).append(c)
     sel_rows = {m: [json.loads(l) for l in open(S.dir / f"select_{m}.jsonl")] for m in (q, f)}
-    # r4: the watchdog stays armed through summary + finish; run()'s finally cancels it
-    S.finish(summarize(name, X, cfg, B, sel_rows, ex, t, vb, S.used_s() / 3600, ids, rids, cases, vbatch, all_loads(S.state_path))); _mark(S, "done")
+    return summarize(name, X, cfg, B, sel_rows, ex, t, vb, None, ids, rids, cases, vbatch, all_loads(S.dir))   # gpu_h set by the supervisor
 
 def selection_stats(sel_rows, ids):
     """From the RAW selection rows (r3): complete = exactly one row per registered entry, no extras."""

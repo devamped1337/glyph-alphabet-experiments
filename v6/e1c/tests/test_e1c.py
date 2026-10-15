@@ -1,11 +1,10 @@
-import sys, os, json, re, shutil, tempfile, unittest, copy
+import sys, os, json, re, shutil, tempfile, unittest, copy, subprocess, time
 from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent; sys.path.insert(0, str(ROOT)); sys.path.insert(0, str(ROOT.parent / "e1b" / "tests")); sys.path.insert(0, str(ROOT / "tools"))
 from e1c import load_cfg, DATA, E1B
 from e1c import book as BK, verifier as V, analysis as A, stages as ST
 from e1b.parsing import parse_letter, parse_letter_a10
 from e1b.protocol import render_message, framed_id
-from test_e1b import FakeBackend
 import authorise_retry as AR, check_freeze as CF
 
 class Terms(unittest.TestCase):
@@ -149,170 +148,161 @@ class Freeze(unittest.TestCase):
         self.assertTrue(CF.files_ok(["v6/e1c/data/book_test.json", "v6/e1c/config_e1c.json", "v6/e1c/CODE_HASH.txt"])[0])
         self.assertFalse(CF.files_ok(["v6/e1c/e1c/verifier.py"])[0]); self.assertFalse(CF.files_ok(["v6/e1c/PREREG_E1c.md"])[0])
 
-class Fake(FakeBackend):
-    """Sender: 'X) F1'-style reply naming the TRUE candidate, or a NEIGHBOUR for entries in `wrong`; verifier: the
-    spec of the entry the sender picked (so a wrong pick is ACCEPTED), off by one for `bad`; receiver: toy output.
-    Records the size of every generate_batch call."""
-    def __init__(self, B, bad=(), wrong=()):
-        super().__init__(False); self.info = dict(backend="fake"); self.bad = set(bad); self.wrong = dict(wrong); self.B = B; self.bsz = []
-        self.msg = {render_message(B["entries"][k]): B["entries"][k] for f in ("F1", "F2") for k in B["e1c_core"][f]}
-    def _fix(self, j, r):
-        s, p, u = j
-        if u.startswith("Message:") and "Candidates:" in u:
-            e = self.msg[u.split("\n\nCandidates:")[0][len("Message:\n"):]]; tgt = self.wrong.get(e["id"], e["id"])
-            L = next(l[0] for l in u.splitlines() if re.match(r"^[ABCD]\) ", l) and l[3:].startswith(tgt + "@"))
-            return dict(r, text=f"{L}) F1")
-        if u.startswith("Message:"):
-            e = self.msg[u.split("\n\nReply in exactly")[0][len("Message:\n"):]]
-            sp = dict(V.expected_spec(self.B["entries"][self.wrong.get(e["id"], e["id"])]))
-            if e["id"] in self.bad: k = [k for k in sp if isinstance(sp[k], int)][0]; sp[k] += 1
-            return dict(r, text=" ".join(f"{k}={v}" for k, v in sp.items()))
-        return r
-    def generate(self, s, p, u, max_new, warm=False, mode=None): return self._fix((s, p, u), super().generate(s, p, u, max_new, warm=warm, mode=mode))
-    def generate_batch(self, jobs, max_new): self.bsz.append(len(jobs)); return [self._fix(j, r) for j, r in zip(jobs, super().generate_batch(jobs, max_new))]
+HOOK = ROOT / "tests" / "e1c_hook.py"
 
-class DryRun(unittest.TestCase):
+class Proc(unittest.TestCase):
+    """r5: every stage run is a REAL supervisor process (run_e1c.py --stage) launching a REAL child process; the fake
+    backend and faults are injected into the child by tests/e1c_hook.py (test-only, needs E1B_ALLOW_NO_GPU=1)."""
     def setUp(self):
-        self.tmp = Path(tempfile.mkdtemp()); self.old = (ST.RES, ST.load_B, ST.require_canaries, ST.code_hash)
-        ST.RES = self.tmp / "results"; ST.RES.mkdir(); os.environ["E1B_ALLOW_NO_GPU"] = "1"
-        self.cfg = load_cfg(); self.B = BK.load_book(self.cfg, "dev"); self.cfg["e1c"]["sizes"]["dev"] = dict(core_per_family=6, receiver_entries_per_family=3)
+        self.tmp = Path(tempfile.mkdtemp()); self.res = self.tmp / "results"; self.res.mkdir(); self.oldRES = ST.RES; ST.RES = self.res
+        self.cfg = load_cfg(); self.B = BK.load_book(self.cfg, "dev"); self.X = copy.deepcopy(json.load(open(ROOT / "config_e1c.json")))
+        self.X["sizes"]["dev"] = dict(core_per_family=6, receiver_entries_per_family=3); self.cfg["e1c"]["sizes"]["dev"] = self.X["sizes"]["dev"]
         self.bad = self.B["e1c_core"]["F2"][1]; self.wr = self.B["e1c_core"]["F1"][2]; self.nb = self.B["neighbours"][self.wr][0]
-        self.fakes = []
-        def lb(name, cfg, S):
-            f = Fake(self.B, [self.bad], {self.wr: self.nb}); self.fakes.append(f); return f, "fake"
-        ST.load_B = lb; ST.require_canaries = lambda *a: None
-        h = self.old[3](); ST.code_hash = lambda: h
-        self.pin = ROOT / "CODE_HASH.txt"; self.had = self.pin.read_text() if self.pin.exists() else None; self.pin.write_text(h + "\n")
+        self.pin = ROOT / "CODE_HASH.txt"; self.had = self.pin.read_text() if self.pin.exists() else None; self.pin.write_text(ST.code_hash() + "\n")
+        self.log = self.tmp / "calls.jsonl"
     def tearDown(self):
-        ST.RES, ST.load_B, ST.require_canaries, ST.code_hash = self.old; os.environ.pop("E1C_GO", None)
+        ST.RES = self.oldRES
+        for p in (self.res, self.res / "D1"):
+            if p.exists(): os.chmod(p, 0o755)
         if self.had is None: self.pin.unlink()
         else: self.pin.write_text(self.had)
         shutil.rmtree(self.tmp, ignore_errors=True)
-    def _run(self, name, cfg=None):
-        try: ST.run(cfg or self.cfg, name)
-        except SystemExit as e: return e.code
-    def _state(self): return json.load(open(ST.RES / "D1" / "e1c_state.json"))
+    def run_stage(self, name="D1", go="D1", mode="ok", cap_h=None, frozen=False, timeout=120, fast_priors=False):
+        X = copy.deepcopy(self.X)
+        if fast_priors: X["inflight_est_s"] = {k: 0.01 for k in X["inflight_est_s"]}   # so only the hard deadline can stop it
+        if cap_h is not None: X["caps_h"][name] = cap_h
+        if frozen: X["status"] = "frozen"
+        X["base_config"] = str((ROOT / self.X["base_config"]).resolve()); cp = self.tmp / "cfg.json"; json.dump(X, open(cp, "w"))
+        env = dict(os.environ, E1B_ALLOW_NO_GPU="1", E1C_RES=str(self.res), E1C_CONFIG=str(cp), E1C_TEST_HOOK=str(HOOK),
+                   E1C_TEST_MODE=mode, E1C_TEST_LOG=str(self.log)); env.pop("E1C_GO", None)
+        if go: env["E1C_GO"] = go
+        t = time.time(); r = subprocess.run([sys.executable, str(ROOT / "run_e1c.py"), "--stage", name], env=env, capture_output=True, text=True, timeout=timeout)
+        self.wall = time.time() - t; self.out = r.stdout + r.stderr; return r.returncode
+    def d(self): return self.res / "D1"
+    def state(self): return json.load(open(self.d() / "e1c_state.json"))
+    def ledger(self): p = self.res / "budget_ledger.json"; return json.load(open(p)).get("E1C_D1") if p.exists() else None
+    def calls(self): return [json.loads(l) for l in open(self.log)] if self.log.exists() else []
+    def au(self, *a): return AR.authorise("D1", *a, res=self.res, cfg=self.cfg)
+
+    # --- gates and the normal path
     def test_gates(self):
-        self.assertEqual(self._run("D1"), 14)
-        os.environ["E1C_GO"] = "T1"; self.assertEqual(self._run("T1"), 13)
-        os.environ["E1C_GO"] = "D1"; self.assertEqual(self._run("T1"), 14)
-    def test_code_hash_gate(self):
-        os.environ["E1C_GO"] = "D1"; self.pin.write_text("0" * 64 + "\n"); self.assertEqual(self._run("D1"), 16)
+        self.assertEqual(self.run_stage(go=None), 14); self.assertEqual(self.run_stage("T1", go="T1"), 13)
+        self.assertEqual(self.run_stage("T1", go="D1"), 14)
+        self.pin.write_text("0" * 64 + "\n"); self.assertEqual(self.run_stage(), 16)
+    def test_child_refuses_without_supervisor(self):
+        env = dict(os.environ, E1B_ALLOW_NO_GPU="1", E1C_RES=str(self.res)); self.d().mkdir()
+        json.dump(dict(attempts=[dict(n=1, token="t", outcome="running", deadline_wall=time.time() + 99)], cap_h=0.5), open(self.d() / "e1c_state.json", "w"))
+        for tok in (None, "wrong"):
+            e = dict(env); e.pop("E1C_ATTEMPT_TOKEN", None)
+            if tok: e["E1C_ATTEMPT_TOKEN"] = tok
+            self.assertEqual(subprocess.run([sys.executable, str(ROOT / "run_e1c.py"), "--child", "D1"], env=e, capture_output=True).returncode, 15)
     def test_d1_dry_run(self):
-        os.environ["E1C_GO"] = "D1"; self.assertIn(self._run("D1"), (None, 0))
-        S = json.load(open(ST.RES / "D1" / "summary.json"))
+        self.assertEqual(self.run_stage(), 0, self.out); d = self.d(); S = json.load(open(d / "summary.json"))
         for m in ("qwen7b", "falcon7b"):
             s = S["selection"][m]; self.assertEqual(s["n"], 12); self.assertTrue(s["complete"]); self.assertAlmostEqual(s["pick_acc"], 11 / 12)
             self.assertEqual(s["correct_pick_rejected"], 1); self.assertEqual(s["wrong_pick_accepted"], 1); self.assertAlmostEqual(s["coverage"], 11 / 12)
-        for d, r in S["directions"].items():
+        for dn, r in S["directions"].items():
             self.assertEqual(r["status"], "COMPLETE"); self.assertEqual(r["n_entries"], 6); self.assertEqual(r["n_messages"], 24)
-            rows = [json.loads(l) for l in open(ST.RES / "D1" / f"exchange_{d}.jsonl")]
+            rows = [json.loads(l) for l in open(d / f"exchange_{dn}.jsonl")]
             fb = [x for x in rows if x["cond"] == "hybrid" and x["sent"] == "prose"]; self.assertEqual(len(fb), 4)
             for x in fb:
                 tw = [y for y in rows if y["cond"] == "prose" and y["case"] == x["case"]][0]
                 self.assertEqual((x["payload_bytes"], x["pred"], x["shared_n"]), (tw["payload_bytes"], tw["pred"], 2))
+                self.assertEqual((x["batch_index"], x["batch_pos"], x["latency_s"]), (tw["batch_index"], tw["batch_pos"], tw["latency_s"]))
         self.assertIn("sizing", S); self.assertNotIn("verdict", S); self.assertEqual(S["protocol_hash"], ST.protocol_hash(self.cfg["e1c"], self.cfg))
-        self.assertEqual(self._state()["attempts"][-1]["outcome"], "done"); self.assertEqual(self._run("D1"), 0)
-    def test_wrong_accepted_pick_scored_on_true_case_r2(self):
-        """r2 (GPT r1 #4): an ACCEPTED wrong neighbour sends the neighbour's rule, but both arms use the TRUE entry's
-        cases and gold, and correctness is judged against that gold."""
+        self.assertEqual(S["verifier_batch_size"], 8); self.assertEqual(set(S["verifier_b1_check"]), {"qwen7b", "falcon7b"})
+        self.assertTrue(all(c["n"] <= 8 for c in self.calls() if c["kind"] == "batch"))
+        a = self.state()["attempts"][-1]; self.assertEqual(a["outcome"], "done"); self.assertLess(a["ended_wall"], a["deadline_wall"])
+        self.assertAlmostEqual(self.ledger(), a["elapsed_s"], places=3); self.assertAlmostEqual(S["gpu_h"], self.ledger() / 3600)
+        # wrong accepted pick: neighbour's rule sent, scored on the TRUE case (GPT r1 #4)
         from e1b.parsing import parse_answer, score_answer
-        os.environ["E1C_GO"] = "D1"; self.assertIn(self._run("D1"), (None, 0))
-        sel = {json.loads(l)["entry"]: json.loads(l) for l in open(ST.RES / "D1" / "select_qwen7b.jsonl")}
+        sel = {json.loads(l)["entry"]: json.loads(l) for l in open(d / "select_qwen7b.jsonl")}
         self.assertTrue(sel[self.wr]["accepted"]); self.assertFalse(sel[self.wr]["correct"]); self.assertEqual(sel[self.wr]["pick"], self.nb)
-        rows = [json.loads(l) for l in open(ST.RES / "D1" / "exchange_qwen7b_to_falcon7b.jsonl") if json.loads(l)["entry"] == self.wr]
-        true = {c["text"]: c["gold"] for c in BK.cases_for(self.B, [self.wr])}; nbE = self.B["entries"][self.nb]
-        self.assertEqual(len(rows), 8)
-        for r in rows:
-            self.assertEqual(r["gold"], true[r["case"]]); self.assertEqual(r["correct"], score_answer(parse_answer(r["raw"]), true[r["case"]]))
-        hy = [r for r in rows if r["cond"] == "hybrid"]
-        self.assertTrue(all(r["sent"] == "id" and r["rule_entry"] == self.nb and r["payload_bytes"] == len(framed_id(nbE)) for r in hy))
-        self.assertTrue(all(r["rule_entry"] == self.wr for r in rows if r["cond"] == "prose"))
-        from e1b.cases import gold_of
-        self.assertTrue(any(str(gold_of(nbE["sem"], nbE["fam"], c["meta"])) != c["gold"] for c in BK.cases_for(self.B, [self.wr])))
-    def test_verifier_batches_r2(self):
-        """r2 (GPT r1 #6): verifier + b1 check use explicit batch 8 on the production path."""
-        os.environ["E1C_GO"] = "D1"; self._run("D1")
-        self.assertTrue(self.fakes and all(max(f.bsz) <= 8 for f in self.fakes if f.bsz))
-        S = json.load(open(ST.RES / "D1" / "summary.json")); self.assertEqual(set(S["verifier_b1_check"]), {"qwen7b", "falcon7b"})
-        self.assertEqual(S["verifier_batch_size"], 8)
-    def test_inflight_guard_r2(self):
-        os.environ["E1C_GO"] = "D1"; c = copy.deepcopy(self.cfg); c["e1c"]["caps_h"]["D1"] = 0.05   # 180 s < 420 s load estimate
-        self.assertEqual(self._run("D1", c), 3); self.assertTrue((ST.RES / "D1" / "BUDGET_EXHAUSTED").exists()); self.assertEqual(len(self.fakes), 0)
-        self.assertEqual(self._run("D1", c), 18)
-    def test_retry_rules_r2(self):
-        """r2/r3 (GPT r1 #3, r2 #3): second start only with an authorised reason CONSISTENT with the recorded failure;
-        finite charged_h <= cap; cumulative budget; never a third start."""
-        os.environ["E1C_GO"] = "D1"; d = ST.RES / "D1"; d.mkdir()
-        json.dump(dict(attempts=[dict(n=1, kind="first", outcome="running")], retry=None, cap_h=0.5), open(d / "e1c_state.json", "w"))
-        self.assertEqual(self._run("D1"), 17); (d / "ATTEMPT_INCOMPLETE").unlink()
-        au = lambda *a: AR.authorise("D1", *a, res=ST.RES, cfg=self.cfg)
-        for args in (("bad_result", 0.1, "x"), ("no_gpu", 0, "x"), ("no_gpu", float("nan"), "x"), ("no_gpu", float("inf"), "x"), ("no_gpu", 0.6, "x"), ("no_gpu", 0.1, " ")):
-            with self.assertRaises(SystemExit, msg=args): au(*args)
-        (d / "GPU_PREFLIGHT_FAIL").write_text("no CUDA\n")
-        with self.assertRaises(SystemExit): au("kernel_crash", 0.1, "log says no GPU")      # inconsistent with the marker
-        au("no_gpu", 0.1, "T4 not attached (log line 3)")
-        with self.assertRaises(SystemExit): au("no_gpu", 0.1, "again")
-        self.assertIn(self._run("D1"), (None, 0))
-        st = self._state(); self.assertEqual([a["kind"] for a in st["attempts"]], ["first", "infra_retry"]); self.assertEqual(st["attempts"][-1]["outcome"], "done")
-        self.assertGreaterEqual(json.load(open(ST.RES / "budget_ledger.json"))["E1C_D1"], 360); self.assertTrue((d / "GPU_PREFLIGHT_FAIL.attempt1").exists())
-        (d / ".done").unlink(); self.assertEqual(self._run("D1"), 17)
-    def test_retry_reason_consistency_r3(self):
-        self.assertEqual(AR.allowed_reasons("exit 9", False), {"no_gpu"}); self.assertEqual(AR.allowed_reasons("exit 3", False), set())
-        self.assertEqual(AR.allowed_reasons("exit 8", False), set()); self.assertNotIn("no_gpu", AR.allowed_reasons("crash RuntimeError", False))
-        self.assertNotIn("no_gpu", AR.allowed_reasons("running", False)); self.assertEqual(AR.allowed_reasons("running", True), {"no_gpu"})
-        d = ST.RES / "D1"; d.mkdir(); json.dump(dict(attempts=[dict(n=1, outcome="exit 19")], retry=None, cap_h=0.5), open(d / "e1c_state.json", "w"))
-        with self.assertRaises(SystemExit): AR.authorise("D1", "kernel_crash", 0.1, "x", res=ST.RES, cfg=self.cfg)
-    def test_resume_bound_to_protocol_r3(self):
-        """r3 (GPT r2 #3): attempt-1 rows from a different code/protocol cannot be resumed."""
-        os.environ["E1C_GO"] = "D1"; d = ST.RES / "D1"; d.mkdir(); (d / "select_qwen7b.jsonl").write_text("")
-        json.dump(dict(attempts=[dict(n=1, kind="first", outcome="crash RuntimeError", code_hash="old", protocol_hash="old")], retry=None, cap_h=0.5), open(d / "e1c_state.json", "w"))
-        AR.authorise("D1", "kernel_crash", 0.1, "CUDA error in log", res=ST.RES, cfg=self.cfg)
-        self.assertEqual(self._run("D1"), 17); self.assertIn("different code/protocol", (d / "ATTEMPT_INCOMPLETE").read_text())
-    def test_unit_costs_r3(self):
+        rows = [json.loads(l) for l in open(d / "exchange_qwen7b_to_falcon7b.jsonl") if json.loads(l)["entry"] == self.wr]
+        true = {c["text"]: c["gold"] for c in BK.cases_for(self.B, [self.wr])}; nbE = self.B["entries"][self.nb]; self.assertEqual(len(rows), 8)
+        for r in rows: self.assertEqual(r["gold"], true[r["case"]]); self.assertEqual(r["correct"], score_answer(parse_answer(r["raw"]), true[r["case"]]))
+        self.assertTrue(all(r["sent"] == "id" and r["rule_entry"] == self.nb and r["payload_bytes"] == len(framed_id(nbE)) for r in rows if r["cond"] == "hybrid"))
+        self.assertEqual(self.run_stage(), 0)                                     # already finished
+        (d / "BUDGET_EXHAUSTED").write_text("x"); self.assertEqual(self.run_stage(), 18)   # r5: terminal marker beats .done
+
+    # --- r5 separate-process tests
+    def test_deadline_kill(self):
+        """Child hangs in a sender call; the supervisor SIGKILLs the group at the pre-recorded deadline."""
+        self.assertEqual(self.run_stage(mode="sleep_send", cap_h=8 / 3600, fast_priors=True), 3, self.out); d = self.d()
+        self.assertLess(self.wall, 30); self.assertTrue((d / "BUDGET_EXHAUSTED").exists()); self.assertFalse((d / ".done").exists())
+        a = self.state()["attempts"][-1]; self.assertEqual((a["outcome"], a["rc"]), ("deadline", None)); self.assertAlmostEqual(self.ledger(), 8, places=3)
+        self.assertEqual(self.run_stage(cap_h=8 / 3600), 18)
+        with self.assertRaises(SystemExit): self.au("kernel_crash", 0.001, "x")
+    def test_admission_guard(self):
+        self.assertEqual(self.run_stage(cap_h=0.05), 3, self.out)      # 180 s < 420 s load estimate: child exits 3, no load
+        self.assertTrue((self.d() / "BUDGET_EXHAUSTED").exists()); self.assertEqual(self.calls(), [])
+        self.assertEqual(self.state()["attempts"][-1]["outcome"], "budget_admission")
+    def test_concurrent_finish_after_deadline(self):
+        """Child writes CHILD_COMPLETE, then is still alive at the deadline: deadline wins, never .done."""
+        self.assertEqual(self.run_stage(mode="complete_then_sleep", cap_h=25 / 3600, fast_priors=True), 3, self.out); d = self.d()
+        self.assertTrue((d / "CHILD_COMPLETE").exists()); self.assertFalse((d / ".done").exists()); self.assertFalse((d / "summary.json").exists())
+        self.assertTrue((d / "BUDGET_EXHAUSTED").exists()); self.assertEqual(self.state()["attempts"][-1]["outcome"], "deadline")
+    def test_decide_late_exit(self):
+        from e1c.supervisor import decide
+        self.assertEqual(decide(0, 10.0, 9.9, True)[0], "deadline"); self.assertEqual(decide(0, 9.0, 9.9, True)[0], "done")
+        self.assertEqual(decide(0, 9.0, 9.9, False)[0], "crash rc=0"); self.assertEqual(decide(None, 9.0, 9.9, True)[0], "deadline")
+        self.assertEqual(decide(8, 1, 2, False)[1], "CANARY_FAIL"); self.assertEqual(decide(9, 1, 2, False)[1], None)
+    def test_both_writes_fail_closed(self):
+        """At the deadline both the ledger and the marker writes fail (read-only dirs): the supervisor exits 70, the
+        attempt stays 'running', and that is terminal: no retry, the next start is INCOMPLETE."""
+        self.assertEqual(self.run_stage(mode="readonly_then_sleep", cap_h=25 / 3600, fast_priors=True), 70, self.out); d = self.d()
+        for p in (self.res, d): os.chmod(p, 0o755)
+        self.assertFalse((d / "BUDGET_EXHAUSTED").exists()); self.assertIsNone(self.ledger()); self.assertFalse((d / ".done").exists())
+        self.assertEqual(self.state()["attempts"][-1]["outcome"], "running")
+        for r in ("kernel_crash", "install_or_network", "no_gpu"):
+            with self.assertRaises(SystemExit): self.au(r, 0.001, "log shows a crash")
+        self.assertEqual(self.run_stage(cap_h=25 / 3600), 17); self.assertTrue((d / "ATTEMPT_INCOMPLETE").exists())
+        self.assertEqual(self.run_stage(cap_h=25 / 3600), 18)
+    def test_resume_after_partial_selection(self):
+        """Attempt 1 crashes in the falcon sender AFTER select_qwen7b.jsonl (12 rows) is saved; authorised retry
+        resumes without re-running qwen selection (file byte-identical); sizing sees both attempts' loads."""
+        self.assertEqual(self.run_stage(mode="crash_send:18"), 10, self.out); d = self.d()   # sender call 18 = 6th falcon call
+        q = (d / "select_qwen7b.jsonl").read_bytes(); self.assertEqual(len(q.splitlines()), 12); self.assertFalse((d / "select_falcon7b.jsonl").exists())
+        self.assertEqual([c["model"] for c in self.calls() if c["kind"] == "send"], ["qwen7b"] * 12 + ["falcon7b"] * 5)
+        a1 = self.state()["attempts"][0]; self.assertEqual(a1["outcome"], "crash rc=1"); led1 = self.ledger(); self.assertGreater(led1, 0)
+        with self.assertRaises(SystemExit): self.au("no_gpu", 0.001, "x")            # inconsistent with a crash
+        self.au("kernel_crash", 0.0001, "RuntimeError: CUDA error (log)")
+        self.assertEqual(self.run_stage(), 0, self.out)
+        self.assertEqual((d / "select_qwen7b.jsonl").read_bytes(), q)
+        self.assertFalse([c for c in self.calls() if c["attempt"] == 2 and c["model"] == "qwen7b" and c["kind"] == "send"])
+        st = self.state(); self.assertEqual([a["kind"] for a in st["attempts"]], ["first", "infra_retry"])
+        self.assertAlmostEqual(self.ledger(), led1 + st["attempts"][1]["elapsed_s"], places=3)
+        S = json.load(open(d / "summary.json")); z = S["sizing"]; self.assertTrue(S["selection"]["qwen7b"]["complete"])
+        loads = ST.all_loads(d); self.assertEqual(len(loads), 2 + 3); self.assertAlmostEqual(z["load_s"], max(loads))
+        sel = {m: [json.loads(l) for l in open(d / f"select_{m}.jsonl")] for m in ("qwen7b", "falcon7b")}
+        ex = {k: [json.loads(l) for l in open(d / f"exchange_{k}.jsonl")] for k in S["directions"]}
+        sv, rv = ST.unit_costs(sel, ex); self.assertAlmostEqual(z["sender_verifier_s_per_entry"], sv); self.assertAlmostEqual(z["receiver_s_per_message"], rv)
+        (d / ".done").unlink(); self.assertEqual(self.run_stage(), 17)            # never a third start
+    def test_resume_bound_to_protocol(self):
+        d = self.d(); d.mkdir(); (d / "select_qwen7b.jsonl").write_text("")
+        json.dump(dict(attempts=[dict(n=1, kind="first", outcome="crash rc=1", code_hash="old", protocol_hash="old")], retry=None, cap_h=0.5), open(d / "e1c_state.json", "w"))
+        self.au("kernel_crash", 0.1, "CUDA error in log"); self.assertEqual(self.run_stage(), 17); self.assertIn("different code/protocol", (d / "ATTEMPT_INCOMPLETE").read_text())
+    def test_retry_rules(self):
+        d = self.d(); d.mkdir()
+        json.dump(dict(attempts=[dict(n=1, kind="first", outcome="no_gpu rc=9")], retry=None, cap_h=0.5), open(d / "e1c_state.json", "w"))
+        for args in (("bad_result", 0.1, "x"), ("no_gpu", 0, "x"), ("no_gpu", float("nan"), "x"), ("no_gpu", float("inf"), "x"), ("no_gpu", 0.6, "x"), ("no_gpu", 0.1, " "), ("kernel_crash", 0.1, "x")):
+            with self.assertRaises(SystemExit, msg=args): self.au(*args)
+        (d / "GPU_PREFLIGHT_FAIL").write_text("no CUDA\n"); self.au("no_gpu", 0.1, "T4 not attached (log line 3)")
+        with self.assertRaises(SystemExit): self.au("no_gpu", 0.1, "again")
+        self.assertEqual(self.run_stage(), 0, self.out); self.assertGreaterEqual(self.ledger(), 360); self.assertTrue((d / "GPU_PREFLIGHT_FAIL.attempt1").exists())
+    def test_retry_reason_consistency(self):
+        self.assertEqual(AR.allowed_reasons("no_gpu rc=9", False), {"no_gpu"}); self.assertEqual(AR.allowed_reasons("budget_admission", False), set())
+        self.assertEqual(AR.allowed_reasons("canary_fail", False), set()); self.assertEqual(AR.allowed_reasons("deadline", False), set())
+        self.assertNotIn("no_gpu", AR.allowed_reasons("crash rc=1", False)); self.assertEqual(AR.allowed_reasons("running", True), set())
+        d = self.d(); d.mkdir(); (d / "CANARY_FAIL").write_text("x")
+        with self.assertRaises(SystemExit): self.au("kernel_crash", 0.1, "x")
+    def test_ledger_at_cap_is_terminal(self):
+        json.dump({"E1C_D1": 0.5 * 3600}, open(self.res / "budget_ledger.json", "w"))
+        self.assertEqual(self.run_stage(), 3); self.assertTrue((self.d() / "BUDGET_EXHAUSTED").exists()); self.assertEqual(self.calls(), [])
+    def test_unit_costs(self):
         sel = dict(q=[dict(sender_latency_s=1.0, verifier_latency_s=0.5)] * 4, f=[dict(sender_latency_s=2.0, verifier_latency_s=0.5)] * 4)
         ex = dict(d=[dict(cond="prose", latency_s=3.0), dict(cond="hybrid", sent="prose", latency_s=3.0), dict(cond="prose", latency_s=3.0), dict(cond="hybrid", sent="id", latency_s=1.0)])
         sv, rv = ST.unit_costs(sel, ex); self.assertAlmostEqual(sv, 4.0); self.assertAlmostEqual(rv, 3.5)
-    def test_interrupted_resumed_run_r4(self):
-        """r4 (GPT r3 optional): a genuine interrupted + resumed fixture. Attempt 1 crashes mid-sender; the authorised
-        retry resumes; sizing uses every persisted row latency and the loads of BOTH attempts; receiver cost is
-        checked against the batched-generation rows (a fallback shares its prose twin's generation)."""
-        os.environ["E1C_GO"] = "D1"; calls = dict(n=0); real = ST.load_B
-        def crashing(name, cfg, S):
-            f, k = real(name, cfg, S); g = f.generate
-            def gen(*a, **kw):
-                calls["n"] += 1
-                if calls["n"] == 5: raise RuntimeError("simulated CUDA error")
-                return g(*a, **kw)
-            f.generate = gen; return f, k
-        ST.load_B = crashing
-        with self.assertRaises(RuntimeError): ST.run(self.cfg, "D1")
-        st = self._state(); self.assertEqual(st["attempts"][0]["outcome"], "crash RuntimeError"); self.assertEqual(len(st["attempts"][0]["loads"]), 1)
-        part = [json.loads(l) for l in open(ST.RES / "D1" / "select_qwen7b.jsonl")] if (ST.RES / "D1" / "select_qwen7b.jsonl").exists() else []
-        ST.load_B = real; AR.authorise("D1", "kernel_crash", 0.01, "RuntimeError: CUDA error (log)", res=ST.RES, cfg=self.cfg)
-        self.assertIn(self._run("D1"), (None, 0))
-        S = json.load(open(ST.RES / "D1" / "summary.json")); z = S["sizing"]
-        sel = {m: [json.loads(l) for l in open(ST.RES / "D1" / f"select_{m}.jsonl")] for m in ("qwen7b", "falcon7b")}
-        ex = {d: [json.loads(l) for l in open(ST.RES / "D1" / f"exchange_{d}.jsonl")] for d in S["directions"]}
-        self.assertEqual(len(sel["qwen7b"]), 12); self.assertEqual(S["selection"]["qwen7b"]["complete"], True)
-        sv, rv = ST.unit_costs(sel, ex); self.assertAlmostEqual(z["sender_verifier_s_per_entry"], sv); self.assertAlmostEqual(z["receiver_s_per_message"], rv)
-        loads = ST.all_loads(ST.RES / "D1" / "e1c_state.json"); self.assertEqual(len(loads), 4); self.assertAlmostEqual(z["load_s"], max(loads))
-        for rows in ex.values():
-            for x in rows:
-                if x["cond"] == "hybrid" and x["sent"] == "prose":
-                    tw = [y for y in rows if y["cond"] == "prose" and y["case"] == x["case"]][0]
-                    self.assertEqual((x["batch_index"], x["batch_pos"], x["latency_s"]), (tw["batch_index"], tw["batch_pos"], tw["latency_s"]))
-    def test_watchdog_deadline_r3(self):
-        """r3 (GPT r2 #6): enforceable deadline at the cap, whatever is in flight."""
-        import types, time as _t
-        hit = []; tmp = self.tmp / "wd"; tmp.mkdir()
-        S = types.SimpleNamespace(budget_s=0.2, used_s=lambda: 0.0, save_ledger=lambda: hit.append("ledger"), dir=tmp, name="D1", log=lambda *a, **k: hit.append("log"))
-        w = ST.Watchdog(S, exit_fn=lambda: hit.append("exit")); _t.sleep(0.6)
-        self.assertTrue(w.fired); self.assertEqual(hit, ["ledger", "log", "exit"]); self.assertTrue((tmp / "BUDGET_EXHAUSTED").exists())
-        S2 = types.SimpleNamespace(budget_s=0.2, used_s=lambda: 0.0); w2 = ST.Watchdog(S2, exit_fn=lambda: hit.append("x")); w2.cancel(); _t.sleep(0.4); self.assertFalse(w2.fired)
-    def test_retry_refused_after_terminal(self):
-        d = ST.RES / "D1"; d.mkdir(); (d / "CANARY_FAIL").write_text("x")
-        with self.assertRaises(SystemExit): AR.authorise("D1", "kernel_crash", 0.1, "x", res=ST.RES, cfg=self.cfg)
     def good_summary(self):
         X = self.cfg["e1c"]; E = ST.expected_shape(X); q, f = X["pair"]
         return dict(protocol_hash=ST.protocol_hash(X, self.cfg),
@@ -320,13 +310,10 @@ class DryRun(unittest.TestCase):
                     selection={m: dict(complete=True, n=E["n_sel"]) for m in (q, f)},
                     verifier_b1_check={m: dict(n=E["b1_n"], identical=E["b1_n"]) for m in (q, f)},
                     sizing=dict(wrong_pass_ok=True, projected_T1_gpu_h=2.0, max_wrong_pick_accepted_rate=0.0))
-    def test_t1_eligibility_r3(self):
-        """r2/r3 (GPT r1 #2, r2 #2, r2 new #2): exact D1 structure, conformance, CURRENT protocol incl. the actual
-        sender token limit, screen and projection."""
-        X = self.cfg["e1c"]; d = ST.RES / "D1"; d.mkdir(); (d / ".done").write_text("x")
+    def test_t1_eligibility(self):
+        X = self.cfg["e1c"]; d = self.d(); d.mkdir(); (d / ".done").write_text("x")
         def chk(s, cfg=None): json.dump(s, open(d / "summary.json", "w")); return ST.t1_eligibility(X if cfg is None else cfg["e1c"], cfg or self.cfg)
-        g = self.good_summary(); self.assertEqual(chk(g), (True, "ok"))
-        q, f = X["pair"]
+        g = self.good_summary(); self.assertEqual(chk(g), (True, "ok")); q, f = X["pair"]
         muts = [dict(protocol_hash="0"), dict(sizing=dict(g["sizing"], wrong_pass_ok=False)), dict(sizing=dict(g["sizing"], projected_T1_gpu_h=99)),
                 dict(sizing=dict(g["sizing"], projected_T1_gpu_h=float("nan"))), dict(directions={}), dict(selection={}), dict(verifier_b1_check={}),
                 dict(directions={k: v for k, v in list(g["directions"].items())[:1]}), dict(selection={q: g["selection"][q]}),
@@ -335,12 +322,13 @@ class DryRun(unittest.TestCase):
                 dict(verifier_b1_check={m: dict(v, identical=15) for m, v in g["verifier_b1_check"].items()}),
                 dict(verifier_b1_check={m: dict(v, n=3, identical=3) for m, v in g["verifier_b1_check"].items()})]
         for m in muts: self.assertFalse(chk(dict(g, **m))[0], m)
-        c2 = copy.deepcopy(self.cfg); c2["sender_max_new_tokens"] = 8; self.assertFalse(chk(g, c2)[0])          # actual token limit is hashed
+        c2 = copy.deepcopy(self.cfg); c2["sender_max_new_tokens"] = 8; self.assertFalse(chk(g, c2)[0])
         c3 = copy.deepcopy(self.cfg); c3["e1c"]["verifier_max_new_tokens"] = 64; self.assertFalse(chk(g, c3)[0])
-        c4 = copy.deepcopy(self.cfg); c4["e1c"]["batch_size"] = 1; self.assertFalse(chk(g, c4)[0])                # effective verifier batch is hashed
-        c = copy.deepcopy(self.cfg); c["e1c"]["status"] = "frozen"; os.environ["E1C_GO"] = "T1"; json.dump(dict(g, protocol_hash="0"), open(d / "summary.json", "w"))
-        self.assertEqual(self._run("T1", c), 19)
-    def test_verdict_structure_r3(self):
+        c4 = copy.deepcopy(self.cfg); c4["e1c"]["batch_size"] = 1; self.assertFalse(chk(g, c4)[0])
+        for m in ST.TERMINAL:                                                       # r5: a terminal marker beats .done
+            (d / m).write_text("x"); self.assertFalse(chk(g)[0], m); (d / m).unlink()
+        json.dump(dict(g, protocol_hash="0"), open(d / "summary.json", "w")); self.assertEqual(self.run_stage("T1", go="T1", frozen=True), 19)
+    def test_verdict_structure(self):
         X = self.cfg["e1c"]; q, f = X["pair"]; n = X["sizes"]["test"]; K = X["cases_per_entry"]
         dr = dict(status="COMPLETE", n_entries=2 * n["receiver_entries_per_family"], n_messages=2 * n["receiver_entries_per_family"] * K, success=True)
         out = dict(directions={f"{q}_to_{f}": dr, f"{f}_to_{q}": dr}, selection={m: dict(complete=True, n=2 * n["core_per_family"]) for m in (q, f)})
@@ -350,83 +338,9 @@ class DryRun(unittest.TestCase):
                   dict(out, selection={m: dict(v, n=12) for m, v in out["selection"].items()})):
             self.assertEqual(ST.verdict(o, X), "INCOMPLETE", o)
         self.assertEqual(ST.verdict(dict(out, directions={k: dict(dr, success=k.startswith(q)) for k in out["directions"]}), X), "NOT MET")
-    def test_freeze_digest_r3(self):
+    def test_freeze_digest(self):
         import hashlib
         b = b"book"; h = hashlib.sha256(b).hexdigest()
         self.assertTrue(CF.digest_ok(b, h, h + "\n")[0]); self.assertFalse(CF.digest_ok(b, h, "0" * 64)[0]); self.assertFalse(CF.digest_ok(b + b"x", h, h)[0])
-
-class Rec(ST.Watchdog):
-    inst = []
-    def __init__(self, S, exit_fn=None, **kw):
-        super().__init__(S, exit_fn=exit_fn or (lambda: (_ for _ in ()).throw(SystemExit(3))), **kw); Rec.inst.append(self); self.done_at_cancel = None
-    def cancel(self): self.done_at_cancel = (self.S.dir / ".done").exists(); super().cancel()
-
-class WatchdogR4(unittest.TestCase):
-    _run = DryRun._run; _state = DryRun._state
-    def setUp(self):
-        DryRun.setUp(self); self.oldW, self.oldS = ST.Watchdog, ST.summarize; ST.Watchdog = Rec; Rec.inst = []
-    def tearDown(self):
-        ST.Watchdog, ST.summarize = self.oldW, self.oldS; DryRun.tearDown(self)
-    def test_armed_through_summary_and_finish(self):
-        seen = []
-        def summ(*a, **k): w = Rec.inst[-1]; seen.append((w.t.is_alive(), w.cancelled)); return self.oldS(*a, **k)
-        ST.summarize = summ; os.environ["E1C_GO"] = "D1"; self.assertIn(self._run("D1"), (None, 0))
-        self.assertEqual(seen, [(True, False)]); self.assertTrue(Rec.inst[-1].cancelled); self.assertTrue(Rec.inst[-1].done_at_cancel)
-    def test_expiry_during_finalisation(self):
-        def summ(*a, **k):
-            w = Rec.inst[-1]; w.t.cancel(); w.fire()     # deadline reached while the summary is being written
-        ST.summarize = summ; os.environ["E1C_GO"] = "D1"; self.assertEqual(self._run("D1"), 3)
-        d = ST.RES / "D1"; self.assertTrue((d / "BUDGET_EXHAUSTED").exists()); self.assertFalse((d / ".done").exists())
-        self.assertEqual(self._state()["attempts"][-1]["outcome"], "exit 3"); self.assertEqual(Rec.inst[-1].done_steps, ["marker", "ledger", "log"])
-        self.assertEqual(self._run("D1"), 18)
-        with self.assertRaises(SystemExit): AR.authorise("D1", "kernel_crash", 0.1, "x", res=ST.RES, cfg=self.cfg)
-
-class LedgerR4(unittest.TestCase):
-    def setUp(self):
-        self.tmp = Path(tempfile.mkdtemp()); self.oldR = ST.RES; ST.RES = self.tmp / "results"; ST.RES.mkdir()
-        self.cfg = load_cfg(); os.environ["E1B_ALLOW_NO_GPU"] = "1"
-    def tearDown(self): ST.RES = self.oldR; shutil.rmtree(self.tmp, ignore_errors=True)
-    def test_concurrent_saves_are_safe(self):
-        import threading
-        S = ST._stage("D1", 0.5, self.cfg); errs = []
-        def hammer():
-            try:
-                for _ in range(200): S.save_ledger()
-            except Exception as e: errs.append(e)
-        ts = [threading.Thread(target=hammer) for _ in range(4)]
-        for t in ts: t.start()
-        for t in ts: t.join()
-        self.assertEqual(errs, []); L = json.load(open(ST.RES / "budget_ledger.json")); self.assertIn("E1C_D1", L)
-        self.assertEqual(list(ST.RES.glob("*.tmp")), [])
-    def test_lock_timeout(self):
-        S = ST._stage("D1", 0.5, self.cfg); ST.LEDGER_LOCK.acquire()
-        try:
-            with self.assertRaises(TimeoutError): S.save_ledger(timeout=0.1)
-        finally: ST.LEDGER_LOCK.release()
-    def test_exit_independent_of_bookkeeping(self):
-        import types, time as _t, threading
-        hit = []
-        def boom(*a, **k): raise OSError("disk full")
-        S = types.SimpleNamespace(budget_s=0.05, used_s=lambda: 0.0, save_ledger=boom, dir=self.tmp / "missing" / "dir", name="D1", log=boom)
-        w = ST.Watchdog(S, exit_fn=lambda: hit.append("exit"), grace=0.3); _t.sleep(0.5)
-        self.assertEqual(hit, ["exit"]); self.assertEqual(w.done_steps, [])
-        ev = threading.Event(); hit2 = []
-        S2 = types.SimpleNamespace(budget_s=0.05, used_s=lambda: 0.0, save_ledger=lambda **k: ev.wait(), dir=self.tmp, name="D1", log=lambda *a, **k: None)
-        t0 = _t.time(); w2 = ST.Watchdog(S2, exit_fn=lambda: hit2.append(_t.time() - t0), grace=0.3); _t.sleep(0.8)
-        self.assertEqual(len(hit2), 1); self.assertLess(hit2[0], 0.7); self.assertEqual(w2.done_steps, ["marker"]); ev.set(); _t.sleep(0.1)
-        self.assertEqual(len(hit2), 1)                                   # exit happens exactly once
-    def test_ledger_at_cap_is_terminal(self):
-        os.environ["E1C_GO"] = "D1"; old = (ST.code_hash, ST.load_B); h = ST.code_hash(); ST.code_hash = lambda: h
-        pin = ROOT / "CODE_HASH.txt"; had = pin.read_text(); pin.write_text(h + "\n")
-        try:
-            json.dump({"E1C_D1": 0.5 * 3600}, open(ST.RES / "budget_ledger.json", "w"))
-            try: ST.run(self.cfg, "D1"); code = None
-            except SystemExit as e: code = e.code
-            self.assertEqual(code, 3); self.assertTrue((ST.RES / "D1" / "BUDGET_EXHAUSTED").exists())
-            (ST.RES / "D1" / "BUDGET_EXHAUSTED").unlink()
-            with self.assertRaises(SystemExit): AR.authorise("D1", "kernel_crash", 0.2, "x", res=ST.RES, cfg=self.cfg)
-            json.dump({}, open(ST.RES / "budget_ledger.json", "w"))
-            with self.assertRaises(SystemExit): AR.authorise("D1", "kernel_crash", 0.5, "x", res=ST.RES, cfg=self.cfg)
-        finally: ST.code_hash, ST.load_B = old; pin.write_text(had); os.environ.pop("E1C_GO", None)
 
 if __name__ == "__main__": unittest.main()
