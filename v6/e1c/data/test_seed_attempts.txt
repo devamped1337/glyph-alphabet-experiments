@@ -1,0 +1,4 @@
+93062: could not build load-bearing neighbour 2 for F2-0082
+93162: could not build load-bearing neighbour 2 for F2-7491
+93262: could not build load-bearing neighbour 2 for F2-1429
+93362: built
