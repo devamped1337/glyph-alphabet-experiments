@@ -50,7 +50,7 @@ If it succeeds, the supported claim is: *"on this registered task distribution, 
      - F2: `GIVER=<word> GIVER_RATE=<int> TAKER=<word> TAKER_RATE=<int>`
 
      with keys in this order, `<word>` = `[A-Za-z]+` (compared case-insensitively), `<int>` = `-?[0-9]+`, separated by spaces or tabs. Anything else is a format error and causes fallback: extra lines, explanations, extra or duplicate keys, units ("4 credits"), articles, punctuation.
-   - Up to 48 new tokens. Batch size is explicit: 8 on the production batching path, in D1 and T1 alike. There is no automatic switch: if D1's batch-1 check disagrees, T1 is ineligible until a batch-1 dev stage is added by amendment (§7, §8).
+   - Up to 48 new tokens. Batch size is explicit: 8 on the production batching path, in the dev stages and T1 alike. There is no automatic switch: if the qualifying dev stage's batch-1 check disagrees, T1 is ineligible until a batch-1 dev stage is added by amendment (§7, §8).
 3. **Deterministic acceptance.** The ID is accepted only if all three hold:
    - the pick is valid;
    - the dictionary resolve passes (ID, version and hash8);
@@ -101,7 +101,7 @@ E1c succeeds only if all four criteria pass in both directions. Anything else is
 |---|---|---|---|---|
 | **D1 dev pilot** | dev book: senders and verifier on 160 entries per model; receivers on 10 entries × 4 cases × 2 arms per direction | this week (after Stefan's go) | **0.5 GPU-h** | `E1C_GO=D1`, Stefan's explicit go; allowed while DRAFT |
 | **D2 dev pilot (A1)** | same as D1 (same dev book, sizes and protocol; reruns everything) | after review and Stefan's explicit go | **0.8 GPU-h** (from measured D1 timings, see AMENDMENT_E1c_A1) | `E1C_GO=D2`; D1 is closed (BUDGET_EXHAUSTED, kept as recorded); **D2 is the dev stage that qualifies T1** (§8 rules unchanged) |
-| **T1 TEST** | TEST book: 240 entries per direction | next week, after the Kaggle quota reset | **6.0 GPU-h** (placeholder; set from D1 at freeze, ≤ next week's quota) | `E1C_GO=T1`, Stefan's explicit go, `status=frozen`, TEST book sha pinned, and **D1 eligibility** (§8) checked in code |
+| **T1 TEST** | TEST book: 240 entries per direction | next week, after the Kaggle quota reset | **6.0 GPU-h** (placeholder; set from D2 at freeze (A1), ≤ next week's quota) | `E1C_GO=T1`, Stefan's explicit go, `status=frozen`, TEST book sha pinned, and **D2 eligibility** (§8; A1: D2 replaces D1) checked in code |
 
 **Rules for every stage:**
 - **Starts (r2, r3).** One start plus at most one **authorised infrastructure retry**, enforced through `results/<stage>/e1c_state.json`:
@@ -123,23 +123,25 @@ E1c succeeds only if all four criteria pass in both directions. Anything else is
     - Child exit codes: 3 = admission stop (BUDGET_EXHAUSTED), 8 = canary failure (CANARY_FAIL), 9 = no GPU (infra, GPU_PREFLIGHT_FAIL), anything else = `crash rc=N`.
     - After the child ends, the supervisor writes, in order: the ledger (monotonic elapsed time from the pre-launch record to child exit), the marker, `summary.json` + `.done` (when done), and **last** the attempt outcome. **Ledger scope (r6):** the charge covers the pre-launch record write and the child's whole run; the supervisor's post-run bookkeeping (typically well under 1 s) is reported separately as `finalise_s` in the attempt record (excluding the final state write itself) and is not charged. **Fail-closed:** if any write before the final state replace fails, the supervisor exits 70 and the attempt stays `running`, which is terminal (see Starts). Disclosed limitation: if the final state replace succeeds but the directory fsync after it fails, the supervisor exits 70 while the visible state may already say `done`, with uncertain crash durability; no further transactional machinery is added for this pilot.
     - **Completion (r6):** a stage counts as finished only when `.done` exists **and** the committed state records outcome `done` for the last attempt with no attempt `running`. `.done` alone (e.g. the final state write failed) is INCOMPLETE at start, refused by `authorise_retry`, and does not qualify T1.
-    - Precedence (r5, r6): terminal markers, then unresolved `running` attempts, then completion, both at start and in the T1 eligibility check; a D1 with any terminal marker never qualifies T1. `start` also refuses (exit 3) when the ledger shows the cap used.
+    - Precedence (r5, r6): terminal markers, then unresolved `running` attempts, then completion, both at start and in the T1 eligibility check; a qualifying dev stage (D2, A1) with any terminal marker never qualifies T1. `start` also refuses (exit 3) when the ledger shows the cap used.
     - Rows already written are kept. Not covered: Kaggle wall time before the supervisor starts (clone, pip install), which is outside the stage ledger and reported separately.
   - **Admission control (estimate-based, not a bound):** the child does not start a unit (model load + canaries, sender call, verifier chunk, receiver chunk, batch-1 check call) whose estimate would cross the deadline; it exits 3 and the supervisor records BUDGET_EXHAUSTED. Estimate = max(configured prior, 1.2 × longest observed); priors: load 420 s, sender call 10 s, verifier chunk 120 s, receiver chunk 240 s, check call 20 s.
 - There is a code-hash gate (`CODE_HASH.txt`, covering the e1c code, config, kernel runner and the E1b modules it imports).
 - Status is checked once, a few minutes after a push: no polling and no relaunch.
 
-**D1 time estimate** (from E1b B3/B3f/B3r logs): three loads with canaries about 750 s; senders 2 × 160 × 0.55 s ≈ 180 s; verifier about 240 s; batch-1 check about 100 s; receivers 2 × 40 messages × 2 arms ≈ 250 s. Total about 1,500 s ≈ 0.42 GPU-h, under the 0.5 h cap. If it runs slower, the guard stops it cleanly; nothing is shrunk.
+**D1 time estimate** (historical, from E1b B3/B3f/B3r logs; it proved too low, see A1 and `D1_REPORT.md`; D2's cap uses the measured D1 timings): three loads with canaries about 750 s; senders 2 × 160 × 0.55 s ≈ 180 s; verifier about 240 s; batch-1 check about 100 s; receivers 2 × 40 messages × 2 arms ≈ 250 s. Total about 1,500 s ≈ 0.42 GPU-h, under the 0.5 h cap. If it runs slower, the guard stops it cleanly; nothing is shrunk.
 
 **Load order** (both stages):
 1. Qwen: send and verify.
 2. Falcon: send and verify, then receive Qwen's messages.
 3. Qwen: receive Falcon's messages.
 
-D1 also runs a verifier batch-8 (production path) versus batch-1 identity check on 16 entries per model, budget-guarded. **Pre-declared rule (r3):** if any reply differs for either model, T1 is **not eligible**. A new dev stage (amendment, own cap and go) must re-measure the acceptance screen with the verifier at batch 1. The effective verifier batch is part of the protocol hash, so T1 always runs the configuration D1 qualified.
+Each dev stage (D1; under A1, D2) runs a verifier batch-8 (production path) versus batch-1 identity check on 16 entries per model, budget-guarded. **Pre-declared rule (r3):** if any reply differs for either model, T1 is **not eligible**. A new dev stage (amendment, own cap and go) must re-measure the acceptance screen with the verifier at batch 1. The effective verifier batch is part of the protocol hash, so T1 always runs the configuration the qualifying dev stage (D2) qualified.
 
-## 8. What D1 measures, the T1 eligibility rule and TEST sizing (pre-declared)
-**D1 reports** (descriptive; no E1c verdict):
+## 8. What the dev stage measures, the T1 eligibility rule and TEST sizing (pre-declared)
+A1: the qualifying dev stage is **D2** (same sizes and protocol as D1); D1 ended BUDGET_EXHAUSTED and is diagnostics only.
+
+**D2 (as D1) reports** (descriptive; no E1c verdict):
 - timing per step;
 - A10 parse paths;
 - verifier format rate;
@@ -151,17 +153,17 @@ D1 also runs a verifier batch-8 (production path) versus batch-1 identity check 
 **What 160 dev entries can and cannot show (r2, honest wording).**
 - The 2% rule is a **feasibility screen, not a demonstration**. Any rate interpretation assumes a binomial sampling model for the 160 generated, family-balanced dev entries per sender. They are generated by the registered builder, not drawn from a natural population. The screen passes if the observed rate is ≤ 2% for both senders, i.e. at most 3 wrong-and-accepted out of 160.
 - A rate ≤ 2% is shown (95% one-sided) only if the Clopper–Pearson upper bound is ≤ 2%, which needs **0 of 160** (upper bound about 1.86%). With 80 entries even 0 of 80 does not show it (about 3.7%), which is why dev was enlarged.
-- Whatever D1 shows, TEST measures the consequence directly: an accepted wrong pick **can** lower hybrid accuracy (a different rule need not change a particular scored answer), which is the primary endpoint, and the TEST wrong-pick-accepted count and bound are reported.
+- Whatever the dev stage shows, TEST measures the consequence directly: an accepted wrong pick **can** lower hybrid accuracy (a different rule need not change a particular scored answer), which is the primary endpoint, and the TEST wrong-pick-accepted count and bound are reported.
 
-**T1 eligibility (enforced in `stages.py:t1_eligibility` / `check_d1_summary`).** T1 refuses to start (exit 19) unless the recorded D1 summary shows all of these:
-1. D1 `.done`, with the **exact registered structure (r3)**: both registered directions and no others, each COMPLETE with 10 entries and 40 messages; both senders, each complete with exactly one selection row per entry (160); and both conformance records (16 entries each, all identical between batch 8 and batch 1);
+**T1 eligibility (enforced in `stages.py:t1_eligibility` / `check_d1_summary`).** T1 refuses to start (exit 19) unless the recorded **D2** summary (`t1_qualifying_dev_stage`, A1) shows all of these:
+1. D2 `.done` **and** a recorded `done` outcome with no terminal marker, with the **exact registered structure (r3)**: both registered directions and no others, each COMPLETE with 10 entries and 40 messages; both senders, each complete with exactly one selection row per entry (160); and both conformance records (16 entries each, all identical between batch 8 and batch 1);
 2. the screen passed (observed wrong-pick-accepted ≤ 2% for both senders);
-3. projected T1 GPU-h (D1 timings scaled to 240 entries per direction, both directions, plus 25% margin) ≤ the frozen T1 cap;
-4. **D1's protocol hash equals the current one.** The hash covers the sender prompt, the **actual configured** sender token limit and the A10 parser, plus the verifier prompt, format, grammar, token limit and **effective batch**, and the receiver batch size.
+3. projected T1 GPU-h (D2 timings scaled to 240 entries per direction, both directions, plus 25% margin) ≤ the frozen T1 cap;
+4. **D2's protocol hash equals the current one.** The hash covers the sender prompt, the **actual configured** sender token limit and the A10 parser, plus the verifier prompt, format, grammar, token limit and **effective batch**, and the receiver batch size.
 
 **Projection inputs (r3, r4).** These come from **persisted per-row latencies** (sender and verifier per entry; receiver per generated row, with a fallback counted once) plus the longest model load (with canaries) **from any attempt** (loads are persisted per attempt in `loads_attempt<n>.json`). This keeps a resumed attempt from underprojecting.
 
-Any dev-driven change to these invalidates D1. A new dev stage (D1b, with its own amendment, cap and go) is then needed; old measurements do not qualify a revised implementation. There is no override flag.
+Any dev-driven change to these invalidates the qualifying dev stage. A new dev stage (with with its own amendment, cap and go) is then needed; old measurements do not qualify a revised implementation. There is no override flag.
 
 **TEST size.** 240 entries per direction (fixed). If the eligibility rule fails, there is no TEST until a documented amendment.
 
@@ -169,10 +171,10 @@ Dev results may change only these things before freeze, each documented with a d
 - the verifier prompt or format;
 - the receiver batch size.
 
-The T1 cap may be set from D1 at freeze (it is not part of the protocol hash, and eligibility checks it). Thresholds, endpoints, families, candidate difficulty and models never change. After freeze there are **no outcome-driven changes**.
+The T1 cap may be set from D2 at freeze (A1) (it is not part of the protocol hash, and eligibility checks it). Thresholds, endpoints, families, candidate difficulty and models never change. After freeze there are **no outcome-driven changes**.
 
 ## 9. Freeze procedure (r2: two fixed, separate commits)
-1. D1 runs and is reported. Any dev-driven change, plus its new dev stage, goes in as an amendment.
+1. The qualifying dev stage (D2, A1) runs and is reported. Any dev-driven change, plus its new dev stage, goes in as an amendment.
 2. GPT/Grok review.
 3. **Registration commit**, tagged **`prereg-e1c`** (never moved): `status: frozen`, T1 cap set, `test_book_sha256: null`, no `book_test.json`. This fixes the code, protocol and analysis.
 4. On the box (CPU, no model), `tools/build_book.py test` builds the TEST book with the seed rule. That is the only time TEST data is generated.

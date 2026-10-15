@@ -1,5 +1,5 @@
 """E1c stages (PREREG_E1c §7). D1/D2 = dev pilots (allowed while DRAFT; dev book only, never TEST; A1: D1 is closed BUDGET_EXHAUSTED, D2 qualifies T1). T1 = TEST (needs
-e1c.status == frozen, the pinned TEST book, and a qualifying D1 summary for the SAME protocol). Both need
+e1c.status == frozen, the pinned TEST book, and a qualifying D2 summary (A1) for the SAME protocol). Both need
 E1C_GO == <stage> (set only on Stefan's explicit go), one start plus at most one AUTHORISED infrastructure retry,
 and room in the cumulative stage cap. Model calls reuse the frozen E1b code paths."""
 import os, sys, json, time, random, hashlib, inspect, math
@@ -102,7 +102,7 @@ def t1_eligibility(X, cfg):
     term = [m for m in TERMINAL if (dd / m).exists()]
     if term: return False, f"{dv} has terminal marker(s) {term}"     # r5: terminal markers take precedence over .done
     if not finished(dd): return False, f"{dv} has no recorded 'done' outcome"   # r6
-    if not p.exists(): return False, f"{dv} not finished"
+    if not (dd / ".done").exists() or not p.exists(): return False, f"{dv} not finished"   # explicit .done (GPT A1 r1)
     S = json.load(open(p)); ok, why = check_d1_summary(S, X, cfg)
     if not ok: return False, why
     z = S.get("sizing", {})

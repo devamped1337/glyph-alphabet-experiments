@@ -367,6 +367,12 @@ class Proc(unittest.TestCase):
         good = self.good_summary(); (d1 / "BUDGET_EXHAUSTED").unlink(); (d1 / ".done").write_text("x"); json.dump(good, open(d1 / "summary.json", "w"))
         json.dump(dict(attempts=[dict(n=1, outcome="done")]), open(d1 / "e1c_state.json", "w"))
         shutil.rmtree(self.d()); self.assertFalse(ST.t1_eligibility(self.cfg["e1c"], self.cfg)[0])
+    def test_t1_needs_done_marker(self):
+        """GPT A1 r1: a valid D2 summary and a recorded 'done' outcome without .done is not eligible."""
+        d = self.d(); d.mkdir(); json.dump(self.good_summary(), open(d / "summary.json", "w"))
+        json.dump(dict(attempts=[dict(n=1, outcome="done")], retry=None, cap_h=0.8), open(d / "e1c_state.json", "w"))
+        self.assertFalse(ST.t1_eligibility(self.cfg["e1c"], self.cfg)[0])
+        (d / ".done").write_text("x"); self.assertEqual(ST.t1_eligibility(self.cfg["e1c"], self.cfg), (True, "ok"))
     def test_log_field_relabelled(self):
         self.assertEqual(self.run_stage(), 0, self.out)
         st = [json.loads(l) for l in open(self.d() / "stage_log.jsonl") if json.loads(l)["ev"] == "start"][0]["env"]

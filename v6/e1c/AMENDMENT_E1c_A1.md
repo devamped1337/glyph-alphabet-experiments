@@ -8,12 +8,12 @@ The D1 cap (0.5 GPU-h) rested on an **assumed** time of about 0.42 h (≈ 1,500 
 
 ## 2. D1 stays as recorded
 - D1 is **terminal BUDGET_EXHAUSTED** (attempt 1, outcome `budget_admission`, 0.388 GPU-h). Nothing in `results/D1/` is edited, re-run, retried or reinterpreted. `closed_stages: ["D1"]` makes the supervisor refuse any further D1 start (exit 20).
-- D1's partial results (both selection sets complete; Qwen→Falcon exchange; no Falcon→Qwen) are **diagnostics only**. They gate nothing, are not pooled with D2, and are not used for T1 eligibility or sizing. The only use of D1 in this amendment is its **timings**, to set D2's cap.
+- D1's partial results (both selection sets complete; Qwen→Falcon exchange; no Falcon→Qwen) are **diagnostics only**. They gate nothing, are not pooled with D2, and are not used for T1 eligibility or sizing. D1 is used in this amendment only for its **timings** (to set D2's cap) and, after D2, for the descriptive, non-gating reproducibility comparison in §4.
 
 ## 3. D2: a dev stage that uses measured times
 **Same as D1:** protocol and protocol hash, dev book (sha pinned), sizes (160 selection entries per sender, 10 receiver entries per direction × 4 cases × 2 arms), verifier batch-1 check, admission guard, supervisor, retry rules, outputs. Only the name, the cap and the load-order rationale change.
 
-**Load order.** D2 keeps the registered sequential order Qwen (send + verify + check) → Falcon (send + verify + check, receive Qwen→Falcon) → Qwen (receive Falcon→Qwen). Three loads is the **minimum for one model on the GPU at a time**: each model's receiver role depends on the *other* model's sender output, so "each model loaded once" requires both 7B models resident together on the 15 GB T4. Two NF4 7B models (≈ 5–6 GB each plus KV cache and batch-8 activations) might fit, but that was **never measured**, and an OOM would be a new failure mode. Taking the lesson of D1 ("measure, don't assume"), D2 uses the order whose every segment was measured in D1. Co-residency is noted as a possible later saving, only after it has been measured.
+**Load order.** D2 keeps the registered sequential order Qwen (send + verify + check) → Falcon (send + verify + check, receive Qwen→Falcon) → Qwen (receive Falcon→Qwen). Three loads is the **minimum for one model on the GPU at a time**: each model's receiver role depends on the *other* model's sender output, so "each model loaded once" requires both 7B models resident together on the 15 GB T4. Two NF4 7B models (≈ 5–6 GB each plus KV cache and batch-8 activations) might fit, but that was **never measured**, and an OOM would be a new failure mode. Taking the lesson of D1 ("measure, don't assume"), D2 uses the order whose segments were measured in D1: six directly, and the two not reached (third Qwen load, Qwen receiver) estimated from their measured counterparts (disclosed below). Co-residency is noted as a possible later saving, only after it has been measured.
 
 **Measured D1 segments**, the figures Grok cites (loads ≈ 600 s for two models: 310 + 290; send + verify 224–270 s per model) (seconds from the attempt start, `results/D1/stage_log.jsonl`):
 
@@ -28,10 +28,10 @@ The D1 cap (0.5 GPU-h) rested on an **assumed** time of about 0.42 h (≈ 1,500 
 | *not reached:* Qwen load + canaries | 310 (= the measured Qwen load) |
 | *not reached:* Qwen receives Falcon→Qwen | 273 (= the measured mirror segment) |
 | Summary and finalisation | ≈ 10 |
-| **Estimate** | **1,980 s = 0.55 GPU-h** |
+| **Estimate** | **1,980 s = 0.55 GPU-h** (1,387 s measured directly incl. start-up + 583 s from measured counterparts + ≈ 10 s summary) |
 
 **Cap: 0.8 GPU-h = 2,880 s**, i.e. 900 s (45%) above the estimate. Checks:
-- if all three loads take the 420 s admission prior instead of ≈ 300 s (+330 s) **and** all generation is 25% slower (+260 s): 2,570 s, still under 2,880 s;
+- if all three loads take the 420 s admission prior instead of 310 + 290 + 310 s (+350 s) **and** all 1,040 s of generation is 25% slower (+260 s): 2,590 s, still 290 s under 2,880 s (corrected per GPT A1 r1);
 - at the third load the admission guard would see ≈ 1,400 s used + 420 s, about 1,000 s below the deadline;
 - two of the eight segments are not measured directly (the third Qwen load, likely faster with a warm cache, and the Qwen receiver); both are taken at their measured counterparts.
 
@@ -54,5 +54,6 @@ D1's `start` log line showed `code_hash 77eceb53…`. That field comes from the 
 ## 7. Code and tests
 - `config_e1c.json`: `caps_h.D2 = 0.8`, `dev_stages`, `closed_stages = ["D1"]`, `t1_qualifying_dev_stage = "D2"`, `amendment_A1`.
 - `stages.py`: `is_dev()` replaces `name == "D1"`; `t1_eligibility` reads the qualifying stage; `ChildStage.log` relabels the hash. `supervisor.py`: closed-stage refusal (exit 20).
-- Tests (42 OK, from 40): the stage tests now run D2. `test_D1_closed_and_D2_qualifies`: D1 start refused (20); D1's terminal marker does not block D2; a "good" D1 summary qualifies nothing. Plus `test_log_field_relabelled`. E1b suite unchanged (112 OK).
+- `t1_eligibility` keeps the explicit `.done` check on the qualifying stage (GPT A1 r1).
+- Tests (43 OK, from 40): the stage tests now run D2. `test_D1_closed_and_D2_qualifies`: D1 start refused (20); D1's terminal marker does not block D2; a "good" D1 summary qualifies nothing. Plus `test_log_field_relabelled`, and `test_t1_needs_done_marker` (valid D2 summary and recorded `done`, but no `.done` → not eligible). E1b suite unchanged (112 OK).
 - Kernel `glyph-kaggle/e1c_D2` prepared, **not pushed**, `E1C_COMMIT = "SET_ME"` with a guarding assert.
