@@ -1,6 +1,6 @@
 # PREREG E1c: verified ID with prose fallback, both directions (DRAFT, NOT FROZEN)
 
-Status: **DRAFT, r2** (GPT r1 fixes applied; see §11). No E1c TEST data exists. The TEST book is not built and refuses to build until `e1c.status == "frozen"`.
+Status: **DRAFT, r3** (GPT r1 and r2 fixes applied; see §11). No E1c TEST data exists. The TEST book is not built and refuses to build until `e1c.status == "frozen"`.
 Design input: `v6/e1b/reviews/gpt_E1c_design.md` (GPT memo), plus Stefan/Grok steering (2026-10-15).
 E1c is a new, separate pre-registered study. It does not change any E1b result. The E1b A9 primary stays **POC FAILED**. The A10 B3r secondary result stays **INCONCLUSIVE**.
 
@@ -33,7 +33,7 @@ If it succeeds, the supported claim is: *"on this registered task distribution, 
   - (d) new **neighbours** are not text-checked: a new distractor may coincide with any old rule text (true rule or neighbour), and a new core entry may coincide with an old *neighbour* text.
   - "Old true-rule texts" are every non-neighbour entry of the E1b books, but for the E1c dev book only its 160 E1c core entries (the only true rules any model sees in D1). The dev book's other builder groups are never shown to a model in E1c.
   - Why the relaxations: the F2 rule space is small. With every old text forbidden, 0 of 10 throwaway seeds built a TEST-size book. With (c)/(d) and the full dev-book forbid list, 0 of 10 still built once dev grew to 80 per family. With the dev forbid limited to its E1c core, 3 of 10 built, so the seed rule is expected to fire for TEST.
-  - Consequence for freshness: every TEST true rule and every TEST case is new to E1c and E1b. A TEST distractor, or a TEST true rule, can textually equal a rule that earlier appeared only as a distractor. The models are stateless (no training, no memory across calls), so this is not exposure; it is disclosed, and the overlap can be counted from the committed books.
+  - Consequence for freshness (r3 wording): TEST true rules exclude the specified earlier **true-rule** texts, and TEST cases are fresh under checks (a)–(b). A TEST true rule or distractor may repeat the text of an earlier *distractor*, so that text is not historically unseen. Stateless inference only means no conversational context carries over between calls. The overlap can be counted from the committed books.
 - **Distinct core rules.** No two E1c core entries may state the same rule.
   - Why: the E1b builder can emit duplicates. The E1b A9 book has two duplicate F2 core pairs, which is disclosed as an E1b finding.
   - How: books build 2n core entries per family. The E1c core is the first n entries in build order whose rule text is new.
@@ -68,7 +68,7 @@ If it succeeds, the supported claim is: *"on this registered task distribution, 
 ## 5. Primary endpoint (TEST, per direction)
 - **Per-entry difference.** d_e = mean over 4 cases of hybrid correct − prose correct, using the true entry's cases. The point estimate is the mean of d_e over the 240 entries.
 - **CI.** A 95% CI from a **paired bootstrap stratified by family and clustered by entry**: resample entries with replacement within F1 and within F2. It uses 2,000 resamples and a frozen seed (`seed_of(seeds.test.bootstrap, direction)`).
-- **Completeness first (r2).** Before any result, each direction's rows must equal the assignment exactly: all 240 assigned entries (120 per family), each entry's 4 registered cases (by text), each case in both arms exactly once, gold equal to the registered gold, no extra or duplicate rows, and a selection row for every assigned entry. Otherwise that direction is **INCOMPLETE** and the study verdict is INCOMPLETE, never SUCCESS.
+- **Completeness first (r2).** Before any result, each direction's rows must equal the assignment exactly: all 240 assigned entries (120 per family), each entry's 4 registered cases (by text), each case in both arms exactly once, gold equal to the registered gold, no extra or duplicate rows, and a selection row for every assigned entry. Otherwise that direction is **INCOMPLETE** and the study verdict is INCOMPLETE, never SUCCESS. The sender's selection file must hold exactly one row per assigned entry (r3). The T1 verdict also needs exactly both registered directions and both senders at the registered sizes.
 - **Percentile convention.** Sorted statistics s[0..1999]: lower = s[50], upper = s[1949].
 - **Label rule** (E1b A1.2, CI only, mutually exclusive):
   - lower bound > −0.05: non-inferior;
@@ -103,14 +103,18 @@ E1c succeeds only if all four criteria pass in both directions. Anything else is
 | **T1 TEST** | TEST book: 240 entries per direction | next week, after the Kaggle quota reset | **6.0 GPU-h** (placeholder; set from D1 at freeze, ≤ next week's quota) | `E1C_GO=T1`, Stefan's explicit go, `status=frozen`, TEST book sha pinned, and **D1 eligibility** (§8) checked in code |
 
 **Rules for every stage:**
-- **Starts (r2).** One start plus at most one **authorised infrastructure retry**, enforced through `results/<stage>/e1c_state.json`:
+- **Starts (r2, r3).** One start plus at most one **authorised infrastructure retry**, enforced through `results/<stage>/e1c_state.json`:
   - every start appends an attempt record (kind, code hash, outcome: running / done / exit code / crash type);
   - a second start is allowed only if the state carries a retry authorisation written by `tools/authorise_retry.py` after the failed attempt's Kaggle log has been read. The reason must be one of `no_gpu`, `install_or_network`, `kernel_crash`, `oom_at_load`. The authorisation records the GPU-h already used (charged_h);
   - there is never a retry after `.done`, BUDGET_EXHAUSTED, CANARY_FAIL or ATTEMPT_INCOMPLETE (these are terminal), and never a third start;
   - **GPU_PREFLIGHT_FAIL** (no CUDA device) is an infrastructure failure, **not** terminal. It permits the retry only with reason `no_gpu`; this resolves the r1 conflict;
+  - **reason consistency (r3):** the reason must match the recorded failure. A GPU_PREFLIGHT_FAIL marker or `exit 9` means `no_gpu`, and `no_gpu` needs one of them. `crash <type>` or a run killed while `running` means `install_or_network`, `kernel_crash` or `oom_at_load`. Any other `exit N` (budget, canary, gate) is refused. If no results came back, attempt 1 is recorded by hand as "manual: from Kaggle log" with one of the non-GPU reasons. A note citing the log is mandatory. charged_h must be finite, > 0 and ≤ the stage cap;
+  - **resume binding (r3):** if attempt 1 left selection or exchange rows, the retry refuses (ATTEMPT_INCOMPLETE) unless attempt 1's recorded code hash and protocol hash equal the current ones. Reused rows therefore always come from the qualified protocol;
   - the retry kernel overlays `v6/e1c/results` from a pinned commit (`E1C_RESULTS_COMMIT`), so the attempt history and ledger travel with it.
 - **Cumulative budget.** The stage cap covers both attempts: ledger value = max(recorded ledger, charged_h).
-- **In-flight guard (r2).** The cap is a hard cap including work in flight. Before any unit starts (model load + canaries, sender call, verifier chunk, receiver chunk, batch-1 check call), the run stops with BUDGET_EXHAUSTED if used time + that unit's estimate would exceed the cap. Estimate = max(configured prior, 1.2 × longest observed); priors: load 420 s, sender call 10 s, verifier chunk 120 s, receiver chunk 240 s, check call 20 s.
+- **Budget enforcement (r3).** Two layers.
+  - **Deadline (enforced):** a watchdog fires when cumulative stage time reaches the cap, whatever is in flight. It saves the ledger, writes BUDGET_EXHAUSTED and hard-exits (code 3). The overrun is bounded by termination latency (seconds), and rows already written are kept. Not covered: Kaggle wall time before the stage starts (clone, pip install), which is outside the stage ledger and reported separately from the Kaggle run time.
+  - **Admission control (estimate-based, not a bound):** before any unit starts (model load + canaries, sender call, verifier chunk, receiver chunk, batch-1 check call), the run stops with BUDGET_EXHAUSTED if used time + that unit's estimate would exceed the cap. Estimate = max(configured prior, 1.2 × longest observed); priors: load 420 s, sender call 10 s, verifier chunk 120 s, receiver chunk 240 s, check call 20 s.
 - There is a code-hash gate (`CODE_HASH.txt`, covering the e1c code, config, kernel runner and the E1b modules it imports).
 - Status is checked once, a few minutes after a push: no polling and no relaunch.
 
@@ -121,7 +125,7 @@ E1c succeeds only if all four criteria pass in both directions. Anything else is
 2. Falcon: send and verify, then receive Qwen's messages.
 3. Qwen: receive Falcon's messages.
 
-D1 also runs a verifier batch-8 (production path) versus batch-1 identity check on 16 entries per model, budget-guarded. **Pre-declared rule:** if any reply differs for either model, T1 runs the verifier at batch 1 (the reference path) and the projection uses batch-1 timing.
+D1 also runs a verifier batch-8 (production path) versus batch-1 identity check on 16 entries per model, budget-guarded. **Pre-declared rule (r3):** if any reply differs for either model, T1 is **not eligible**. A new dev stage (amendment, own cap and go) must re-measure the acceptance screen with the verifier at batch 1. The effective verifier batch is part of the protocol hash, so T1 always runs the configuration D1 qualified.
 
 ## 8. What D1 measures, the T1 eligibility rule and TEST sizing (pre-declared)
 **D1 reports** (descriptive; no E1c verdict):
@@ -134,15 +138,17 @@ D1 also runs a verifier batch-8 (production path) versus batch-1 identity check 
 - descriptive hybrid-versus-prose results on the 10-entry receiver subset (completeness-checked like TEST).
 
 **What 160 dev entries can and cannot show (r2, honest wording).**
-- The 2% rule is a **feasibility screen, not a demonstration**. The screen passes if the observed rate is ≤ 2% for both senders, i.e. at most 3 wrong-and-accepted out of 160.
-- A rate ≤ 2% is shown (95% one-sided) only if the Clopper–Pearson upper bound is ≤ 2%, which needs **0 of 160** (upper bound 1.9%). With 80 entries even 0 of 80 does not show it (3.7%), which is why dev was enlarged.
-- Whatever D1 shows, TEST measures the consequence directly: an accepted wrong pick lowers hybrid accuracy, which is the primary endpoint, and the TEST wrong-pick-accepted count and bound are reported.
+- The 2% rule is a **feasibility screen, not a demonstration**. Any rate interpretation assumes a binomial sampling model for the 160 generated, family-balanced dev entries per sender. They are generated by the registered builder, not drawn from a natural population. The screen passes if the observed rate is ≤ 2% for both senders, i.e. at most 3 wrong-and-accepted out of 160.
+- A rate ≤ 2% is shown (95% one-sided) only if the Clopper–Pearson upper bound is ≤ 2%, which needs **0 of 160** (upper bound about 1.86%). With 80 entries even 0 of 80 does not show it (about 3.7%), which is why dev was enlarged.
+- Whatever D1 shows, TEST measures the consequence directly: an accepted wrong pick **can** lower hybrid accuracy (a different rule need not change a particular scored answer), which is the primary endpoint, and the TEST wrong-pick-accepted count and bound are reported.
 
-**T1 eligibility (enforced in `stages.py:t1_eligibility`).** T1 refuses to start (exit 19) unless the recorded D1 summary shows all of these:
-1. D1 `.done`; both directions COMPLETE; both selections complete;
+**T1 eligibility (enforced in `stages.py:t1_eligibility` / `check_d1_summary`).** T1 refuses to start (exit 19) unless the recorded D1 summary shows all of these:
+1. D1 `.done`, with the **exact registered structure (r3)**: both registered directions and no others, each COMPLETE with 10 entries and 40 messages; both senders, each complete with exactly one selection row per entry (160); and both conformance records (16 entries each, all identical between batch 8 and batch 1);
 2. the screen passed (observed wrong-pick-accepted ≤ 2% for both senders);
 3. projected T1 GPU-h (D1 timings scaled to 240 entries per direction, both directions, plus 25% margin) ≤ the frozen T1 cap;
-4. **D1's protocol hash equals the current one.** The hash covers the sender prompt, token limit and A10 parser, plus the verifier prompt, format, grammar and token limit, and the receiver batch size.
+4. **D1's protocol hash equals the current one.** The hash covers the sender prompt, the **actual configured** sender token limit and the A10 parser, plus the verifier prompt, format, grammar, token limit and **effective batch**, and the receiver batch size.
+
+**Projection inputs (r3).** These come from **persisted per-row latencies** (sender and verifier per entry; receiver per generated row, with a fallback counted once) plus the longest observed load. This keeps a resumed attempt from underprojecting.
 
 Any dev-driven change to these invalidates D1. A new dev stage (D1b, with its own amendment, cap and go) is then needed; old measurements do not qualify a revised implementation. There is no override flag.
 
@@ -183,3 +189,14 @@ The T1 cap may be set from D1 at freeze (it is not part of the protocol hash, an
 8. Freshness wording equals the code, with cross-kind tests (§3).
 9. Two fixed tags and the allowed execution diff, checked by a tool (§9).
 - Also: dev enlarged to 160 per sender and the 2% gate reworded as a screen (§8).
+
+**r3 changes (GPT r2):**
+1. Selection rows are validated raw: exactly one per entry, no duplicates or extras, else INCOMPLETE (§5).
+2. The protocol hash uses the actual sender token limit and the effective verifier batch. A batch-1/batch-8 disagreement makes T1 ineligible until a batch-1 dev stage runs (§7, §8).
+3. Retry reason must be consistent with the recorded failure; charged_h finite and ≤ cap; mandatory log note; resume bound to the same code and protocol hash (§7).
+4. Verifier grammar uses ASCII `[0-9]` (no Unicode digits) (§4).
+5. Enforced deadline watchdog plus estimate-based admission control, stated honestly (§7).
+6. New, blocking: sizing from persisted per-row latencies, valid after a resume (§8).
+7. New, blocking: exact D1 summary and T1 verdict structure required (both directions, both senders, sizes, conformance) (§5, §8).
+8. Minor: freshness wording (§3); dev-power sampling assumption, "can lower", and the 1.86% bound (§8).
+9. Optional: `check_freeze.py` also verifies that the registration commit has no TEST book and that the execution book digest matches both pins.

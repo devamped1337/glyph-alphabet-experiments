@@ -24,11 +24,20 @@ def cfg_diff_ok(a, b):
 def files_ok(changed):
     bad = sorted(set(changed) - ALLOWED); return (not bad), (f"disallowed files changed: {bad}" if bad else "ok")
 
+def digest_ok(book_bytes, cfg_pin, sha_file_text):
+    """r3 (optional): the execution commit's TEST book digest equals both pins."""
+    import hashlib
+    h = hashlib.sha256(book_bytes).hexdigest(); return (h == cfg_pin == sha_file_text.strip()), h
+
 def main(reg, exe):
     g = lambda *a: subprocess.check_output(["git", *a], text=True)
     if subprocess.run(["git", "merge-base", "--is-ancestor", reg, exe]).returncode: raise SystemExit("execution tag is not a descendant of the registration tag")
     ok1, w1 = files_ok([l for l in g("diff", "--name-only", reg, exe).splitlines() if l])
     ok2, w2 = cfg_diff_ok(json.loads(g("show", f"{reg}:v6/e1c/config_e1c.json")), json.loads(g("show", f"{exe}:v6/e1c/config_e1c.json")))
-    print(w1, w2); sys.exit(0 if ok1 and ok2 else 1)
+    no_book = subprocess.run(["git", "cat-file", "-e", f"{reg}:v6/e1c/data/book_test.json"]).returncode != 0
+    raw = subprocess.check_output(["git", "show", f"{exe}:v6/e1c/data/book_test.json"])
+    ok3, h = digest_ok(raw, json.loads(g("show", f"{exe}:v6/e1c/config_e1c.json"))["test_book_sha256"], g("show", f"{exe}:v6/e1c/data/book_test.sha256"))
+    print(w1, w2, "registration has no TEST book" if no_book else "REGISTRATION CONTAINS A TEST BOOK", "digest ok" if ok3 else f"digest mismatch {h}")
+    sys.exit(0 if ok1 and ok2 and no_book and ok3 else 1)
 
 if __name__ == "__main__": main(sys.argv[1], sys.argv[2])

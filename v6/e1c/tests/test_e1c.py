@@ -83,6 +83,7 @@ class Verifier(unittest.TestCase):
                re.sub(r"GIVER_RATE=(\d+)", r"GIVER_RATE=\1 credits", ok), ok.replace("GIVER=", "GIVER=the "),
                " ".join(reversed(ok.split())), ok.replace("GIVER=", "GIVER=GIVER="), "GIVER=a GIVER=b GIVER_RATE=1 TAKER=c TAKER_RATE=2",
                "GROUP=x MEMBER=3 NONMEMBER=5"]
+        bad += [re.sub(r"GIVER_RATE=(\d+)", "GIVER_RATE=\u0664", ok), re.sub(r"TAKER_RATE=(\d+)", "TAKER_RATE=\uff13", ok)]   # r3: Arabic-Indic / fullwidth digits
         for t in bad: self.assertEqual(V.parse_spec("F2", t), (None, "format"), t)
         self.assertEqual(V.parse_spec("F1", "GROUP=Gold MEMBER=three NONMEMBER=5"), (None, "format"))
         self.assertEqual(V.parse_spec("F1", "GROUP=Gold MEMBER=-3 NONMEMBER=5")[0], dict(GROUP="gold", MEMBER=-3, NONMEMBER=5))
@@ -116,20 +117,21 @@ class Analysis(unittest.TestCase):
         assigned = ["a", "b"]; fams = dict(a="F1", b="F2")
         cases = {e: [dict(text=f"{e}{i}", gold=str(i)) for i in range(4)] for e in assigned}
         B = dict(entries=dict(a=dict(id="a", fam="F1", ver=1, hash="0" * 8, text="x"), b=dict(id="b", fam="F2", ver=1, hash="0" * 8, text="y")), neighbours=dict(a=[], b=[]))
-        sel = {e: dict(accepted=True, correct=True) for e in assigned}; crit = load_cfg()["e1c"]["criteria"]
-        good = A.direction_result(_rows(assigned, cases, fams), sel, B, crit, 1, assigned, cases); self.assertEqual(good["status"], "COMPLETE")
+        sel = [dict(entry=e, accepted=True, correct=True) for e in assigned]; crit = load_cfg()["e1c"]["criteria"]
+        good = A.direction_result(_rows(assigned, cases, fams), sel, B, crit, 1, assigned, cases, assigned); self.assertEqual(good["status"], "COMPLETE")
         for rows in (_rows(assigned, cases, fams, drop=("a", "a0", "hybrid")), _rows(assigned, cases, fams, dup=True),
                      _rows(assigned, cases, fams, gold_off=("b", "b1")), _rows(["a"], cases, fams),
                      _rows(assigned, cases, fams) + [dict(_rows(["a"], cases, fams)[0], case="zz")]):
-            r = A.direction_result(rows, sel, B, crit, 1, assigned, cases); self.assertEqual(r["status"], "INCOMPLETE"); self.assertFalse(r["success"])
-        out = dict(directions=dict(x=good, y=dict(status="INCOMPLETE", success=False)), selection=dict(q=dict(complete=True)))
-        self.assertEqual(ST.verdict(out), "INCOMPLETE")
-        out["directions"]["y"] = good; out["selection"]["q"]["complete"] = False; self.assertEqual(ST.verdict(out), "INCOMPLETE")
+            r = A.direction_result(rows, sel, B, crit, 1, assigned, cases, assigned); self.assertEqual(r["status"], "INCOMPLETE"); self.assertFalse(r["success"])
+        # r3 (GPT r2 #1): duplicate / missing / extra SELECTION rows -> INCOMPLETE
+        for sr in (sel + [sel[0]], sel[:1], sel + [dict(entry="zz", accepted=True, correct=True)]):
+            r = A.direction_result(_rows(assigned, cases, fams), sr, B, crit, 1, assigned, cases, assigned); self.assertEqual(r["status"], "INCOMPLETE", sr)
+        r = A.direction_result(_rows(assigned, cases, fams), sel, B, crit, 1, assigned, cases, ["a"]); self.assertEqual(r["status"], "INCOMPLETE")
     def test_byte_unit_r2(self):
         """r2 (GPT r1 #7): message = one case exchange; saving on payload; break-even in the same unit."""
         assigned = ["a"]; fams = dict(a="F1"); cases = dict(a=[dict(text=f"a{i}", gold="1") for i in range(4)])
         B = dict(entries=dict(a=dict(id="a", fam="F1", ver=1, hash="0" * 8, text="x" * 88)), neighbours=dict(a=[]))
-        r = A.direction_result(_rows(assigned, cases, fams), dict(a=dict(accepted=True, correct=True)), B, load_cfg()["e1c"]["criteria"], 1, assigned, cases)
+        r = A.direction_result(_rows(assigned, cases, fams), [dict(entry="a", accepted=True, correct=True)], B, load_cfg()["e1c"]["criteria"], 1, assigned, cases, assigned)
         self.assertEqual(r["n_messages"], 4); self.assertAlmostEqual(r["payload_saving"], 0.9); self.assertEqual(r["payload_saving_per_message"], 90)
         db = len((framed_id(B["entries"]["a"]) + " " + "x" * 88 + "\n").encode()); self.assertEqual(r["dict_bytes"], db); self.assertAlmostEqual(r["breakeven_messages"], db / 90)
         self.assertIn("sender-local", r["byte_boundary"])
@@ -209,7 +211,7 @@ class DryRun(unittest.TestCase):
             for x in fb:
                 tw = [y for y in rows if y["cond"] == "prose" and y["case"] == x["case"]][0]
                 self.assertEqual((x["payload_bytes"], x["pred"], x["shared_n"]), (tw["payload_bytes"], tw["pred"], 2))
-        self.assertIn("sizing", S); self.assertNotIn("verdict", S); self.assertEqual(S["protocol_hash"], ST.protocol_hash(self.cfg["e1c"]))
+        self.assertIn("sizing", S); self.assertNotIn("verdict", S); self.assertEqual(S["protocol_hash"], ST.protocol_hash(self.cfg["e1c"], self.cfg))
         self.assertEqual(self._state()["attempts"][-1]["outcome"], "done"); self.assertEqual(self._run("D1"), 0)
     def test_wrong_accepted_pick_scored_on_true_case_r2(self):
         """r2 (GPT r1 #4): an ACCEPTED wrong neighbour sends the neighbour's rule, but both arms use the TRUE entry's
@@ -233,39 +235,98 @@ class DryRun(unittest.TestCase):
         os.environ["E1C_GO"] = "D1"; self._run("D1")
         self.assertTrue(self.fakes and all(max(f.bsz) <= 8 for f in self.fakes if f.bsz))
         S = json.load(open(ST.RES / "D1" / "summary.json")); self.assertEqual(set(S["verifier_b1_check"]), {"qwen7b", "falcon7b"})
-        self.assertEqual(S["sizing"]["t1_verifier_batch"], 8 if all(v["identical"] == v["n"] for v in S["verifier_b1_check"].values()) else 1)
+        self.assertEqual(S["verifier_batch_size"], 8)
     def test_inflight_guard_r2(self):
         os.environ["E1C_GO"] = "D1"; c = copy.deepcopy(self.cfg); c["e1c"]["caps_h"]["D1"] = 0.05   # 180 s < 420 s load estimate
         self.assertEqual(self._run("D1", c), 3); self.assertTrue((ST.RES / "D1" / "BUDGET_EXHAUSTED").exists()); self.assertEqual(len(self.fakes), 0)
         self.assertEqual(self._run("D1", c), 18)
     def test_retry_rules_r2(self):
-        """r2 (GPT r1 #3): second start only with an authorised infrastructure reason; cumulative budget; never a third."""
+        """r2/r3 (GPT r1 #3, r2 #3): second start only with an authorised reason CONSISTENT with the recorded failure;
+        finite charged_h <= cap; cumulative budget; never a third start."""
         os.environ["E1C_GO"] = "D1"; d = ST.RES / "D1"; d.mkdir()
         json.dump(dict(attempts=[dict(n=1, kind="first", outcome="running")], retry=None, cap_h=0.5), open(d / "e1c_state.json", "w"))
         self.assertEqual(self._run("D1"), 17); (d / "ATTEMPT_INCOMPLETE").unlink()
-        with self.assertRaises(SystemExit): AR.authorise("D1", "bad_result", 0.1, "x", res=ST.RES, cfg=self.cfg)
-        with self.assertRaises(SystemExit): AR.authorise("D1", "no_gpu", 0, "x", res=ST.RES, cfg=self.cfg)
-        (d / "GPU_PREFLIGHT_FAIL").write_text("no CUDA\n"); AR.authorise("D1", "no_gpu", 0.1, "T4 not attached", res=ST.RES, cfg=self.cfg)
-        with self.assertRaises(SystemExit): AR.authorise("D1", "no_gpu", 0.1, "again", res=ST.RES, cfg=self.cfg)
+        au = lambda *a: AR.authorise("D1", *a, res=ST.RES, cfg=self.cfg)
+        for args in (("bad_result", 0.1, "x"), ("no_gpu", 0, "x"), ("no_gpu", float("nan"), "x"), ("no_gpu", float("inf"), "x"), ("no_gpu", 0.6, "x"), ("no_gpu", 0.1, " ")):
+            with self.assertRaises(SystemExit, msg=args): au(*args)
+        (d / "GPU_PREFLIGHT_FAIL").write_text("no CUDA\n")
+        with self.assertRaises(SystemExit): au("kernel_crash", 0.1, "log says no GPU")      # inconsistent with the marker
+        au("no_gpu", 0.1, "T4 not attached (log line 3)")
+        with self.assertRaises(SystemExit): au("no_gpu", 0.1, "again")
         self.assertIn(self._run("D1"), (None, 0))
         st = self._state(); self.assertEqual([a["kind"] for a in st["attempts"]], ["first", "infra_retry"]); self.assertEqual(st["attempts"][-1]["outcome"], "done")
         self.assertGreaterEqual(json.load(open(ST.RES / "budget_ledger.json"))["E1C_D1"], 360); self.assertTrue((d / "GPU_PREFLIGHT_FAIL.attempt1").exists())
         (d / ".done").unlink(); self.assertEqual(self._run("D1"), 17)
+    def test_retry_reason_consistency_r3(self):
+        self.assertEqual(AR.allowed_reasons("exit 9", False), {"no_gpu"}); self.assertEqual(AR.allowed_reasons("exit 3", False), set())
+        self.assertEqual(AR.allowed_reasons("exit 8", False), set()); self.assertNotIn("no_gpu", AR.allowed_reasons("crash RuntimeError", False))
+        self.assertNotIn("no_gpu", AR.allowed_reasons("running", False)); self.assertEqual(AR.allowed_reasons("running", True), {"no_gpu"})
+        d = ST.RES / "D1"; d.mkdir(); json.dump(dict(attempts=[dict(n=1, outcome="exit 19")], retry=None, cap_h=0.5), open(d / "e1c_state.json", "w"))
+        with self.assertRaises(SystemExit): AR.authorise("D1", "kernel_crash", 0.1, "x", res=ST.RES, cfg=self.cfg)
+    def test_resume_bound_to_protocol_r3(self):
+        """r3 (GPT r2 #3): attempt-1 rows from a different code/protocol cannot be resumed."""
+        os.environ["E1C_GO"] = "D1"; d = ST.RES / "D1"; d.mkdir(); (d / "select_qwen7b.jsonl").write_text("")
+        json.dump(dict(attempts=[dict(n=1, kind="first", outcome="crash RuntimeError", code_hash="old", protocol_hash="old")], retry=None, cap_h=0.5), open(d / "e1c_state.json", "w"))
+        AR.authorise("D1", "kernel_crash", 0.1, "CUDA error in log", res=ST.RES, cfg=self.cfg)
+        self.assertEqual(self._run("D1"), 17); self.assertIn("different code/protocol", (d / "ATTEMPT_INCOMPLETE").read_text())
+    def test_resumed_sizing_uses_persisted_latencies_r3(self):
+        """r3 (GPT r2 new #1): unit costs come from persisted per-row latencies, so a resumed attempt does not underproject."""
+        sel = dict(q=[dict(sender_latency_s=1.0, verifier_latency_s=0.5)] * 4, f=[dict(sender_latency_s=2.0, verifier_latency_s=0.5)] * 4)
+        ex = dict(d=[dict(cond="prose", latency_s=3.0), dict(cond="hybrid", sent="prose", latency_s=3.0), dict(cond="prose", latency_s=3.0), dict(cond="hybrid", sent="id", latency_s=1.0)])
+        sv, rv = ST.unit_costs(sel, ex); self.assertAlmostEqual(sv, 4.0); self.assertAlmostEqual(rv, 3.5)
+        # a resumed attempt that redid only 1 of 4 sender rows still yields the same per-entry cost
+        self.assertEqual(ST.unit_costs(sel, ex), ST.unit_costs({k: list(v) for k, v in sel.items()}, ex))
+    def test_watchdog_deadline_r3(self):
+        """r3 (GPT r2 #6): enforceable deadline at the cap, whatever is in flight."""
+        import types, time as _t
+        hit = []; tmp = self.tmp / "wd"; tmp.mkdir()
+        S = types.SimpleNamespace(budget_s=0.2, used_s=lambda: 0.0, save_ledger=lambda: hit.append("ledger"), dir=tmp, name="D1", log=lambda *a, **k: hit.append("log"))
+        w = ST.Watchdog(S, exit_fn=lambda: hit.append("exit")); _t.sleep(0.6)
+        self.assertTrue(w.fired); self.assertEqual(hit, ["ledger", "log", "exit"]); self.assertTrue((tmp / "BUDGET_EXHAUSTED").exists())
+        S2 = types.SimpleNamespace(budget_s=0.2, used_s=lambda: 0.0); w2 = ST.Watchdog(S2, exit_fn=lambda: hit.append("x")); w2.cancel(); _t.sleep(0.4); self.assertFalse(w2.fired)
     def test_retry_refused_after_terminal(self):
         d = ST.RES / "D1"; d.mkdir(); (d / "CANARY_FAIL").write_text("x")
         with self.assertRaises(SystemExit): AR.authorise("D1", "kernel_crash", 0.1, "x", res=ST.RES, cfg=self.cfg)
-    def test_t1_eligibility_r2(self):
-        """r2 (GPT r1 #2): T1 needs a qualifying D1 for the CURRENT protocol and the frozen cap."""
-        X = self.cfg["e1c"]; d = ST.RES / "D1"; d.mkdir(); (d / ".done").write_text("x")
-        good = dict(protocol_hash=ST.protocol_hash(X), directions=dict(a=dict(status="COMPLETE")), selection=dict(q=dict(complete=True)),
+    def good_summary(self):
+        X = self.cfg["e1c"]; E = ST.expected_shape(X); q, f = X["pair"]
+        return dict(protocol_hash=ST.protocol_hash(X, self.cfg),
+                    directions={d: dict(status="COMPLETE", n_entries=E["n_entries"], n_messages=E["n_messages"]) for d in E["directions"]},
+                    selection={m: dict(complete=True, n=E["n_sel"]) for m in (q, f)},
+                    verifier_b1_check={m: dict(n=E["b1_n"], identical=E["b1_n"]) for m in (q, f)},
                     sizing=dict(wrong_pass_ok=True, projected_T1_gpu_h=2.0, max_wrong_pick_accepted_rate=0.0))
-        def chk(s): json.dump(s, open(d / "summary.json", "w")); return ST.t1_eligibility(X)
-        self.assertEqual(chk(good), (True, "ok"))
-        for mut in (dict(protocol_hash="0"), dict(sizing=dict(good["sizing"], wrong_pass_ok=False)), dict(sizing=dict(good["sizing"], projected_T1_gpu_h=99)),
-                    dict(directions=dict(a=dict(status="INCOMPLETE"))), dict(selection=dict(q=dict(complete=False)))):
-            self.assertFalse(chk(dict(good, **mut))[0], mut)
-        X2 = dict(X, verifier_max_new_tokens=64); json.dump(good, open(d / "summary.json", "w")); self.assertFalse(ST.t1_eligibility(X2)[0])
-        c = copy.deepcopy(self.cfg); c["e1c"]["status"] = "frozen"; os.environ["E1C_GO"] = "T1"; json.dump(dict(good, protocol_hash="0"), open(d / "summary.json", "w"))
+    def test_t1_eligibility_r3(self):
+        """r2/r3 (GPT r1 #2, r2 #2, r2 new #2): exact D1 structure, conformance, CURRENT protocol incl. the actual
+        sender token limit, screen and projection."""
+        X = self.cfg["e1c"]; d = ST.RES / "D1"; d.mkdir(); (d / ".done").write_text("x")
+        def chk(s, cfg=None): json.dump(s, open(d / "summary.json", "w")); return ST.t1_eligibility(X if cfg is None else cfg["e1c"], cfg or self.cfg)
+        g = self.good_summary(); self.assertEqual(chk(g), (True, "ok"))
+        q, f = X["pair"]
+        muts = [dict(protocol_hash="0"), dict(sizing=dict(g["sizing"], wrong_pass_ok=False)), dict(sizing=dict(g["sizing"], projected_T1_gpu_h=99)),
+                dict(sizing=dict(g["sizing"], projected_T1_gpu_h=float("nan"))), dict(directions={}), dict(selection={}), dict(verifier_b1_check={}),
+                dict(directions={k: v for k, v in list(g["directions"].items())[:1]}), dict(selection={q: g["selection"][q]}),
+                dict(directions={k: dict(v, n_messages=1) for k, v in g["directions"].items()}), dict(selection={m: dict(v, n=v["n"] - 1) for m, v in g["selection"].items()}),
+                dict(selection={m: dict(v, complete=False) for m, v in g["selection"].items()}),
+                dict(verifier_b1_check={m: dict(v, identical=15) for m, v in g["verifier_b1_check"].items()}),
+                dict(verifier_b1_check={m: dict(v, n=3, identical=3) for m, v in g["verifier_b1_check"].items()})]
+        for m in muts: self.assertFalse(chk(dict(g, **m))[0], m)
+        c2 = copy.deepcopy(self.cfg); c2["sender_max_new_tokens"] = 8; self.assertFalse(chk(g, c2)[0])          # actual token limit is hashed
+        c3 = copy.deepcopy(self.cfg); c3["e1c"]["verifier_max_new_tokens"] = 64; self.assertFalse(chk(g, c3)[0])
+        c4 = copy.deepcopy(self.cfg); c4["e1c"]["batch_size"] = 1; self.assertFalse(chk(g, c4)[0])                # effective verifier batch is hashed
+        c = copy.deepcopy(self.cfg); c["e1c"]["status"] = "frozen"; os.environ["E1C_GO"] = "T1"; json.dump(dict(g, protocol_hash="0"), open(d / "summary.json", "w"))
         self.assertEqual(self._run("T1", c), 19)
+    def test_verdict_structure_r3(self):
+        X = self.cfg["e1c"]; q, f = X["pair"]; n = X["sizes"]["test"]; K = X["cases_per_entry"]
+        dr = dict(status="COMPLETE", n_entries=2 * n["receiver_entries_per_family"], n_messages=2 * n["receiver_entries_per_family"] * K, success=True)
+        out = dict(directions={f"{q}_to_{f}": dr, f"{f}_to_{q}": dr}, selection={m: dict(complete=True, n=2 * n["core_per_family"]) for m in (q, f)})
+        self.assertEqual(ST.verdict(out, X), "SUCCESS")
+        for o in (dict(out, directions={}), dict(out, selection={}), dict(out, directions={f"{q}_to_{f}": dr}),
+                  dict(out, directions={k: dict(dr, n_messages=5) for k in out["directions"]}), dict(out, selection={q: out["selection"][q]}),
+                  dict(out, selection={m: dict(v, n=12) for m, v in out["selection"].items()})):
+            self.assertEqual(ST.verdict(o, X), "INCOMPLETE", o)
+        self.assertEqual(ST.verdict(dict(out, directions={k: dict(dr, success=k.startswith(q)) for k in out["directions"]}), X), "NOT MET")
+    def test_freeze_digest_r3(self):
+        import hashlib
+        b = b"book"; h = hashlib.sha256(b).hexdigest()
+        self.assertTrue(CF.digest_ok(b, h, h + "\n")[0]); self.assertFalse(CF.digest_ok(b, h, "0" * 64)[0]); self.assertFalse(CF.digest_ok(b + b"x", h, h)[0])
 
 if __name__ == "__main__": unittest.main()

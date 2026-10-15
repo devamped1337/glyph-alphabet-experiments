@@ -2,13 +2,13 @@
 e1c.status == frozen, the pinned TEST book, and a qualifying D1 summary for the SAME protocol). Both need
 E1C_GO == <stage> (set only on Stefan's explicit go), one start plus at most one AUTHORISED infrastructure retry,
 and room in the cumulative stage cap. Model calls reuse the frozen E1b code paths."""
-import os, sys, json, time, random, hashlib, inspect
+import os, sys, json, time, random, hashlib, inspect, math, threading
 from statistics import mean
 from . import RES, HERE, E1B
 from .book import load_book, core_ids, cases_for
 from . import verifier as VF
 from .verifier import verifier_parts, parse_spec, matches
-from .analysis import direction_result, cp_upper
+from .analysis import direction_result, cp_upper, check_selection, Incomplete
 from e1b import stages as ES
 from e1b.stages import (seed_of, rec, load_B, canaries, canary_regressions, _require_gpu, ask_arith_many,
                         batched_generate, log_prompt, chunks)
@@ -21,12 +21,14 @@ TERMINAL = ("BUDGET_EXHAUSTED", "CANARY_FAIL", "ATTEMPT_INCOMPLETE")   # GPU_PRE
 def code_hash():
     sys.path.insert(0, str(HERE / "tools")); import code_hash as H; return H.compute()
 
-def protocol_hash(X):
-    """What D1 qualifies (GPT r1 #2): sender prompt + token limit + A10 parser, verifier prompt/format/grammar and
-    token limit, receiver batch size. Any change invalidates D1 for T1 (a new dev stage is required)."""
+def protocol_hash(X, cfg):
+    """What D1 qualifies (GPT r1 #2, r2 #2): sender prompt + the ACTUAL sender token limit + A10 parser, verifier
+    prompt/format/grammar/token limit and the EFFECTIVE verifier batch, receiver batch. Any change invalidates D1
+    for T1 (a new dev stage is required)."""
     parts = [SYS_SENDER, inspect.getsource(EP.parse_letter), inspect.getsource(parse_letter_a10), EP._ID_FRAG.pattern,
              VF.SYS_VERIFY, json.dumps(VF.FMT, sort_keys=True), json.dumps({k: g.pattern for k, g in VF.GRAMMAR.items()}, sort_keys=True),
-             str(X["verifier_max_new_tokens"]), str(X["batch_size"]), "sender_max_new=4"]
+             f"verifier_max_new={X['verifier_max_new_tokens']}", f"verifier_batch={X['batch_size']}", f"receiver_batch={X['batch_size']}",
+             f"sender_max_new={cfg['sender_max_new_tokens']}"]
     return hashlib.sha256("\x1f".join(parts).encode()).hexdigest()
 
 def _stage(name, cap, cfg):
@@ -43,22 +45,62 @@ def guard(S, est_s, what):
         (S.dir / "BUDGET_EXHAUSTED").write_text(f"{S.name}: next unit '{what}' (~{est_s:.0f}s) would exceed the cap; stopped, not shrunk\n")
         S.log("budget_exhausted", next=what, est_s=est_s); S.save_ledger(); print(f"[{S.name}] BUDGET EXHAUSTED (in-flight guard)"); sys.exit(3)
 
+class Watchdog:
+    """r3 (GPT r2 #6): enforceable deadline. Fires when the cumulative stage time reaches the cap, whatever is in
+    flight: saves the ledger, writes BUDGET_EXHAUSTED (overrun = termination latency only) and hard-exits (code 3).
+    Rows already written are kept. The admission guard above still avoids starting units that would not fit."""
+    def __init__(self, S, exit_fn=None):
+        self.S = S; self.exit_fn = exit_fn or (lambda: os._exit(3)); self.fired = False
+        self.t = threading.Timer(max(0.0, S.budget_s - S.used_s()), self.fire); self.t.daemon = True; self.t.start()
+    def fire(self):
+        self.fired = True
+        try:
+            self.S.save_ledger()
+            (self.S.dir / "BUDGET_EXHAUSTED").write_text(f"{self.S.name}: deadline reached at the cap ({self.S.budget_s/3600:.3f} h); in-flight work killed\n")
+            self.S.log("budget_deadline", used_s=self.S.used_s())
+        finally: self.exit_fn()
+    def cancel(self): self.t.cancel()
+
 class Est:
     """Per-unit duration estimate = max(configured prior, 1.2 x longest observed)."""
     def __init__(self, X): self.v = dict(X["inflight_est_s"])
     def __call__(self, k): return self.v[k]
     def seen(self, k, s): self.v[k] = max(self.v[k], 1.2 * s)
 
-def t1_eligibility(X):
-    """GPT r1 #2: T1 needs the recorded D1 summary to qualify the CURRENT protocol and the frozen T1 cap."""
+def expected_shape(X):
+    q, f = X["pair"]; d = X["sizes"]["dev"]; K = X["cases_per_entry"]
+    return dict(directions={f"{q}_to_{f}", f"{f}_to_{q}"}, senders={q, f}, n_sel=2 * d["core_per_family"],
+                n_entries=2 * d["receiver_entries_per_family"], n_messages=2 * d["receiver_entries_per_family"] * K,
+                b1_n=X["verifier_b1_check_n"])
+
+def check_d1_summary(S, X, cfg):
+    """r3 (GPT r2 new #2): exact structure of a qualifying D1 summary (both directions, both senders, sizes,
+    conformance records). Returns (ok, reason)."""
+    E = expected_shape(X)
+    if set(S.get("directions", {})) != E["directions"]: return False, "D1 directions != both registered directions"
+    if set(S.get("selection", {})) != E["senders"]: return False, "D1 selection != both senders"
+    if set(S.get("verifier_b1_check", {})) != E["senders"]: return False, "D1 conformance records missing"
+    for m, s in S["selection"].items():
+        if not s.get("complete") or s.get("n") != E["n_sel"]: return False, f"D1 selection {m} incomplete or wrong size"
+    for d, r in S["directions"].items():
+        if r.get("status") != "COMPLETE" or r.get("n_entries") != E["n_entries"] or r.get("n_messages") != E["n_messages"]:
+            return False, f"D1 direction {d} incomplete or wrong size"
+    for m, v in S["verifier_b1_check"].items():
+        if v.get("n") != E["b1_n"]: return False, f"D1 conformance {m} wrong size"
+        if v.get("identical") != v["n"]: return False, f"D1 verifier batch-8 != batch-1 for {m} (a batch-1 dev stage is required)"
+    if S.get("protocol_hash") != protocol_hash(X, cfg): return False, "protocol changed since D1 (a new dev stage is required)"
+    return True, "ok"
+
+def t1_eligibility(X, cfg):
+    """GPT r1 #2 / r2 #2 / r2 new #2: T1 needs a structurally complete D1 summary qualifying the CURRENT protocol."""
     p = RES / "D1" / "summary.json"
     if not (RES / "D1" / ".done").exists() or not p.exists(): return False, "D1 not finished"
-    S = json.load(open(p)); z = S.get("sizing", {})
-    if S.get("protocol_hash") != protocol_hash(X): return False, "protocol changed since D1 (a new dev stage is required)"
-    if not all(d.get("status") == "COMPLETE" for d in S["directions"].values()): return False, "D1 incomplete"
-    if not all(s.get("complete") for s in S["selection"].values()): return False, "D1 selection incomplete"
+    S = json.load(open(p)); ok, why = check_d1_summary(S, X, cfg)
+    if not ok: return False, why
+    z = S.get("sizing", {})
     if not z.get("wrong_pass_ok"): return False, f"D1 wrong-pick-accepted rate {z.get('max_wrong_pick_accepted_rate')} > {X['criteria']['wrong_pass_max_dev']}"
-    if z.get("projected_T1_gpu_h", 1e9) > X["caps_h"]["T1"]: return False, f"projected T1 {z.get('projected_T1_gpu_h'):.2f} h > T1 cap {X['caps_h']['T1']}"
+    ph = z.get("projected_T1_gpu_h")
+    if not isinstance(ph, (int, float)) or not math.isfinite(ph) or ph > X["caps_h"]["T1"]: return False, f"projected T1 {ph} h > T1 cap {X['caps_h']['T1']}"
     return True, "ok"
 
 def start(cfg, name):
@@ -67,7 +109,7 @@ def start(cfg, name):
     if os.environ.get("E1C_GO") != name: print(f"{name} refused: no explicit go (E1C_GO must equal '{name}')"); sys.exit(14)
     if name == "T1":
         if X["status"] != "frozen": print("T1 refused: E1c is not frozen"); sys.exit(13)
-        ok, why = t1_eligibility(X)
+        ok, why = t1_eligibility(X, cfg)
         if not ok: print(f"T1 refused: {why}"); sys.exit(19)
     p = HERE / "CODE_HASH.txt"; pin = p.read_text().strip() if p.exists() else None
     if pin != code_hash(): print(f"{name} refused: code hash != CODE_HASH.txt"); sys.exit(16)
@@ -82,19 +124,23 @@ def start(cfg, name):
     if len(A) == 0: kind_a = "first"
     elif len(A) == 1 and R and R.get("for_attempt") == 1 and R.get("reason") in X["infra_retry_reasons"]:
         kind_a = "infra_retry"
+        old = A[0]   # r3 (GPT r2 #3): results kept from attempt 1 must come from the SAME code and protocol
+        rows_exist = any(d.glob("select_*.jsonl")) or any(d.glob("exchange_*.jsonl"))
+        if rows_exist and (old.get("code_hash") != code_hash() or old.get("protocol_hash") != protocol_hash(X, cfg)):
+            (d / "ATTEMPT_INCOMPLETE").write_text(f"{name}: attempt-1 rows exist from a different code/protocol; cannot resume\n"); sys.exit(17)
         if (d / "GPU_PREFLIGHT_FAIL").exists(): (d / "GPU_PREFLIGHT_FAIL").rename(d / "GPU_PREFLIGHT_FAIL.attempt1")
         L = RES / "budget_ledger.json"; led = json.load(open(L)) if L.exists() else {}
         led[f"E1C_{name}"] = max(led.get(f"E1C_{name}", 0.0), float(R["charged_h"]) * 3600)   # cumulative across attempts
         json.dump(led, open(L, "w"))
     else:
         (d / "ATTEMPT_INCOMPLETE").write_text(f"{name}: no further start allowed (attempts={len(A)}, retry={R}); INCOMPLETE\n"); sys.exit(17)
-    A.append(dict(n=len(A) + 1, kind=kind_a, t=time.time(), code_hash=code_hash(), outcome="running"))
+    A.append(dict(n=len(A) + 1, kind=kind_a, t=time.time(), code_hash=code_hash(), protocol_hash=protocol_hash(X, cfg), outcome="running"))
     json.dump(st, open(stp, "w"), indent=1)
     c = dict(cfg); c["stageB_batch_size"] = X["batch_size"]; ES._A9.clear()
     S = _stage(name, st["cap_h"], c); S.state_path = stp
-    _require_gpu(S)
+    _require_gpu(S); S.watchdog = Watchdog(S)
     S.log("e1c", stage=name, status=X["status"], attempt=A[-1], cap_h=st["cap_h"], book=kind,
-          book_sha256=X[f"{kind}_book_sha256"], code_hash=code_hash(), protocol_hash=protocol_hash(X))
+          book_sha256=X[f"{kind}_book_sha256"], code_hash=code_hash(), protocol_hash=protocol_hash(X, cfg))
     return X, B, S, c
 
 def _mark(S, outcome):
@@ -150,8 +196,9 @@ def send_and_verify(b, m, B, ids, cfg, X, S, est, vbatch):
     return {json.loads(l)["entry"]: json.loads(l) for l in open(S.dir / fs)}
 
 def verifier_b1_check(b, m, B, ids, cfg, X, S, est):
-    """D1 only: production batch-8 path vs the batch-1 reference on a fixed subset (16 entries). Pre-declared rule:
-    any difference for either model -> the T1 verifier runs at batch 1."""
+    """D1 only: production batch-8 path vs the batch-1 reference on a fixed subset (16 entries). Pre-declared rule
+    (r3): any difference for either model -> T1 is NOT eligible; a new dev stage at batch 1 (amendment) re-measures
+    the acceptance screen under the batch-1 path."""
     E = B["entries"]; n = X["verifier_b1_check_n"]; sub = ids[:: max(1, len(ids) // n)][:n]
     jobs = [verifier_parts(E[e]["fam"], render_message(E[e])) for e in sub]
     b8 = run_verifier(b, jobs, cfg, X, S, est, X["batch_size"]); same = 0; t1 = []
@@ -191,20 +238,17 @@ def exchange(b, snd, rcv, B, ids, sel, cfg, S, est):
             S.write(fx, rec(rcv, S.name, "exchange", k, **r))
     return [json.loads(l) for l in open(S.dir / fx)]
 
-def t1_verifier_batch(X):
-    if X["_kind"] != "test": return X["batch_size"]
-    vb = json.load(open(RES / "D1" / "summary.json"))["verifier_b1_check"]
-    return X["batch_size"] if all(v["identical"] == v["n"] for v in vb.values()) else 1
-
 def run(cfg, name):
     X, B, S, cfg = start(cfg, name); X = dict(X, _kind="dev" if name == "D1" else "test")
     try: _run(cfg, name, X, B, S)
     except SystemExit as e: _mark(S, f"exit {e.code}"); raise
     except Exception as e: _mark(S, f"crash {type(e).__name__}"); raise
+    finally:
+        if getattr(S, "watchdog", None): S.watchdog.cancel()
 
 def _run(cfg, name, X, B, S):
     kind = X["_kind"]; n = X["sizes"][kind]["core_per_family"]; nr = X["sizes"][kind]["receiver_entries_per_family"]
-    ids = core_ids(B, n); rids = core_ids(B, nr); q, f = X["pair"]; sel, t, vb = {}, {}, {}; est = Est(X); vbatch = t1_verifier_batch(X)
+    ids = core_ids(B, n); rids = core_ids(B, nr); q, f = X["pair"]; sel, t, vb = {}, {}, {}; est = Est(X); vbatch = X["batch_size"]   # r3: T1 uses the D1-qualified batch; a batch-1 change needs a new dev stage
     # load order: q (send+verify) -> f (send+verify; receive q->f) -> q (receive f->q)
     b, t["load1"] = load(q, cfg, B, S, est)
     t0 = time.time(); sel[q] = send_and_verify(b, q, B, ids, cfg, X, S, est, vbatch); t[f"send_verify_{q}"] = time.time() - t0
@@ -220,51 +264,71 @@ def _run(cfg, name, X, B, S):
     del b; free(); S.save_ledger()
     cases = {}
     for c in cases_for(B, rids): cases.setdefault(c["entry"], []).append(c)
-    S.finish(summarize(name, X, B, sel, ex, t, vb, S.used_s() / 3600, rids, cases, vbatch)); _mark(S, "done")
+    sel_rows = {m: [json.loads(l) for l in open(S.dir / f"select_{m}.jsonl")] for m in (q, f)}
+    S.watchdog.cancel()
+    S.finish(summarize(name, X, cfg, B, sel_rows, ex, t, vb, S.used_s() / 3600, ids, rids, cases, vbatch)); _mark(S, "done")
 
-def selection_stats(sel, ids):
+def selection_stats(sel_rows, ids):
+    """From the RAW selection rows (r3): complete = exactly one row per registered entry, no extras."""
+    try: sel = check_selection(sel_rows, ids); complete = True; why = "ok"
+    except Incomplete as e: sel = {r["entry"]: r for r in sel_rows if r["entry"] in set(ids)}; complete = False; why = str(e)
     v = [sel[e] for e in ids if e in sel]; N = len(ids); wp = sum(r["accepted"] and not r["correct"] for r in v)
-    return dict(n=N, complete=len(v) == N, pick_acc=sum(r["correct"] for r in v) / N, sender_invalid=sum(r["pick"] is None for r in v),
+    return dict(n=N, complete=complete, completeness=why, pick_acc=sum(r["correct"] for r in v) / N, sender_invalid=sum(r["pick"] is None for r in v),
                 verifier_format_ok=sum(r["verifier_parse"] == "ok" for r in v) / N, coverage=sum(r["accepted"] for r in v) / N,
                 wrong_pick_accepted=wp, wrong_pick_accepted_rate=wp / N, wrong_pick_accepted_cp95_upper=cp_upper(wp, N),
                 correct_pick_rejected=sum(r["correct"] and not r["accepted"] for r in v),
                 wrong_pick_caught=sum((r["pick"] is not None) and not r["correct"] and not r["accepted"] for r in v),
                 parse_paths={p: sum(r["parse_path"] == p for r in v) for p in sorted({r["parse_path"] for r in v})})
 
-def summarize(name, X, B, sel, ex, t, vb, gpu_h, rids, cases, vbatch):
-    n = X["sizes"][X["_kind"]]["core_per_family"]; ids = core_ids(B, n)
+def summarize(name, X, cfg, B, sel_rows, ex, t, vb, gpu_h, ids, rids, cases, vbatch):
     out = dict(stage=name, status=X["status"], gpu_h=gpu_h, timing_s=t, verifier_b1_check=vb, verifier_batch_size=vbatch,
-               protocol_hash=protocol_hash(X), selection={m: selection_stats(s, ids) for m, s in sel.items()}, directions={})
+               protocol_hash=protocol_hash(X, cfg), selection={m: selection_stats(r, ids) for m, r in sel_rows.items()}, directions={})
     for d, rows in ex.items():
-        out["directions"][d] = direction_result(rows, sel[d.split("_to_")[0]], B, X["criteria"],
-                                                seed_of(X["seeds"][X["_kind"]]["bootstrap"], d), rids, cases)
+        out["directions"][d] = direction_result(rows, sel_rows[d.split("_to_")[0]], B, X["criteria"],
+                                                seed_of(X["seeds"][X["_kind"]]["bootstrap"], d), rids, cases, ids)
     if name == "D1":
         out["note"] = "DEV pilot: descriptive only; no E1c verdict. Feeds the TEST eligibility and sizing rules (PREREG_E1c §8)."
-        out["sizing"] = sizing(out, X, t, vb)
-    else: out["verdict"] = verdict(out)
+        out["sizing"] = sizing(out, X, t, sel_rows, ex)
+    else: out["verdict"] = verdict(out, X)
     return out
 
-def verdict(out):
-    if any(v["status"] != "COMPLETE" for v in out["directions"].values()) or not all(s["complete"] for s in out["selection"].values()):
-        return "INCOMPLETE"
-    return "SUCCESS" if all(v["success"] for v in out["directions"].values()) else "NOT MET"
+def verdict(out, X):
+    """r3 (GPT r2 new #2): exact structure required (both registered directions, both senders, registered sizes)."""
+    q, f = X["pair"]; n = X["sizes"]["test"]; K = X["cases_per_entry"]
+    D, Sl = out.get("directions", {}), out.get("selection", {})
+    if set(D) != {f"{q}_to_{f}", f"{f}_to_{q}"} or set(Sl) != {q, f}: return "INCOMPLETE"
+    if any(v.get("status") != "COMPLETE" or v.get("n_entries") != 2 * n["receiver_entries_per_family"]
+           or v.get("n_messages") != 2 * n["receiver_entries_per_family"] * K for v in D.values()): return "INCOMPLETE"
+    if any(not s.get("complete") or s.get("n") != 2 * n["core_per_family"] for s in Sl.values()): return "INCOMPLETE"
+    return "SUCCESS" if all(v["success"] for v in D.values()) else "NOT MET"
 
-def sizing(out, X, t, vb):
-    """Pre-declared TEST eligibility + sizing from dev (PREREG_E1c §8). rv = receiver seconds per case (both arms)."""
-    nT = X["sizes"]["test"]["core_per_family"] * 2; nD = out["selection"][X["pair"][0]]["n"]; K = X["cases_per_entry"]
-    b1 = all(v["identical"] == v["n"] for v in vb.values())
-    sv = sum(v for k, v in t.items() if k.startswith("send_verify")) / nD
-    if not b1: sv += sum(v["batch1_s_per_call"] or 0 for v in vb.values())   # T1 verifier at batch 1
-    nm = sum(d.get("n_messages", 0) for d in out["directions"].values())
-    rv = sum(v for k, v in t.items() if k.startswith("recv")) / max(1, nm)
-    loads = sum(t.get(k, 0) for k in ("load1", "load2", "load3"))
-    proj_h = (loads + sv * nT + rv * nT * K * 2) / 3600 * 1.25     # 2 directions x nT entries x K cases; 25% margin
+def unit_costs(sel_rows, ex):
+    """r3 (GPT r2 new #1): per-unit costs from PERSISTED per-row latencies (valid across a resumed attempt):
+    sender+verifier seconds per entry (summed over both senders) and receiver seconds per message (a fallback
+    hybrid row shares its prose twin's generation, so only generated rows are counted)."""
+    sv = 0.0
+    for rows in sel_rows.values():
+        sv += mean(r["sender_latency_s"] for r in rows) + mean((r.get("verifier_latency_s") or 0.0) for r in rows)
+    gen, msgs = 0.0, 0
+    for rows in ex.values():
+        for r in rows:
+            if r["cond"] == "hybrid": msgs += 1
+            if r["cond"] == "prose" or r.get("sent") == "id": gen += float(r.get("latency_s") or 0.0)
+    return sv, gen / max(1, msgs)
+
+def sizing(out, X, t, sel_rows, ex):
+    """Pre-declared TEST eligibility + sizing from dev (PREREG_E1c §8), from persisted per-row latencies plus the
+    longest observed model load (+ canaries) of the final attempt."""
+    nT = X["sizes"]["test"]["core_per_family"] * 2; K = X["cases_per_entry"]
+    sv, rv = unit_costs(sel_rows, ex)
+    load = max([t.get(k, 0) for k in ("load1", "load2", "load3")] + [0])
+    proj_h = (3 * load + sv * nT + rv * nT * K * 2) / 3600 * 1.25     # 3 loads; 2 directions x nT entries x K cases; 25% margin
     S = out["selection"]; wp = max(s["wrong_pick_accepted_rate"] for s in S.values())
     ok_wp = wp <= X["criteria"]["wrong_pass_max_dev"]
     return dict(test_entries_per_direction=nT if (ok_wp and proj_h <= X["caps_h"]["T1"]) else None,
-                projected_T1_gpu_h=proj_h, max_wrong_pick_accepted_rate=wp, wrong_pass_ok=ok_wp,
+                projected_T1_gpu_h=proj_h, sender_verifier_s_per_entry=sv, receiver_s_per_message=rv, load_s=load,
+                max_wrong_pick_accepted_rate=wp, wrong_pass_ok=ok_wp,
                 wrong_pick_accepted_cp95_upper={m: s["wrong_pick_accepted_cp95_upper"] for m, s in S.items()},
                 demonstrated_le_2pct={m: s["wrong_pick_accepted_cp95_upper"] <= 0.02 for m, s in S.items()},
-                t1_verifier_batch=X["batch_size"] if b1 else 1,
-                projection_depends_on="dev coverage (fallback reuse), dev prompt-length mix, dev timing",
-                rule="screen: observed wrong-pick-accepted <= 2% for both senders AND projection <= T1 cap. The screen does not show the rate is <= 2%; that needs the CP95 upper bound <= 2% (0 of 160).")
+                projection_depends_on="dev coverage (fallback reuse), dev prompt-length mix, dev per-row latencies",
+                rule="screen: observed wrong-pick-accepted <= 2% for both senders AND projection <= T1 cap. The screen does not show the rate is <= 2%; under a binomial model of the generated, family-balanced entries that needs the CP95 upper bound <= 2% (0 of 160: about 1.86%).")

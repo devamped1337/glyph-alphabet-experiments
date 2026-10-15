@@ -20,7 +20,7 @@ def verifier_parts(fam, message):
 # one line: the family's keys in the registered order, single-word names ([A-Za-z]+), plain integers, separated by
 # spaces/tabs. Anything else (extra lines, extra keys, duplicate keys, units, explanations, punctuation) is a format
 # error -> fallback to prose.
-_W, _I, _SP = r"([A-Za-z]+)", r"(-?\d+)", r"[ \t]+"
+_W, _I, _SP = r"([A-Za-z]+)", r"(-?[0-9]+)", r"[ \t]+"   # r3: ASCII digits only ([0-9], not \d)
 GRAMMAR = dict(F1=re.compile(rf"GROUP={_W}{_SP}MEMBER={_I}{_SP}NONMEMBER={_I}"),
                F2=re.compile(rf"GIVER={_W}{_SP}GIVER_RATE={_I}{_SP}TAKER={_W}{_SP}TAKER_RATE={_I}"))
 

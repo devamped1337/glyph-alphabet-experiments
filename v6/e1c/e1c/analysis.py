@@ -31,6 +31,17 @@ def check_complete(rows, assigned, cases_by_entry, fams):
         if r["fam"] != fams[e]: raise Incomplete(f"family mismatch {e}")
     return True
 
+def check_selection(sel_rows, ids):
+    """r3 (GPT r2 #1): exactly one selection row per registered sender entry, no duplicates, no extras.
+    sel_rows = the raw JSONL rows (never a collapsed dict). Returns {entry: row}; raises Incomplete."""
+    out = {}
+    for r in sel_rows:
+        if r["entry"] in out: raise Incomplete(f"duplicate selection row {r['entry']}")
+        out[r["entry"]] = r
+    if set(out) != set(ids):
+        raise Incomplete(f"selection rows != sender assignment: {len(set(ids) - set(out))} missing, {len(set(out) - set(ids))} extra")
+    return out
+
 def entry_diffs(rows):
     """-> {fam: [d_entry]} with d = mean hybrid correct - mean prose correct over the entry's cases."""
     acc = {}
@@ -82,10 +93,14 @@ def dict_bytes(B, eids):
     E = B["entries"]; ks = sorted({k for e in eids for k in [e] + B["neighbours"][e]})
     return sum(len((framed_id(E[k]) + " " + E[k]["text"] + "\n").encode("utf-8")) for k in ks)
 
-def direction_result(rows, sel, B, crit, seed, assigned, cases_by_entry):
-    """One direction. Completeness is checked first; incomplete data -> status INCOMPLETE, never SUCCESS."""
+def direction_result(rows, sel_rows, B, crit, seed, assigned, cases_by_entry, sender_ids):
+    """One direction. Completeness (receiver rows AND sender selection rows) is checked first; incomplete data ->
+    status INCOMPLETE, never SUCCESS."""
     fams = {e: B["entries"][e]["fam"] for e in assigned}
-    try: check_complete(rows, assigned, cases_by_entry, fams)
+    try:
+        sel = check_selection(sel_rows, sender_ids)
+        if not set(assigned) <= set(sender_ids): raise Incomplete("receiver entries not a subset of sender entries")
+        check_complete(rows, assigned, cases_by_entry, fams)
     except Incomplete as ex: return dict(status="INCOMPLETE", reason=str(ex), success=False, n_assigned=len(assigned))
     by = entry_diffs(rows); lo, hi = strat_boot(by, crit["bootstrap_resamples"], seed, crit["ci"])
     cov = sum(bool(sel[e]["accepted"]) for e in assigned) / len(assigned)          # denominator = ASSIGNED entries
