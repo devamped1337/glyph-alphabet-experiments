@@ -1,43 +1,42 @@
-# E1c REVIEW_ROUND r4 (draft pre-registration after GPT r3), pinned commit b0c288a
+# E1c REVIEW_ROUND r5 (draft pre-registration after GPT r4), pinned commit 6080fdc
 
 ## Ask
-Re-review the E1c **DRAFT** after the r3 fixes. Verdict: ACCEPT (D1 may be proposed to Stefan for a go) or CHANGE (required edits). For each r3 item, say whether it is resolved:
-- (6) watchdog coverage;
-- (W1) [blocking] deadline enforcement through summary and finalisation;
-- (W2) [blocking] ledger race and an exit independent of bookkeeping;
-- (N) [non-blocking] batch-rule wording;
-- the optional items.
+Re-review the E1c **DRAFT** after the r5 supervisor-process redesign. Verdict: ACCEPT (D1 may be proposed to Stefan for a go) or CHANGE (required edits). For each r4 blocking item say resolved / not resolved:
+- (1) ledger time leak and unprotected `used_s` reads;
+- (2) deadline vs completion not mutually exclusive; `.done` checked before terminal markers; `t1_eligibility` ignoring BUDGET_EXHAUSTED; no real `os._exit` test;
+- (3) fail-closed gap when both marker and ledger writes fail;
+- (4) [non-blocking] 5 s grace not a hard bound.
 
 ## Context
-- r3 (`reviews/gpt_E1c_r3.md`, at cf9723d) returned CHANGE. Items 1, 2, 3, 5, A, B, C and D were resolved; only the watchdog remained (6, W1, W2), plus one wording item and two optional suggestions.
-- Unchanged: E1b A9 = POC FAILED; A10 B3r = INCONCLUSIVE; Qwen2.5-7B and Falcon3-7B; free T4; D1 cap 0.5 GPU-h.
+- r4 (`reviews/gpt_E1c_r4.md`, at b0c288a) returned CHANGE on the watchdog accounting/terminality. Stefan approved replacing the in-process watchdog with a supervisor process.
+- Unchanged: protocol, books, criteria, models (Qwen2.5-7B, Falcon3-7B), free T4, D1 cap 0.5 GPU-h, protocol hash.
 
-## Artifacts (at b0c288a), all in `e1c/stages.py` unless noted
-- **W1.** The watchdog is no longer cancelled before `summarize()` and `S.finish()`. It is cancelled only in `run()`'s `finally`, after `.done` and `_mark("done")` or after an exit.
-  - Test: the watchdog is alive and not cancelled during `summarize`, and `.done` already exists when it is cancelled.
-  - Test: a deadline fired during the summary gives exit 3, BUDGET_EXHAUSTED and no `.done`; the attempt outcome is "exit 3"; a further start gives 18; a retry is refused.
-- **W2, ledger.** `E1cStage(ES.Stage)` overrides `save_ledger`. It holds one process-wide `LEDGER_LOCK` (the main thread, the watchdog and atexit all go through it, since atexit binds the subclass method) and writes atomically: a unique temp file per pid and thread, fsync, then `os.replace`. A `timeout` is used for the watchdog.
-  - Test: 4 threads × 200 concurrent saves raise no error, leave valid JSON and leave no temp files.
-  - Test: a held lock with timeout=0.1 gives TimeoutError.
-- **W2, exit.** `Watchdog.fire()` arms a **killer timer first** (grace 5 s → `_exit`, once only). Then, each step isolated in try/except: the BUDGET_EXHAUSTED marker via `os.open` (first), `save_ledger(timeout=2)`, a log line. Then `_exit`.
-  - Test: save and log raise and the marker directory is missing; the exit still happens and done_steps is empty.
-  - Test: `save_ledger` blocks forever; the exit happens within the grace period, exactly once.
-- **Terminality without bookkeeping.**
-  - `start()` refuses with exit 3 and writes the marker when the ledger shows the cap used.
-  - `authorise_retry` refuses charged_h ≥ cap, and refuses when max(ledger, charged) ≥ cap.
-  - Tests cover both.
-- **N.** `config_e1c.json` `verifier_batch_rule` and PREREG §4 now say: batch 8 in D1 and T1; a disagreement makes T1 ineligible until an amendment adds a batch-1 dev stage; there is no automatic switch.
-- **Optional, both done.**
-  - Loads, including canaries, are persisted in each attempt record (`_record_load`), and sizing uses the maximum over all attempts (`all_loads`).
-  - A genuine interrupted-then-resumed fixture: attempt 1 raises RuntimeError on the 5th generate call; the retry is authorised as kernel_crash and resumes to completion. The test checks:
-    - the selection file holds 12 rows and is complete;
-    - sizing's sender+verifier and receiver unit costs equal `unit_costs` recomputed from the persisted rows;
-    - there are 4 loads (1 + 3) and load_s = their maximum;
-    - each fallback hybrid row has the same `batch_index`, `batch_pos` and `latency_s` as its prose twin, so a fallback's generation is counted once.
-- **Tests:** E1c 38 OK (from 31); E1b 112 OK (unchanged). Kernel `e1c_D1` is prepared and **not pushed**.
+## Artifacts (at 6080fdc)
+- **`e1c/supervisor.py` (new; `run_e1c.py --stage`).** Sole writer of `e1c_state.json`, `budget_ledger.json`, terminal markers, `summary.json`, `.done`. No threads.
+  - Gates (go, frozen, D1 eligibility, code hash, book); then terminal markers **before** `.done`; any attempt still `running` -> ATTEMPT_INCOMPLETE (17).
+  - remaining = cap − cumulative ledger (retry: max(ledger, charged_h)); ≤ 0 -> BUDGET_EXHAUSTED (3).
+  - Attempt record (uuid token, started_wall, deadline_wall, budget_s, code/protocol hash, outcome=running) written atomically (tmp + fsync + os.replace) **before** `Popen(..., start_new_session=True)`; a failed write raises before launch.
+  - `wait(timeout=deadline − now)`; on timeout `killpg(SIGKILL)`.
+  - `decide(rc, end, deadline, complete)`: rc None or end > deadline -> deadline/BUDGET_EXHAUSTED; rc 0 + CHILD_COMPLETE -> done; 3 -> BUDGET_EXHAUSTED; 8 -> CANARY_FAIL; 9 -> `no_gpu rc=9` (infra); else `crash rc=N`.
+  - Post-run, in order: ledger (+elapsed; deadline charges the full remaining budget), marker, summary.json (from summary.child.json, gpu_h = ledger) + `.done`, and LAST the attempt outcome. Any exception -> exit 70, attempt stays `running` (terminal).
+- **Child (`run_e1c.py --child`, `stages.child_main`).** Refuses (15) unless `E1C_ATTEMPT_TOKEN` equals the running attempt's token; deadline read from that record. `ChildStage`: `save_ledger` no-op, `finish` raises. Writes only rows, `loads_attempt<n>.json`, `summary.child.json`, then CHILD_COMPLETE. Admission guard exits 3 without writing; canary failure exits 8 without writing a marker. Watchdog, LEDGER_LOCK, E1cStage removed.
+- **`t1_eligibility`:** any TERMINAL marker in D1 -> not eligible, before `.done`.
+- **`authorise_retry`:** outcome `running` -> no reason allowed (fail-closed); `no_gpu rc=9`/marker -> no_gpu; `crash rc=N` -> non-GPU reasons; deadline/admission/canary -> refused; charged_h rules unchanged.
+- **Test-only hooks** (only with E1B_ALLOW_NO_GPU=1): E1C_RES, E1C_CONFIG, E1C_TEST_HOOK (`tests/e1c_hook.py`: fake backend + faults). The Kaggle kernel sets none of them.
+- **Separate-process tests** (each runs a real supervisor process that launches a real child):
+  - deadline kill: child sleeps in a sender call, cap 8 s -> exit 3, outcome deadline, rc None, BUDGET_EXHAUSTED, no `.done`, ledger = 8 s, wall < 30 s; rerun 18; retry refused;
+  - admission stop (cap 180 s < 420 s load prior): exit 3, no model calls;
+  - concurrent finish: child writes CHILD_COMPLETE then sleeps past the 25 s deadline -> deadline, no `.done`, no summary.json; plus pure `decide` cases (exit after deadline with CHILD_COMPLETE -> deadline);
+  - both writes failing: child makes results/ and results/D1 read-only then sleeps past the deadline -> supervisor exit 70, no marker, no ledger, attempt `running`; every retry reason refused; next start 17 (ATTEMPT_INCOMPLETE), then 18;
+  - resume: crash on sender call 18 (6th Falcon call) after `select_qwen7b.jsonl` (12 rows) is saved, no Falcon file -> `crash rc=1`; no_gpu refused, kernel_crash authorised; retry -> done; Qwen file byte-identical; no Qwen sender calls in attempt 2; ledger = attempt-1 + attempt-2 elapsed; 5 loads across attempts, load_s = max; sizing unit costs = recomputed; a third start -> 17;
+  - child without/with wrong token -> 15; full D1 dry run, terminal marker beats `.done` (18); ledger at cap -> 3, no calls.
+- PREREG §7 (deadline, fail-closed, precedence) and §11 (r5) updated. **Tests:** E1c 33 OK (consolidated; watchdog/lock tests removed); E1b 112 OK. Kernel `e1c_D1` prepared, **not pushed**.
+
+## Code excerpt: supervise() post-launch (verbatim)
+(pasted in the prompt)
 
 ## Scope
-In scope: whether 6, W1, W2, N and the optional items are resolved, and any new problem the fixes introduced (thread safety of `used_s` reads, the `os._exit` path, the grace period, residual non-ledger costs). Out of scope: E1b conclusions, model choice, posting.
+In scope: whether items 1–4 are resolved; new problems from the redesign (kill/wait race, wall-clock source, clock jumps, orphaned grandchildren, the cost of making a whole-kernel death terminal, test-hook exposure). Out of scope: E1b conclusions, model choice, posting.
 
 ## Output
-Verdict (ACCEPT / CHANGE). Then items 6, W1, W2, N and optional, each marked resolved / not resolved, with a reason if not. Then any new required changes, marked [blocking] or [non-blocking]. Then optional suggestions. Plain text.
+Verdict (ACCEPT / CHANGE). Items 1–4 each resolved / not resolved, with a reason if not. New required changes marked [blocking] or [non-blocking]. Optional suggestions. Plain text.
