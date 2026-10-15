@@ -4,7 +4,7 @@ compares that spec with the picked entry. No model judges the match."""
 import re
 
 SYS_VERIFY = ("You read one message that states a pricing rule and write down its parameters. Compute any number "
-              "that is stated relative to another. Reply with exactly one line in the format given, and nothing else.")
+              "that is stated relative to another. Reply with exactly one line in the format given, with single-word names and plain integers, and nothing else.")
 FMT = dict(
     F1="GROUP=<name of the membership scheme> MEMBER=<credits per unit for members> NONMEMBER=<credits per unit for non-members>",
     F2="GIVER=<role name of whoever hands over the items> GIVER_RATE=<credits per item billed to the giver> "
@@ -16,30 +16,21 @@ def verifier_parts(fam, message):
     """(system, prefix_user, suffix_user). Depends only on the family and the prose message."""
     return SYS_VERIFY, "", f"Message:\n{message}\n\nReply in exactly this format:\n{FMT[fam]}"
 
-_TOK = re.compile(r"\b([A-Z_]+)\s*=\s*(.*?)(?=\s+[A-Z_]+\s*=|$)")
+# Registered grammar (r2, GPT r1 #5): the WHOLE reply, after stripping leading/trailing whitespace, must be exactly
+# one line: the family's keys in the registered order, single-word names ([A-Za-z]+), plain integers, separated by
+# spaces/tabs. Anything else (extra lines, extra keys, duplicate keys, units, explanations, punctuation) is a format
+# error -> fallback to prose.
+_W, _I, _SP = r"([A-Za-z]+)", r"(-?\d+)", r"[ \t]+"
+GRAMMAR = dict(F1=re.compile(rf"GROUP={_W}{_SP}MEMBER={_I}{_SP}NONMEMBER={_I}"),
+               F2=re.compile(rf"GIVER={_W}{_SP}GIVER_RATE={_I}{_SP}TAKER={_W}{_SP}TAKER_RATE={_I}"))
 
 def parse_spec(fam, txt):
-    """-> (spec dict | None, reason). Uses the first line that contains every required key exactly once."""
-    for line in txt.strip().splitlines():
-        kv = {}; dup = False
-        for k, v in _TOK.findall(line.strip()):
-            if k in kv: dup = True
-            kv[k] = v.strip().strip(".,;").strip()
-        if not all(k in kv for k in KEYS[fam]): continue
-        if dup: return None, "duplicate_key"
-        out = {}
-        for k in KEYS[fam]:
-            v = kv[k].strip("<>\"' ")
-            if k in INTS:
-                m = re.fullmatch(r"(-?\d+)(?:\s*credits?.*)?", v)
-                if not m: return None, f"non_integer_{k}"
-                out[k] = int(m.group(1))
-            else:
-                v = re.sub(r"^(the|a|an)\s+", "", v.lower()).strip()
-                if not v: return None, f"empty_{k}"
-                out[k] = v
-        return out, "ok"
-    return None, "format"
+    """-> (spec | None, reason). reason in {ok, format}. Strict full-response grammar (see GRAMMAR)."""
+    m = GRAMMAR[fam].fullmatch(txt.strip())
+    if not m: return None, "format"
+    out = {}
+    for k, v in zip(KEYS[fam], m.groups()): out[k] = int(v) if k in INTS else v.lower()
+    return out, "ok"
 
 def expected_spec(e):
     s = e["sem"]

@@ -8,13 +8,21 @@ from e1b.cases import build, verify
 from e1b.a9 import check_branches
 
 def _old_rule_texts(o):
-    """Rule texts an E1c book may not reuse: every old-book entry except neighbours (a neighbour is a confusable
-    distractor; forbidding all old neighbour texts as well exhausts the small F2 rule space at TEST size)."""
+    """Rule texts a new E1c book may not use for any NON-neighbour entry. E1b books (frozen, A9): every entry
+    except neighbours. The E1c dev book: its E1c core entries (the only true rules any model sees in D1); its
+    other builder groups (Stage-A, qualification, pilot, planted...) are never shown to a model in E1c, and
+    forbidding them as well makes a TEST-size book unbuildable (F2 rule space is small)."""
+    if o.get("meta", {}).get("study") == "E1c":
+        return {norm(o["entries"][k]["text"]) for f in ("F1", "F2") for k in o["e1c_core"][f]}
     return {norm(e["text"]) for e in o["entries"].values() if e.get("kind") != "neighbour"}
 
 def check_fresh(B, o):
-    """E1c freshness vs an old book: no case text (except the shared canary pool), no entry id outside the canary
-    pool, and no E1c core entry (or non-neighbour entry) whose rule text is an old non-neighbour rule text."""
+    """E1c freshness vs an old book (exactly what is enforced; PREREG_E1c §3):
+    (a) no case text of the old book, except the shared canary pool;
+    (b) no entry id of the old book, except the canary pool;
+    (c) no NON-neighbour entry of the new book (incl. every E1c core = TEST true rule) uses a rule text in
+        _old_rule_texts(old) (old true rules; old neighbour texts are NOT forbidden);
+    (d) new NEIGHBOUR entries are not text-checked: a new distractor may coincide with any old rule text."""
     can_t = {norm(c["text"]) for c in o["cases"]["canary"]}; can_e = set(o["groups"]["canary_F1"])
     old_t = {norm(c["text"]) for cs in o["cases"].values() for c in cs}; old_r = _old_rule_texts(o)
     for pool, cs in B["cases"].items():

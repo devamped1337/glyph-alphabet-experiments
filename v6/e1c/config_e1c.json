@@ -37,8 +37,8 @@
  },
  "sizes": {
   "dev": {
-   "core_per_family": 40,
-   "receiver_entries_per_family": 10
+   "core_per_family": 80,
+   "receiver_entries_per_family": 5
   },
   "test": {
    "core_per_family": 120,
@@ -63,8 +63,22 @@
   "T1": 6.0
  },
  "max_starts": 2,
- "max_starts_note": "one start plus one infrastructure retry (retry only for a crash/no-GPU/kernel failure before or during the run; never after a .done)",
- "dev_book_sha256": "7f5827132b0c9aeddb0305fa3350ec2d95549991f3e3ac58eb9478e44629f37d",
+ "max_starts_note": "one start plus one infrastructure retry. The retry needs results/<stage>/e1c_state.json to carry a retry authorisation (tools/authorise_retry.py) with a reason in infra_retry_reasons, written after inspecting the failed attempt's log; never after .done, BUDGET_EXHAUSTED, CANARY_FAIL or ATTEMPT_INCOMPLETE. Budget is cumulative across both attempts.",
+ "dev_book_sha256": "a7ea724dfb856547dbfba38d04a49a8f59d781b3a9e66596f2582ce112ae78c4",
  "test_book_sha256": null,
- "seed_rule": "Each book is built with 2 x core_per_family core entries per family; the E1c core is the first n per family in build order whose rule text is new. If a book fails to build at its pinned generator seed, the seed is raised by 100 until it builds; every attempt is logged. Dev: generator 91062 (attempts in data/dev_seed_attempts.txt)."
+ "seed_rule": "Each book is built with 2 x core_per_family core entries per family; the E1c core is the first n per family in build order whose rule text is new. If a book fails to build at its pinned generator seed, the seed is raised by 100 until it builds; every attempt is logged. Dev: generator 91062 built first try (80/family; data/dev_seed_attempts.txt). TEST: about 3 of 10 throwaway seeds build at TEST size, so the rule is expected to fire; tools/build_book.py applies it mechanically.",
+ "infra_retry_reasons": [
+  "no_gpu",
+  "install_or_network",
+  "kernel_crash",
+  "oom_at_load"
+ ],
+ "inflight_est_s": {
+  "load": 420,
+  "sender_call": 10,
+  "verifier_chunk": 120,
+  "receiver_chunk": 240,
+  "b1_check_call": 20
+ },
+ "verifier_batch_rule": "T1 verifier batch = 8 if every D1 batch-1 vs batch-8 verifier reply was identical for both models, else 1 (batch 1 is the reference path)."
 }
