@@ -1,4 +1,10 @@
-# E1c REVIEW_ROUND r6 (draft pre-registration after GPT r5), pinned commit 1346dc2
+# E1c REVIEW_ROUND r6 (draft pre-registration after GPT r5), pinned commit dffaa41
+
+**Status:** GPT r6 = **ACCEPT** at 1346dc2 (`reviews/gpt_E1c_r6.md`). Pin moved to dffaa41, which adds **wording-only** edits after that ACCEPT (no behaviour change; tests unchanged, E1c 40 OK; CODE_HASH refreshed):
+- final-state-replace limitation disclosed (replace succeeds, directory fsync fails -> exit 70 with visible `done`; PREREG §7, supervisor docstring);
+- PR_SET_PDEATHSIG limits disclosed (unchecked prctl, no pre-registration parent check, child only; PREREG §7, `_pdeathsig`);
+- docstrings corrected: `finalise_s` excludes the final state write; ChildStage says `deadline_mono`; guard no longer says hard bound.
+The review text below describes the 1346dc2 artifacts as reviewed.
 
 ## Ask
 Re-review the E1c **DRAFT** after the r6 fixes. Verdict: ACCEPT (D1 may be proposed to Stefan for a go) or CHANGE.
