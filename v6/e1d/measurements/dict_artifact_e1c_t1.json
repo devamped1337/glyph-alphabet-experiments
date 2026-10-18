@@ -1,0 +1,82 @@
+{
+ "book": "v6/e1c/data/book_test.json",
+ "book_sha256": "32f3a7c035bd2d76fd2911bb752c1269e1ac9997362c4fa45b0c493f17f850e2",
+ "crosscheck": {
+  "e1c_dict_bytes_registered": 165969,
+  "published_line_sum_independent": 373936
+ },
+ "delta_example": {
+  "applied_equals_full": true,
+  "body_bytes": 18587,
+  "core_added": 24,
+  "delta_bytes": 18704,
+  "entries_added": 96,
+  "manifest_bytes": 117,
+  "roundtrip_after_delta": {
+   "failures": [],
+   "members": 960,
+   "members_ok": 960,
+   "non_members_checked": 200,
+   "non_members_unknown": true,
+   "stale_version": "stale_version",
+   "wrong_hash": "hash_mismatch"
+  }
+ },
+ "format": "E1D-DICT/1",
+ "published": {
+  "artifact_bytes": 374054,
+  "artifact_gzip9_bytes": 31295,
+  "body_bytes": 373936,
+  "label": "book['dictionary'] (published membership used by Dictionary(B))",
+  "manifest_bytes": 118,
+  "mean_line_bytes": 190.78367346938776,
+  "n_entries": 1960,
+  "roundtrip": {
+   "failures": [],
+   "members": 1960,
+   "members_ok": 1960,
+   "non_members_checked": 200,
+   "non_members_unknown": true,
+   "stale_version": "stale_version",
+   "wrong_hash": "hash_mismatch"
+  },
+  "sha256": "2d0bcd88bdd27324b64f1ad9a5f409a4e617f62c6aadf0adde518a3cab2d1493",
+  "tamper_check": "rejected (body digest mismatch)"
+ },
+ "published_breakdown": {
+  "F3L": 10,
+  "core_spare_2n_build": 240,
+  "core_used": 240,
+  "honest_total": 490,
+  "neighbours": 1470
+ },
+ "serializer_framing_bytes": {
+  "id": [
+   15
+  ],
+  "n_cases": 960,
+  "prose": [
+   15
+  ]
+ },
+ "t1_minimal": {
+  "artifact_bytes": 166086,
+  "artifact_gzip9_bytes": 15746,
+  "body_bytes": 165969,
+  "label": "E1c T1 assigned core (240) + neighbours",
+  "manifest_bytes": 117,
+  "mean_line_bytes": 172.884375,
+  "n_entries": 960,
+  "roundtrip": {
+   "failures": [],
+   "members": 960,
+   "members_ok": 960,
+   "non_members_checked": 200,
+   "non_members_unknown": true,
+   "stale_version": "stale_version",
+   "wrong_hash": "hash_mismatch"
+  },
+  "sha256": "fe3d0714e6b0c5f98b0bb7ef3126eb718f33ddeb95a66e7f0a6567ae00626ca0",
+  "tamper_check": "rejected (body digest mismatch)"
+ }
+}
