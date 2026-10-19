@@ -1,0 +1,96 @@
+{
+ "old_books": [
+  "e1b/data/cases_e1b.json",
+  "e1b/data/cases_e1b_a9.json",
+  "e1c/data/book_dev.json",
+  "e1c/data/book_test.json"
+ ],
+ "new_roles": [
+  [
+   "baker",
+   "porter"
+  ],
+  [
+   "potter",
+   "bearer"
+  ],
+  [
+   "tanner",
+   "loader"
+  ],
+  [
+   "farmer",
+   "packer"
+  ],
+  [
+   "cooper",
+   "driver"
+  ],
+  [
+   "grocer",
+   "runner"
+  ]
+ ],
+ "F2_old_pair_space": 560,
+ "F2_old_fresh_vs_old_true_rules_E1c_rule": 83,
+ "F2_old_fresh_vs_all_old_entry_texts_E1d_rule": 5,
+ "F2_per_new_pair": 56,
+ "F1_space": 16800,
+ "F1_fresh_vs_all_old_entry_texts": 14919,
+ "new_role_words_seen_in_old_books": [],
+ "new_role_words_colliding_with_old_roles_nouns_units": [],
+ "by_k": {
+  "1": {
+   "fresh_F2_texts": 61,
+   "dev_new_core": 4,
+   "test_core_F2": 80,
+   "p_fill_dev_and_test": 0.0,
+   "min_unused_after_test": null
+  },
+  "2": {
+   "fresh_F2_texts": 117,
+   "dev_new_core": 8,
+   "test_core_F2": 80,
+   "p_fill_dev_and_test": 0.2955,
+   "min_unused_after_test": 8
+  },
+  "3": {
+   "fresh_F2_texts": 173,
+   "dev_new_core": 12,
+   "test_core_F2": 80,
+   "p_fill_dev_and_test": 0.9995,
+   "min_unused_after_test": 49
+  },
+  "4": {
+   "fresh_F2_texts": 229,
+   "dev_new_core": 16,
+   "test_core_F2": 80,
+   "p_fill_dev_and_test": 1.0,
+   "min_unused_after_test": 94
+  },
+  "5": {
+   "fresh_F2_texts": 285,
+   "dev_new_core": 20,
+   "test_core_F2": 80,
+   "p_fill_dev_and_test": 1.0,
+   "min_unused_after_test": 137
+  },
+  "6": {
+   "fresh_F2_texts": 341,
+   "dev_new_core": 24,
+   "test_core_F2": 80,
+   "p_fill_dev_and_test": 1.0,
+   "min_unused_after_test": 184
+  }
+ },
+ "k3_dev_sensitivity": {
+  "12": {
+   "p_fill_dev_and_test": 1.0,
+   "min_unused_after_test": 51
+  },
+  "24": {
+   "p_fill_dev_and_test": 0.9515,
+   "min_unused_after_test": 18
+  }
+ }
+}
