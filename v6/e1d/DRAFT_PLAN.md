@@ -1,6 +1,6 @@
-# E1d: draft plan v4 (DRAFT, not frozen)
+# E1d: draft plan v5 (DRAFT, not frozen)
 
-Status: draft for review. Nothing is pre-registered or run. v1 = `1509f3f`, v2 = `22e4b58`, v3 = `da0fe97`. v4 closes GPT r4 (`reviews/gpt_E1d_draft_r4.md`, 5 issues) and Grok's v3 review (`reviews/grok_E1d_draft_v3.md`, 4 points). Change log: §14. Numbers are labelled **measured** (file), **declared** (this plan) or **derived** (frozen formula from measured inputs).
+Status: draft for review. Nothing is pre-registered or run. v1 = `1509f3f`, v2 = `22e4b58`, v3 = `da0fe97`, v4 = `4ffdc76`. v5 closes GPT r5 (`reviews/gpt_E1d_draft_r5.md`, 2 issues) and Grok's v4 review (`reviews/grok_E1d_draft_v4.md`). Change log: §14. Numbers are labelled **measured** (file), **declared** (this plan) or **derived** (frozen formula from measured inputs).
 
 ## 1. Framing and motivation
 Stefan's framing (2026-10-19): E1d is a **proof of concept** about better and faster agent communication by sending fewer kilobytes, not a foolproof product. The dictionary is a **shared repository that agents keep up to date**, used across many agents and conversations. Each participant syncs it; it is not shipped fresh per receiver.
@@ -10,7 +10,7 @@ E1c T1 (`v6/e1c/T1_REPORT.md`) was NOT MET only on break-even (1,142 and 1,114 m
 ## 2. What stays from E1c, and what changes
 - **Unchanged:** models (Qwen2.5-7B, Falcon3-7B, nf4, free Kaggle T4), both directions, families F1/F2, credit rates 2–9, the E1b sender prompt and A10 parser, the verifier prompt, grammar and acceptance rule (`v6/e1c/e1c/verifier.py`), receiver prompt and scoring, 4 cases per entry, supervisor, ledger, retry and `.done` rules.
 - **Checker: unchanged, sender-side.** The verifier stays a stateless call to the sender model on the original prose (`PREREG_E1c.md` §4.2, `stages.py:160`). A rejected ID never leaves the sender, so it costs **0 network bytes**. Verifier compute is reported separately (§12).
-- **Changed:** (a) the receiver's dictionary is loaded only from the repository artifact (§4.2); (b) the byte endpoint and W (§3–§5); (c) the gates (§9); wrong IDs are reported, not gated (§6); (d) TEST size (§6); (e) F2 TEST uses three new role pairs only (§7); (f) an explicit dev eligibility table (§8); (g) speed is reported (§12).
+- **Changed:** (a) the receiver's dictionary is loaded only from the repository artifact (§4.2); (b) the byte endpoint and W (§3–§5); (c) the gates (§9); wrong IDs are reported, not gated (§6); (d) TEST size (§6); (e) F2 TEST uses three new role pairs only (§7); (f) an explicit dev eligibility table (§8); (g) speed is reported (§12); (h) **one arm only: A0** (the E1c design, dictionary = core + 3 neighbours, sender sees the true entry + its neighbours). The smaller "no neighbours" arm A1 is deferred (§14).
 
 ## 3. Primary criterion: lifetime saving under W
 Per direction d:
@@ -46,7 +46,7 @@ M_d = messages in direction d under W; a = share that may use an ID (§5); P_d, 
 ### 4.2 Repository artifact (v1 measured)
 - **Format `E1D-DICT/1`:** manifest line `E1D-DICT/1 kind=<full|delta> dict_ver=<v> base=<v|-> n=<entries> sha256=<body digest>`, then one line per member sorted by ID: `<ID>@v<ver>#<hash8> <entry text>`.
 - **Loader:** checks manifest, body digest, count and `sha256(text)[:8] == hash8`; applies a delta only onto its base version; feeds the **unchanged** `e1b.protocol.Dictionary` (`protocol.py:17`).
-- **Membership:** TEST core entries plus their neighbours (arm A0); no spare 2n-build entries, no F3L. The receiver's Dictionary is built only from the artifact, so the object shipped is the object charged.
+- **Membership:** TEST core entries plus their neighbours (A0, the only arm); no spare 2n-build entries, no F3L. The receiver's Dictionary is built only from the artifact, so the object shipped is the object charged.
 - **Measured on the E1c T1 book** (`measurements/dict_artifact_e1c_t1.json`): minimal artifact **166,086 B** (960 entries = 117 B manifest + E1c's 165,969 B); published 1,960-entry membership 373,936 B line sum (confirms GPT r2), 374,054 B as artifact; gzip-9 15,746 B and 31,295 B. Per core rule (rule + 3 neighbours): 691.5 B.
 - **E1d v1** is measured by the same script from the E1d TEST book at the execution commit, before T1, and pinned. Derived estimate: 160 rules × 691.5 B ≈ 110.6 KB.
 
@@ -99,7 +99,8 @@ W is a declared **scenario, not a forecast**. Values were chosen for the reasons
 - **G2 coverage:** T1 coverage was 92.9% and 95.4%. At 160 entries the chance of observing < 85% is about 0.02% and < 0.01% at those rates, and about 1.7% if true coverage were 90%.
 - **G3 bytes (measured sizing, `tools/size_byte_bound.py`, `measurements/byte_bound_sizing.json`; seed 95100, 10,000 replicates, 15 B framing):** at 80 per family, the SD of the hybrid/prose message-byte ratio H*/P* is 0.0107 (Qwen→Falcon) and 0.0086 (Falcon→Qwen). Its one-sided 95% distance above the point is 1.86 and 1.52 points; times a = 0.89 the S lower bound sits about **1.65 and 1.36 points** below the point estimate. This agrees with GPT r4 (1.64 / 1.36). At 120 per family it would be 1.35 / 1.09 points, a gain of about 0.3 points. The F/(M·P) term also moves with P*; that part depends on W and is left to the real bootstrap (no W-level projection is computed).
 - **Why not larger:** the fresh F2 pool is finite (Grok; §7). E1c's 120 per family would use 40 more fresh F2 texts for about 0.3 points.
-- **Compute (derived estimate):** from T1 timings, send+verify ≈ 380 s, receivers ≈ 6,900 s, loads ≈ 640 s: ≈ 2.2 GPU-h raw. The TEST cap is set from the E1d dev stage at freeze.
+- **Compute (derived estimate):** from T1 timings, send+verify ≈ 380 s, receivers ≈ 6,900 s, loads ≈ 640 s: ≈ 2.2 GPU-h raw. From E1c D2 per-row rates (2.14 s per entry sender+verifier, 4.82 s per receiver message, 261 s per load): 2.0 h raw, 2.5 h with +25%. **Planned TEST cap: 4.0 GPU-h**, provisional; at freeze it is confirmed only if the D1-E1d projection (+25%) is ≤ 4.0 h (check D5).
+- **Dev stage D1-E1d (§8), derived estimate:** E1c D2 took 1,461 s (0.41 GPU-h) for the same E1c-dev work; dev-new adds about 50 s of sender+verifier and about 930 s of receivers (48 messages × 2 arms × 2 directions × 4.82 s): ≈ 2,440 s ≈ 0.68 GPU-h. With all loads at the 420 s prior: ≈ 0.76 h. **Planned dev cap: 1.0 GPU-h.** Total planned ≈ 3 GPU-h, within the free weekly Kaggle quota.
 
 ## 7. Data and the F2 fix (Option A)
 **Approximate counts** (`tools/count_f2_fresh.py`, `measurements/f2_fresh_counts.json`; a simplified occupancy model, not the builder): F2 with the 10 old pairs has 560 texts; 83 are fresh against old true rules, **5** against all E1b/E1c entry texts of any kind (the E1d rule). Each new pair adds 56 texts. F1: 14,919 of 16,800 fresh.
@@ -114,38 +115,53 @@ W is a declared **scenario, not a forecast**. Values were chosen for the reasons
 - F2 role pairs: dev-new and TEST use **("baker", "porter"), ("potter", "bearer"), ("tanner", "loader")** only. Same template (`render_def`, `render_message`, labels, cases, neighbours), credits 2–9, uniform choice over pairs then rates (`cases.py:44`). F1 is unchanged.
 - Role words: single lowercase ASCII words (verifier grammar `[A-Za-z]+`), consonant-initial (templates say "a {x}"), common trade nouns of similar length. CPU check: none appears in any E1b/E1c entry or case text, and none collides with old roles, scheme nouns or units.
 - E1d passes the role list through its own builder code (the trial tool rebinds `e1b.cases.ROLES` in-process); `v6/e1b/e1b/cases.py` is not edited, so E1b and E1c hashes stay valid.
-- **Step-up rule:** if a pair fails (fewer than 8 of 10 builds, or dev smoke check D7 in §8), the next pair from ("farmer", "packer"), ("cooper", "driver"), ("grocer", "runner") replaces or joins it, one at a time, up to six new pairs ever. Dev-new size is then **4 × adopted pairs**, every adopted pair is qualified in dev, and the builder trials are rerun.
+- **Step-up list (frozen order):** ("farmer", "packer"), ("cooper", "driver"), ("grocer", "runner"); at most six new pairs are ever used. A builder failure (D6) **adds** the next pair (k grows by one) and the trials rerun; a dev failure (D7/D8) **replaces** a failed pair by the next one (k unchanged), by the deterministic rule in §8. Let k = the number of adopted pairs (now 3); dev-new size is always 4k.
 
-**Exclusion list (frozen):** a dev-new or TEST entry (core or neighbour) may not use any entry text of **any kind**, and no case text or entry ID may be reused, from the E1b frozen book, the E1b A9 book, the E1c dev book and the E1c TEST book; TEST also excludes the E1d dev-new shown material (cores, neighbours, cases, IDs). The canary pool is spliced in as in E1c. `book.py:47` lists only the first three books and must be replaced.
+**Exclusion list (frozen):** a dev-new or TEST entry (core or neighbour) may not use any entry text of **any kind**, and no case text or entry ID may be reused, from the E1b frozen book, the E1b A9 book, the E1c dev book and the E1c TEST book. **TEST also excludes everything shown to a model in any earlier dev stage:** E1c D1 and D2 (the E1c dev book, already excluded whole), and every E1d dev stage, including the first dev-new book and any replacement dev-new book (their cores, neighbours, cases and IDs). A role pair replaced after a dev failure is never used in TEST. Throwaway builder-trial books are never shown to a model and are not excluded (their seeds are disjoint). The canary pool is spliced in as in E1c. `book.py:47` lists only the first three books and must be replaced.
 
 **Order of steps before freeze:**
 1. Throwaway builder trials (done: 10/10; rerun if pairs change).
-2. E1d dev-new book (seed 94062): 12 F2 cores, 4 per new pair, 4 cases each. The E1c dev book is reused for everything else (no fresh texts). Reusing E1c dev alone cannot qualify the new roles (GPT).
+2. E1d dev-new book (seed 94062): 4k = 12 F2 cores, 4 per new pair, 4 cases each. The E1c dev book is reused for everything else (no fresh texts). Reusing E1c dev alone cannot qualify the new roles (GPT).
 3. The E1d dev stage (§8), after Stefan's go.
 4. Freeze, then build the E1d TEST book (seeds 95061–95066, generator 95062, +100 seed rule).
 
 ## 8. Dev stage and eligibility for freeze
-One dev stage, **D1-E1d**, after Stefan's explicit go, with its own cap set from E1c's measured timings. Data:
-- **E1c dev book** (reused; old pairs; 80 per family): senders + verifier on all 160 entries per sender, arm A0 (and A1 if run); receivers on the E1c 10-entry subset (5 per family), 40 messages × 2 arms per direction, per arm.
-- **E1d dev-new** (12 F2 entries on new pairs): senders + verifier and receivers, both directions, all 48 messages × 2 arms.
+One dev stage, **D1-E1d**, after Stefan's explicit go, with the planned cap of 1.0 GPU-h (§6). Arm A0 only. Data:
+- **E1c dev book** (reused; old pairs; 80 per family): senders + verifier on all 160 entries per sender; receivers on the E1c 10-entry subset (5 per family), 40 messages × 2 arms per direction.
+- **E1d dev-new** (4k = 12 F2 entries on the new pairs, 4 per pair): senders + verifier and receivers, both directions, all 16k = 48 messages × 2 arms per direction.
 
-**The 12 dev-new entries are a vocabulary smoke test only.** They can catch gross breakage of the new role words; they do not establish new-pair reliability. TEST measures that, reported per pair (§10).
+**The dev-new entries are a vocabulary smoke test only.** They can catch gross breakage of the new role words; they do not establish new-pair reliability. TEST measures that, reported per pair (§10).
 
 Freeze is allowed only if every row holds (checked in code, like E1c `t1_eligibility`):
 
 | Check | Measures | Pass | From E1c? | On failure |
 |---|---|---|---|---|
 | D1 completion | `.done` + recorded `done`, no terminal marker | yes | carried (`stages.py:98`) | E1c retry rules; no freeze |
-| D2 structure | both directions, both senders; 160 selection rows per sender (E1c dev, per arm run), 12 per sender (dev-new); receiver rows exactly as assigned | exact | carried, extended | INCOMPLETE; no freeze |
+| D2 structure | both directions, both senders; 160 selection rows per sender (E1c dev), 4k per sender (dev-new); receiver rows exactly as assigned | exact | carried, extended | INCOMPLETE; no freeze |
 | D3 verifier batch conformance | batch 8 vs batch 1 on 16 E1c-dev entries per model | all identical | carried | not eligible; amendment with a batch-1 dev stage |
-| D4 protocol hash | dev hash = TEST config hash (now also covers the role list and the frozen arm) | equal | carried, extended | new dev stage |
-| D5 projection | dev per-row timings scaled to 160 entries × 2 directions, + 25% | ≤ TEST cap | carried | no TEST until amendment |
-| D6 builder feasibility | real-builder throwaway trials | ≥ 8 of 10 | new | step-up rule (§7) |
-| D7 vocabulary smoke test, per new pair and per sender (4 entries each) | verifier format OK; sender pick valid; prose-arm receiver answer parseable | ≥ 3 of 4 each | new | that pair is replaced by the next step-up pair; dev-new for it reruns (new dev stage, own cap and go) |
-| D8 dev-new accuracy, per direction (48 messages) | prose-arm correct; hybrid − prose observed | ≥ 36/48 (75%); ≥ −0.10 | new | as D7 for any pair at fault; if no pair is at fault or all three fail: stop, Option A not qualified, back to Stefan |
-| Wrong-pick screen | E1c's observed ≤ 2% screen (`stages.py:109`) | reported only | **not carried as blocking** (consistent with Stefan's decision; TEST G1 captures its effect on accuracy) | n/a |
+| D4 protocol hash | dev hash = TEST config hash (also covers the role list) | equal | carried, extended | new dev stage |
+| D5 projection | dev per-row timings scaled to 160 entries × 2 directions, + 25% | ≤ TEST cap (4.0 h) | carried | no TEST until amendment |
+| D6 builder feasibility | real-builder throwaway trials (§7) | ≥ 8 of 10 | new | add the next step-up pair, rerun (§7) |
+| D7 vocabulary smoke test | per pair, see below | all six sub-checks | new | deterministic rule below |
+| D8 dev-new accuracy | per pair and pooled, see below | all | new | deterministic rule below |
+| Wrong-pick screen | E1c's observed ≤ 2% screen (`stages.py:109`) | reported only | **not carried as blocking** (consistent with Stefan's decision to drop the wrong-ID gate; TEST G1 captures its effect on accuracy) | n/a |
 
-**A1 selection data.** Only the E1c dev book (160 entries per sender) and its 10-entry receiver subset; dev-new is too small to stand in for a dictionary. A1's dictionary is the 160 dev cores. Lifetime cost is priced at TEST scale under W_base: A0 at L_rule from the dev book (core + 3 neighbour lines), A1 at the dev book's mean core-line bytes only.
+**D7 (per adopted pair p; three screens, each checked separately, for each sender; a pair passes D7 only if all six pass).** Each sender has 4 entries of pair p.
+- D7a verifier format: `verifier_parse == "ok"` on **≥ 3 of 4** entries.
+- D7b sender pick valid: `pick` not null (a letter parsed) on **≥ 3 of 4** entries.
+- D7c receiver parse, prose arm, in that sender's direction: **16 case-level observations** (4 entries × 4 cases); pass if the frozen E1b receiver parser returns an answer (`pred` not null) on **≥ 14 of 16**.
+
+**D8 (accuracy; counts are case-level messages).**
+- Per pair p and direction (16 messages per arm): D8a prose correct **≥ 12 of 16**; D8b hybrid correct − prose correct **≥ −2**. A pair passes D8 only if D8a and D8b hold in both directions.
+- Pooled over all k adopted pairs, per direction (16k messages per arm; 48 at k = 3): D8c prose correct **≥ 12k** (36 at k = 3); D8d hybrid correct − prose correct **≥ −floor(1.6k)** (−4 at k = 3). Pooled D8 passes only if D8c and D8d hold in both directions.
+
+**Deterministic outcome rule** (f = number of adopted pairs failing D7 or D8; u = unused step-up pairs left):
+1. f = 0 and pooled D8 passes: dev-new is qualified.
+2. f = 0 and pooled D8 fails: **stop**. Option A is not qualified; back to Stefan (no automatic remedy).
+3. 1 ≤ f < k and f ≤ u: each failed pair is replaced by the next unused step-up pair, in frozen order, failed pairs taken in adopted-list order. Then: builder trials rerun with the new set (D6); a replacement dev-new stage (own cap, Stefan's go) runs only the 4f new entries; passing pairs keep their results; D7/D8 are re-evaluated on the final set (pooled D8 from each pair's latest results), and this rule applies again.
+4. f = k (every pair fails), or f > u: **stop**, as in 2.
+
+The step-up list holds three pairs, so at most three replacements happen across all dev stages.
 
 ## 9. Gates and verdict
 Per direction; SUCCESS only if all pass in **both** directions, after completeness:
@@ -159,7 +175,7 @@ Per direction; SUCCESS only if all pass in **both** directions, after completene
 
 Reported, not gated: wrong IDs (§6), sensitivities (§5.3), compressed baselines (§11), speed (§12), per-pair results (§10), E1c's 30% payload and break-even.
 
-**Code to adapt:** E1c's `direction_result` and `verdict` enforce the old criteria (`analysis.py:113`, `stages.py:281`); `check_freeze.py` hardcodes `v6/e1c` paths; the code hash omits `tools/`. E1d needs its own gate code, the §8 eligibility check, freeze paths, and a hash covering `tools/` (all four scripts), the W file, the builder and the analysis. Tests: F_d in every replicate, the §5.2 event counts, versions and order, the artifact round trip, both-direction enforcement.
+**Code to adapt:** E1c's `direction_result` and `verdict` enforce the old criteria (`analysis.py:113`, `stages.py:281`); `check_freeze.py` hardcodes `v6/e1c` paths; the code hash omits `tools/`. E1d needs its own gate code, the §8 eligibility check, freeze paths, and a hash covering `tools/` (all four scripts), the W file, the builder and the analysis. Tests: F_d in every replicate, the §5.2 event counts, versions and order, the artifact round trip, both-direction enforcement, and the D7/D8 outcome rule on synthetic rows.
 
 ## 10. Per-pair reporting
 For **each adopted new role pair** separately (baker/porter, potter/bearer, tanner/loader, and any step-up pair), per direction: entries, picks and messages (denominators shown); coverage; hybrid and prose accuracy; wrong accepts with CP95 upper bound; hybrid and prose bytes per message. Also the pooled F2 new-pair group, F1, and E1c T1 F2 as the old-pair reference. Groups with no entries are marked "n/a". These are reported findings, not gates. With 21–33 entries per pair (§7) the per-pair numbers are imprecise and say so.
@@ -174,14 +190,29 @@ From fields the runs already log (`exchange_*.jsonl`, `select_*.jsonl`), per dir
 - ID-arm sender-side overhead: `sender_latency_s`, `sender_gen_tokens`, `verifier_latency_s` per entry.
 Latencies are batch-level measurements on a shared T4 and are descriptive only.
 
-## 13. Open questions (for Stefan, GPT, Grok)
-1. W_base values (§5.1): accept as a labelled scenario, or change any value before freeze?
-2. Dev wrong-pick screen (§8): v4 makes E1c's 2% dev screen reported only, by extension of Stefan's TEST decision. Confirm?
-3. D7/D8 smoke thresholds (≥ 3 of 4 per pair; prose ≥ 75%, hybrid − prose ≥ −0.10): acceptable?
-4. Run arm A1 at all, given it changes the sender task?
-5. Compression: per-message gzip-9 only, or also zstd with a trained dictionary and its distribution cost?
+## 13. Open questions and closed decisions
+**For Stefan:**
+1. The freeze decision itself, with the planned compute: dev stage D1-E1d cap 1.0 GPU-h (estimate ≈ 0.7 h); TEST cap 4.0 GPU-h (estimate ≈ 2.0–2.5 h, confirmed by D5 at freeze).
+2. D7/D8 thresholds (§8): accept as written, or change before freeze?
+
+**Closed:**
+- W_base values: accepted by Grok (`reviews/grok_E1d_draft_v4.md`) as a proof-of-concept shared-repository scenario; unchanged.
+- Arm A1 "no neighbours": dropped; A0 is the only arm (Grok, GPT r5).
+- Dev wrong-pick screen: reported only, consistent with Stefan's decision to drop the wrong-ID gate.
+- Compression: gzip-9 stays the reported compressed baseline. zstd with a trained dictionary (and its distribution cost) is **deferred** as a possible reported extra; not part of E1d's frozen analysis.
 
 ## 14. Change log
+**v5 (2026-10-19)**
+
+| Point | Fix | Section |
+|---|---|---|
+| GPT r5 #2 / Grok v4 #1: A1 not fully specified | A1 dropped and deferred; A0 the only arm; every A1 step and dependency removed (dev data, D2 rows, D4 hash, selection data) | §2, §4.2, §8 |
+| GPT r5 #1 / Grok v4 #2: D7/D8 not mechanical | D7 three screens checked separately per sender with actual counts (4 entries; 16 case-level receiver parses, ≥ 14); D8 pair-level (16 messages) and pooled (16k) numeric thresholds; deterministic replace/stop rule in terms of k and remaining step-up pairs | §8, §7 |
+| GPT r5 #1: TEST exclusions | TEST excludes everything shown in any earlier dev stage, incl. replacement dev-new books; replaced pairs never used | §7 |
+| Grok v4: W_base acceptable | recorded as closed | §13 |
+| Open questions | closed: W_base, A1, dev wrong-pick screen (reported), zstd (deferred); planned compute added for the freeze decision | §6, §13 |
+
+**v4 (`4ffdc76`, 2026-10-19)**
 **v4 (2026-10-19)**
 
 | Point | Fix | Section |
