@@ -2,6 +2,10 @@
 procedure (2n core draws, keep the first n distinct) can fill dev and TEST. CPU only, reads the old books, builds no
 book, calls no model.  python v6/e1d/tools/count_f2_fresh.py [out.json]
 
+APPROXIMATE: the fill simulation is a simplified occupancy model (dev cores drawn from the whole pool, each
+neighbour generated once, no builder rejection rules). The authoritative feasibility check is the real builder,
+tools/builder_trials.py (DRAFT_PLAN v4 §7).
+
 Exclusion list (DRAFT_PLAN §7): every entry text of ANY kind, every case text and every entry ID in the E1b frozen
 book, the E1b A9 book, the E1c dev book and the E1c TEST book (strict; stricter than E1c's true-rule rule)."""
 import sys, json, random, copy

@@ -1,0 +1,476 @@
+{
+ "seeds": [
+  99000,
+  99100,
+  99200,
+  99300,
+  99400,
+  99500,
+  99600,
+  99700,
+  99800,
+  99900
+ ],
+ "built": 10,
+ "n": 10,
+ "rule": "authoritative if >= 8 of 10 build",
+ "new_roles": [
+  [
+   "baker",
+   "porter"
+  ],
+  [
+   "potter",
+   "bearer"
+  ],
+  [
+   "tanner",
+   "loader"
+  ]
+ ],
+ "role_words_in_old_books": [],
+ "dev_per_new_pair": 4,
+ "test_core_per_family": 80,
+ "trials": [
+  {
+   "seed": 99000,
+   "dev_new": {
+    "core": 12,
+    "shown_entries": 48,
+    "cases": 48,
+    "e1b_verify": true,
+    "branch_balance": true,
+    "distinct_core": true,
+    "fresh_entry_texts": true,
+    "fresh_ids": true,
+    "fresh_cases": true,
+    "cases_per_core_ok": true,
+    "verifier_spec_parse_all_shown": true
+   },
+   "test": {
+    "core_F1": 80,
+    "core_F2": 80,
+    "cases": 640,
+    "F2_by_pair": {
+     "baker/porter": 24,
+     "potter/bearer": 23,
+     "tanner/loader": 33
+    },
+    "F2_new_pair": 80,
+    "e1b_verify": true,
+    "branch_balance": true,
+    "distinct_core": true,
+    "fresh_entry_texts": true,
+    "fresh_ids": true,
+    "fresh_cases": true,
+    "cases_per_core_ok": true,
+    "verifier_spec_parse_all_shown": true
+   },
+   "new_pair_F2_space": {
+    "total": 168,
+    "used_by_dev_new_shown": 33,
+    "test_cores": 80,
+    "left_after_test_cores": 55,
+    "left_after_all_test_shown": 16
+   },
+   "built": true,
+   "seconds": 0.5
+  },
+  {
+   "seed": 99100,
+   "dev_new": {
+    "core": 12,
+    "shown_entries": 48,
+    "cases": 48,
+    "e1b_verify": true,
+    "branch_balance": true,
+    "distinct_core": true,
+    "fresh_entry_texts": true,
+    "fresh_ids": true,
+    "fresh_cases": true,
+    "cases_per_core_ok": true,
+    "verifier_spec_parse_all_shown": true
+   },
+   "test": {
+    "core_F1": 80,
+    "core_F2": 80,
+    "cases": 640,
+    "F2_by_pair": {
+     "potter/bearer": 31,
+     "baker/porter": 25,
+     "tanner/loader": 24
+    },
+    "F2_new_pair": 80,
+    "e1b_verify": true,
+    "branch_balance": true,
+    "distinct_core": true,
+    "fresh_entry_texts": true,
+    "fresh_ids": true,
+    "fresh_cases": true,
+    "cases_per_core_ok": true,
+    "verifier_spec_parse_all_shown": true
+   },
+   "new_pair_F2_space": {
+    "total": 168,
+    "used_by_dev_new_shown": 30,
+    "test_cores": 80,
+    "left_after_test_cores": 58,
+    "left_after_all_test_shown": 14
+   },
+   "built": true,
+   "seconds": 0.6
+  },
+  {
+   "seed": 99200,
+   "dev_new": {
+    "core": 12,
+    "shown_entries": 48,
+    "cases": 48,
+    "e1b_verify": true,
+    "branch_balance": true,
+    "distinct_core": true,
+    "fresh_entry_texts": true,
+    "fresh_ids": true,
+    "fresh_cases": true,
+    "cases_per_core_ok": true,
+    "verifier_spec_parse_all_shown": true
+   },
+   "test": {
+    "core_F1": 80,
+    "core_F2": 80,
+    "cases": 640,
+    "F2_by_pair": {
+     "baker/porter": 28,
+     "tanner/loader": 29,
+     "potter/bearer": 23
+    },
+    "F2_new_pair": 80,
+    "e1b_verify": true,
+    "branch_balance": true,
+    "distinct_core": true,
+    "fresh_entry_texts": true,
+    "fresh_ids": true,
+    "fresh_cases": true,
+    "cases_per_core_ok": true,
+    "verifier_spec_parse_all_shown": true
+   },
+   "new_pair_F2_space": {
+    "total": 168,
+    "used_by_dev_new_shown": 34,
+    "test_cores": 80,
+    "left_after_test_cores": 54,
+    "left_after_all_test_shown": 12
+   },
+   "built": true,
+   "seconds": 0.5
+  },
+  {
+   "seed": 99300,
+   "dev_new": {
+    "core": 12,
+    "shown_entries": 48,
+    "cases": 48,
+    "e1b_verify": true,
+    "branch_balance": true,
+    "distinct_core": true,
+    "fresh_entry_texts": true,
+    "fresh_ids": true,
+    "fresh_cases": true,
+    "cases_per_core_ok": true,
+    "verifier_spec_parse_all_shown": true
+   },
+   "test": {
+    "core_F1": 80,
+    "core_F2": 80,
+    "cases": 640,
+    "F2_by_pair": {
+     "potter/bearer": 24,
+     "tanner/loader": 30,
+     "baker/porter": 26
+    },
+    "F2_new_pair": 80,
+    "e1b_verify": true,
+    "branch_balance": true,
+    "distinct_core": true,
+    "fresh_entry_texts": true,
+    "fresh_ids": true,
+    "fresh_cases": true,
+    "cases_per_core_ok": true,
+    "verifier_spec_parse_all_shown": true
+   },
+   "new_pair_F2_space": {
+    "total": 168,
+    "used_by_dev_new_shown": 30,
+    "test_cores": 80,
+    "left_after_test_cores": 58,
+    "left_after_all_test_shown": 18
+   },
+   "built": true,
+   "seconds": 0.6
+  },
+  {
+   "seed": 99400,
+   "dev_new": {
+    "core": 12,
+    "shown_entries": 48,
+    "cases": 48,
+    "e1b_verify": true,
+    "branch_balance": true,
+    "distinct_core": true,
+    "fresh_entry_texts": true,
+    "fresh_ids": true,
+    "fresh_cases": true,
+    "cases_per_core_ok": true,
+    "verifier_spec_parse_all_shown": true
+   },
+   "test": {
+    "core_F1": 80,
+    "core_F2": 80,
+    "cases": 640,
+    "F2_by_pair": {
+     "tanner/loader": 29,
+     "potter/bearer": 21,
+     "baker/porter": 30
+    },
+    "F2_new_pair": 80,
+    "e1b_verify": true,
+    "branch_balance": true,
+    "distinct_core": true,
+    "fresh_entry_texts": true,
+    "fresh_ids": true,
+    "fresh_cases": true,
+    "cases_per_core_ok": true,
+    "verifier_spec_parse_all_shown": true
+   },
+   "new_pair_F2_space": {
+    "total": 168,
+    "used_by_dev_new_shown": 31,
+    "test_cores": 80,
+    "left_after_test_cores": 57,
+    "left_after_all_test_shown": 19
+   },
+   "built": true,
+   "seconds": 0.5
+  },
+  {
+   "seed": 99500,
+   "dev_new": {
+    "core": 12,
+    "shown_entries": 48,
+    "cases": 48,
+    "e1b_verify": true,
+    "branch_balance": true,
+    "distinct_core": true,
+    "fresh_entry_texts": true,
+    "fresh_ids": true,
+    "fresh_cases": true,
+    "cases_per_core_ok": true,
+    "verifier_spec_parse_all_shown": true
+   },
+   "test": {
+    "core_F1": 80,
+    "core_F2": 80,
+    "cases": 640,
+    "F2_by_pair": {
+     "baker/porter": 23,
+     "potter/bearer": 27,
+     "tanner/loader": 30
+    },
+    "F2_new_pair": 80,
+    "e1b_verify": true,
+    "branch_balance": true,
+    "distinct_core": true,
+    "fresh_entry_texts": true,
+    "fresh_ids": true,
+    "fresh_cases": true,
+    "cases_per_core_ok": true,
+    "verifier_spec_parse_all_shown": true
+   },
+   "new_pair_F2_space": {
+    "total": 168,
+    "used_by_dev_new_shown": 33,
+    "test_cores": 80,
+    "left_after_test_cores": 55,
+    "left_after_all_test_shown": 15
+   },
+   "built": true,
+   "seconds": 0.6
+  },
+  {
+   "seed": 99600,
+   "dev_new": {
+    "core": 12,
+    "shown_entries": 48,
+    "cases": 48,
+    "e1b_verify": true,
+    "branch_balance": true,
+    "distinct_core": true,
+    "fresh_entry_texts": true,
+    "fresh_ids": true,
+    "fresh_cases": true,
+    "cases_per_core_ok": true,
+    "verifier_spec_parse_all_shown": true
+   },
+   "test": {
+    "core_F1": 80,
+    "core_F2": 80,
+    "cases": 640,
+    "F2_by_pair": {
+     "potter/bearer": 27,
+     "tanner/loader": 28,
+     "baker/porter": 25
+    },
+    "F2_new_pair": 80,
+    "e1b_verify": true,
+    "branch_balance": true,
+    "distinct_core": true,
+    "fresh_entry_texts": true,
+    "fresh_ids": true,
+    "fresh_cases": true,
+    "cases_per_core_ok": true,
+    "verifier_spec_parse_all_shown": true
+   },
+   "new_pair_F2_space": {
+    "total": 168,
+    "used_by_dev_new_shown": 34,
+    "test_cores": 80,
+    "left_after_test_cores": 54,
+    "left_after_all_test_shown": 16
+   },
+   "built": true,
+   "seconds": 0.5
+  },
+  {
+   "seed": 99700,
+   "dev_new": {
+    "core": 12,
+    "shown_entries": 48,
+    "cases": 48,
+    "e1b_verify": true,
+    "branch_balance": true,
+    "distinct_core": true,
+    "fresh_entry_texts": true,
+    "fresh_ids": true,
+    "fresh_cases": true,
+    "cases_per_core_ok": true,
+    "verifier_spec_parse_all_shown": true
+   },
+   "test": {
+    "core_F1": 80,
+    "core_F2": 80,
+    "cases": 640,
+    "F2_by_pair": {
+     "tanner/loader": 24,
+     "baker/porter": 28,
+     "potter/bearer": 28
+    },
+    "F2_new_pair": 80,
+    "e1b_verify": true,
+    "branch_balance": true,
+    "distinct_core": true,
+    "fresh_entry_texts": true,
+    "fresh_ids": true,
+    "fresh_cases": true,
+    "cases_per_core_ok": true,
+    "verifier_spec_parse_all_shown": true
+   },
+   "new_pair_F2_space": {
+    "total": 168,
+    "used_by_dev_new_shown": 29,
+    "test_cores": 80,
+    "left_after_test_cores": 59,
+    "left_after_all_test_shown": 11
+   },
+   "built": true,
+   "seconds": 0.6
+  },
+  {
+   "seed": 99800,
+   "dev_new": {
+    "core": 12,
+    "shown_entries": 48,
+    "cases": 48,
+    "e1b_verify": true,
+    "branch_balance": true,
+    "distinct_core": true,
+    "fresh_entry_texts": true,
+    "fresh_ids": true,
+    "fresh_cases": true,
+    "cases_per_core_ok": true,
+    "verifier_spec_parse_all_shown": true
+   },
+   "test": {
+    "core_F1": 80,
+    "core_F2": 80,
+    "cases": 640,
+    "F2_by_pair": {
+     "baker/porter": 27,
+     "potter/bearer": 25,
+     "tanner/loader": 28
+    },
+    "F2_new_pair": 80,
+    "e1b_verify": true,
+    "branch_balance": true,
+    "distinct_core": true,
+    "fresh_entry_texts": true,
+    "fresh_ids": true,
+    "fresh_cases": true,
+    "cases_per_core_ok": true,
+    "verifier_spec_parse_all_shown": true
+   },
+   "new_pair_F2_space": {
+    "total": 168,
+    "used_by_dev_new_shown": 32,
+    "test_cores": 80,
+    "left_after_test_cores": 56,
+    "left_after_all_test_shown": 16
+   },
+   "built": true,
+   "seconds": 0.4
+  },
+  {
+   "seed": 99900,
+   "dev_new": {
+    "core": 12,
+    "shown_entries": 48,
+    "cases": 48,
+    "e1b_verify": true,
+    "branch_balance": true,
+    "distinct_core": true,
+    "fresh_entry_texts": true,
+    "fresh_ids": true,
+    "fresh_cases": true,
+    "cases_per_core_ok": true,
+    "verifier_spec_parse_all_shown": true
+   },
+   "test": {
+    "core_F1": 80,
+    "core_F2": 80,
+    "cases": 640,
+    "F2_by_pair": {
+     "baker/porter": 31,
+     "tanner/loader": 28,
+     "potter/bearer": 21
+    },
+    "F2_new_pair": 80,
+    "e1b_verify": true,
+    "branch_balance": true,
+    "distinct_core": true,
+    "fresh_entry_texts": true,
+    "fresh_ids": true,
+    "fresh_cases": true,
+    "cases_per_core_ok": true,
+    "verifier_spec_parse_all_shown": true
+   },
+   "new_pair_F2_space": {
+    "total": 168,
+    "used_by_dev_new_shown": 32,
+    "test_cores": 80,
+    "left_after_test_cores": 56,
+    "left_after_all_test_shown": 12
+   },
+   "built": true,
+   "seconds": 0.6
+  }
+ ]
+}
