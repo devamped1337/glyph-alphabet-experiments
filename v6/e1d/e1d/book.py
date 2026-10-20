@@ -79,3 +79,37 @@ def merge(Dv, N, X):
     B["e1d_ids"] = dict(e1c_dev_sel=ed, e1c_dev_recv=er, dev_new=list(new)); return B
 
 def pair_of(e): return f"{e['x']}/{e['y']}" if e.get("fam") == "F2" else None
+
+# ---------------------------------------------------------------- TEST (built only after freeze)
+import os
+from pathlib import Path
+TDATA = Path(os.environ["E1D_TEST_DATA"]) if os.environ.get("E1B_ALLOW_NO_GPU") == "1" and os.environ.get("E1D_TEST_DATA") else DATA   # tests only (throwaway book)
+TEST_PINS = TDATA / "test_pins.json"     # written AFTER the freeze tag (book sha256 + measured v1 artifact); not in the code hash
+
+def build_test(cfg, seed0):
+    """Frozen procedure (§7): seeds seed0..seed0+5 in BT.KEYS_SEED order (95061 -> generator 95062), F2 roles = adopted
+    new pairs only, 2n = 160 draws per family, core = first 80 distinct per family; strict exclusions incl. dev-new."""
+    X = cfg["e1d"]
+    if X["status"] != "frozen": raise SystemExit("TEST book refused: E1d is not frozen")
+    roles = [tuple(p) for p in X["roles_adopted"]]; n = X["sizes"]["test"]["core_per_family"]
+    N = json.load(open(DATA / "book_dev_new.json")); excl = exclusions("test", [N]); frz = olds()[0]
+    B, c = BT.build(e1c_cfg(), "test", seed0, n, roles, excl, frz)      # sub_cfg doubles n (spare = n) -> 2n draws
+    core = {f: BT.first_distinct(B, f, n) for f in ("F1", "F2")}
+    for f in core: assert len(core[f]) == n, f"TEST: only {len(core[f])} distinct {f} cores"
+    assert all((B["entries"][k]["x"], B["entries"][k]["y"]) in set(roles) for k in core["F2"]), "TEST F2 core on an old pair"
+    allc = core["F1"] + core["F2"]; chk, _, _ = BT.checks(B, c, allc, excl); assert all(chk.values()), chk
+    check_fresh_e1d(B, allc, excl)
+    B["e1d_test_core"] = core; B["meta"] = dict(B.get("meta", {}), study="E1d", kind="test", seed0=seed0, generator=seed0 + 1,
+                                                roles=[list(r) for r in roles], checks=chk)
+    return B
+
+def load_test(cfg):
+    X = cfg["e1d"]
+    if X["status"] != "frozen": raise SystemExit("TEST refused: E1d is not frozen")
+    P = json.load(open(TEST_PINS)); B = _load(TDATA / "book_test.json", P["test_book_sha256"])
+    N = json.load(open(DATA / "book_dev_new.json")); allc = B["e1d_test_core"]["F1"] + B["e1d_test_core"]["F2"]
+    check_fresh_e1d(B, allc, exclusions("test", [N]))
+    assert [list(r) for r in X["roles_adopted"]] == B["meta"]["roles"]
+    n = X["sizes"]["test"]["core_per_family"]; assert all(len(B["e1d_test_core"][f]) == n for f in ("F1", "F2"))
+    B["e1c_core"] = {f: list(B["e1d_test_core"][f]) for f in ("F1", "F2")}     # (fake test backend keys)
+    B["e1d_ids"] = dict(test=allc); return B

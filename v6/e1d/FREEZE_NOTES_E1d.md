@@ -1,0 +1,8 @@
+# E1d freeze notes (TEST)
+
+- Plan: `DRAFT_PLAN.md` at tag `prereg-e1d` (1430f5d), unchanged. Dev stage D1-E1d ran at `f092214` (tag `e1d-dev-exec`, code hash `fa8d8b80…`); its results under `results/D1-E1d/` are unchanged (sha256 list in `FREEZE_E1d.json`). Post-run D1–D8: all pass, outcome rule 1 (GPT dev review r1, `reviews/gpt_E1d_dev_r1.md`).
+- Code change since `f092214` (why the code hash differs): TEST execution support (`book.build_test/load_test`, `stages._run_test/summarize_test`, supervisor `test_eligibility/test_projection`), `tools/check_eligibility.py`, `tools/check_freeze.py`, `tools/build_test_book.py`, tests; config `status` -> frozen, `t1_qualifying_dev_stage`, `test_projection` (measured D1-E1d timings), stress-margin wording; `run_e1d.py` docstring. Dev-path code (`_run`, `exchange`, `summarize`, analysis, lifetime, eligibility) is unchanged.
+- Protocol hash unchanged from dev: `11d7af03…` (D4); checked by `tools/check_freeze.py`.
+- Frozen: roles, step-up list, seeds (TEST 95061–95066, generator 95062, +100 rule), sizes (80 per family), gates G1/G2/G3, W file, cap T1-E1d 4.0 GPU-h. TEST launch projection from measured dev timings: 2.97 h with +25% (stress: loads at 420 s, no margin, 2.50 h).
+- Order: this freeze tag (`e1d-test-freeze`) is created BEFORE the TEST book exists. The TEST book and the measured v1 artifact are pinned afterwards in `data/test_pins.json` (outside the code hash), then `tools/check_freeze.py --exec` verifies integrity (tag `e1d-test-exec`).
+- TEST sender views are seeded with the TEST generator (95062), as E1c T1 used its TEST generator.

@@ -1,0 +1,298 @@
+{
+ "code_hash": "625071563086ac0dbcb8c931f1482011a901108245a624e6ea7afe3f98d71270",
+ "protocol_hash": "11d7af03575d5434c4c3a5e6f815db87a45bc3ad0abfbdca3ee198a06e8777a2",
+ "execution_commit_dev": "f092214",
+ "dev_code_hash": "fa8d8b80b1917cd4b1168042e7170bf49d722abb222e890e1a624ddee63993c0",
+ "dev_results_sha256": {
+  "results/D1-E1d/.done": "47003fb48c68f14e40b51e4853a64b5b6af1306b034edb98679bd7876fb9bad2",
+  "results/D1-E1d/CHILD_COMPLETE": "c26a2868157f33a343fc83852e9a2f947bc7f1d09f7815ea905e18b3b9aeaa7f",
+  "results/D1-E1d/canary_falcon7b.jsonl": "4cbb6410768d9fd828865fbaea6bb6094cec73f1e5ad69246f445359a5ac4245",
+  "results/D1-E1d/canary_qwen7b.jsonl": "391f0eef163f7f730cf2f78a07d0f9d7c8cc29c1b1402e13d3e4c5115d3d4e98",
+  "results/D1-E1d/dict_v1.e1d": "30c00f0f24c5f2a1c85242725b7c776829014dc2f3ad7848e0813abe7ce26906",
+  "results/D1-E1d/e1d_state.json": "2791a04a2bf23f5d702030e0fd1fb17d7a508b91ee83cadf1fbe48414817a358",
+  "results/D1-E1d/eligibility.json": "ba1327e03a56bb38218035f2ddd7ae40dee0007963be9b81b037a803b078167e",
+  "results/D1-E1d/exchange_falcon7b_to_qwen7b.jsonl": "198156565d00a5933c741c5061daeb3ee708e50ecff5f1ea366d1bd4bdd3b9ad",
+  "results/D1-E1d/exchange_qwen7b_to_falcon7b.jsonl": "c32e02b7b2fdaf9563c111a5bba09cd68a29d190f4fd39a7fdfdc9bf6d37a80f",
+  "results/D1-E1d/kaggle_log.json": "a9ee3bf9ef4fd55d40bae7996093064999f26074fb94e2d47d83f1e6cc5b2114",
+  "results/D1-E1d/loads_attempt1.json": "b80d5a9b5bb08b1d46a89109f3061f300415e8acdbee5eda048db155cb149709",
+  "results/D1-E1d/prompts_falcon7b.jsonl": "827f2920d72ac65ddfcb22459ca63caf9e88e961439c52efee5f3025849202ea",
+  "results/D1-E1d/prompts_qwen7b.jsonl": "8375847202d43c8a631a724ced58c5d725108d1070fa51a6786c5385939fc58c",
+  "results/D1-E1d/select_falcon7b.jsonl": "16c7d9af7ae12db8351905d4a461b04455ad00e49c621cbd1671dccd2fb35eff",
+  "results/D1-E1d/select_qwen7b.jsonl": "7afc38c723db69c83fafe44123eb47efe5a047106eb4e150b5d0cdb0d9e0511b",
+  "results/D1-E1d/stage_log.jsonl": "f45cd6ba903b43dc18b28f6b92f83f2c3fe9a4bae85044bdbae3db014b1d45d6",
+  "results/D1-E1d/summary.child.json": "ec596e853fbea12851d5c6e9d75a1ead22477f06eba1a210838f0547d897a75d",
+  "results/D1-E1d/summary.json": "e17ef32ccfc7dcbad57ba731dc8ba350bf92c850ae52abdf62aa3e5807e70d68",
+  "results/budget_ledger.json": "1b09da617b80bdeb26dbacacc835aba6840e4fa4bc1b0c3a9e4eea4f5db52d42"
+ },
+ "frozen": {
+  "roles_adopted": [
+   [
+    "baker",
+    "porter"
+   ],
+   [
+    "potter",
+    "bearer"
+   ],
+   [
+    "tanner",
+    "loader"
+   ]
+  ],
+  "roles_step_up": [
+   [
+    "farmer",
+    "packer"
+   ],
+   [
+    "cooper",
+    "driver"
+   ],
+   [
+    "grocer",
+    "runner"
+   ]
+  ],
+  "seeds": {
+   "dev": {
+    "hard_messages": 91067,
+    "generator": 91062,
+    "probes_fresh": 91063,
+    "sanity_subset": 91064,
+    "cache_sample": 91065,
+    "bootstrap": 91066
+   },
+   "dev_new_generator": 94062,
+   "test": {
+    "generator": 95062,
+    "first": 95061,
+    "last": 95066,
+    "bootstrap": 95066,
+    "lifetime": 95066
+   }
+  },
+  "sizes": {
+   "e1c_dev": {
+    "core_per_family": 80,
+    "receiver_entries_per_family": 5
+   },
+   "dev_new": {
+    "per_pair": 4
+   },
+   "test": {
+    "core_per_family": 80,
+    "receiver_entries_per_family": 80
+   }
+  },
+  "criteria": {
+   "margin": 0.05,
+   "coverage_min": 0.85,
+   "lifetime_saving_min": 0.2,
+   "bootstrap_resamples": 2000,
+   "ci": 0.95,
+   "lifetime_resamples": 10000,
+   "lifetime_index": 500,
+   "byte_saving_min": 0.0,
+   "breakeven_max_messages": 1e+18,
+   "e1c_secondary_note": "byte_saving_min/breakeven_max are neutralised for E1c's direction_result; E1c's 30% payload and break-even are reported only (no 1,000-message gate)"
+  },
+  "caps_h": {
+   "D1-E1d": 1.0,
+   "T1-E1d": 4.0
+  },
+  "arm": "A0",
+  "pair": [
+   "qwen7b",
+   "falcon7b"
+  ],
+  "cases_per_entry": 4,
+  "batch_size": 8,
+  "verifier_max_new_tokens": 48,
+  "dev_rules": {
+   "D6_min_builds": 8,
+   "D7a_min": 3,
+   "D7b_min": 3,
+   "D7c_min": 14,
+   "D8a_min": 12,
+   "D8b_min": -2,
+   "D8c_per_k": 12,
+   "D8d_per_k": 1.6,
+   "D5_margin": 1.25
+  },
+  "test_projection": {
+   "rule": "T1-E1d starts only if 1.25 x (3 x max load + sv x 160 + rv x 160 x 4 x 2) <= 4.0 h AND the stress (loads at 420 s, no margin) <= 4.0 h; from MEASURED D1-E1d timings",
+   "source": "v6/e1d/results/D1-E1d/summary.json sizing (projected_T1_gpu_h 2.9744)",
+   "load_s": 268.0742,
+   "sv_s_per_entry": 2.60188,
+   "recv_s_per_message": 5.738877,
+   "stress_load_s": 420,
+   "margin": 1.25
+  }
+ },
+ "W": {
+  "note": "DRAFT_PLAN \u00a75 (frozen). Scenarios, not forecasts. Days 0..89.",
+  "n_core_v1_per_family": 80,
+  "families": 2,
+  "neighbours_per_rule": 3,
+  "W_base": {
+   "M_d": 90000,
+   "a": 0.89,
+   "P0": 20,
+   "joins": {
+    "15": 2,
+    "45": 2,
+    "75": 2
+   },
+   "replace": false,
+   "delta_days": [
+    7,
+    14,
+    21,
+    28,
+    35,
+    42,
+    49,
+    56,
+    63,
+    70,
+    77,
+    84
+   ],
+   "r": 0.02,
+   "alloc": 0.5
+  },
+  "W_copy": {
+   "M_d": 90000,
+   "a": 0.89,
+   "P0": 6,
+   "joins": {
+    "15": 1,
+    "45": 1,
+    "75": 1
+   },
+   "replace": true,
+   "delta_days": [
+    30,
+    60
+   ],
+   "r": 0.1,
+   "alloc": 1.0
+  },
+  "W_low": {
+   "M_d": 22500,
+   "a": 0.89,
+   "P0": 20,
+   "joins": {
+    "15": 2,
+    "45": 2,
+    "75": 2
+   },
+   "replace": false,
+   "delta_days": [
+    7,
+    14,
+    21,
+    28,
+    35,
+    42,
+    49,
+    56,
+    63,
+    70,
+    77,
+    84
+   ],
+   "r": 0.02,
+   "alloc": 0.5
+  },
+  "W_churn": {
+   "M_d": 90000,
+   "a": 0.88,
+   "P0": 20,
+   "joins": {
+    "15": 4,
+    "45": 4,
+    "75": 4
+   },
+   "replace": false,
+   "delta_days": [
+    3,
+    6,
+    9,
+    12,
+    15,
+    18,
+    21,
+    24,
+    27,
+    30,
+    33,
+    36,
+    39,
+    42,
+    45,
+    48,
+    51,
+    54,
+    57,
+    60,
+    63,
+    66,
+    69,
+    72,
+    75,
+    78,
+    81,
+    84,
+    87
+   ],
+   "r": 0.01,
+   "alloc": 0.5
+  },
+  "W_low_churn": {
+   "M_d": 22500,
+   "a": 0.88,
+   "P0": 20,
+   "joins": {
+    "15": 4,
+    "45": 4,
+    "75": 4
+   },
+   "replace": false,
+   "delta_days": [
+    3,
+    6,
+    9,
+    12,
+    15,
+    18,
+    21,
+    24,
+    27,
+    30,
+    33,
+    36,
+    39,
+    42,
+    45,
+    48,
+    51,
+    54,
+    57,
+    60,
+    63,
+    66,
+    69,
+    72,
+    75,
+    78,
+    81,
+    84,
+    87
+   ],
+   "r": 0.01,
+   "alloc": 0.5
+  },
+  "min_traffic_step": 1800
+ }
+}

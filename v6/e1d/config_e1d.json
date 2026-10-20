@@ -1,46 +1,146 @@
 {
  "label": "E1d: verified-ID hybrid (A0) vs prose, lifetime bytes under declared W, both directions",
- "status": "draft_plan_frozen_prereg-e1d",
+ "status": "frozen",
  "plan": "v6/e1d/DRAFT_PLAN.md (tag prereg-e1d, 1430f5d)",
  "base_config": "../e1b/config_e1b.json",
  "w_file": "w_e1d.json",
  "arm": "A0",
- "pair": ["qwen7b", "falcon7b"],
- "roles_adopted": [["baker", "porter"], ["potter", "bearer"], ["tanner", "loader"]],
- "roles_step_up": [["farmer", "packer"], ["cooper", "driver"], ["grocer", "runner"]],
+ "pair": [
+  "qwen7b",
+  "falcon7b"
+ ],
+ "roles_adopted": [
+  [
+   "baker",
+   "porter"
+  ],
+  [
+   "potter",
+   "bearer"
+  ],
+  [
+   "tanner",
+   "loader"
+  ]
+ ],
+ "roles_step_up": [
+  [
+   "farmer",
+   "packer"
+  ],
+  [
+   "cooper",
+   "driver"
+  ],
+  [
+   "grocer",
+   "runner"
+  ]
+ ],
  "seeds": {
-  "dev": {"hard_messages": 91067, "generator": 91062, "probes_fresh": 91063, "sanity_subset": 91064, "cache_sample": 91065, "bootstrap": 91066},
+  "dev": {
+   "hard_messages": 91067,
+   "generator": 91062,
+   "probes_fresh": 91063,
+   "sanity_subset": 91064,
+   "cache_sample": 91065,
+   "bootstrap": 91066
+  },
   "dev_new_generator": 94062,
-  "test": {"generator": 95062, "first": 95061, "last": 95066, "bootstrap": 95066, "lifetime": 95066}
+  "test": {
+   "generator": 95062,
+   "first": 95061,
+   "last": 95066,
+   "bootstrap": 95066,
+   "lifetime": 95066
+  }
  },
  "seed_note": "dev = E1c dev seeds (the reused E1c dev book and its sender views); dev-new built at generator 94062 (+100 rule); TEST seeds 95061-95066 (generator 95062), built only after freeze.",
  "sizes": {
-  "e1c_dev": {"core_per_family": 80, "receiver_entries_per_family": 5},
-  "dev_new": {"per_pair": 4},
-  "test": {"core_per_family": 80, "receiver_entries_per_family": 80}
+  "e1c_dev": {
+   "core_per_family": 80,
+   "receiver_entries_per_family": 5
+  },
+  "dev_new": {
+   "per_pair": 4
+  },
+  "test": {
+   "core_per_family": 80,
+   "receiver_entries_per_family": 80
+  }
  },
  "cases_per_entry": 4,
  "batch_size": 8,
  "verifier_max_new_tokens": 48,
  "verifier_b1_check_n": 16,
  "criteria": {
-  "margin": 0.05, "coverage_min": 0.85, "lifetime_saving_min": 0.20, "bootstrap_resamples": 2000, "ci": 0.95,
-  "lifetime_resamples": 10000, "lifetime_index": 500,
-  "byte_saving_min": 0.0, "breakeven_max_messages": 1e18,
+  "margin": 0.05,
+  "coverage_min": 0.85,
+  "lifetime_saving_min": 0.2,
+  "bootstrap_resamples": 2000,
+  "ci": 0.95,
+  "lifetime_resamples": 10000,
+  "lifetime_index": 500,
+  "byte_saving_min": 0.0,
+  "breakeven_max_messages": 1e+18,
   "e1c_secondary_note": "byte_saving_min/breakeven_max are neutralised for E1c's direction_result; E1c's 30% payload and break-even are reported only (no 1,000-message gate)"
  },
- "dev_rules": {"D6_min_builds": 8, "D7a_min": 3, "D7b_min": 3, "D7c_min": 14, "D8a_min": 12, "D8b_min": -2, "D8c_per_k": 12, "D8d_per_k": 1.6, "D5_margin": 1.25},
- "caps_h": {"D1-E1d": 1.0, "T1-E1d": 4.0},
- "dev_stages": ["D1-E1d"],
+ "dev_rules": {
+  "D6_min_builds": 8,
+  "D7a_min": 3,
+  "D7b_min": 3,
+  "D7c_min": 14,
+  "D8a_min": 12,
+  "D8b_min": -2,
+  "D8c_per_k": 12,
+  "D8d_per_k": 1.6,
+  "D5_margin": 1.25
+ },
+ "caps_h": {
+  "D1-E1d": 1.0,
+  "T1-E1d": 4.0
+ },
+ "dev_stages": [
+  "D1-E1d"
+ ],
  "closed_stages": [],
  "launch_projection": {
-  "rule": "the supervisor refuses to start a dev stage unless 1.25 x the projection from MEASURED E1c D2 timings (all loads at the measured max and, stress, at the 420 s prior) is <= the stage cap",
+  "rule": "the supervisor refuses to start the dev stage unless (a) 1.25 x the projection from MEASURED E1c D2 timings (loads at their measured values) <= the cap AND (b) the stress projection (loads at the 420 s prior, NO margin) <= the cap",
   "source": "v6/e1c/results/D2/summary.json (gpu_h 0.4059 = 1461 s; loads 248/261/119 s; 2.1412 s sender+verifier per entry; 4.8175 s receiver per message, both arms)",
-  "e1c_d2_total_s": 1461.3, "e1c_d2_load_s": [248.36, 260.92, 118.61], "sv_s_per_entry": 2.1412, "recv_s_per_message": 4.8175,
-  "stress_load_s": 420, "margin": 1.25
+  "e1c_d2_total_s": 1461.3,
+  "e1c_d2_load_s": [
+   248.36,
+   260.92,
+   118.61
+  ],
+  "sv_s_per_entry": 2.1412,
+  "recv_s_per_message": 4.8175,
+  "stress_load_s": 420,
+  "margin": 1.25
  },
  "max_starts": 2,
- "infra_retry_reasons": ["no_gpu", "install_or_network", "kernel_crash", "oom_at_load"],
- "inflight_est_s": {"load": 420, "sender_call": 10, "verifier_chunk": 120, "receiver_chunk": 240, "b1_check_call": 20},
- "dev_new_book_sha256": "b795797a2d7c00938345c0d2957ffb91cc62b5e3f77ca20415d2ca231f6b95be"
+ "infra_retry_reasons": [
+  "no_gpu",
+  "install_or_network",
+  "kernel_crash",
+  "oom_at_load"
+ ],
+ "inflight_est_s": {
+  "load": 420,
+  "sender_call": 10,
+  "verifier_chunk": 120,
+  "receiver_chunk": 240,
+  "b1_check_call": 20
+ },
+ "dev_new_book_sha256": "b795797a2d7c00938345c0d2957ffb91cc62b5e3f77ca20415d2ca231f6b95be",
+ "t1_qualifying_dev_stage": "D1-E1d",
+ "test_projection": {
+  "rule": "T1-E1d starts only if 1.25 x (3 x max load + sv x 160 + rv x 160 x 4 x 2) <= 4.0 h AND the stress (loads at 420 s, no margin) <= 4.0 h; from MEASURED D1-E1d timings",
+  "source": "v6/e1d/results/D1-E1d/summary.json sizing (projected_T1_gpu_h 2.9744)",
+  "load_s": 268.0742,
+  "sv_s_per_entry": 2.60188,
+  "recv_s_per_message": 5.738877,
+  "stress_load_s": 420,
+  "margin": 1.25
+ }
 }

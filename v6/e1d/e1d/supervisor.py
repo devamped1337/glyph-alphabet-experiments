@@ -18,7 +18,7 @@ waits can delay the actual termination, so the deadline is an enforced kill, not
 import os, sys, json, time, signal, subprocess, uuid, ctypes
 from . import RES, HERE
 from . import stages as ST
-from .book import load_dev
+from .book import load_dev, load_test
 
 RUN = HERE / "run_e1d.py"
 OUTCOME = {3: ("budget_admission", "BUDGET_EXHAUSTED", 3), 8: ("canary_fail", "CANARY_FAIL", 8), 9: ("no_gpu rc=9", None, 9)}
@@ -68,17 +68,43 @@ def launch_projection(X, name):
     proj = dict(raw_s=base, stress_raw_s=stress, projected_h=base * P["margin"] / 3600, stress_projected_h=stress * P["margin"] / 3600, cap_h=X["caps_h"][name])
     proj["ok"] = proj["projected_h"] <= proj["cap_h"] and proj["stress_raw_s"] / 3600 <= proj["cap_h"]; return proj
 
+def test_projection(X, name):
+    """TEST cap from MEASURED D1-E1d timings (config test_projection, = results/D1-E1d/summary.json sizing):
+    (3 x max load + sv x 160 + rv x 160 x 4 x 2) x 1.25 <= cap, and the stress (loads at 420 s, no margin) <= cap."""
+    P = X["test_projection"]; nT = 2 * X["sizes"]["test"]["core_per_family"]; K = X["cases_per_entry"]
+    raw = 3 * P["load_s"] + P["sv_s_per_entry"] * nT + P["recv_s_per_message"] * nT * K * 2
+    stress = raw + 3 * max(0.0, P["stress_load_s"] - P["load_s"])
+    proj = dict(raw_s=raw, stress_raw_s=stress, projected_h=raw * P["margin"] / 3600, cap_h=X["caps_h"][name])
+    proj["ok"] = proj["projected_h"] <= proj["cap_h"] and stress / 3600 <= proj["cap_h"]; return proj
+
+def test_eligibility(X, cfg):
+    """T1-E1d needs the qualifying dev stage finished with D1-D8 all passing and outcome rule 1 (re-evaluated now,
+    post-run), and the CURRENT protocol hash equal to the dev summary's (D4)."""
+    from . import eligibility as EL
+    d = RES / X["t1_qualifying_dev_stage"]; q, f = X["pair"]
+    if any((d / m).exists() for m in ST.TERMINAL): return False, "dev stage has a terminal marker"
+    if not ST.finished(d): return False, "dev stage not finished"
+    S = json.load(open(d / "summary.json")); B = load_dev(cfg)
+    sel = {m: [json.loads(l) for l in open(d / f"select_{m}.jsonl")] for m in (q, f)}
+    ex = {k: [json.loads(l) for l in open(d / f"exchange_{k}.jsonl")] for k in (f"{q}_to_{f}", f"{f}_to_{q}")}
+    E = EL.evaluate(S, X, cfg, B, sel, ex, done_ok=True)
+    if not E["eligible_for_freeze"]: return False, f"dev not eligible: {[k for k in ('D2','D3','D4','D5','D6','D7','D8') if not E[k]['ok']]} rule {E['outcome_rule']['rule']}"
+    return True, "ok"
+
 def gates(cfg, name):
     X = cfg["e1d"]
     if name not in X["caps_h"]: print(f"unknown E1d stage {name}"); sys.exit(2)
     if name in X.get("closed_stages", []): print(f"{name} refused: closed"); sys.exit(20)
     if os.environ.get("E1D_GO") != name: print(f"{name} refused: no explicit go (E1D_GO must equal '{name}')"); sys.exit(14)
-    if not ST.is_dev(X, name): print(f"{name} refused: TEST is not launchable from this commit (freeze + D1-D8 first)"); sys.exit(13)
-    pj = launch_projection(X, name); print("launch projection", json.dumps(pj))
+    if not ST.is_dev(X, name):
+        if X["status"] != "frozen": print(f"{name} refused: E1d is not frozen"); sys.exit(13)
+        ok, why = test_eligibility(X, cfg)
+        if not ok: print(f"{name} refused: {why}"); sys.exit(19)
+    pj = launch_projection(X, name) if ST.is_dev(X, name) else test_projection(X, name); print("launch projection", json.dumps(pj))
     if not pj["ok"]: print(f"{name} refused: projection {pj['projected_h']:.3f} h (stress raw {pj['stress_raw_s']/3600:.3f} h) > cap {pj['cap_h']} h"); sys.exit(19)
     p = HERE / "CODE_HASH.txt"; pin = p.read_text().strip() if p.exists() else None
     if pin != ST.code_hash(): print(f"{name} refused: code hash != CODE_HASH.txt"); sys.exit(16)
-    load_dev(cfg)
+    load_dev(cfg) if ST.is_dev(X, name) else load_test(cfg)
     return X
 
 def supervise(cfg, name):

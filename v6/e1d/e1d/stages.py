@@ -4,7 +4,7 @@ dictionary is loaded ONLY from the E1D-DICT/1 artifact (§4.2) and every message
 serializer (§4.1). Needs E1D_GO == <stage> (Stefan's explicit go)."""
 import os, sys, json, time, hashlib, inspect, math
 from . import RES, HERE
-from .book import load_dev, shown_of
+from .book import load_dev, load_test, shown_of, TEST_PINS
 from . import analysis as AN, lifetime as LT, eligibility as EL
 from e1c import stages as C1
 from e1c.stages import guard, Est, free, send_and_verify, verifier_b1_check, selection_stats, unit_costs, all_loads, TERMINAL
@@ -92,15 +92,15 @@ def child_main(cfg, name):
     X = cfg["e1d"]; d = RES / name; st = json.load(open(d / "e1d_state.json")); a = st["attempts"][-1]
     if not os.environ.get("E1D_ATTEMPT_TOKEN") or os.environ["E1D_ATTEMPT_TOKEN"] != a.get("token") or a.get("outcome") != "running":
         print("child refused: not launched by the supervisor for the running attempt"); sys.exit(15)
-    if not is_dev(X, name): print("only the dev stage is implemented in this execution commit"); sys.exit(13)
-    c = dict(cfg); c["stageB_batch_size"] = X["batch_size"]; ES._A9.clear(); B = load_dev(cfg)
+    dev = is_dev(X, name)
+    c = dict(cfg); c["stageB_batch_size"] = X["batch_size"]; ES._A9.clear(); B = load_dev(cfg) if dev else load_test(cfg)
     S = _stage(name, st["cap_h"], c, a["deadline_mono"]); S.attempt = a["n"]
     if os.environ.get("E1B_ALLOW_NO_GPU") == "1" and os.environ.get("E1D_TEST_HOOK"):   # test-only fake backend
         import importlib.util as U; sp = U.spec_from_file_location("e1d_test_hook", os.environ["E1D_TEST_HOOK"])
         h = U.module_from_spec(sp); sp.loader.exec_module(h); h.install(C1, B, a)
     ES._require_gpu(S)
     S.log("e1d", stage=name, attempt=a, cap_h=st["cap_h"], code_hash=code_hash(), protocol_hash=protocol_hash(X, cfg))
-    out = _run(c, name, dict(X, _kind="dev"), B, S)
+    out = _run(c, name, dict(X, _kind="dev"), B, S) if dev else _run_test(c, name, dict(X, _kind="test"), B, S)
     json.dump(out, open(S.dir / "summary.child.json", "w"), indent=1)
     (S.dir / "CHILD_COMPLETE").write_text(f"attempt {S.attempt}\n"); S.log("child_complete")
 
@@ -151,3 +151,45 @@ def summarize(name, X, cfg, B, sel_rows, ex, t, vb, art, loads=()):
                          formula="(3 x max load + sv x 160 + rv x 160 x 4 x 2) / 3600 x 1.25")
     out["eligibility_D2_D8"] = EL.evaluate(out, X, cfg, B, sel_rows, ex, done_ok=None)
     return out
+
+
+# ---------------------------------------------------------------- TEST stage T1-E1d (§6, §9; A0; no batch-1 check)
+def _run_test(cfg, name, X, B, S):
+    """Same load order and code paths as D1-E1d (sender views seeded by the TEST generator 95062, as E1c T1 used its
+    TEST generator); data = the pinned TEST book (160 entries, receivers on all of them)."""
+    ids = B["e1d_ids"]["test"]; q, f = X["pair"]; sel, t = {}, {}; est = Est(X); vbatch = X["batch_size"]
+    art = write_artifact(S, B, ids); RD = receiver_dictionary(S)
+    pin = json.load(open(TEST_PINS))["artifact_v1"]
+    assert {k: art[k] for k in pin} == pin, f"v1 artifact != pinned measurement: {art} vs {pin}"
+    b, t["load1"] = C1.load(q, cfg, B, S, est)
+    t0 = time.time(); sel[q] = send_and_verify(b, q, B, ids, cfg, X, S, est, vbatch); t[f"send_verify_{q}"] = time.time() - t0
+    del b; free()
+    b, t["load2"] = C1.load(f, cfg, B, S, est)
+    t0 = time.time(); sel[f] = send_and_verify(b, f, B, ids, cfg, X, S, est, vbatch); t[f"send_verify_{f}"] = time.time() - t0
+    t0 = time.time(); ex = {f"{q}_to_{f}": exchange(b, q, f, B, ids, sel[q], cfg, S, est, RD)}; t[f"recv_{f}"] = time.time() - t0
+    del b; free()
+    b, t["load3"] = C1.load(q, cfg, B, S, est)
+    t0 = time.time(); ex[f"{f}_to_{q}"] = exchange(b, f, q, B, ids, sel[f], cfg, S, est, RD); t[f"recv_{q}"] = time.time() - t0
+    del b; free()
+    sel_rows = {m: [json.loads(l) for l in open(S.dir / f"select_{m}.jsonl")] for m in (q, f)}
+    return summarize_test(name, X, cfg, B, sel_rows, ex, t, art)
+
+def summarize_test(name, X, cfg, B, sel_rows, ex, t, art):
+    from e1c.book import cases_for
+    ids = B["e1d_ids"]["test"]; W = X["W"]; crit = X["criteria"]; LCs = lifecycles(W, art, W["n_core_v1_per_family"])
+    cs = {}
+    for c in cases_for(B, ids): cs.setdefault(c["entry"], []).append(c)
+    out = dict(stage=name, gpu_h=None, timing_s=t, protocol_hash=protocol_hash(X, cfg), code_hash=code_hash(), artifact_v1=art,
+               lifecycle={s: dict(L_rule=LCs[s].L_rule, delta_body=LCs[s].delta_body, rules_per_delta=LCs[s].rules,
+                                  events=LT.events(W[s], LCs[s])) for s in AN.SCEN},
+               selection={m: selection_stats(r, ids) for m, r in sel_rows.items()}, directions={})
+    for d, rows in ex.items():
+        m = d.split("_to_")[0]; sr = sel_rows[m]; sel = {r["entry"]: r for r in sr}
+        v = AN.direction_result(rows, sr, B, crit, seed_of(X["seeds"]["test"]["bootstrap"], d), ids, cs, ids, W, LCs, d)
+        if v["status"] == "COMPLETE":
+            by = LT.entry_bytes(rows); w = W["W_base"]
+            v["min_traffic_W_base_shape"] = LT.min_traffic(by, lambda M, w=w: LT.F_d(w, LCs["W_base"]), w, LT.lifetime_seed(d), W["min_traffic_step"],
+                                                           crit["lifetime_saving_min"], crit["lifetime_resamples"], crit["lifetime_index"], max_steps=300)
+            v["per_pair"] = AN.per_pair(rows, sel, B, ids, [tuple(p) for p in X["roles_adopted"]]); v["speed"] = AN.speed(rows, sr)
+        out["directions"][d] = v
+    out["verdict"] = AN.verdict(out, X, "test"); return out

@@ -152,3 +152,31 @@ class DryRun(unittest.TestCase):
         shutil.rmtree(res)
 
 if __name__ == "__main__": unittest.main()
+
+class TestStage(unittest.TestCase):
+    """Fake-model CPU dry run of T1-E1d end to end, on a THROWAWAY book (seed 99050, a builder-trial seed; never shown
+    to a model), with the real D1-E1d results copied in for the eligibility gate."""
+    def test_t1_stage(self):
+        tmp = Path(tempfile.mkdtemp()); res = tmp / "res"; td = tmp / "data"; td.mkdir(); res.mkdir()
+        shutil.copytree(HERE / "results" / "D1-E1d", res / "D1-E1d")
+        env = dict(os.environ, E1B_ALLOW_NO_GPU="1", E1D_RES=str(res), E1D_TEST_DATA=str(td), E1D_TEST_HOOK=str(HERE / "tests" / "e1d_hook.py"))
+        r = subprocess.run([sys.executable, str(HERE / "tools" / "build_test_book.py"), "99050"], env=env, capture_output=True, text=True, timeout=900)
+        self.assertEqual(r.returncode, 0, r.stdout[-2000:] + r.stderr[-2000:])
+        r = subprocess.run([sys.executable, str(HERE / "run_e1d.py"), "--stage", "T1-E1d"], env=dict(env, E1D_GO="D1-E1d"), capture_output=True, text=True)
+        self.assertEqual(r.returncode, 14)                       # no go for T1 -> refused
+        r = subprocess.run([sys.executable, str(HERE / "run_e1d.py"), "--stage", "T1-E1d"], env=dict(env, E1D_GO="T1-E1d"), capture_output=True, text=True, timeout=1800)
+        self.assertEqual(r.returncode, 0, r.stdout[-3000:] + r.stderr[-3000:])
+        S = json.load(open(res / "T1-E1d" / "summary.json"))
+        self.assertIn(S["verdict"], ("SUCCESS", "NOT MET")); self.assertEqual(S["protocol_hash"], json.load(open(HERE / "results" / "D1-E1d" / "summary.json"))["protocol_hash"])
+        for d in S["directions"].values():
+            self.assertEqual((d["status"], d["n_entries"], d["n_messages"]), ("COMPLETE", 160, 640)); self.assertEqual(set(d["gates"]), {"G1", "G2", "G3"})
+        self.assertEqual(S["artifact_v1"]["n_core"], 160)
+        json.dump(dict(verdict=S["verdict"], art=S["artifact_v1"], gpu_h=S["gpu_h"], d={k: dict(g=v["gates"], cov=v["coverage"], W=v["lifetime"]["W_base"], mt=v["min_traffic_W_base_shape"]) for k, v in S["directions"].items()}),
+                  open("/tmp/e1d_t1_dryrun.json", "w"), indent=1, default=str)
+        shutil.rmtree(tmp)
+    def test_projection_measured(self):
+        from e1d.supervisor import test_projection
+        p = test_projection(X, "T1-E1d"); self.assertTrue(p["ok"]); self.assertAlmostEqual(p["projected_h"], 2.9744, places=3)
+    def test_protocol_hash_unchanged(self):
+        from e1d.stages import protocol_hash
+        self.assertTrue(protocol_hash(X, cfg).startswith("11d7af03"))

@@ -1,4 +1,5 @@
-"""python run_e1d.py --stage D1-E1d (supervisor; needs E1D_GO=<stage>) | --check (code hash) | --eligibility <stage>
+"""python run_e1d.py --stage D1-E1d (supervisor; needs E1D_GO=<stage>) | T1-E1d (after freeze) | --check (code hash)
+Post-run D1-D8: python tools/check_eligibility.py results/D1-E1d
 --child <stage> is launched only by the supervisor."""
 import sys, argparse, json
 from pathlib import Path
