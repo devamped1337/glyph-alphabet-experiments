@@ -38,32 +38,32 @@ No wrong ID reached a receiver in either direction.
 | Scenario | What changes vs W_base | Q→F | F→Q |
 |---|---|---|---|
 | W_base (gate) | — | 33.3% / 35.6% | 38.3% / 39.6% |
-| W_copy | 6 agents, whole-dictionary replacement copies (2 updates of 11 kB), F counted fully: F = 1,185,415 B | 36.2% / 38.4% | 41.2% / 42.5% |
+| W_copy | 6 agents; full copies for initial holders and replacement joiners plus two incremental deltas (11,054 B body + manifest each), F counted fully: F = 1,185,415 B | 36.2% / 38.4% | 41.2% / 42.5% |
 | W_low | traffic ÷ 4 (M = 22,500) | **10.6% / 12.9%** | **15.6% / 16.9%** |
 | W_churn | twice the joiners, 29 deltas every 3 days, a = 0.88 | 30.6% / 32.8% | 35.5% / 36.8% |
 | W_low_churn | both | **1.0% / 3.3%** | **6.0% / 7.3%** |
 
-Minimum traffic (W_base shape) at which the lower bound clears 20%: **66,600** messages (Q→F) and **54,000** (F→Q) per direction over 90 days. Below roughly that, sync cost erases the bar; W_low and W_low_churn would not meet it.
+Minimum traffic (W_base shape) at which the lower bound clears 20%: **33,300** messages per direction (Q→F) and **27,000** per direction (F→Q) over 90 days (aggregate 66,600 and 54,000 across both directions; minima on the planned 1,800-message aggregate grid). Below roughly that, sync cost erases the bar; W_low and W_low_churn would not meet it.
 
 ## Compressed baseline (gzip-9, secondary, §11)
 Primary claim is limited to plain, uncompressed prose. With both arms gzip-9 per message (mtime 0), mean P = 190.1 B, H = 139.1 / 134.5 B.
 | | Q→F lower / point | F→Q lower / point |
 |---|---|---|
 | Frozen secondary (`lifetime_gzip9_secondary`; sync F **uncompressed**) | 11.5% / 12.7% | 14.1% / 14.9% |
-| Reporting-only: sync F × measured v1 gzip ratio 0.0902 (GPT note 1; `results/T1-E1d/gzip_sync_reporting.json`) | **21.6% / 22.9%** | **24.3% / 25.0%** |
+| Reporting-only: sync F × measured v1 gzip ratio 0.0902 (GPT note 1; `results/T1-E1d/gzip_sync_reporting.json`; later full copies and deltas are assumed to compress like v1, not individually measured) | **21.6% / 22.9%** | **24.3% / 25.0%** |
 
-W_low with compressed sync: 18.6% / 21.2% lower bounds; W_low_churn 17.1% / 19.7%. Against a gzip baseline the dictionary still saves bytes at W_base, but the margin over 20% is thin (Q→F 1.6 pt) and depends on also compressing sync traffic.
+W_low with compressed sync: 18.6% / 21.2% lower bounds; W_low_churn 17.1% / 19.7%. Against a gzip baseline the dictionary still saves bytes at W_base, but the margin over 20% is thin (Q→F 1.6 pt) and depends on also compressing sync traffic, under the assumption that later full copies and deltas compress like v1 (ratio 0.0902); that was estimated, not measured.
 
 ## Per role pair (§10; reported, not gated; small denominators)
 Coverage = correct-and-accepted / entries; correct = receiver answers, hybrid vs prose, of 4 cases per entry.
-| Group | Q→F coverage | Q→F hybrid vs prose | F→Q coverage | F→Q hybrid vs prose | Bytes hyb / prose (Q→F; F→Q) |
-|---|---|---|---|---|---|
-| baker/porter (new) | 21/26 | 103/104 vs 102/104 | 26/26 | 104/104 vs 102/104 | 163/305; 129/305 |
-| **potter/bearer (new)** | **28/30 = 93.3%** | **120/120 vs 119/120** | **30/30** | **120/120 vs 119/120** | 141/306; 130/306 |
-| tanner/loader (new) | 21/24 | 96/96 vs 95/96 | 24/24 | 96/96 vs 89/96 | 151/307; 130/307 |
-| F2 new pooled | 70/80 = 87.5% | 319/320 vs 316/320 | 80/80 | 320/320 vs 310/320 | 151/306; 129/306 |
-| F1 | 69/80 = 86.3% | 320/320 vs 320/320 | 71/80 = 88.8% | 319/320 vs 319/320 | 137/254; 134/254 |
-| F2 old pairs, **from E1c T1** (`v6/e1c/T1_REPORT.md` §3; 120 entries, 480 messages; different book and artifact) | 114/120 = 95.0% | 480/480 vs 477/480 | 117/120 = 97.5% | 478/480 vs 470/480 | n/a |
+| Group | Q→F coverage | Q→F hybrid vs prose | F→Q coverage | F→Q hybrid vs prose | Bytes hyb / prose (Q→F; F→Q) | Wrong IDs accepted (Q→F; F→Q), CP95 upper |
+|---|---|---|---|---|---|---|
+| baker/porter (new) | 21/26 | 103/104 vs 102/104 | 26/26 | 104/104 vs 102/104 | 163/305; 129/305 | 0; 0 (10.9%) |
+| **potter/bearer (new)** | **28/30 = 93.3%** | **120/120 vs 119/120** | **30/30** | **120/120 vs 119/120** | 141/306; 130/306 | 0; 0 (9.5%) |
+| tanner/loader (new) | 21/24 | 96/96 vs 95/96 | 24/24 | 96/96 vs 89/96 | 151/307; 130/307 | 0; 0 (11.7%) |
+| F2 new pooled | 70/80 = 87.5% | 319/320 vs 316/320 | 80/80 | 320/320 vs 310/320 | 151/306; 129/306 | 0; 0 |
+| F1 | 69/80 = 86.3% | 320/320 vs 320/320 | 71/80 = 88.8% | 319/320 vs 319/320 | 137/254; 134/254 | 0; 0 |
+| F2 old pairs, **from E1c T1** (`v6/e1c/T1_REPORT.md` §3; 120 entries, 480 messages; different book and artifact) | 114/120 = 95.0% | 480/480 vs 477/480 | 117/120 = 97.5% | 478/480 vs 470/480 | n/a | n/a |
 
 Potter/bearer, the dev weak spot (Qwen coverage 2/4 in D1), is fine on TEST: 28/30 coverage for Qwen and 30/30 for Falcon. The in-run `F2_old_pairs` field is `n/a` by design (E1d TEST has only new F2 pairs); the old-pair row above is the E1c T1 reference.
 
