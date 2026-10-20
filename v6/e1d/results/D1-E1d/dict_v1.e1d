@@ -1,0 +1,689 @@
+E1D-DICT/1 kind=full dict_ver=1 base=- n=688 sha256=d085130877a723c62ac403afbcf1494de170f35079d7fd5c9d26244a22fef501
+F1-0006@v1#5d530cdf Pricing rule. Fenrow members are charged 5 credits per litre. Customers who are not Fenrow members are charged 6 credits per litre.
+F1-0009@v1#87f02a1c Pricing rule. Selmet members are charged 9 credits per kilogram. Customers who are not Selmet members are charged 2 credits per kilogram.
+F1-0018@v1#043877e6 Pricing rule. Ferro members are charged 10 credits per page. Customers who are not Ferro members are charged 4 credits per page.
+F1-0044@v1#8e789a5d Pricing rule. Yarrow members are charged 12 credits per kilogram. Customers who are not Yarrow members are charged 10 credits per kilogram.
+F1-0068@v1#e2045945 Pricing rule. Tovrin members are charged 4 credits per hour. Customers who are not Tovrin members are charged 9 credits per hour.
+F1-0089@v1#ea69349b Pricing rule. Pellan members are charged 11 credits per seat. Customers who are not Pellan members are charged 11 credits per seat.
+F1-0167@v1#733fd334 Pricing rule. Morvane members are charged 7 credits per page. Customers who are not Morvane members are charged 4 credits per page.
+F1-0185@v1#5a447a56 Pricing rule. Gildra members are charged 7 credits per bale. Customers who are not Gildra members are charged 4 credits per bale.
+F1-0286@v1#746ca170 Pricing rule. Lumsk members are charged 2 credits per bale. Customers who are not Lumsk members are charged 8 credits per bale.
+F1-0321@v1#7febe9eb Pricing rule. Harrow members are charged 5 credits per bale. Customers who are not Harrow members are charged 4 credits per bale.
+F1-0337@v1#ce990d36 Pricing rule. Brindle members are charged 5 credits per bale. Customers who are not Brindle members are charged 2 credits per bale.
+F1-0343@v1#7fcbe974 Pricing rule. Orsk members are charged 6 credits per crate. Customers who are not Orsk members are charged 6 credits per crate.
+F1-0393@v1#406d8f04 Pricing rule. Dovrin members are charged 4 credits per ticket. Customers who are not Dovrin members are charged 10 credits per ticket.
+F1-0429@v1#2ec6988c Pricing rule. Quillon members are charged 7 credits per ticket. Customers who are not Quillon members are charged 8 credits per ticket.
+F1-0517@v1#f7b5c6fa Pricing rule. Gildra members are charged 2 credits per sack. Customers who are not Gildra members are charged 4 credits per sack.
+F1-0531@v1#e2b8daed Pricing rule. Morvane members are charged 2 credits per hour. Customers who are not Morvane members are charged 6 credits per hour.
+F1-0646@v1#425aae83 Pricing rule. Ferro members are charged 7 credits per page. Customers who are not Ferro members are charged 2 credits per page.
+F1-0828@v1#2ac33ce5 Pricing rule. Ambrel members are charged 6 credits per litre. Customers who are not Ambrel members are charged 8 credits per litre.
+F1-0876@v1#20d24c7f Pricing rule. Caskel members are charged 2 credits per parcel. Customers who are not Caskel members are charged 4 credits per parcel.
+F1-0886@v1#b82996cc Pricing rule. Vantrel members are charged 9 credits per parcel. Customers who are not Vantrel members are charged 9 credits per parcel.
+F1-0908@v1#5491d110 Pricing rule. Rastor members are charged 8 credits per page. Customers who are not Rastor members are charged 9 credits per page.
+F1-0936@v1#4b26b780 Pricing rule. Gildra members are charged 5 credits per litre. Customers who are not Gildra members are charged 6 credits per litre.
+F1-0946@v1#125f95e3 Pricing rule. Gildra members are charged 11 credits per parcel. Customers who are not Gildra members are charged 9 credits per parcel.
+F1-0957@v1#f8de686a Pricing rule. Fenrow members are charged 7 credits per seat. Customers who are not Fenrow members are charged 11 credits per seat.
+F1-0990@v1#9d6c03e6 Pricing rule. Tovrin members are charged 10 credits per hour. Customers who are not Tovrin members are charged 7 credits per hour.
+F1-1005@v1#2dcefa25 Pricing rule. Yarrow members are charged 7 credits per kilogram. Customers who are not Yarrow members are charged 8 credits per kilogram.
+F1-1030@v1#3c45da9d Pricing rule. Brindle members are charged 11 credits per ticket. Customers who are not Brindle members are charged 7 credits per ticket.
+F1-1059@v1#3352c769 Pricing rule. Yarrow members are charged 12 credits per crate. Customers who are not Yarrow members are charged 7 credits per crate.
+F1-1120@v1#4c4a336c Pricing rule. Corvel members are charged 4 credits per bale. Customers who are not Corvel members are charged 8 credits per bale.
+F1-1134@v1#8ea90985 Pricing rule. Ferro members are charged 7 credits per hour. Customers who are not Ferro members are charged 10 credits per hour.
+F1-1142@v1#eff01b17 Pricing rule. Iselin members are charged 7 credits per parcel. Customers who are not Iselin members are charged 6 credits per parcel.
+F1-1156@v1#78d5e7b3 Pricing rule. Vantrel members are charged 8 credits per parcel. Customers who are not Vantrel members are charged 11 credits per parcel.
+F1-1187@v1#8dd852e5 Pricing rule. Pellan members are charged 10 credits per seat. Customers who are not Pellan members are charged 10 credits per seat.
+F1-1244@v1#f15e88ff Pricing rule. Caskel members are charged 4 credits per parcel. Customers who are not Caskel members are charged 2 credits per parcel.
+F1-1344@v1#f696e610 Pricing rule. Orsk members are charged 7 credits per parcel. Customers who are not Orsk members are charged 4 credits per parcel.
+F1-1429@v1#b50a496f Pricing rule. Gildra members are charged 4 credits per sack. Customers who are not Gildra members are charged 2 credits per sack.
+F1-1455@v1#15558a50 Pricing rule. Corvel members are charged 11 credits per bale. Customers who are not Corvel members are charged 6 credits per bale.
+F1-1489@v1#2b557d7e Pricing rule. Ambrel members are charged 7 credits per hour. Customers who are not Ambrel members are charged 6 credits per hour.
+F1-1522@v1#abaeaa5a Pricing rule. Ulvar members are charged 8 credits per ticket. Customers who are not Ulvar members are charged 5 credits per ticket.
+F1-1542@v1#476d34dc Pricing rule. Gildra members are charged 5 credits per bale. Customers who are not Gildra members are charged 9 credits per bale.
+F1-1543@v1#7fec2b92 Pricing rule. Corvel members are charged 8 credits per page. Customers who are not Corvel members are charged 6 credits per page.
+F1-1547@v1#63494a7f Pricing rule. Nethra members are charged 4 credits per parcel. Customers who are not Nethra members are charged 3 credits per parcel.
+F1-1573@v1#592ab6e2 Pricing rule. Yarrow members are charged 6 credits per page. Customers who are not Yarrow members are charged 9 credits per page.
+F1-1580@v1#e4831432 Pricing rule. Quillon members are charged 7 credits per bale. Customers who are not Quillon members are charged 5 credits per bale.
+F1-1632@v1#e98cafd1 Pricing rule. Gildra members are charged 3 credits per sack. Customers who are not Gildra members are charged 7 credits per sack.
+F1-1650@v1#9ff5dad4 Pricing rule. Brindle members are charged 7 credits per bale. Customers who are not Brindle members are charged 9 credits per bale.
+F1-1673@v1#2820402b Pricing rule. Pellan members are charged 8 credits per parcel. Customers who are not Pellan members are charged 6 credits per parcel.
+F1-1746@v1#94c2962a Pricing rule. Ferro members are charged 5 credits per hour. Customers who are not Ferro members are charged 8 credits per hour.
+F1-1817@v1#2cfc6cc3 Pricing rule. Ferro members are charged 10 credits per ticket. Customers who are not Ferro members are charged 8 credits per ticket.
+F1-1818@v1#2633cf22 Pricing rule. Wexley members are charged 4 credits per bale. Customers who are not Wexley members are charged 6 credits per bale.
+F1-1882@v1#f6f2cd03 Pricing rule. Ulvar members are charged 6 credits per ticket. Customers who are not Ulvar members are charged 9 credits per ticket.
+F1-1895@v1#b2201981 Pricing rule. Ferro members are charged 8 credits per kilogram. Customers who are not Ferro members are charged 9 credits per kilogram.
+F1-1897@v1#d41d12bc Pricing rule. Rastor members are charged 6 credits per kilogram. Customers who are not Rastor members are charged 9 credits per kilogram.
+F1-1902@v1#72bf0a0c Pricing rule. Quillon members are charged 4 credits per bale. Customers who are not Quillon members are charged 3 credits per bale.
+F1-2053@v1#92ec4db3 Pricing rule. Gildra members are charged 6 credits per litre. Customers who are not Gildra members are charged 9 credits per litre.
+F1-2060@v1#ea1b5c56 Pricing rule. Harrow members are charged 4 credits per litre. Customers who are not Harrow members are charged 8 credits per litre.
+F1-2071@v1#780059ed Pricing rule. Harrow members are charged 10 credits per crate. Customers who are not Harrow members are charged 8 credits per crate.
+F1-2117@v1#64d0fb4d Pricing rule. Tovrin members are charged 4 credits per litre. Customers who are not Tovrin members are charged 6 credits per litre.
+F1-2218@v1#c7517243 Pricing rule. Corvel members are charged 7 credits per hour. Customers who are not Corvel members are charged 10 credits per hour.
+F1-2264@v1#540b1150 Pricing rule. Lumsk members are charged 8 credits per bale. Customers who are not Lumsk members are charged 2 credits per bale.
+F1-2269@v1#09cd8407 Pricing rule. Yarrow members are charged 8 credits per crate. Customers who are not Yarrow members are charged 12 credits per crate.
+F1-2313@v1#10f8cdb8 Pricing rule. Ferro members are charged 4 credits per page. Customers who are not Ferro members are charged 8 credits per page.
+F1-2396@v1#428e6f3b Pricing rule. Caskel members are charged 6 credits per bale. Customers who are not Caskel members are charged 10 credits per bale.
+F1-2519@v1#416ac837 Pricing rule. Ulvar members are charged 2 credits per crate. Customers who are not Ulvar members are charged 5 credits per crate.
+F1-2522@v1#f4d2df16 Pricing rule. Kelmar members are charged 12 credits per parcel. Customers who are not Kelmar members are charged 4 credits per parcel.
+F1-2533@v1#0ba896e3 Pricing rule. Pellan members are charged 9 credits per seat. Customers who are not Pellan members are charged 8 credits per seat.
+F1-2573@v1#a6475f90 Pricing rule. Orsk members are charged 10 credits per parcel. Customers who are not Orsk members are charged 5 credits per parcel.
+F1-2597@v1#f9cff3c0 Pricing rule. Gildra members are charged 10 credits per ticket. Customers who are not Gildra members are charged 4 credits per ticket.
+F1-2619@v1#fff9774a Pricing rule. Fenrow members are charged 6 credits per parcel. Customers who are not Fenrow members are charged 2 credits per parcel.
+F1-2672@v1#0b060769 Pricing rule. Elsworth members are charged 5 credits per ticket. Customers who are not Elsworth members are charged 8 credits per ticket.
+F1-2674@v1#ab0cfd3e Pricing rule. Nethra members are charged 7 credits per parcel. Customers who are not Nethra members are charged 6 credits per parcel.
+F1-2695@v1#ea3ba226 Pricing rule. Wexley members are charged 9 credits per hour. Customers who are not Wexley members are charged 8 credits per hour.
+F1-2697@v1#193a2421 Pricing rule. Iselin members are charged 6 credits per sack. Customers who are not Iselin members are charged 4 credits per sack.
+F1-2699@v1#96148cc8 Pricing rule. Ambrel members are charged 8 credits per ticket. Customers who are not Ambrel members are charged 5 credits per ticket.
+F1-2736@v1#89236376 Pricing rule. Ambrel members are charged 9 credits per hour. Customers who are not Ambrel members are charged 9 credits per hour.
+F1-2754@v1#372bcafd Pricing rule. Ambrel members are charged 6 credits per hour. Customers who are not Ambrel members are charged 7 credits per hour.
+F1-2771@v1#596b9c5b Pricing rule. Rastor members are charged 9 credits per page. Customers who are not Rastor members are charged 10 credits per page.
+F1-2922@v1#20d01997 Pricing rule. Yarrow members are charged 9 credits per page. Customers who are not Yarrow members are charged 6 credits per page.
+F1-2952@v1#79f0c32a Pricing rule. Wexley members are charged 8 credits per bale. Customers who are not Wexley members are charged 4 credits per bale.
+F1-3045@v1#0724e036 Pricing rule. Kelmar members are charged 4 credits per seat. Customers who are not Kelmar members are charged 7 credits per seat.
+F1-3053@v1#13e5b02c Pricing rule. Yarrow members are charged 8 credits per seat. Customers who are not Yarrow members are charged 6 credits per seat.
+F1-3100@v1#409ff41a Pricing rule. Fenrow members are charged 4 credits per parcel. Customers who are not Fenrow members are charged 9 credits per parcel.
+F1-3150@v1#a20771d1 Pricing rule. Rastor members are charged 11 credits per page. Customers who are not Rastor members are charged 11 credits per page.
+F1-3171@v1#25584245 Pricing rule. Fenrow members are charged 7 credits per kilogram. Customers who are not Fenrow members are charged 6 credits per kilogram.
+F1-3179@v1#4243795c Pricing rule. Ferro members are charged 9 credits per kilogram. Customers who are not Ferro members are charged 8 credits per kilogram.
+F1-3203@v1#2ecb284b Pricing rule. Quillon members are charged 6 credits per ticket. Customers who are not Quillon members are charged 5 credits per ticket.
+F1-3212@v1#884300c2 Pricing rule. Lumsk members are charged 9 credits per hour. Customers who are not Lumsk members are charged 3 credits per hour.
+F1-3217@v1#8588dd30 Pricing rule. Corvel members are charged 5 credits per hour. Customers who are not Corvel members are charged 8 credits per hour.
+F1-3239@v1#c4829c8c Pricing rule. Wexley members are charged 8 credits per hour. Customers who are not Wexley members are charged 10 credits per hour.
+F1-3265@v1#608f63b2 Pricing rule. Gildra members are charged 4 credits per bale. Customers who are not Gildra members are charged 7 credits per bale.
+F1-3301@v1#8f1e2b70 Pricing rule. Iselin members are charged 9 credits per parcel. Customers who are not Iselin members are charged 9 credits per parcel.
+F1-3305@v1#59ea9461 Pricing rule. Kelmar members are charged 3 credits per sack. Customers who are not Kelmar members are charged 4 credits per sack.
+F1-3312@v1#632f0bad Pricing rule. Brindle members are charged 2 credits per sack. Customers who are not Brindle members are charged 6 credits per sack.
+F1-3339@v1#9d744a67 Pricing rule. Pellan members are charged 8 credits per seat. Customers who are not Pellan members are charged 9 credits per seat.
+F1-3422@v1#789d0b25 Pricing rule. Caskel members are charged 10 credits per bale. Customers who are not Caskel members are charged 5 credits per bale.
+F1-3437@v1#397a2887 Pricing rule. Harrow members are charged 10 credits per crate. Customers who are not Harrow members are charged 10 credits per crate.
+F1-3483@v1#f20d2441 Pricing rule. Corvel members are charged 9 credits per page. Customers who are not Corvel members are charged 11 credits per page.
+F1-3505@v1#092eeb03 Pricing rule. Ambrel members are charged 5 credits per ticket. Customers who are not Ambrel members are charged 8 credits per ticket.
+F1-3527@v1#5572fb91 Pricing rule. Quillon members are charged 6 credits per ticket. Customers who are not Quillon members are charged 8 credits per ticket.
+F1-3536@v1#689d0519 Pricing rule. Tovrin members are charged 4 credits per litre. Customers who are not Tovrin members are charged 4 credits per litre.
+F1-3545@v1#6c993b86 Pricing rule. Lumsk members are charged 8 credits per sack. Customers who are not Lumsk members are charged 6 credits per sack.
+F1-3586@v1#13efa907 Pricing rule. Harrow members are charged 5 credits per bale. Customers who are not Harrow members are charged 5 credits per bale.
+F1-3614@v1#583a4298 Pricing rule. Galtry members are charged 6 credits per kilogram. Customers who are not Galtry members are charged 3 credits per kilogram.
+F1-3632@v1#95bd6681 Pricing rule. Brindle members are charged 7 credits per sack. Customers who are not Brindle members are charged 5 credits per sack.
+F1-3634@v1#f658fb93 Pricing rule. Kelmar members are charged 4 credits per sack. Customers who are not Kelmar members are charged 3 credits per sack.
+F1-3650@v1#40bcf489 Pricing rule. Kelmar members are charged 9 credits per crate. Customers who are not Kelmar members are charged 3 credits per crate.
+F1-3668@v1#11f79c0d Pricing rule. Selmet members are charged 8 credits per parcel. Customers who are not Selmet members are charged 3 credits per parcel.
+F1-3676@v1#b74837bf Pricing rule. Gildra members are charged 7 credits per sack. Customers who are not Gildra members are charged 5 credits per sack.
+F1-3692@v1#438b02ce Pricing rule. Caskel members are charged 5 credits per parcel. Customers who are not Caskel members are charged 5 credits per parcel.
+F1-3695@v1#0f580079 Pricing rule. Ulvar members are charged 3 credits per crate. Customers who are not Ulvar members are charged 8 credits per crate.
+F1-3728@v1#9bc444d9 Pricing rule. Gildra members are charged 8 credits per litre. Customers who are not Gildra members are charged 7 credits per litre.
+F1-3744@v1#4f295023 Pricing rule. Dovrin members are charged 7 credits per ticket. Customers who are not Dovrin members are charged 2 credits per ticket.
+F1-3812@v1#6c14149d Pricing rule. Elsworth members are charged 11 credits per ticket. Customers who are not Elsworth members are charged 7 credits per ticket.
+F1-3830@v1#a6afe729 Pricing rule. Gildra members are charged 5 credits per ticket. Customers who are not Gildra members are charged 8 credits per ticket.
+F1-3850@v1#7e2b498c Pricing rule. Ambrel members are charged 3 credits per litre. Customers who are not Ambrel members are charged 5 credits per litre.
+F1-3852@v1#b5f89568 Pricing rule. Brindle members are charged 8 credits per bale. Customers who are not Brindle members are charged 11 credits per bale.
+F1-3894@v1#48a4784d Pricing rule. Ferro members are charged 10 credits per hour. Customers who are not Ferro members are charged 6 credits per hour.
+F1-3897@v1#6c0bc297 Pricing rule. Wexley members are charged 7 credits per hour. Customers who are not Wexley members are charged 6 credits per hour.
+F1-3904@v1#54b2b71e Pricing rule. Ulvar members are charged 5 credits per crate. Customers who are not Ulvar members are charged 2 credits per crate.
+F1-3935@v1#9b208a11 Pricing rule. Wexley members are charged 8 credits per page. Customers who are not Wexley members are charged 3 credits per page.
+F1-4003@v1#6e55b04b Pricing rule. Wexley members are charged 3 credits per page. Customers who are not Wexley members are charged 8 credits per page.
+F1-4017@v1#bbe2300e Pricing rule. Yarrow members are charged 8 credits per kilogram. Customers who are not Yarrow members are charged 11 credits per kilogram.
+F1-4028@v1#149ae497 Pricing rule. Ambrel members are charged 9 credits per ticket. Customers who are not Ambrel members are charged 7 credits per ticket.
+F1-4045@v1#b1f04992 Pricing rule. Orsk members are charged 4 credits per parcel. Customers who are not Orsk members are charged 7 credits per parcel.
+F1-4063@v1#f8cd9b71 Pricing rule. Kelmar members are charged 11 credits per crate. Customers who are not Kelmar members are charged 6 credits per crate.
+F1-4064@v1#0a8b71c9 Pricing rule. Orsk members are charged 3 credits per crate. Customers who are not Orsk members are charged 4 credits per crate.
+F1-4124@v1#0e7798db Pricing rule. Caskel members are charged 7 credits per litre. Customers who are not Caskel members are charged 3 credits per litre.
+F1-4133@v1#014adaf4 Pricing rule. Caskel members are charged 6 credits per litre. Customers who are not Caskel members are charged 3 credits per litre.
+F1-4137@v1#98dda14c Pricing rule. Harrow members are charged 7 credits per crate. Customers who are not Harrow members are charged 9 credits per crate.
+F1-4150@v1#8c0d106b Pricing rule. Nethra members are charged 5 credits per parcel. Customers who are not Nethra members are charged 5 credits per parcel.
+F1-4152@v1#d318b09e Pricing rule. Selmet members are charged 3 credits per parcel. Customers who are not Selmet members are charged 8 credits per parcel.
+F1-4174@v1#31944b87 Pricing rule. Kelmar members are charged 6 credits per parcel. Customers who are not Kelmar members are charged 11 credits per parcel.
+F1-4176@v1#41836476 Pricing rule. Wexley members are charged 10 credits per page. Customers who are not Wexley members are charged 5 credits per page.
+F1-4225@v1#a264099c Pricing rule. Quillon members are charged 8 credits per crate. Customers who are not Quillon members are charged 11 credits per crate.
+F1-4276@v1#eb14fda1 Pricing rule. Ambrel members are charged 6 credits per crate. Customers who are not Ambrel members are charged 7 credits per crate.
+F1-4303@v1#671e8148 Pricing rule. Yarrow members are charged 3 credits per seat. Customers who are not Yarrow members are charged 5 credits per seat.
+F1-4320@v1#57412086 Pricing rule. Gildra members are charged 7 credits per parcel. Customers who are not Gildra members are charged 8 credits per parcel.
+F1-4327@v1#32cb0256 Pricing rule. Orsk members are charged 4 credits per crate. Customers who are not Orsk members are charged 3 credits per crate.
+F1-4336@v1#819b9196 Pricing rule. Iselin members are charged 7 credits per sack. Customers who are not Iselin members are charged 5 credits per sack.
+F1-4357@v1#0dc6173e Pricing rule. Elsworth members are charged 4 credits per kilogram. Customers who are not Elsworth members are charged 5 credits per kilogram.
+F1-4376@v1#cecf5488 Pricing rule. Elsworth members are charged 2 credits per kilogram. Customers who are not Elsworth members are charged 6 credits per kilogram.
+F1-4456@v1#63b124d0 Pricing rule. Caskel members are charged 8 credits per page. Customers who are not Caskel members are charged 8 credits per page.
+F1-4506@v1#055a8f73 Pricing rule. Ferro members are charged 3 credits per litre. Customers who are not Ferro members are charged 6 credits per litre.
+F1-4532@v1#4452e864 Pricing rule. Lumsk members are charged 4 credits per bale. Customers who are not Lumsk members are charged 11 credits per bale.
+F1-4565@v1#03af1f34 Pricing rule. Yarrow members are charged 7 credits per kilogram. Customers who are not Yarrow members are charged 9 credits per kilogram.
+F1-4590@v1#13051147 Pricing rule. Corvel members are charged 8 credits per hour. Customers who are not Corvel members are charged 5 credits per hour.
+F1-4637@v1#d6cbf123 Pricing rule. Harrow members are charged 7 credits per litre. Customers who are not Harrow members are charged 9 credits per litre.
+F1-4656@v1#fc289d48 Pricing rule. Ulvar members are charged 10 credits per ticket. Customers who are not Ulvar members are charged 6 credits per ticket.
+F1-4662@v1#649cce12 Pricing rule. Yarrow members are charged 10 credits per page. Customers who are not Yarrow members are charged 8 credits per page.
+F1-4669@v1#e1c58c3a Pricing rule. Corvel members are charged 11 credits per crate. Customers who are not Corvel members are charged 5 credits per crate.
+F1-4675@v1#3150f5ce Pricing rule. Elsworth members are charged 6 credits per kilogram. Customers who are not Elsworth members are charged 5 credits per kilogram.
+F1-4730@v1#1de251f7 Pricing rule. Nethra members are charged 3 credits per parcel. Customers who are not Nethra members are charged 4 credits per parcel.
+F1-4825@v1#86e01ae2 Pricing rule. Harrow members are charged 3 credits per bale. Customers who are not Harrow members are charged 4 credits per bale.
+F1-4846@v1#5839cf1a Pricing rule. Ambrel members are charged 7 credits per crate. Customers who are not Ambrel members are charged 6 credits per crate.
+F1-4860@v1#8f00bc48 Pricing rule. Gildra members are charged 7 credits per ticket. Customers who are not Gildra members are charged 3 credits per ticket.
+F1-4882@v1#09b6cbc4 Pricing rule. Ferro members are charged 6 credits per litre. Customers who are not Ferro members are charged 7 credits per litre.
+F1-4974@v1#56031f22 Pricing rule. Elsworth members are charged 5 credits per kilogram. Customers who are not Elsworth members are charged 7 credits per kilogram.
+F1-5003@v1#d862fd78 Pricing rule. Wexley members are charged 6 credits per hour. Customers who are not Wexley members are charged 7 credits per hour.
+F1-5056@v1#bd983d2c Pricing rule. Fenrow members are charged 2 credits per parcel. Customers who are not Fenrow members are charged 6 credits per parcel.
+F1-5115@v1#32bfbe41 Pricing rule. Tovrin members are charged 3 credits per litre. Customers who are not Tovrin members are charged 2 credits per litre.
+F1-5160@v1#dfbcbcd0 Pricing rule. Lumsk members are charged 3 credits per hour. Customers who are not Lumsk members are charged 9 credits per hour.
+F1-5167@v1#7e3a1000 Pricing rule. Vantrel members are charged 7 credits per bale. Customers who are not Vantrel members are charged 3 credits per bale.
+F1-5174@v1#f3dfa1a7 Pricing rule. Corvel members are charged 10 credits per hour. Customers who are not Corvel members are charged 6 credits per hour.
+F1-5180@v1#c99e9360 Pricing rule. Ferro members are charged 6 credits per litre. Customers who are not Ferro members are charged 3 credits per litre.
+F1-5223@v1#38e34533 Pricing rule. Ferro members are charged 6 credits per ticket. Customers who are not Ferro members are charged 7 credits per ticket.
+F1-5344@v1#38d7f805 Pricing rule. Brindle members are charged 5 credits per sack. Customers who are not Brindle members are charged 7 credits per sack.
+F1-5356@v1#dd3e5f79 Pricing rule. Brindle members are charged 11 credits per bale. Customers who are not Brindle members are charged 9 credits per bale.
+F1-5371@v1#9deb24f4 Pricing rule. Harrow members are charged 9 credits per litre. Customers who are not Harrow members are charged 6 credits per litre.
+F1-5461@v1#dd67d3eb Pricing rule. Rastor members are charged 9 credits per page. Customers who are not Rastor members are charged 8 credits per page.
+F1-5519@v1#0bf86cf4 Pricing rule. Ferro members are charged 12 credits per kilogram. Customers who are not Ferro members are charged 10 credits per kilogram.
+F1-5543@v1#b71a9544 Pricing rule. Gildra members are charged 6 credits per litre. Customers who are not Gildra members are charged 5 credits per litre.
+F1-5547@v1#a97b1dd0 Pricing rule. Gildra members are charged 8 credits per bale. Customers who are not Gildra members are charged 6 credits per bale.
+F1-5582@v1#504611ec Pricing rule. Vantrel members are charged 8 credits per bale. Customers who are not Vantrel members are charged 6 credits per bale.
+F1-5636@v1#a4d8dedb Pricing rule. Fenrow members are charged 8 credits per seat. Customers who are not Fenrow members are charged 6 credits per seat.
+F1-5646@v1#74b444ea Pricing rule. Fenrow members are charged 11 credits per seat. Customers who are not Fenrow members are charged 9 credits per seat.
+F1-5744@v1#9e3e5c2c Pricing rule. Quillon members are charged 3 credits per bale. Customers who are not Quillon members are charged 4 credits per bale.
+F1-5754@v1#50c2891b Pricing rule. Corvel members are charged 6 credits per bale. Customers who are not Corvel members are charged 10 credits per bale.
+F1-5841@v1#23ae62de Pricing rule. Quillon members are charged 5 credits per ticket. Customers who are not Quillon members are charged 6 credits per ticket.
+F1-5884@v1#413ad729 Pricing rule. Ambrel members are charged 10 credits per crate. Customers who are not Ambrel members are charged 8 credits per crate.
+F1-5929@v1#aa28cee4 Pricing rule. Morvane members are charged 3 credits per page. Customers who are not Morvane members are charged 6 credits per page.
+F1-5941@v1#bb92ae82 Pricing rule. Fenrow members are charged 6 credits per kilogram. Customers who are not Fenrow members are charged 6 credits per kilogram.
+F1-6018@v1#07099c29 Pricing rule. Yarrow members are charged 6 credits per seat. Customers who are not Yarrow members are charged 8 credits per seat.
+F1-6092@v1#1a17a7c0 Pricing rule. Caskel members are charged 3 credits per litre. Customers who are not Caskel members are charged 7 credits per litre.
+F1-6096@v1#7b208a84 Pricing rule. Selmet members are charged 11 credits per kilogram. Customers who are not Selmet members are charged 4 credits per kilogram.
+F1-6104@v1#9fb00f1e Pricing rule. Tovrin members are charged 9 credits per hour. Customers who are not Tovrin members are charged 4 credits per hour.
+F1-6109@v1#c4ea6004 Pricing rule. Selmet members are charged 10 credits per parcel. Customers who are not Selmet members are charged 5 credits per parcel.
+F1-6144@v1#8d0eb241 Pricing rule. Iselin members are charged 4 credits per sack. Customers who are not Iselin members are charged 6 credits per sack.
+F1-6153@v1#cf31847d Pricing rule. Gildra members are charged 3 credits per parcel. Customers who are not Gildra members are charged 2 credits per parcel.
+F1-6193@v1#fc0037d1 Pricing rule. Orsk members are charged 6 credits per crate. Customers who are not Orsk members are charged 4 credits per crate.
+F1-6213@v1#41fe4d97 Pricing rule. Quillon members are charged 9 credits per crate. Customers who are not Quillon members are charged 6 credits per crate.
+F1-6264@v1#273be105 Pricing rule. Ferro members are charged 9 credits per kilogram. Customers who are not Ferro members are charged 10 credits per kilogram.
+F1-6301@v1#4a440ab9 Pricing rule. Caskel members are charged 4 credits per parcel. Customers who are not Caskel members are charged 7 credits per parcel.
+F1-6347@v1#8b3abc30 Pricing rule. Dovrin members are charged 2 credits per ticket. Customers who are not Dovrin members are charged 7 credits per ticket.
+F1-6376@v1#e930fed4 Pricing rule. Elsworth members are charged 6 credits per kilogram. Customers who are not Elsworth members are charged 7 credits per kilogram.
+F1-6399@v1#8b6921eb Pricing rule. Brindle members are charged 7 credits per bale. Customers who are not Brindle members are charged 3 credits per bale.
+F1-6431@v1#f501cdb7 Pricing rule. Caskel members are charged 7 credits per bale. Customers who are not Caskel members are charged 3 credits per bale.
+F1-6452@v1#bd1eb3b8 Pricing rule. Ferro members are charged 9 credits per page. Customers who are not Ferro members are charged 3 credits per page.
+F1-6512@v1#2b535dc3 Pricing rule. Caskel members are charged 10 credits per litre. Customers who are not Caskel members are charged 5 credits per litre.
+F1-6541@v1#ae86cdbb Pricing rule. Fenrow members are charged 8 credits per litre. Customers who are not Fenrow members are charged 9 credits per litre.
+F1-6589@v1#80b956af Pricing rule. Morvane members are charged 6 credits per page. Customers who are not Morvane members are charged 3 credits per page.
+F1-6598@v1#5d4752f9 Pricing rule. Ulvar members are charged 5 credits per ticket. Customers who are not Ulvar members are charged 8 credits per ticket.
+F1-6614@v1#d6692970 Pricing rule. Gildra members are charged 5 credits per parcel. Customers who are not Gildra members are charged 4 credits per parcel.
+F1-6617@v1#ba2253ae Pricing rule. Brindle members are charged 6 credits per sack. Customers who are not Brindle members are charged 2 credits per sack.
+F1-6625@v1#97984738 Pricing rule. Elsworth members are charged 5 credits per kilogram. Customers who are not Elsworth members are charged 4 credits per kilogram.
+F1-6673@v1#854f3042 Pricing rule. Elsworth members are charged 6 credits per kilogram. Customers who are not Elsworth members are charged 2 credits per kilogram.
+F1-6713@v1#78fc9dcd Pricing rule. Brindle members are charged 8 credits per ticket. Customers who are not Brindle members are charged 11 credits per ticket.
+F1-6723@v1#1d05d1b7 Pricing rule. Morvane members are charged 5 credits per page. Customers who are not Morvane members are charged 7 credits per page.
+F1-6729@v1#b9c3c0d2 Pricing rule. Fenrow members are charged 6 credits per litre. Customers who are not Fenrow members are charged 5 credits per litre.
+F1-6766@v1#938d85be Pricing rule. Corvel members are charged 8 credits per bale. Customers who are not Corvel members are charged 4 credits per bale.
+F1-6823@v1#5ba50985 Pricing rule. Ambrel members are charged 6 credits per ticket. Customers who are not Ambrel members are charged 11 credits per ticket.
+F1-6854@v1#f0a5fa70 Pricing rule. Caskel members are charged 9 credits per page. Customers who are not Caskel members are charged 8 credits per page.
+F1-6873@v1#e58d85b0 Pricing rule. Tovrin members are charged 6 credits per hour. Customers who are not Tovrin members are charged 12 credits per hour.
+F1-6906@v1#94e15686 Pricing rule. Kelmar members are charged 4 credits per sack. Customers who are not Kelmar members are charged 7 credits per sack.
+F1-6940@v1#96d7abb2 Pricing rule. Pellan members are charged 6 credits per parcel. Customers who are not Pellan members are charged 8 credits per parcel.
+F1-6951@v1#128b0c26 Pricing rule. Caskel members are charged 3 credits per litre. Customers who are not Caskel members are charged 6 credits per litre.
+F1-6962@v1#9162f7b4 Pricing rule. Elsworth members are charged 8 credits per ticket. Customers who are not Elsworth members are charged 5 credits per ticket.
+F1-7004@v1#ffc72fe0 Pricing rule. Selmet members are charged 3 credits per kilogram. Customers who are not Selmet members are charged 11 credits per kilogram.
+F1-7081@v1#1c960792 Pricing rule. Pellan members are charged 7 credits per parcel. Customers who are not Pellan members are charged 10 credits per parcel.
+F1-7083@v1#20430d33 Pricing rule. Brindle members are charged 8 credits per sack. Customers who are not Brindle members are charged 8 credits per sack.
+F1-7088@v1#5a887e3f Pricing rule. Ulvar members are charged 3 credits per ticket. Customers who are not Ulvar members are charged 6 credits per ticket.
+F1-7099@v1#3e827800 Pricing rule. Caskel members are charged 7 credits per page. Customers who are not Caskel members are charged 6 credits per page.
+F1-7120@v1#878d9268 Pricing rule. Elsworth members are charged 8 credits per kilogram. Customers who are not Elsworth members are charged 7 credits per kilogram.
+F1-7141@v1#a1ff0e8e Pricing rule. Dovrin members are charged 10 credits per ticket. Customers who are not Dovrin members are charged 3 credits per ticket.
+F1-7155@v1#5378a91f Pricing rule. Kelmar members are charged 3 credits per crate. Customers who are not Kelmar members are charged 9 credits per crate.
+F1-7227@v1#e7fbe7c5 Pricing rule. Corvel members are charged 6 credits per page. Customers who are not Corvel members are charged 8 credits per page.
+F1-7268@v1#f1f7081a Pricing rule. Selmet members are charged 6 credits per parcel. Customers who are not Selmet members are charged 9 credits per parcel.
+F1-7277@v1#6cbd1f7c Pricing rule. Rastor members are charged 9 credits per kilogram. Customers who are not Rastor members are charged 4 credits per kilogram.
+F1-7308@v1#94c7f6d1 Pricing rule. Caskel members are charged 3 credits per bale. Customers who are not Caskel members are charged 7 credits per bale.
+F1-7315@v1#f22d4d0b Pricing rule. Yarrow members are charged 5 credits per seat. Customers who are not Yarrow members are charged 3 credits per seat.
+F1-7345@v1#ee17e716 Pricing rule. Corvel members are charged 8 credits per crate. Customers who are not Corvel members are charged 3 credits per crate.
+F1-7457@v1#6f21c195 Pricing rule. Kelmar members are charged 4 credits per crate. Customers who are not Kelmar members are charged 11 credits per crate.
+F1-7474@v1#a2989952 Pricing rule. Ambrel members are charged 6 credits per litre. Customers who are not Ambrel members are charged 5 credits per litre.
+F1-7476@v1#e18e16ab Pricing rule. Harrow members are charged 8 credits per litre. Customers who are not Harrow members are charged 4 credits per litre.
+F1-7500@v1#8f5b4163 Pricing rule. Kelmar members are charged 5 credits per sack. Customers who are not Kelmar members are charged 6 credits per sack.
+F1-7543@v1#c73d97b5 Pricing rule. Brindle members are charged 8 credits per sack. Customers who are not Brindle members are charged 5 credits per sack.
+F1-7625@v1#83fd155b Pricing rule. Lumsk members are charged 7 credits per sack. Customers who are not Lumsk members are charged 4 credits per sack.
+F1-7629@v1#7dbd40b3 Pricing rule. Kelmar members are charged 7 credits per seat. Customers who are not Kelmar members are charged 4 credits per seat.
+F1-7639@v1#b228c5ef Pricing rule. Kelmar members are charged 8 credits per seat. Customers who are not Kelmar members are charged 5 credits per seat.
+F1-7646@v1#6271b62f Pricing rule. Gildra members are charged 5 credits per parcel. Customers who are not Gildra members are charged 5 credits per parcel.
+F1-7656@v1#039ff7af Pricing rule. Rastor members are charged 3 credits per kilogram. Customers who are not Rastor members are charged 6 credits per kilogram.
+F1-7717@v1#9710bb7e Pricing rule. Brindle members are charged 2 credits per bale. Customers who are not Brindle members are charged 5 credits per bale.
+F1-7743@v1#3584f539 Pricing rule. Caskel members are charged 6 credits per page. Customers who are not Caskel members are charged 7 credits per page.
+F1-7751@v1#77dd0ee4 Pricing rule. Selmet members are charged 2 credits per kilogram. Customers who are not Selmet members are charged 9 credits per kilogram.
+F1-7774@v1#05c8d78d Pricing rule. Morvane members are charged 3 credits per hour. Customers who are not Morvane members are charged 8 credits per hour.
+F1-7883@v1#5612331f Pricing rule. Quillon members are charged 12 credits per crate. Customers who are not Quillon members are charged 8 credits per crate.
+F1-7884@v1#e7e21dd6 Pricing rule. Lumsk members are charged 10 credits per hour. Customers who are not Lumsk members are charged 5 credits per hour.
+F1-7885@v1#808b9a53 Pricing rule. Elsworth members are charged 9 credits per kilogram. Customers who are not Elsworth members are charged 8 credits per kilogram.
+F1-7887@v1#fa1f9525 Pricing rule. Brindle members are charged 5 credits per ticket. Customers who are not Brindle members are charged 9 credits per ticket.
+F1-7892@v1#06bd87fe Pricing rule. Fenrow members are charged 5 credits per kilogram. Customers who are not Fenrow members are charged 4 credits per kilogram.
+F1-7910@v1#da3c7559 Pricing rule. Iselin members are charged 6 credits per sack. Customers who are not Iselin members are charged 9 credits per sack.
+F1-7927@v1#ff945600 Pricing rule. Tovrin members are charged 2 credits per litre. Customers who are not Tovrin members are charged 3 credits per litre.
+F1-7930@v1#8d19c7e8 Pricing rule. Lumsk members are charged 4 credits per sack. Customers who are not Lumsk members are charged 7 credits per sack.
+F1-8004@v1#d9e5dc90 Pricing rule. Galtry members are charged 4 credits per kilogram. Customers who are not Galtry members are charged 7 credits per kilogram.
+F1-8037@v1#e8516905 Pricing rule. Yarrow members are charged 8 credits per kilogram. Customers who are not Yarrow members are charged 7 credits per kilogram.
+F1-8050@v1#0cab915d Pricing rule. Morvane members are charged 6 credits per hour. Customers who are not Morvane members are charged 2 credits per hour.
+F1-8070@v1#3eec27c5 Pricing rule. Gildra members are charged 3 credits per ticket. Customers who are not Gildra members are charged 7 credits per ticket.
+F1-8197@v1#22146a9a Pricing rule. Quillon members are charged 5 credits per bale. Customers who are not Quillon members are charged 7 credits per bale.
+F1-8211@v1#80b3060a Pricing rule. Ulvar members are charged 6 credits per crate. Customers who are not Ulvar members are charged 3 credits per crate.
+F1-8222@v1#7eb41990 Pricing rule. Caskel members are charged 4 credits per litre. Customers who are not Caskel members are charged 7 credits per litre.
+F1-8230@v1#6c1e131b Pricing rule. Ambrel members are charged 9 credits per hour. Customers who are not Ambrel members are charged 8 credits per hour.
+F1-8234@v1#c8610234 Pricing rule. Yarrow members are charged 9 credits per crate. Customers who are not Yarrow members are charged 5 credits per crate.
+F1-8258@v1#ca82b6c7 Pricing rule. Harrow members are charged 9 credits per crate. Customers who are not Harrow members are charged 7 credits per crate.
+F1-8321@v1#751dda11 Pricing rule. Lumsk members are charged 6 credits per sack. Customers who are not Lumsk members are charged 9 credits per sack.
+F1-8360@v1#63c2499c Pricing rule. Vantrel members are charged 3 credits per bale. Customers who are not Vantrel members are charged 7 credits per bale.
+F1-8366@v1#d5f0fe00 Pricing rule. Kelmar members are charged 9 credits per parcel. Customers who are not Kelmar members are charged 3 credits per parcel.
+F1-8368@v1#9e934519 Pricing rule. Brindle members are charged 4 credits per sack. Customers who are not Brindle members are charged 8 credits per sack.
+F1-8373@v1#28c83122 Pricing rule. Kelmar members are charged 7 credits per seat. Customers who are not Kelmar members are charged 9 credits per seat.
+F1-8401@v1#acbf7728 Pricing rule. Yarrow members are charged 5 credits per crate. Customers who are not Yarrow members are charged 9 credits per crate.
+F1-8427@v1#ecb345f8 Pricing rule. Ulvar members are charged 6 credits per ticket. Customers who are not Ulvar members are charged 4 credits per ticket.
+F1-8444@v1#5b0bf287 Pricing rule. Ambrel members are charged 9 credits per crate. Customers who are not Ambrel members are charged 8 credits per crate.
+F1-8451@v1#06b2f7bb Pricing rule. Vantrel members are charged 5 credits per bale. Customers who are not Vantrel members are charged 10 credits per bale.
+F1-8459@v1#a6c58e4c Pricing rule. Fenrow members are charged 9 credits per parcel. Customers who are not Fenrow members are charged 3 credits per parcel.
+F1-8510@v1#5037e913 Pricing rule. Ferro members are charged 9 credits per litre. Customers who are not Ferro members are charged 4 credits per litre.
+F1-8513@v1#d8f73736 Pricing rule. Fenrow members are charged 8 credits per litre. Customers who are not Fenrow members are charged 7 credits per litre.
+F1-8525@v1#9e9985a8 Pricing rule. Brindle members are charged 3 credits per bale. Customers who are not Brindle members are charged 7 credits per bale.
+F1-8548@v1#5cfb43f5 Pricing rule. Wexley members are charged 4 credits per page. Customers who are not Wexley members are charged 11 credits per page.
+F1-8559@v1#72707477 Pricing rule. Corvel members are charged 11 credits per page. Customers who are not Corvel members are charged 9 credits per page.
+F1-8566@v1#79efaeb8 Pricing rule. Ambrel members are charged 5 credits per litre. Customers who are not Ambrel members are charged 3 credits per litre.
+F1-8608@v1#585d2527 Pricing rule. Gildra members are charged 9 credits per parcel. Customers who are not Gildra members are charged 10 credits per parcel.
+F1-8611@v1#ba513121 Pricing rule. Fenrow members are charged 6 credits per seat. Customers who are not Fenrow members are charged 8 credits per seat.
+F1-8620@v1#80260e05 Pricing rule. Iselin members are charged 6 credits per parcel. Customers who are not Iselin members are charged 7 credits per parcel.
+F1-8648@v1#def27fc6 Pricing rule. Quillon members are charged 6 credits per crate. Customers who are not Quillon members are charged 9 credits per crate.
+F1-8656@v1#c05da3e8 Pricing rule. Kelmar members are charged 3 credits per parcel. Customers who are not Kelmar members are charged 9 credits per parcel.
+F1-8668@v1#22a7ac07 Pricing rule. Orsk members are charged 7 credits per parcel. Customers who are not Orsk members are charged 9 credits per parcel.
+F1-8669@v1#b7dfb35a Pricing rule. Ulvar members are charged 2 credits per ticket. Customers who are not Ulvar members are charged 5 credits per ticket.
+F1-8704@v1#fea835d6 Pricing rule. Yarrow members are charged 6 credits per kilogram. Customers who are not Yarrow members are charged 5 credits per kilogram.
+F1-8708@v1#717ca050 Pricing rule. Yarrow members are charged 8 credits per page. Customers who are not Yarrow members are charged 10 credits per page.
+F1-8757@v1#60625eb0 Pricing rule. Brindle members are charged 6 credits per sack. Customers who are not Brindle members are charged 8 credits per sack.
+F1-8778@v1#e036a654 Pricing rule. Elsworth members are charged 8 credits per kilogram. Customers who are not Elsworth members are charged 3 credits per kilogram.
+F1-8851@v1#9181086d Pricing rule. Yarrow members are charged 5 credits per kilogram. Customers who are not Yarrow members are charged 6 credits per kilogram.
+F1-8954@v1#19849e3e Pricing rule. Wexley members are charged 2 credits per bale. Customers who are not Wexley members are charged 5 credits per bale.
+F1-8988@v1#d7ee9555 Pricing rule. Elsworth members are charged 6 credits per kilogram. Customers who are not Elsworth members are charged 6 credits per kilogram.
+F1-9011@v1#0e079e37 Pricing rule. Caskel members are charged 6 credits per litre. Customers who are not Caskel members are charged 9 credits per litre.
+F1-9036@v1#979e61dd Pricing rule. Harrow members are charged 4 credits per bale. Customers who are not Harrow members are charged 3 credits per bale.
+F1-9106@v1#5515b39b Pricing rule. Iselin members are charged 8 credits per parcel. Customers who are not Iselin members are charged 8 credits per parcel.
+F1-9128@v1#f891fc71 Pricing rule. Vantrel members are charged 6 credits per parcel. Customers who are not Vantrel members are charged 8 credits per parcel.
+F1-9163@v1#32cbf49e Pricing rule. Vantrel members are charged 9 credits per parcel. Customers who are not Vantrel members are charged 10 credits per parcel.
+F1-9168@v1#d562af68 Pricing rule. Brindle members are charged 9 credits per bale. Customers who are not Brindle members are charged 7 credits per bale.
+F1-9173@v1#fbf58117 Pricing rule. Gildra members are charged 8 credits per parcel. Customers who are not Gildra members are charged 7 credits per parcel.
+F1-9174@v1#43549d40 Pricing rule. Yarrow members are charged 9 credits per kilogram. Customers who are not Yarrow members are charged 7 credits per kilogram.
+F1-9298@v1#e90f2e36 Pricing rule. Rastor members are charged 6 credits per kilogram. Customers who are not Rastor members are charged 3 credits per kilogram.
+F1-9307@v1#7ad2de00 Pricing rule. Pellan members are charged 11 credits per parcel. Customers who are not Pellan members are charged 7 credits per parcel.
+F1-9312@v1#43cd2708 Pricing rule. Galtry members are charged 3 credits per kilogram. Customers who are not Galtry members are charged 6 credits per kilogram.
+F1-9327@v1#53578566 Pricing rule. Gildra members are charged 2 credits per parcel. Customers who are not Gildra members are charged 3 credits per parcel.
+F1-9353@v1#c1f24fff Pricing rule. Lumsk members are charged 11 credits per bale. Customers who are not Lumsk members are charged 5 credits per bale.
+F1-9357@v1#696f210e Pricing rule. Fenrow members are charged 4 credits per kilogram. Customers who are not Fenrow members are charged 5 credits per kilogram.
+F1-9414@v1#079e02d6 Pricing rule. Ferro members are charged 8 credits per ticket. Customers who are not Ferro members are charged 8 credits per ticket.
+F1-9477@v1#560db858 Pricing rule. Morvane members are charged 8 credits per hour. Customers who are not Morvane members are charged 3 credits per hour.
+F1-9496@v1#44aa96c3 Pricing rule. Corvel members are charged 3 credits per crate. Customers who are not Corvel members are charged 8 credits per crate.
+F1-9529@v1#2b0ab511 Pricing rule. Elsworth members are charged 7 credits per kilogram. Customers who are not Elsworth members are charged 6 credits per kilogram.
+F1-9565@v1#570e8876 Pricing rule. Elsworth members are charged 6 credits per ticket. Customers who are not Elsworth members are charged 9 credits per ticket.
+F1-9628@v1#e3d85d88 Pricing rule. Lumsk members are charged 5 credits per hour. Customers who are not Lumsk members are charged 10 credits per hour.
+F1-9667@v1#9add871b Pricing rule. Galtry members are charged 8 credits per kilogram. Customers who are not Galtry members are charged 6 credits per kilogram.
+F1-9673@v1#34273cbf Pricing rule. Ulvar members are charged 5 credits per ticket. Customers who are not Ulvar members are charged 2 credits per ticket.
+F1-9692@v1#004a219e Pricing rule. Corvel members are charged 5 credits per crate. Customers who are not Corvel members are charged 11 credits per crate.
+F1-9770@v1#530ea568 Pricing rule. Wexley members are charged 5 credits per bale. Customers who are not Wexley members are charged 2 credits per bale.
+F1-9870@v1#915062fa Pricing rule. Ferro members are charged 7 credits per ticket. Customers who are not Ferro members are charged 6 credits per ticket.
+F1-9896@v1#1d220fee Pricing rule. Ferro members are charged 8 credits per hour. Customers who are not Ferro members are charged 5 credits per hour.
+F1-9899@v1#e7300253 Pricing rule. Caskel members are charged 8 credits per litre. Customers who are not Caskel members are charged 4 credits per litre.
+F1-9935@v1#726e775e Pricing rule. Brindle members are charged 9 credits per ticket. Customers who are not Brindle members are charged 5 credits per ticket.
+F2-0002@v1#21a5f47b Hand-over rule. When a donor hands items to a clerk, the donor pays 8 credits per item and the clerk pays 3 credits per item. The clerk does not pay the donor's share.
+F2-0012@v1#a0a7d2a5 Hand-over rule. When a tanner hands items to a loader, the tanner pays 4 credits per item and the loader pays 6 credits per item. The loader does not pay the tanner's share.
+F2-0045@v1#4bf819f2 Hand-over rule. When a tutor hands items to a ward, the tutor pays 2 credits per item and the ward pays 8 credits per item. The ward does not pay the tutor's share.
+F2-0101@v1#7f7c32d8 Hand-over rule. When a weaver hands items to a dyer, the weaver pays 12 credits per item and the dyer pays 5 credits per item. The dyer does not pay the weaver's share.
+F2-0103@v1#8af32b7a Hand-over rule. When a plenter hands items to a taker, the plenter pays 7 credits per item and the taker pays 6 credits per item. The taker does not pay the plenter's share.
+F2-0107@v1#ff5b8bfa Hand-over rule. When a potter hands items to a bearer, the potter pays 9 credits per item and the bearer pays 9 credits per item. The bearer does not pay the potter's share.
+F2-0117@v1#5b3b1e71 Hand-over rule. When a donor hands items to a clerk, the donor pays 11 credits per item and the clerk pays 6 credits per item. The clerk does not pay the donor's share.
+F2-0120@v1#f948df0d Hand-over rule. When a lodger hands items to a keeper, the lodger pays 8 credits per item and the keeper pays 3 credits per item. The keeper does not pay the lodger's share.
+F2-0137@v1#b02bc322 Hand-over rule. When a weaver hands items to a dyer, the weaver pays 2 credits per item and the dyer pays 3 credits per item. The dyer does not pay the weaver's share.
+F2-0153@v1#63b8567d Hand-over rule. When a plenter hands items to a taker, the plenter pays 6 credits per item and the taker pays 3 credits per item. The taker does not pay the plenter's share.
+F2-0163@v1#2556ea79 Hand-over rule. When a weaver hands items to a dyer, the weaver pays 4 credits per item and the dyer pays 9 credits per item. The dyer does not pay the weaver's share.
+F2-0166@v1#02e1161d Hand-over rule. When a lodger hands items to a keeper, the lodger pays 9 credits per item and the keeper pays 6 credits per item. The keeper does not pay the lodger's share.
+F2-0185@v1#0b9baf4d Hand-over rule. When a weaver hands items to a dyer, the weaver pays 6 credits per item and the dyer pays 5 credits per item. The dyer does not pay the weaver's share.
+F2-0203@v1#5e96042e Hand-over rule. When a lodger hands items to a keeper, the lodger pays 2 credits per item and the keeper pays 8 credits per item. The keeper does not pay the lodger's share.
+F2-0231@v1#93ea7b9d Hand-over rule. When a tutor hands items to a ward, the tutor pays 5 credits per item and the ward pays 9 credits per item. The ward does not pay the tutor's share.
+F2-0235@v1#881683c0 Hand-over rule. When a plenter hands items to a taker, the plenter pays 7 credits per item and the taker pays 9 credits per item. The taker does not pay the plenter's share.
+F2-0244@v1#0d5ab331 Hand-over rule. When a brewer hands items to a carter, the brewer pays 10 credits per item and the carter pays 7 credits per item. The carter does not pay the brewer's share.
+F2-0273@v1#61104895 Hand-over rule. When a tutor hands items to a ward, the tutor pays 9 credits per item and the ward pays 8 credits per item. The ward does not pay the tutor's share.
+F2-0282@v1#0f2dddd4 Hand-over rule. When a potter hands items to a bearer, the potter pays 5 credits per item and the bearer pays 8 credits per item. The bearer does not pay the potter's share.
+F2-0309@v1#ad340aec Hand-over rule. When a sender hands items to a courier, the sender pays 2 credits per item and the courier pays 3 credits per item. The courier does not pay the sender's share.
+F2-0379@v1#9628fe59 Hand-over rule. When a weaver hands items to a dyer, the weaver pays 8 credits per item and the dyer pays 6 credits per item. The dyer does not pay the weaver's share.
+F2-0463@v1#1b88f00c Hand-over rule. When a donor hands items to a clerk, the donor pays 4 credits per item and the clerk pays 8 credits per item. The clerk does not pay the donor's share.
+F2-0464@v1#84a3ec5d Hand-over rule. When a tutor hands items to a ward, the tutor pays 4 credits per item and the ward pays 8 credits per item. The ward does not pay the tutor's share.
+F2-0477@v1#4054cd17 Hand-over rule. When a miller hands items to a hauler, the miller pays 9 credits per item and the hauler pays 2 credits per item. The hauler does not pay the miller's share.
+F2-0560@v1#48841013 Hand-over rule. When a sender hands items to a courier, the sender pays 4 credits per item and the courier pays 9 credits per item. The courier does not pay the sender's share.
+F2-0568@v1#906ebf2e Hand-over rule. When a plenter hands items to a taker, the plenter pays 11 credits per item and the taker pays 7 credits per item. The taker does not pay the plenter's share.
+F2-0579@v1#135210b7 Hand-over rule. When a drover hands items to a stabler, the drover pays 6 credits per item and the stabler pays 10 credits per item. The stabler does not pay the drover's share.
+F2-0586@v1#37c45197 Hand-over rule. When a tanner hands items to a loader, the tanner pays 7 credits per item and the loader pays 3 credits per item. The loader does not pay the tanner's share.
+F2-0593@v1#6821cd77 Hand-over rule. When a tutor hands items to a ward, the tutor pays 8 credits per item and the ward pays 6 credits per item. The ward does not pay the tutor's share.
+F2-0667@v1#344e4453 Hand-over rule. When a weaver hands items to a dyer, the weaver pays 3 credits per item and the dyer pays 5 credits per item. The dyer does not pay the weaver's share.
+F2-0683@v1#e986cd49 Hand-over rule. When a donor hands items to a clerk, the donor pays 9 credits per item and the clerk pays 7 credits per item. The clerk does not pay the donor's share.
+F2-0696@v1#38702e9d Hand-over rule. When a weaver hands items to a dyer, the weaver pays 7 credits per item and the dyer pays 10 credits per item. The dyer does not pay the weaver's share.
+F2-0704@v1#16b7fc48 Hand-over rule. When a potter hands items to a bearer, the potter pays 7 credits per item and the bearer pays 6 credits per item. The bearer does not pay the potter's share.
+F2-0742@v1#72c70015 Hand-over rule. When a miller hands items to a hauler, the miller pays 11 credits per item and the hauler pays 9 credits per item. The hauler does not pay the miller's share.
+F2-0789@v1#a7bf7acd Hand-over rule. When a tutor hands items to a ward, the tutor pays 4 credits per item and the ward pays 11 credits per item. The ward does not pay the tutor's share.
+F2-0824@v1#ae849764 Hand-over rule. When a vendor hands items to a fetcher, the vendor pays 10 credits per item and the fetcher pays 4 credits per item. The fetcher does not pay the vendor's share.
+F2-0849@v1#a417cf57 Hand-over rule. When a miller hands items to a hauler, the miller pays 3 credits per item and the hauler pays 12 credits per item. The hauler does not pay the miller's share.
+F2-0855@v1#0f54c0c6 Hand-over rule. When a tutor hands items to a ward, the tutor pays 7 credits per item and the ward pays 7 credits per item. The ward does not pay the tutor's share.
+F2-0918@v1#83fbe2db Hand-over rule. When a lodger hands items to a keeper, the lodger pays 3 credits per item and the keeper pays 9 credits per item. The keeper does not pay the lodger's share.
+F2-0967@v1#4cacfb6b Hand-over rule. When a lodger hands items to a keeper, the lodger pays 9 credits per item and the keeper pays 5 credits per item. The keeper does not pay the lodger's share.
+F2-1024@v1#92fc8474 Hand-over rule. When a lodger hands items to a keeper, the lodger pays 4 credits per item and the keeper pays 7 credits per item. The keeper does not pay the lodger's share.
+F2-1027@v1#2fd00aed Hand-over rule. When a brewer hands items to a carter, the brewer pays 4 credits per item and the carter pays 7 credits per item. The carter does not pay the brewer's share.
+F2-1059@v1#fed57d32 Hand-over rule. When a sender hands items to a courier, the sender pays 4 credits per item and the courier pays 12 credits per item. The courier does not pay the sender's share.
+F2-1070@v1#836cd73d Hand-over rule. When a vendor hands items to a fetcher, the vendor pays 7 credits per item and the fetcher pays 8 credits per item. The fetcher does not pay the vendor's share.
+F2-1104@v1#f40b78ce Hand-over rule. When a tutor hands items to a ward, the tutor pays 10 credits per item and the ward pays 6 credits per item. The ward does not pay the tutor's share.
+F2-1129@v1#74ad72a4 Hand-over rule. When a baker hands items to a porter, the baker pays 5 credits per item and the porter pays 11 credits per item. The porter does not pay the baker's share.
+F2-1136@v1#c3ee25ae Hand-over rule. When a weaver hands items to a dyer, the weaver pays 4 credits per item and the dyer pays 7 credits per item. The dyer does not pay the weaver's share.
+F2-1139@v1#83bce1b4 Hand-over rule. When a tutor hands items to a ward, the tutor pays 11 credits per item and the ward pays 4 credits per item. The ward does not pay the tutor's share.
+F2-1169@v1#f511508a Hand-over rule. When a tanner hands items to a loader, the tanner pays 7 credits per item and the loader pays 9 credits per item. The loader does not pay the tanner's share.
+F2-1178@v1#b4dd68dc Hand-over rule. When a miller hands items to a hauler, the miller pays 6 credits per item and the hauler pays 10 credits per item. The hauler does not pay the miller's share.
+F2-1193@v1#e4c0b71a Hand-over rule. When a sender hands items to a courier, the sender pays 3 credits per item and the courier pays 9 credits per item. The courier does not pay the sender's share.
+F2-1229@v1#637b2edb Hand-over rule. When a lodger hands items to a keeper, the lodger pays 5 credits per item and the keeper pays 5 credits per item. The keeper does not pay the lodger's share.
+F2-1354@v1#a139ed0d Hand-over rule. When a donor hands items to a clerk, the donor pays 8 credits per item and the clerk pays 4 credits per item. The clerk does not pay the donor's share.
+F2-1386@v1#985f61b3 Hand-over rule. When a sender hands items to a courier, the sender pays 6 credits per item and the courier pays 3 credits per item. The courier does not pay the sender's share.
+F2-1404@v1#07d0c33b Hand-over rule. When a plenter hands items to a taker, the plenter pays 8 credits per item and the taker pays 11 credits per item. The taker does not pay the plenter's share.
+F2-1408@v1#e57c392b Hand-over rule. When a sender hands items to a courier, the sender pays 6 credits per item and the courier pays 2 credits per item. The courier does not pay the sender's share.
+F2-1438@v1#a7879c2e Hand-over rule. When a vendor hands items to a fetcher, the vendor pays 9 credits per item and the fetcher pays 8 credits per item. The fetcher does not pay the vendor's share.
+F2-1448@v1#eeb8b36a Hand-over rule. When a plenter hands items to a taker, the plenter pays 10 credits per item and the taker pays 5 credits per item. The taker does not pay the plenter's share.
+F2-1453@v1#a7879c2e Hand-over rule. When a vendor hands items to a fetcher, the vendor pays 9 credits per item and the fetcher pays 8 credits per item. The fetcher does not pay the vendor's share.
+F2-1485@v1#94ce4b60 Hand-over rule. When a potter hands items to a bearer, the potter pays 6 credits per item and the bearer pays 7 credits per item. The bearer does not pay the potter's share.
+F2-1586@v1#7b843a73 Hand-over rule. When a miller hands items to a hauler, the miller pays 7 credits per item and the hauler pays 10 credits per item. The hauler does not pay the miller's share.
+F2-1622@v1#b9d05a3c Hand-over rule. When a vendor hands items to a fetcher, the vendor pays 10 credits per item and the fetcher pays 10 credits per item. The fetcher does not pay the vendor's share.
+F2-1663@v1#f25982e8 Hand-over rule. When a plenter hands items to a taker, the plenter pays 8 credits per item and the taker pays 6 credits per item. The taker does not pay the plenter's share.
+F2-1705@v1#50e08ca9 Hand-over rule. When a miller hands items to a hauler, the miller pays 2 credits per item and the hauler pays 3 credits per item. The hauler does not pay the miller's share.
+F2-1727@v1#7d5dbd65 Hand-over rule. When a drover hands items to a stabler, the drover pays 12 credits per item and the stabler pays 4 credits per item. The stabler does not pay the drover's share.
+F2-1771@v1#881683c0 Hand-over rule. When a plenter hands items to a taker, the plenter pays 7 credits per item and the taker pays 9 credits per item. The taker does not pay the plenter's share.
+F2-1779@v1#89c2226b Hand-over rule. When a sender hands items to a courier, the sender pays 12 credits per item and the courier pays 7 credits per item. The courier does not pay the sender's share.
+F2-1782@v1#289b160f Hand-over rule. When a donor hands items to a clerk, the donor pays 6 credits per item and the clerk pays 10 credits per item. The clerk does not pay the donor's share.
+F2-1793@v1#ba1a2879 Hand-over rule. When a sender hands items to a courier, the sender pays 8 credits per item and the courier pays 7 credits per item. The courier does not pay the sender's share.
+F2-1811@v1#190f5ad5 Hand-over rule. When a plenter hands items to a taker, the plenter pays 3 credits per item and the taker pays 7 credits per item. The taker does not pay the plenter's share.
+F2-1828@v1#48841013 Hand-over rule. When a sender hands items to a courier, the sender pays 4 credits per item and the courier pays 9 credits per item. The courier does not pay the sender's share.
+F2-1830@v1#8af32b7a Hand-over rule. When a plenter hands items to a taker, the plenter pays 7 credits per item and the taker pays 6 credits per item. The taker does not pay the plenter's share.
+F2-1844@v1#ac62de1f Hand-over rule. When a donor hands items to a clerk, the donor pays 9 credits per item and the clerk pays 6 credits per item. The clerk does not pay the donor's share.
+F2-1962@v1#7a731278 Hand-over rule. When a miller hands items to a hauler, the miller pays 3 credits per item and the hauler pays 2 credits per item. The hauler does not pay the miller's share.
+F2-1980@v1#881683c0 Hand-over rule. When a plenter hands items to a taker, the plenter pays 7 credits per item and the taker pays 9 credits per item. The taker does not pay the plenter's share.
+F2-1990@v1#46fc8067 Hand-over rule. When a tanner hands items to a loader, the tanner pays 4 credits per item and the loader pays 3 credits per item. The loader does not pay the tanner's share.
+F2-2039@v1#6d84e978 Hand-over rule. When a sender hands items to a courier, the sender pays 5 credits per item and the courier pays 8 credits per item. The courier does not pay the sender's share.
+F2-2083@v1#1f763852 Hand-over rule. When a weaver hands items to a dyer, the weaver pays 3 credits per item and the dyer pays 7 credits per item. The dyer does not pay the weaver's share.
+F2-2087@v1#d01c3ae0 Hand-over rule. When a vendor hands items to a fetcher, the vendor pays 6 credits per item and the fetcher pays 10 credits per item. The fetcher does not pay the vendor's share.
+F2-2102@v1#d26c5752 Hand-over rule. When a brewer hands items to a carter, the brewer pays 9 credits per item and the carter pays 5 credits per item. The carter does not pay the brewer's share.
+F2-2116@v1#020c2604 Hand-over rule. When a tutor hands items to a ward, the tutor pays 5 credits per item and the ward pays 8 credits per item. The ward does not pay the tutor's share.
+F2-2152@v1#f7046dcc Hand-over rule. When a miller hands items to a hauler, the miller pays 4 credits per item and the hauler pays 9 credits per item. The hauler does not pay the miller's share.
+F2-2156@v1#34adc7d1 Hand-over rule. When a tanner hands items to a loader, the tanner pays 9 credits per item and the loader pays 10 credits per item. The loader does not pay the tanner's share.
+F2-2201@v1#d8aa0b80 Hand-over rule. When a lodger hands items to a keeper, the lodger pays 2 credits per item and the keeper pays 3 credits per item. The keeper does not pay the lodger's share.
+F2-2279@v1#b6b2229c Hand-over rule. When a baker hands items to a porter, the baker pays 3 credits per item and the porter pays 2 credits per item. The porter does not pay the baker's share.
+F2-2289@v1#88839cb3 Hand-over rule. When a potter hands items to a bearer, the potter pays 7 credits per item and the bearer pays 5 credits per item. The bearer does not pay the potter's share.
+F2-2300@v1#6096f7c7 Hand-over rule. When a sender hands items to a courier, the sender pays 9 credits per item and the courier pays 6 credits per item. The courier does not pay the sender's share.
+F2-2378@v1#4d82f9cb Hand-over rule. When a weaver hands items to a dyer, the weaver pays 5 credits per item and the dyer pays 7 credits per item. The dyer does not pay the weaver's share.
+F2-2384@v1#8520a084 Hand-over rule. When a lodger hands items to a keeper, the lodger pays 5 credits per item and the keeper pays 11 credits per item. The keeper does not pay the lodger's share.
+F2-2434@v1#02b81e04 Hand-over rule. When a plenter hands items to a taker, the plenter pays 10 credits per item and the taker pays 4 credits per item. The taker does not pay the plenter's share.
+F2-2440@v1#256a93f1 Hand-over rule. When a miller hands items to a hauler, the miller pays 8 credits per item and the hauler pays 10 credits per item. The hauler does not pay the miller's share.
+F2-2453@v1#7b35c156 Hand-over rule. When a tutor hands items to a ward, the tutor pays 7 credits per item and the ward pays 6 credits per item. The ward does not pay the tutor's share.
+F2-2484@v1#06b46af9 Hand-over rule. When a donor hands items to a clerk, the donor pays 10 credits per item and the clerk pays 6 credits per item. The clerk does not pay the donor's share.
+F2-2488@v1#53c7e19a Hand-over rule. When a sender hands items to a courier, the sender pays 9 credits per item and the courier pays 10 credits per item. The courier does not pay the sender's share.
+F2-2503@v1#2556ea79 Hand-over rule. When a weaver hands items to a dyer, the weaver pays 4 credits per item and the dyer pays 9 credits per item. The dyer does not pay the weaver's share.
+F2-2537@v1#da7f7f1b Hand-over rule. When a lodger hands items to a keeper, the lodger pays 4 credits per item and the keeper pays 9 credits per item. The keeper does not pay the lodger's share.
+F2-2578@v1#042c8177 Hand-over rule. When a baker hands items to a porter, the baker pays 2 credits per item and the porter pays 3 credits per item. The porter does not pay the baker's share.
+F2-2600@v1#b6d05170 Hand-over rule. When a potter hands items to a bearer, the potter pays 11 credits per item and the bearer pays 6 credits per item. The bearer does not pay the potter's share.
+F2-2604@v1#06b46af9 Hand-over rule. When a donor hands items to a clerk, the donor pays 10 credits per item and the clerk pays 6 credits per item. The clerk does not pay the donor's share.
+F2-2608@v1#06473386 Hand-over rule. When a donor hands items to a clerk, the donor pays 10 credits per item and the clerk pays 10 credits per item. The clerk does not pay the donor's share.
+F2-2638@v1#2c7d17a8 Hand-over rule. When a sender hands items to a courier, the sender pays 2 credits per item and the courier pays 9 credits per item. The courier does not pay the sender's share.
+F2-2678@v1#682923ab Hand-over rule. When a plenter hands items to a taker, the plenter pays 9 credits per item and the taker pays 7 credits per item. The taker does not pay the plenter's share.
+F2-2712@v1#d2e93423 Hand-over rule. When a drover hands items to a stabler, the drover pays 5 credits per item and the stabler pays 2 credits per item. The stabler does not pay the drover's share.
+F2-2717@v1#4beee343 Hand-over rule. When a plenter hands items to a taker, the plenter pays 5 credits per item and the taker pays 2 credits per item. The taker does not pay the plenter's share.
+F2-2724@v1#33e01e73 Hand-over rule. When a weaver hands items to a dyer, the weaver pays 11 credits per item and the dyer pays 4 credits per item. The dyer does not pay the weaver's share.
+F2-2782@v1#cd7ce2f1 Hand-over rule. When a tanner hands items to a loader, the tanner pays 6 credits per item and the loader pays 9 credits per item. The loader does not pay the tanner's share.
+F2-2822@v1#623097b9 Hand-over rule. When a sender hands items to a courier, the sender pays 11 credits per item and the courier pays 8 credits per item. The courier does not pay the sender's share.
+F2-2920@v1#e9f71540 Hand-over rule. When a miller hands items to a hauler, the miller pays 7 credits per item and the hauler pays 4 credits per item. The hauler does not pay the miller's share.
+F2-2921@v1#3b76834c Hand-over rule. When a plenter hands items to a taker, the plenter pays 8 credits per item and the taker pays 8 credits per item. The taker does not pay the plenter's share.
+F2-3046@v1#81c7c4e2 Hand-over rule. When a tutor hands items to a ward, the tutor pays 9 credits per item and the ward pays 11 credits per item. The ward does not pay the tutor's share.
+F2-3098@v1#154bc735 Hand-over rule. When a plenter hands items to a taker, the plenter pays 11 credits per item and the taker pays 8 credits per item. The taker does not pay the plenter's share.
+F2-3126@v1#ca15c512 Hand-over rule. When a lodger hands items to a keeper, the lodger pays 4 credits per item and the keeper pays 4 credits per item. The keeper does not pay the lodger's share.
+F2-3167@v1#1df10496 Hand-over rule. When a sender hands items to a courier, the sender pays 7 credits per item and the courier pays 3 credits per item. The courier does not pay the sender's share.
+F2-3225@v1#b264ac41 Hand-over rule. When a tanner hands items to a loader, the tanner pays 3 credits per item and the loader pays 4 credits per item. The loader does not pay the tanner's share.
+F2-3238@v1#2cafa8c4 Hand-over rule. When a sender hands items to a courier, the sender pays 10 credits per item and the courier pays 3 credits per item. The courier does not pay the sender's share.
+F2-3249@v1#2556ea79 Hand-over rule. When a weaver hands items to a dyer, the weaver pays 4 credits per item and the dyer pays 9 credits per item. The dyer does not pay the weaver's share.
+F2-3273@v1#0c5faf9c Hand-over rule. When a plenter hands items to a taker, the plenter pays 8 credits per item and the taker pays 4 credits per item. The taker does not pay the plenter's share.
+F2-3291@v1#ba8a4420 Hand-over rule. When a lodger hands items to a keeper, the lodger pays 2 credits per item and the keeper pays 5 credits per item. The keeper does not pay the lodger's share.
+F2-3331@v1#21e4339a Hand-over rule. When a drover hands items to a stabler, the drover pays 4 credits per item and the stabler pays 6 credits per item. The stabler does not pay the drover's share.
+F2-3355@v1#c9c633bc Hand-over rule. When a potter hands items to a bearer, the potter pays 6 credits per item and the bearer pays 4 credits per item. The bearer does not pay the potter's share.
+F2-3383@v1#c152a877 Hand-over rule. When a lodger hands items to a keeper, the lodger pays 10 credits per item and the keeper pays 6 credits per item. The keeper does not pay the lodger's share.
+F2-3409@v1#a45d3f0f Hand-over rule. When a tutor hands items to a ward, the tutor pays 11 credits per item and the ward pays 9 credits per item. The ward does not pay the tutor's share.
+F2-3428@v1#aec65034 Hand-over rule. When a tanner hands items to a loader, the tanner pays 5 credits per item and the loader pays 7 credits per item. The loader does not pay the tanner's share.
+F2-3467@v1#fedccfb3 Hand-over rule. When a weaver hands items to a dyer, the weaver pays 9 credits per item and the dyer pays 4 credits per item. The dyer does not pay the weaver's share.
+F2-3471@v1#981f52f4 Hand-over rule. When a weaver hands items to a dyer, the weaver pays 9 credits per item and the dyer pays 2 credits per item. The dyer does not pay the weaver's share.
+F2-3564@v1#e575533c Hand-over rule. When a tutor hands items to a ward, the tutor pays 8 credits per item and the ward pays 9 credits per item. The ward does not pay the tutor's share.
+F2-3567@v1#03c2d3e3 Hand-over rule. When a tutor hands items to a ward, the tutor pays 5 credits per item and the ward pays 10 credits per item. The ward does not pay the tutor's share.
+F2-3586@v1#52e21d78 Hand-over rule. When a weaver hands items to a dyer, the weaver pays 10 credits per item and the dyer pays 5 credits per item. The dyer does not pay the weaver's share.
+F2-3604@v1#977d5a10 Hand-over rule. When a lodger hands items to a keeper, the lodger pays 5 credits per item and the keeper pays 6 credits per item. The keeper does not pay the lodger's share.
+F2-3622@v1#c24018e1 Hand-over rule. When a drover hands items to a stabler, the drover pays 9 credits per item and the stabler pays 3 credits per item. The stabler does not pay the drover's share.
+F2-3640@v1#a68c7553 Hand-over rule. When a lodger hands items to a keeper, the lodger pays 7 credits per item and the keeper pays 5 credits per item. The keeper does not pay the lodger's share.
+F2-3669@v1#6096f7c7 Hand-over rule. When a sender hands items to a courier, the sender pays 9 credits per item and the courier pays 6 credits per item. The courier does not pay the sender's share.
+F2-3691@v1#e4c0b71a Hand-over rule. When a sender hands items to a courier, the sender pays 3 credits per item and the courier pays 9 credits per item. The courier does not pay the sender's share.
+F2-3736@v1#208819a9 Hand-over rule. When a miller hands items to a hauler, the miller pays 6 credits per item and the hauler pays 11 credits per item. The hauler does not pay the miller's share.
+F2-3761@v1#a776e454 Hand-over rule. When a lodger hands items to a keeper, the lodger pays 5 credits per item and the keeper pays 7 credits per item. The keeper does not pay the lodger's share.
+F2-3794@v1#70f203d2 Hand-over rule. When a brewer hands items to a carter, the brewer pays 10 credits per item and the carter pays 8 credits per item. The carter does not pay the brewer's share.
+F2-3799@v1#97a658c7 Hand-over rule. When a tutor hands items to a ward, the tutor pays 3 credits per item and the ward pays 11 credits per item. The ward does not pay the tutor's share.
+F2-3819@v1#7982eb5b Hand-over rule. When a plenter hands items to a taker, the plenter pays 6 credits per item and the taker pays 8 credits per item. The taker does not pay the plenter's share.
+F2-3852@v1#3d48621b Hand-over rule. When a tutor hands items to a ward, the tutor pays 6 credits per item and the ward pays 8 credits per item. The ward does not pay the tutor's share.
+F2-3896@v1#d418b964 Hand-over rule. When a tutor hands items to a ward, the tutor pays 6 credits per item and the ward pays 4 credits per item. The ward does not pay the tutor's share.
+F2-3898@v1#3abefe36 Hand-over rule. When a vendor hands items to a fetcher, the vendor pays 11 credits per item and the fetcher pays 9 credits per item. The fetcher does not pay the vendor's share.
+F2-3904@v1#a90e0d30 Hand-over rule. When a miller hands items to a hauler, the miller pays 10 credits per item and the hauler pays 6 credits per item. The hauler does not pay the miller's share.
+F2-3933@v1#7838903e Hand-over rule. When a sender hands items to a courier, the sender pays 3 credits per item and the courier pays 7 credits per item. The courier does not pay the sender's share.
+F2-3936@v1#76651eef Hand-over rule. When a donor hands items to a clerk, the donor pays 7 credits per item and the clerk pays 11 credits per item. The clerk does not pay the donor's share.
+F2-3938@v1#d26c5752 Hand-over rule. When a brewer hands items to a carter, the brewer pays 9 credits per item and the carter pays 5 credits per item. The carter does not pay the brewer's share.
+F2-3964@v1#bd762a9a Hand-over rule. When a drover hands items to a stabler, the drover pays 6 credits per item and the stabler pays 4 credits per item. The stabler does not pay the drover's share.
+F2-3969@v1#0eb17022 Hand-over rule. When a vendor hands items to a fetcher, the vendor pays 9 credits per item and the fetcher pays 10 credits per item. The fetcher does not pay the vendor's share.
+F2-4008@v1#1dbcea83 Hand-over rule. When a tutor hands items to a ward, the tutor pays 10 credits per item and the ward pays 9 credits per item. The ward does not pay the tutor's share.
+F2-4020@v1#86a9a531 Hand-over rule. When a donor hands items to a clerk, the donor pays 5 credits per item and the clerk pays 8 credits per item. The clerk does not pay the donor's share.
+F2-4056@v1#56c7bf86 Hand-over rule. When a lodger hands items to a keeper, the lodger pays 3 credits per item and the keeper pays 11 credits per item. The keeper does not pay the lodger's share.
+F2-4067@v1#4cacfb6b Hand-over rule. When a lodger hands items to a keeper, the lodger pays 9 credits per item and the keeper pays 5 credits per item. The keeper does not pay the lodger's share.
+F2-4083@v1#152b9f60 Hand-over rule. When a miller hands items to a hauler, the miller pays 4 credits per item and the hauler pays 4 credits per item. The hauler does not pay the miller's share.
+F2-4097@v1#4e7b3ba6 Hand-over rule. When a sender hands items to a courier, the sender pays 7 credits per item and the courier pays 12 credits per item. The courier does not pay the sender's share.
+F2-4128@v1#52e21d78 Hand-over rule. When a weaver hands items to a dyer, the weaver pays 10 credits per item and the dyer pays 5 credits per item. The dyer does not pay the weaver's share.
+F2-4131@v1#f519c1b9 Hand-over rule. When a brewer hands items to a carter, the brewer pays 7 credits per item and the carter pays 6 credits per item. The carter does not pay the brewer's share.
+F2-4171@v1#8d325fb9 Hand-over rule. When a potter hands items to a bearer, the potter pays 8 credits per item and the bearer pays 5 credits per item. The bearer does not pay the potter's share.
+F2-4200@v1#571a610c Hand-over rule. When a brewer hands items to a carter, the brewer pays 9 credits per item and the carter pays 9 credits per item. The carter does not pay the brewer's share.
+F2-4258@v1#1768eebe Hand-over rule. When a lodger hands items to a keeper, the lodger pays 10 credits per item and the keeper pays 7 credits per item. The keeper does not pay the lodger's share.
+F2-4334@v1#a38ba2c5 Hand-over rule. When a miller hands items to a hauler, the miller pays 11 credits per item and the hauler pays 7 credits per item. The hauler does not pay the miller's share.
+F2-4388@v1#7838903e Hand-over rule. When a sender hands items to a courier, the sender pays 3 credits per item and the courier pays 7 credits per item. The courier does not pay the sender's share.
+F2-4406@v1#d7ea618c Hand-over rule. When a brewer hands items to a carter, the brewer pays 7 credits per item and the carter pays 4 credits per item. The carter does not pay the brewer's share.
+F2-4462@v1#4e13da67 Hand-over rule. When a plenter hands items to a taker, the plenter pays 2 credits per item and the taker pays 7 credits per item. The taker does not pay the plenter's share.
+F2-4466@v1#86868fc3 Hand-over rule. When a lodger hands items to a keeper, the lodger pays 6 credits per item and the keeper pays 2 credits per item. The keeper does not pay the lodger's share.
+F2-4469@v1#f18c2591 Hand-over rule. When a donor hands items to a clerk, the donor pays 6 credits per item and the clerk pays 11 credits per item. The clerk does not pay the donor's share.
+F2-4480@v1#173fdfea Hand-over rule. When a tutor hands items to a ward, the tutor pays 12 credits per item and the ward pays 10 credits per item. The ward does not pay the tutor's share.
+F2-4520@v1#aff94bab Hand-over rule. When a vendor hands items to a fetcher, the vendor pays 6 credits per item and the fetcher pays 12 credits per item. The fetcher does not pay the vendor's share.
+F2-4545@v1#2a59ad82 Hand-over rule. When a donor hands items to a clerk, the donor pays 5 credits per item and the clerk pays 11 credits per item. The clerk does not pay the donor's share.
+F2-4552@v1#4ef84b97 Hand-over rule. When a vendor hands items to a fetcher, the vendor pays 7 credits per item and the fetcher pays 2 credits per item. The fetcher does not pay the vendor's share.
+F2-4590@v1#d5da6aaf Hand-over rule. When a tanner hands items to a loader, the tanner pays 6 credits per item and the loader pays 4 credits per item. The loader does not pay the tanner's share.
+F2-4596@v1#7e1bf850 Hand-over rule. When a baker hands items to a porter, the baker pays 8 credits per item and the porter pays 2 credits per item. The porter does not pay the baker's share.
+F2-4629@v1#836c76d0 Hand-over rule. When a sender hands items to a courier, the sender pays 9 credits per item and the courier pays 2 credits per item. The courier does not pay the sender's share.
+F2-4647@v1#56d8eee8 Hand-over rule. When a potter hands items to a bearer, the potter pays 5 credits per item and the bearer pays 7 credits per item. The bearer does not pay the potter's share.
+F2-4671@v1#cc3f7799 Hand-over rule. When a brewer hands items to a carter, the brewer pays 6 credits per item and the carter pays 4 credits per item. The carter does not pay the brewer's share.
+F2-4705@v1#461baf77 Hand-over rule. When a vendor hands items to a fetcher, the vendor pays 7 credits per item and the fetcher pays 4 credits per item. The fetcher does not pay the vendor's share.
+F2-4781@v1#7763c993 Hand-over rule. When a sender hands items to a courier, the sender pays 5 credits per item and the courier pays 5 credits per item. The courier does not pay the sender's share.
+F2-4828@v1#fa5b5629 Hand-over rule. When a miller hands items to a hauler, the miller pays 5 credits per item and the hauler pays 5 credits per item. The hauler does not pay the miller's share.
+F2-4832@v1#b8a6280b Hand-over rule. When a donor hands items to a clerk, the donor pays 3 credits per item and the clerk pays 7 credits per item. The clerk does not pay the donor's share.
+F2-4937@v1#e0a57fed Hand-over rule. When a sender hands items to a courier, the sender pays 8 credits per item and the courier pays 10 credits per item. The courier does not pay the sender's share.
+F2-4959@v1#750b80f3 Hand-over rule. When a weaver hands items to a dyer, the weaver pays 3 credits per item and the dyer pays 8 credits per item. The dyer does not pay the weaver's share.
+F2-5058@v1#f79780c7 Hand-over rule. When a tutor hands items to a ward, the tutor pays 8 credits per item and the ward pays 2 credits per item. The ward does not pay the tutor's share.
+F2-5074@v1#de0a6977 Hand-over rule. When a weaver hands items to a dyer, the weaver pays 7 credits per item and the dyer pays 2 credits per item. The dyer does not pay the weaver's share.
+F2-5119@v1#dc4de2ad Hand-over rule. When a baker hands items to a porter, the baker pays 4 credits per item and the porter pays 5 credits per item. The porter does not pay the baker's share.
+F2-5124@v1#e707d15e Hand-over rule. When a sender hands items to a courier, the sender pays 6 credits per item and the courier pays 12 credits per item. The courier does not pay the sender's share.
+F2-5128@v1#46f669e3 Hand-over rule. When a lodger hands items to a keeper, the lodger pays 11 credits per item and the keeper pays 3 credits per item. The keeper does not pay the lodger's share.
+F2-5155@v1#190f5ad5 Hand-over rule. When a plenter hands items to a taker, the plenter pays 3 credits per item and the taker pays 7 credits per item. The taker does not pay the plenter's share.
+F2-5196@v1#3871ae71 Hand-over rule. When a weaver hands items to a dyer, the weaver pays 6 credits per item and the dyer pays 10 credits per item. The dyer does not pay the weaver's share.
+F2-5209@v1#f71b7792 Hand-over rule. When a vendor hands items to a fetcher, the vendor pays 12 credits per item and the fetcher pays 6 credits per item. The fetcher does not pay the vendor's share.
+F2-5223@v1#56aaea2c Hand-over rule. When a tanner hands items to a loader, the tanner pays 7 credits per item and the loader pays 5 credits per item. The loader does not pay the tanner's share.
+F2-5231@v1#354943d9 Hand-over rule. When a donor hands items to a clerk, the donor pays 4 credits per item and the clerk pays 6 credits per item. The clerk does not pay the donor's share.
+F2-5316@v1#8ef59080 Hand-over rule. When a tutor hands items to a ward, the tutor pays 8 credits per item and the ward pays 12 credits per item. The ward does not pay the tutor's share.
+F2-5345@v1#4ac607be Hand-over rule. When a vendor hands items to a fetcher, the vendor pays 8 credits per item and the fetcher pays 7 credits per item. The fetcher does not pay the vendor's share.
+F2-5364@v1#12a5039e Hand-over rule. When a donor hands items to a clerk, the donor pays 10 credits per item and the clerk pays 5 credits per item. The clerk does not pay the donor's share.
+F2-5388@v1#208819a9 Hand-over rule. When a miller hands items to a hauler, the miller pays 6 credits per item and the hauler pays 11 credits per item. The hauler does not pay the miller's share.
+F2-5430@v1#1df10496 Hand-over rule. When a sender hands items to a courier, the sender pays 7 credits per item and the courier pays 3 credits per item. The courier does not pay the sender's share.
+F2-5431@v1#684cf691 Hand-over rule. When a miller hands items to a hauler, the miller pays 3 credits per item and the hauler pays 5 credits per item. The hauler does not pay the miller's share.
+F2-5432@v1#95410fb2 Hand-over rule. When a miller hands items to a hauler, the miller pays 8 credits per item and the hauler pays 6 credits per item. The hauler does not pay the miller's share.
+F2-5458@v1#9cc86289 Hand-over rule. When a tutor hands items to a ward, the tutor pays 11 credits per item and the ward pays 12 credits per item. The ward does not pay the tutor's share.
+F2-5467@v1#4192768c Hand-over rule. When a tutor hands items to a ward, the tutor pays 8 credits per item and the ward pays 10 credits per item. The ward does not pay the tutor's share.
+F2-5470@v1#f4a22683 Hand-over rule. When a tutor hands items to a ward, the tutor pays 8 credits per item and the ward pays 4 credits per item. The ward does not pay the tutor's share.
+F2-5480@v1#5a393ba3 Hand-over rule. When a miller hands items to a hauler, the miller pays 8 credits per item and the hauler pays 7 credits per item. The hauler does not pay the miller's share.
+F2-5481@v1#a61bb632 Hand-over rule. When a sender hands items to a courier, the sender pays 9 credits per item and the courier pays 4 credits per item. The courier does not pay the sender's share.
+F2-5491@v1#4b8ad41e Hand-over rule. When a tanner hands items to a loader, the tanner pays 3 credits per item and the loader pays 7 credits per item. The loader does not pay the tanner's share.
+F2-5493@v1#fedccfb3 Hand-over rule. When a weaver hands items to a dyer, the weaver pays 9 credits per item and the dyer pays 4 credits per item. The dyer does not pay the weaver's share.
+F2-5577@v1#81c7c4e2 Hand-over rule. When a tutor hands items to a ward, the tutor pays 9 credits per item and the ward pays 11 credits per item. The ward does not pay the tutor's share.
+F2-5603@v1#dcfd93b2 Hand-over rule. When a tanner hands items to a loader, the tanner pays 7 credits per item and the loader pays 7 credits per item. The loader does not pay the tanner's share.
+F2-5612@v1#19fcdafe Hand-over rule. When a lodger hands items to a keeper, the lodger pays 4 credits per item and the keeper pays 5 credits per item. The keeper does not pay the lodger's share.
+F2-5656@v1#b9e22c35 Hand-over rule. When a potter hands items to a bearer, the potter pays 4 credits per item and the bearer pays 6 credits per item. The bearer does not pay the potter's share.
+F2-5662@v1#99080957 Hand-over rule. When a potter hands items to a bearer, the potter pays 7 credits per item and the bearer pays 9 credits per item. The bearer does not pay the potter's share.
+F2-5667@v1#a9039346 Hand-over rule. When a donor hands items to a clerk, the donor pays 7 credits per item and the clerk pays 4 credits per item. The clerk does not pay the donor's share.
+F2-5684@v1#b261c825 Hand-over rule. When a sender hands items to a courier, the sender pays 10 credits per item and the courier pays 11 credits per item. The courier does not pay the sender's share.
+F2-5725@v1#418b3ecc Hand-over rule. When a sender hands items to a courier, the sender pays 12 credits per item and the courier pays 9 credits per item. The courier does not pay the sender's share.
+F2-5767@v1#278ba193 Hand-over rule. When a miller hands items to a hauler, the miller pays 5 credits per item and the hauler pays 9 credits per item. The hauler does not pay the miller's share.
+F2-5773@v1#c61ec6e1 Hand-over rule. When a lodger hands items to a keeper, the lodger pays 5 credits per item and the keeper pays 9 credits per item. The keeper does not pay the lodger's share.
+F2-5775@v1#5b1c8fab Hand-over rule. When a sender hands items to a courier, the sender pays 2 credits per item and the courier pays 6 credits per item. The courier does not pay the sender's share.
+F2-5776@v1#692a7055 Hand-over rule. When a brewer hands items to a carter, the brewer pays 4 credits per item and the carter pays 11 credits per item. The carter does not pay the brewer's share.
+F2-5779@v1#0322c689 Hand-over rule. When a plenter hands items to a taker, the plenter pays 2 credits per item and the taker pays 5 credits per item. The taker does not pay the plenter's share.
+F2-5801@v1#7e823877 Hand-over rule. When a baker hands items to a porter, the baker pays 9 credits per item and the porter pays 5 credits per item. The porter does not pay the baker's share.
+F2-5805@v1#294c63e7 Hand-over rule. When a plenter hands items to a taker, the plenter pays 7 credits per item and the taker pays 8 credits per item. The taker does not pay the plenter's share.
+F2-5824@v1#b150df2d Hand-over rule. When a miller hands items to a hauler, the miller pays 8 credits per item and the hauler pays 5 credits per item. The hauler does not pay the miller's share.
+F2-5833@v1#01203f53 Hand-over rule. When a potter hands items to a bearer, the potter pays 8 credits per item and the bearer pays 8 credits per item. The bearer does not pay the potter's share.
+F2-5848@v1#6e239572 Hand-over rule. When a sender hands items to a courier, the sender pays 11 credits per item and the courier pays 6 credits per item. The courier does not pay the sender's share.
+F2-5912@v1#5b1c8fab Hand-over rule. When a sender hands items to a courier, the sender pays 2 credits per item and the courier pays 6 credits per item. The courier does not pay the sender's share.
+F2-5943@v1#11d985e6 Hand-over rule. When a plenter hands items to a taker, the plenter pays 10 credits per item and the taker pays 10 credits per item. The taker does not pay the plenter's share.
+F2-5946@v1#67097736 Hand-over rule. When a vendor hands items to a fetcher, the vendor pays 8 credits per item and the fetcher pays 11 credits per item. The fetcher does not pay the vendor's share.
+F2-5954@v1#e57c392b Hand-over rule. When a sender hands items to a courier, the sender pays 6 credits per item and the courier pays 2 credits per item. The courier does not pay the sender's share.
+F2-6003@v1#eebc65cf Hand-over rule. When a tutor hands items to a ward, the tutor pays 3 credits per item and the ward pays 8 credits per item. The ward does not pay the tutor's share.
+F2-6041@v1#836cd73d Hand-over rule. When a vendor hands items to a fetcher, the vendor pays 7 credits per item and the fetcher pays 8 credits per item. The fetcher does not pay the vendor's share.
+F2-6066@v1#cef4be7d Hand-over rule. When a sender hands items to a courier, the sender pays 7 credits per item and the courier pays 5 credits per item. The courier does not pay the sender's share.
+F2-6156@v1#9dab7189 Hand-over rule. When a sender hands items to a courier, the sender pays 9 credits per item and the courier pays 5 credits per item. The courier does not pay the sender's share.
+F2-6219@v1#dd0c98b0 Hand-over rule. When a brewer hands items to a carter, the brewer pays 2 credits per item and the carter pays 3 credits per item. The carter does not pay the brewer's share.
+F2-6236@v1#7763c993 Hand-over rule. When a sender hands items to a courier, the sender pays 5 credits per item and the courier pays 5 credits per item. The courier does not pay the sender's share.
+F2-6241@v1#ef43d533 Hand-over rule. When a tutor hands items to a ward, the tutor pays 11 credits per item and the ward pays 5 credits per item. The ward does not pay the tutor's share.
+F2-6257@v1#e7c297e9 Hand-over rule. When a baker hands items to a porter, the baker pays 2 credits per item and the porter pays 8 credits per item. The porter does not pay the baker's share.
+F2-6280@v1#9d7c5db6 Hand-over rule. When a weaver hands items to a dyer, the weaver pays 4 credits per item and the dyer pays 10 credits per item. The dyer does not pay the weaver's share.
+F2-6297@v1#205ff58c Hand-over rule. When a miller hands items to a hauler, the miller pays 7 credits per item and the hauler pays 8 credits per item. The hauler does not pay the miller's share.
+F2-6334@v1#e1420c8d Hand-over rule. When a miller hands items to a hauler, the miller pays 9 credits per item and the hauler pays 7 credits per item. The hauler does not pay the miller's share.
+F2-6341@v1#ac62de1f Hand-over rule. When a donor hands items to a clerk, the donor pays 9 credits per item and the clerk pays 6 credits per item. The clerk does not pay the donor's share.
+F2-6348@v1#e7c297e9 Hand-over rule. When a baker hands items to a porter, the baker pays 2 credits per item and the porter pays 8 credits per item. The porter does not pay the baker's share.
+F2-6351@v1#8d25bf85 Hand-over rule. When a baker hands items to a porter, the baker pays 5 credits per item and the porter pays 10 credits per item. The porter does not pay the baker's share.
+F2-6372@v1#348118e5 Hand-over rule. When a lodger hands items to a keeper, the lodger pays 6 credits per item and the keeper pays 9 credits per item. The keeper does not pay the lodger's share.
+F2-6382@v1#ca20a21b Hand-over rule. When a tutor hands items to a ward, the tutor pays 10 credits per item and the ward pays 8 credits per item. The ward does not pay the tutor's share.
+F2-6398@v1#aae80c06 Hand-over rule. When a brewer hands items to a carter, the brewer pays 5 credits per item and the carter pays 7 credits per item. The carter does not pay the brewer's share.
+F2-6399@v1#b1063da7 Hand-over rule. When a sender hands items to a courier, the sender pays 5 credits per item and the courier pays 11 credits per item. The courier does not pay the sender's share.
+F2-6453@v1#682923ab Hand-over rule. When a plenter hands items to a taker, the plenter pays 9 credits per item and the taker pays 7 credits per item. The taker does not pay the plenter's share.
+F2-6455@v1#800a1791 Hand-over rule. When a baker hands items to a porter, the baker pays 5 credits per item and the porter pays 7 credits per item. The porter does not pay the baker's share.
+F2-6479@v1#408d9618 Hand-over rule. When a drover hands items to a stabler, the drover pays 3 credits per item and the stabler pays 9 credits per item. The stabler does not pay the drover's share.
+F2-6497@v1#61104895 Hand-over rule. When a tutor hands items to a ward, the tutor pays 9 credits per item and the ward pays 8 credits per item. The ward does not pay the tutor's share.
+F2-6538@v1#cdc9d458 Hand-over rule. When a plenter hands items to a taker, the plenter pays 4 credits per item and the taker pays 7 credits per item. The taker does not pay the plenter's share.
+F2-6572@v1#66e99997 Hand-over rule. When a vendor hands items to a fetcher, the vendor pays 11 credits per item and the fetcher pays 4 credits per item. The fetcher does not pay the vendor's share.
+F2-6599@v1#161c2288 Hand-over rule. When a potter hands items to a bearer, the potter pays 8 credits per item and the bearer pays 7 credits per item. The bearer does not pay the potter's share.
+F2-6609@v1#d66af612 Hand-over rule. When a brewer hands items to a carter, the brewer pays 5 credits per item and the carter pays 5 credits per item. The carter does not pay the brewer's share.
+F2-6626@v1#83917455 Hand-over rule. When a tanner hands items to a loader, the tanner pays 10 credits per item and the loader pays 5 credits per item. The loader does not pay the tanner's share.
+F2-6631@v1#9f228e24 Hand-over rule. When a sender hands items to a courier, the sender pays 10 credits per item and the courier pays 4 credits per item. The courier does not pay the sender's share.
+F2-6636@v1#84e4db93 Hand-over rule. When a lodger hands items to a keeper, the lodger pays 11 credits per item and the keeper pays 4 credits per item. The keeper does not pay the lodger's share.
+F2-6661@v1#de4cd029 Hand-over rule. When a miller hands items to a hauler, the miller pays 5 credits per item and the hauler pays 8 credits per item. The hauler does not pay the miller's share.
+F2-6686@v1#5ec90c8e Hand-over rule. When a lodger hands items to a keeper, the lodger pays 8 credits per item and the keeper pays 11 credits per item. The keeper does not pay the lodger's share.
+F2-6706@v1#de4cd029 Hand-over rule. When a miller hands items to a hauler, the miller pays 5 credits per item and the hauler pays 8 credits per item. The hauler does not pay the miller's share.
+F2-6737@v1#48841013 Hand-over rule. When a sender hands items to a courier, the sender pays 4 credits per item and the courier pays 9 credits per item. The courier does not pay the sender's share.
+F2-6764@v1#cbbf42d7 Hand-over rule. When a brewer hands items to a carter, the brewer pays 6 credits per item and the carter pays 10 credits per item. The carter does not pay the brewer's share.
+F2-6778@v1#be04ba5e Hand-over rule. When a plenter hands items to a taker, the plenter pays 10 credits per item and the taker pays 6 credits per item. The taker does not pay the plenter's share.
+F2-6782@v1#a2899a4a Hand-over rule. When a weaver hands items to a dyer, the weaver pays 5 credits per item and the dyer pays 10 credits per item. The dyer does not pay the weaver's share.
+F2-6824@v1#4c037984 Hand-over rule. When a vendor hands items to a fetcher, the vendor pays 9 credits per item and the fetcher pays 7 credits per item. The fetcher does not pay the vendor's share.
+F2-6843@v1#d672ede3 Hand-over rule. When a sender hands items to a courier, the sender pays 2 credits per item and the courier pays 4 credits per item. The courier does not pay the sender's share.
+F2-6900@v1#09e39d70 Hand-over rule. When a vendor hands items to a fetcher, the vendor pays 11 credits per item and the fetcher pays 7 credits per item. The fetcher does not pay the vendor's share.
+F2-6922@v1#78fda597 Hand-over rule. When a vendor hands items to a fetcher, the vendor pays 10 credits per item and the fetcher pays 11 credits per item. The fetcher does not pay the vendor's share.
+F2-6974@v1#278ba193 Hand-over rule. When a miller hands items to a hauler, the miller pays 5 credits per item and the hauler pays 9 credits per item. The hauler does not pay the miller's share.
+F2-6981@v1#393808fa Hand-over rule. When a donor hands items to a clerk, the donor pays 8 credits per item and the clerk pays 9 credits per item. The clerk does not pay the donor's share.
+F2-6997@v1#b1bd0256 Hand-over rule. When a weaver hands items to a dyer, the weaver pays 4 credits per item and the dyer pays 5 credits per item. The dyer does not pay the weaver's share.
+F2-7001@v1#7e1bf850 Hand-over rule. When a baker hands items to a porter, the baker pays 8 credits per item and the porter pays 2 credits per item. The porter does not pay the baker's share.
+F2-7039@v1#75d74567 Hand-over rule. When a miller hands items to a hauler, the miller pays 12 credits per item and the hauler pays 3 credits per item. The hauler does not pay the miller's share.
+F2-7055@v1#2380ccd1 Hand-over rule. When a weaver hands items to a dyer, the weaver pays 8 credits per item and the dyer pays 3 credits per item. The dyer does not pay the weaver's share.
+F2-7173@v1#f79780c7 Hand-over rule. When a tutor hands items to a ward, the tutor pays 8 credits per item and the ward pays 2 credits per item. The ward does not pay the tutor's share.
+F2-7186@v1#bb78b930 Hand-over rule. When a plenter hands items to a taker, the plenter pays 8 credits per item and the taker pays 7 credits per item. The taker does not pay the plenter's share.
+F2-7200@v1#cbbf42d7 Hand-over rule. When a brewer hands items to a carter, the brewer pays 6 credits per item and the carter pays 10 credits per item. The carter does not pay the brewer's share.
+F2-7280@v1#d5da6aaf Hand-over rule. When a tanner hands items to a loader, the tanner pays 6 credits per item and the loader pays 4 credits per item. The loader does not pay the tanner's share.
+F2-7354@v1#1b15d503 Hand-over rule. When a weaver hands items to a dyer, the weaver pays 4 credits per item and the dyer pays 4 credits per item. The dyer does not pay the weaver's share.
+F2-7359@v1#29580709 Hand-over rule. When a plenter hands items to a taker, the plenter pays 4 credits per item and the taker pays 10 credits per item. The taker does not pay the plenter's share.
+F2-7373@v1#201abc6a Hand-over rule. When a miller hands items to a hauler, the miller pays 12 credits per item and the hauler pays 7 credits per item. The hauler does not pay the miller's share.
+F2-7483@v1#174039a5 Hand-over rule. When a miller hands items to a hauler, the miller pays 8 credits per item and the hauler pays 11 credits per item. The hauler does not pay the miller's share.
+F2-7502@v1#c61ec6e1 Hand-over rule. When a lodger hands items to a keeper, the lodger pays 5 credits per item and the keeper pays 9 credits per item. The keeper does not pay the lodger's share.
+F2-7541@v1#70a4b43a Hand-over rule. When a tutor hands items to a ward, the tutor pays 8 credits per item and the ward pays 3 credits per item. The ward does not pay the tutor's share.
+F2-7551@v1#5b8d5781 Hand-over rule. When a tutor hands items to a ward, the tutor pays 12 credits per item and the ward pays 6 credits per item. The ward does not pay the tutor's share.
+F2-7696@v1#27cd3677 Hand-over rule. When a miller hands items to a hauler, the miller pays 11 credits per item and the hauler pays 6 credits per item. The hauler does not pay the miller's share.
+F2-7734@v1#5b3efa22 Hand-over rule. When a plenter hands items to a taker, the plenter pays 9 credits per item and the taker pays 9 credits per item. The taker does not pay the plenter's share.
+F2-7758@v1#f64e9bb0 Hand-over rule. When a brewer hands items to a carter, the brewer pays 3 credits per item and the carter pays 7 credits per item. The carter does not pay the brewer's share.
+F2-7760@v1#94ce4b60 Hand-over rule. When a potter hands items to a bearer, the potter pays 6 credits per item and the bearer pays 7 credits per item. The bearer does not pay the potter's share.
+F2-7763@v1#682923ab Hand-over rule. When a plenter hands items to a taker, the plenter pays 9 credits per item and the taker pays 7 credits per item. The taker does not pay the plenter's share.
+F2-7809@v1#af838090 Hand-over rule. When a weaver hands items to a dyer, the weaver pays 6 credits per item and the dyer pays 11 credits per item. The dyer does not pay the weaver's share.
+F2-7873@v1#91db6678 Hand-over rule. When a vendor hands items to a fetcher, the vendor pays 9 credits per item and the fetcher pays 5 credits per item. The fetcher does not pay the vendor's share.
+F2-7896@v1#cac7bf08 Hand-over rule. When a potter hands items to a bearer, the potter pays 10 credits per item and the bearer pays 6 credits per item. The bearer does not pay the potter's share.
+F2-7918@v1#7e951a77 Hand-over rule. When a donor hands items to a clerk, the donor pays 7 credits per item and the clerk pays 7 credits per item. The clerk does not pay the donor's share.
+F2-7947@v1#2e39af84 Hand-over rule. When a vendor hands items to a fetcher, the vendor pays 9 credits per item and the fetcher pays 3 credits per item. The fetcher does not pay the vendor's share.
+F2-8042@v1#17797ab2 Hand-over rule. When a potter hands items to a bearer, the potter pays 7 credits per item and the bearer pays 11 credits per item. The bearer does not pay the potter's share.
+F2-8051@v1#f204b942 Hand-over rule. When a plenter hands items to a taker, the plenter pays 8 credits per item and the taker pays 10 credits per item. The taker does not pay the plenter's share.
+F2-8076@v1#0b550d6d Hand-over rule. When a vendor hands items to a fetcher, the vendor pays 4 credits per item and the fetcher pays 4 credits per item. The fetcher does not pay the vendor's share.
+F2-8095@v1#69addcfb Hand-over rule. When a sender hands items to a courier, the sender pays 9 credits per item and the courier pays 3 credits per item. The courier does not pay the sender's share.
+F2-8115@v1#c35ec489 Hand-over rule. When a lodger hands items to a keeper, the lodger pays 6 credits per item and the keeper pays 12 credits per item. The keeper does not pay the lodger's share.
+F2-8187@v1#7e823877 Hand-over rule. When a baker hands items to a porter, the baker pays 9 credits per item and the porter pays 5 credits per item. The porter does not pay the baker's share.
+F2-8201@v1#db5312dd Hand-over rule. When a sender hands items to a courier, the sender pays 4 credits per item and the courier pays 2 credits per item. The courier does not pay the sender's share.
+F2-8208@v1#24206fcf Hand-over rule. When a weaver hands items to a dyer, the weaver pays 7 credits per item and the dyer pays 6 credits per item. The dyer does not pay the weaver's share.
+F2-8249@v1#4192768c Hand-over rule. When a tutor hands items to a ward, the tutor pays 8 credits per item and the ward pays 10 credits per item. The ward does not pay the tutor's share.
+F2-8262@v1#76873771 Hand-over rule. When a brewer hands items to a carter, the brewer pays 6 credits per item and the carter pays 5 credits per item. The carter does not pay the brewer's share.
+F2-8275@v1#07a475ba Hand-over rule. When a lodger hands items to a keeper, the lodger pays 7 credits per item and the keeper pays 11 credits per item. The keeper does not pay the lodger's share.
+F2-8306@v1#98ca384e Hand-over rule. When a tutor hands items to a ward, the tutor pays 7 credits per item and the ward pays 10 credits per item. The ward does not pay the tutor's share.
+F2-8359@v1#11b6f95d Hand-over rule. When a brewer hands items to a carter, the brewer pays 7 credits per item and the carter pays 3 credits per item. The carter does not pay the brewer's share.
+F2-8403@v1#e8dcf009 Hand-over rule. When a weaver hands items to a dyer, the weaver pays 4 credits per item and the dyer pays 12 credits per item. The dyer does not pay the weaver's share.
+F2-8418@v1#d0445b36 Hand-over rule. When a brewer hands items to a carter, the brewer pays 4 credits per item and the carter pays 3 credits per item. The carter does not pay the brewer's share.
+F2-8432@v1#5fddd033 Hand-over rule. When a sender hands items to a courier, the sender pays 3 credits per item and the courier pays 2 credits per item. The courier does not pay the sender's share.
+F2-8450@v1#c7974e27 Hand-over rule. When a miller hands items to a hauler, the miller pays 9 credits per item and the hauler pays 4 credits per item. The hauler does not pay the miller's share.
+F2-8481@v1#69addcfb Hand-over rule. When a sender hands items to a courier, the sender pays 9 credits per item and the courier pays 3 credits per item. The courier does not pay the sender's share.
+F2-8548@v1#0137382a Hand-over rule. When a lodger hands items to a keeper, the lodger pays 7 credits per item and the keeper pays 10 credits per item. The keeper does not pay the lodger's share.
+F2-8584@v1#bb78b930 Hand-over rule. When a plenter hands items to a taker, the plenter pays 8 credits per item and the taker pays 7 credits per item. The taker does not pay the plenter's share.
+F2-8595@v1#33e01e73 Hand-over rule. When a weaver hands items to a dyer, the weaver pays 11 credits per item and the dyer pays 4 credits per item. The dyer does not pay the weaver's share.
+F2-8639@v1#9e2f94f6 Hand-over rule. When a lodger hands items to a keeper, the lodger pays 11 credits per item and the keeper pays 8 credits per item. The keeper does not pay the lodger's share.
+F2-8654@v1#6aff0084 Hand-over rule. When a baker hands items to a porter, the baker pays 7 credits per item and the porter pays 5 credits per item. The porter does not pay the baker's share.
+F2-8657@v1#f1e664a0 Hand-over rule. When a donor hands items to a clerk, the donor pays 11 credits per item and the clerk pays 11 credits per item. The clerk does not pay the donor's share.
+F2-8676@v1#aa1ff44a Hand-over rule. When a donor hands items to a clerk, the donor pays 6 credits per item and the clerk pays 7 credits per item. The clerk does not pay the donor's share.
+F2-8710@v1#682923ab Hand-over rule. When a plenter hands items to a taker, the plenter pays 9 credits per item and the taker pays 7 credits per item. The taker does not pay the plenter's share.
+F2-8757@v1#b67e25c7 Hand-over rule. When a donor hands items to a clerk, the donor pays 8 credits per item and the clerk pays 5 credits per item. The clerk does not pay the donor's share.
+F2-8790@v1#7982eb5b Hand-over rule. When a plenter hands items to a taker, the plenter pays 6 credits per item and the taker pays 8 credits per item. The taker does not pay the plenter's share.
+F2-8792@v1#a2899a4a Hand-over rule. When a weaver hands items to a dyer, the weaver pays 5 credits per item and the dyer pays 10 credits per item. The dyer does not pay the weaver's share.
+F2-8858@v1#5d27f233 Hand-over rule. When a plenter hands items to a taker, the plenter pays 12 credits per item and the taker pays 10 credits per item. The taker does not pay the plenter's share.
+F2-8877@v1#4bf819f2 Hand-over rule. When a tutor hands items to a ward, the tutor pays 2 credits per item and the ward pays 8 credits per item. The ward does not pay the tutor's share.
+F2-8890@v1#9b5bf1c0 Hand-over rule. When a miller hands items to a hauler, the miller pays 3 credits per item and the hauler pays 8 credits per item. The hauler does not pay the miller's share.
+F2-8907@v1#8f59b23c Hand-over rule. When a brewer hands items to a carter, the brewer pays 2 credits per item and the carter pays 8 credits per item. The carter does not pay the brewer's share.
+F2-8940@v1#86a7d918 Hand-over rule. When a tanner hands items to a loader, the tanner pays 10 credits per item and the loader pays 10 credits per item. The loader does not pay the tanner's share.
+F2-8972@v1#f519c1b9 Hand-over rule. When a brewer hands items to a carter, the brewer pays 7 credits per item and the carter pays 6 credits per item. The carter does not pay the brewer's share.
+F2-8979@v1#e05b7427 Hand-over rule. When a vendor hands items to a fetcher, the vendor pays 2 credits per item and the fetcher pays 3 credits per item. The fetcher does not pay the vendor's share.
+F2-8983@v1#f25982e8 Hand-over rule. When a plenter hands items to a taker, the plenter pays 8 credits per item and the taker pays 6 credits per item. The taker does not pay the plenter's share.
+F2-9016@v1#d790d1a9 Hand-over rule. When a plenter hands items to a taker, the plenter pays 5 credits per item and the taker pays 8 credits per item. The taker does not pay the plenter's share.
+F2-9030@v1#a17a12ff Hand-over rule. When a plenter hands items to a taker, the plenter pays 5 credits per item and the taker pays 10 credits per item. The taker does not pay the plenter's share.
+F2-9043@v1#d3cb9925 Hand-over rule. When a plenter hands items to a taker, the plenter pays 10 credits per item and the taker pays 8 credits per item. The taker does not pay the plenter's share.
+F2-9060@v1#f69751db Hand-over rule. When a baker hands items to a porter, the baker pays 7 credits per item and the porter pays 9 credits per item. The porter does not pay the baker's share.
+F2-9138@v1#0d5ab331 Hand-over rule. When a brewer hands items to a carter, the brewer pays 10 credits per item and the carter pays 7 credits per item. The carter does not pay the brewer's share.
+F2-9149@v1#b8ea9b63 Hand-over rule. When a donor hands items to a clerk, the donor pays 3 credits per item and the clerk pays 8 credits per item. The clerk does not pay the donor's share.
+F2-9172@v1#8520a084 Hand-over rule. When a lodger hands items to a keeper, the lodger pays 5 credits per item and the keeper pays 11 credits per item. The keeper does not pay the lodger's share.
+F2-9185@v1#7ee45269 Hand-over rule. When a vendor hands items to a fetcher, the vendor pays 10 credits per item and the fetcher pays 9 credits per item. The fetcher does not pay the vendor's share.
+F2-9199@v1#d22f6549 Hand-over rule. When a vendor hands items to a fetcher, the vendor pays 8 credits per item and the fetcher pays 5 credits per item. The fetcher does not pay the vendor's share.
+F2-9208@v1#4e0d8e8a Hand-over rule. When a tutor hands items to a ward, the tutor pays 4 credits per item and the ward pays 6 credits per item. The ward does not pay the tutor's share.
+F2-9249@v1#4ac607be Hand-over rule. When a vendor hands items to a fetcher, the vendor pays 8 credits per item and the fetcher pays 7 credits per item. The fetcher does not pay the vendor's share.
+F2-9274@v1#897abab3 Hand-over rule. When a baker hands items to a porter, the baker pays 10 credits per item and the porter pays 6 credits per item. The porter does not pay the baker's share.
+F2-9287@v1#b6268f75 Hand-over rule. When a tanner hands items to a loader, the tanner pays 9 credits per item and the loader pays 7 credits per item. The loader does not pay the tanner's share.
+F2-9359@v1#ea7bb66d Hand-over rule. When a miller hands items to a hauler, the miller pays 10 credits per item and the hauler pays 10 credits per item. The hauler does not pay the miller's share.
+F2-9381@v1#a61bb632 Hand-over rule. When a sender hands items to a courier, the sender pays 9 credits per item and the courier pays 4 credits per item. The courier does not pay the sender's share.
+F2-9388@v1#63b8567d Hand-over rule. When a plenter hands items to a taker, the plenter pays 6 credits per item and the taker pays 3 credits per item. The taker does not pay the plenter's share.
+F2-9443@v1#36949a69 Hand-over rule. When a miller hands items to a hauler, the miller pays 4 credits per item and the hauler pays 10 credits per item. The hauler does not pay the miller's share.
+F2-9487@v1#d01c3ae0 Hand-over rule. When a vendor hands items to a fetcher, the vendor pays 6 credits per item and the fetcher pays 10 credits per item. The fetcher does not pay the vendor's share.
+F2-9559@v1#73360359 Hand-over rule. When a baker hands items to a porter, the baker pays 4 credits per item and the porter pays 4 credits per item. The porter does not pay the baker's share.
+F2-9578@v1#6e08c3e7 Hand-over rule. When a brewer hands items to a carter, the brewer pays 4 credits per item and the carter pays 4 credits per item. The carter does not pay the brewer's share.
+F2-9590@v1#86a9a531 Hand-over rule. When a donor hands items to a clerk, the donor pays 5 credits per item and the clerk pays 8 credits per item. The clerk does not pay the donor's share.
+F2-9601@v1#31fc34be Hand-over rule. When a vendor hands items to a fetcher, the vendor pays 3 credits per item and the fetcher pays 2 credits per item. The fetcher does not pay the vendor's share.
+F2-9607@v1#173fdfea Hand-over rule. When a tutor hands items to a ward, the tutor pays 12 credits per item and the ward pays 10 credits per item. The ward does not pay the tutor's share.
+F2-9637@v1#d22f6549 Hand-over rule. When a vendor hands items to a fetcher, the vendor pays 8 credits per item and the fetcher pays 5 credits per item. The fetcher does not pay the vendor's share.
+F2-9679@v1#d07c85ef Hand-over rule. When a drover hands items to a stabler, the drover pays 4 credits per item and the stabler pays 7 credits per item. The stabler does not pay the drover's share.
+F2-9683@v1#bfa0149d Hand-over rule. When a vendor hands items to a fetcher, the vendor pays 3 credits per item and the fetcher pays 10 credits per item. The fetcher does not pay the vendor's share.
+F2-9687@v1#81a4d2f6 Hand-over rule. When a weaver hands items to a dyer, the weaver pays 12 credits per item and the dyer pays 6 credits per item. The dyer does not pay the weaver's share.
+F2-9729@v1#0180c7f7 Hand-over rule. When a donor hands items to a clerk, the donor pays 7 credits per item and the clerk pays 5 credits per item. The clerk does not pay the donor's share.
+F2-9741@v1#69ce504b Hand-over rule. When a sender hands items to a courier, the sender pays 6 credits per item and the courier pays 5 credits per item. The courier does not pay the sender's share.
+F2-9770@v1#4aad12d8 Hand-over rule. When a vendor hands items to a fetcher, the vendor pays 3 credits per item and the fetcher pays 9 credits per item. The fetcher does not pay the vendor's share.
+F2-9825@v1#69addcfb Hand-over rule. When a sender hands items to a courier, the sender pays 9 credits per item and the courier pays 3 credits per item. The courier does not pay the sender's share.
+F2-9861@v1#bcdf9d4e Hand-over rule. When a miller hands items to a hauler, the miller pays 10 credits per item and the hauler pays 4 credits per item. The hauler does not pay the miller's share.
+F2-9863@v1#3c38a7bc Hand-over rule. When a brewer hands items to a carter, the brewer pays 5 credits per item and the carter pays 10 credits per item. The carter does not pay the brewer's share.
+F2-9876@v1#6ddadb70 Hand-over rule. When a vendor hands items to a fetcher, the vendor pays 6 credits per item and the fetcher pays 5 credits per item. The fetcher does not pay the vendor's share.
+F2-9896@v1#caf68b80 Hand-over rule. When a donor hands items to a clerk, the donor pays 11 credits per item and the clerk pays 10 credits per item. The clerk does not pay the donor's share.
+F2-9913@v1#da50792a Hand-over rule. When a tutor hands items to a ward, the tutor pays 10 credits per item and the ward pays 3 credits per item. The ward does not pay the tutor's share.
+F2-9927@v1#4d4d25d8 Hand-over rule. When a sender hands items to a courier, the sender pays 6 credits per item and the courier pays 9 credits per item. The courier does not pay the sender's share.
+F2-9944@v1#8d68f299 Hand-over rule. When a miller hands items to a hauler, the miller pays 9 credits per item and the hauler pays 10 credits per item. The hauler does not pay the miller's share.
+F2-9945@v1#e575533c Hand-over rule. When a tutor hands items to a ward, the tutor pays 8 credits per item and the ward pays 9 credits per item. The ward does not pay the tutor's share.

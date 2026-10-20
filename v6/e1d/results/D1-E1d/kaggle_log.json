@@ -1,0 +1,58 @@
+[{"stream_name":"stderr","time":0.884413254,"data":"Cloning into '/kaggle/working/glyph'...\n"}
+,{"stream_name":"stderr","time":4.211791008,"data":"Note: switching to 'f092214'.\n"}
+,{"stream_name":"stderr","time":4.211832239,"data":"\n"}
+,{"stream_name":"stderr","time":4.211836336,"data":"You are in 'detached HEAD' state. You can look around, make experimental\n"}
+,{"stream_name":"stderr","time":4.211839468,"data":"changes and commit them, and you can discard any commits you make in this\n"}
+,{"stream_name":"stderr","time":4.211843563,"data":"state without impacting any branches by switching back to a branch.\n"}
+,{"stream_name":"stderr","time":4.211862184,"data":"\n"}
+,{"stream_name":"stderr","time":4.211866629,"data":"If you want to create a new branch to retain commits you create, you may\n"}
+,{"stream_name":"stderr","time":4.211870997,"data":"do so (now or later) by using -c with the switch command. Example:\n"}
+,{"stream_name":"stderr","time":4.211875017,"data":"\n"}
+,{"stream_name":"stderr","time":4.21187925,"data":"  git switch -c \u003cnew-branch-name\u003e\n"}
+,{"stream_name":"stderr","time":4.211884121,"data":"\n"}
+,{"stream_name":"stderr","time":4.21188771,"data":"Or undo this operation with:\n"}
+,{"stream_name":"stderr","time":4.211891516,"data":"\n"}
+,{"stream_name":"stderr","time":4.211895112,"data":"  git switch -\n"}
+,{"stream_name":"stderr","time":4.211899056,"data":"\n"}
+,{"stream_name":"stderr","time":4.21190267,"data":"Turn off this advice by setting config variable advice.detachedHead to false\n"}
+,{"stream_name":"stderr","time":4.211906705,"data":"\n"}
+,{"stream_name":"stderr","time":4.211910269,"data":"HEAD is now at f092214 E1d: execution code for D1-E1d (A0; artifact receiver dictionary, frozen serializer, W accounting, D1-D8), dev-new book (94062), tests + fake dry run\n"}
+,{"stream_name":"stdout","time":7.529242032,"data":"     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 44.1/44.1 kB 1.1 MB/s eta 0:00:00\n"}
+,{"stream_name":"stdout","time":9.169499332000001,"data":"   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 10.1/10.1 MB 72.1 MB/s eta 0:00:00\n"}
+,{"stream_name":"stdout","time":9.800365933,"data":"   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 61.3/61.3 MB 32.7 MB/s eta 0:00:00\n"}
+,{"stream_name":"stdout","time":9.835390228,"data":"   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 333.2/333.2 kB 17.9 MB/s eta 0:00:00\n"}
+,{"stream_name":"stdout","time":9.870241227,"data":"   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 268.8/268.8 kB 14.3 MB/s eta 0:00:00\n"}
+,{"stream_name":"stdout","time":9.906926438,"data":"   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 566.4/566.4 kB 27.2 MB/s eta 0:00:00\n"}
+,{"stream_name":"stdout","time":9.96572838,"data":"   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 3.1/3.1 MB 79.2 MB/s eta 0:00:00\n"}
+,{"stream_name":"stderr","time":27.166062116,"data":"ERROR: pip's dependency resolver does not currently take into account all the packages that are installed. This behaviour is the source of the following dependency conflicts.\n"}
+,{"stream_name":"stderr","time":27.166093545,"data":"gradio 6.26.0 requires huggingface-hub\u003c2.0,\u003e=1.16.0, but you have huggingface-hub 0.36.2 which is incompatible.\n"}
+,{"stream_name":"stderr","time":27.166115434,"data":"diffusers 0.40.0 requires huggingface-hub\u003c2.0,\u003e=1.23.0, but you have huggingface-hub 0.36.2 which is incompatible.\n"}
+,{"stream_name":"stdout","time":27.350379953,"data":"GPU: Tesla T4, 7.5\n"}
+,{"stream_name":"stdout","time":27.350435549,"data":"Tesla T4, 7.5\n"}
+,{"stream_name":"stdout","time":27.350441754,"data":"\n"}
+,{"stream_name":"stdout","time":27.546665489,"data":"fa8d8b80b1917cd4b1168042e7170bf49d722abb222e890e1a624ddee63993c0 OK\n"}
+,{"stream_name":"stderr","time":144.684499527,"data":"\rDownloading shards:   0%|          | 0/4 [00:00\u003c?, ?it/s]\rDownloading shards:  25%|██▌       | 1/4 [00:26\u003c01:18, 26.28s/it]\rDownloading shards:  50%|█████     | 2/4 [00:33\u003c00:30, 15.23s/it]\rDownloading shards:  75%|███████▌  | 3/4 [00:55\u003c00:18, 18.09s/it]\rDownloading shards: 100%|██████████| 4/4 [01:11\u003c00:00, 17.55s/it]\rDownloading shards: 100%|██████████| 4/4 [01:11\u003c00:00, 18.00s/it]\n"}
+,{"stream_name":"stderr","time":220.766273496,"data":"\rLoading checkpoint shards:   0%|          | 0/4 [00:00\u003c?, ?it/s]\rLoading checkpoint shards:  25%|██▌       | 1/4 [00:16\u003c00:50, 16.88s/it]\rLoading checkpoint shards:  50%|█████     | 2/4 [00:32\u003c00:32, 16.20s/it]\rLoading checkpoint shards:  75%|███████▌  | 3/4 [00:48\u003c00:16, 16.06s/it]\rLoading checkpoint shards: 100%|██████████| 4/4 [01:02\u003c00:00, 15.25s/it]\rLoading checkpoint shards: 100%|██████████| 4/4 [01:02\u003c00:00, 15.63s/it]\n"}
+,{"stream_name":"stderr","time":222.07949808,"data":"We detected that you are passing `past_key_values` as a tuple of tuples. This is deprecated and will be removed in v4.47. Please convert your cache or use an appropriate `Cache` class (https://huggingface.co/docs/transformers/kv_cache#legacy-cache-format)\n"}
+,{"stream_name":"stderr","time":222.155734154,"data":"/usr/local/lib/python3.13/dist-packages/bitsandbytes/backends/cuda/ops.py:464: FutureWarning: _check_is_size will be removed in a future PyTorch release along with guard_size_oblivious.     Use _check(i \u003e= 0) instead.\n"}
+,{"stream_name":"stderr","time":222.155769562,"data":"  torch._check_is_size(blocksize)\n"}
+,{"stream_name":"stderr","time":380.251406153,"data":"/usr/local/lib/python3.13/dist-packages/transformers/generation/configuration_utils.py:650: UserWarning: `do_sample` is set to `False`. However, `top_k` is set to `0` -- this flag is only used in sample-based generation modes. You should set `do_sample=True` or unset `top_k`.\n"}
+,{"stream_name":"stderr","time":380.251495969,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":384.346661246,"data":"From v4.47 onwards, when a model cache is to be returned, `generate` will return a `Cache` instance instead by default (as opposed to the legacy tuple of tuples format). If you want to keep returning the legacy format, please set `return_legacy_cache=True`.\n"}
+,{"stream_name":"stdout","time":534.691807697,"data":"GPU PREFLIGHT PASSED for qwen7b: {'ok': True, 'backend': 'hf-nf4', 'gpu': 'Tesla T4', 'capability': [7, 5], 'linear4bit_layers': 196, 'param_devices': ['cuda']}\n"}
+,{"stream_name":"stderr","time":606.826060575,"data":"\rDownloading shards:   0%|          | 0/4 [00:00\u003c?, ?it/s]\rDownloading shards:  25%|██▌       | 1/4 [00:21\u003c01:04, 21.40s/it]\rDownloading shards:  50%|█████     | 2/4 [00:47\u003c00:48, 24.10s/it]\rDownloading shards:  75%|███████▌  | 3/4 [01:03\u003c00:20, 20.26s/it]\rDownloading shards: 100%|██████████| 4/4 [01:12\u003c00:00, 15.84s/it]\rDownloading shards: 100%|██████████| 4/4 [01:12\u003c00:00, 18.03s/it]\n"}
+,{"stream_name":"stderr","time":671.343942524,"data":"\rLoading checkpoint shards:   0%|          | 0/4 [00:00\u003c?, ?it/s]\rLoading checkpoint shards:  25%|██▌       | 1/4 [00:19\u003c00:59, 19.74s/it]\rLoading checkpoint shards:  50%|█████     | 2/4 [00:38\u003c00:37, 19.00s/it]\rLoading checkpoint shards:  75%|███████▌  | 3/4 [00:55\u003c00:18, 18.08s/it]\rLoading checkpoint shards: 100%|██████████| 4/4 [00:58\u003c00:00, 12.43s/it]\rLoading checkpoint shards: 100%|██████████| 4/4 [00:58\u003c00:00, 14.74s/it]\n"}
+,{"stream_name":"stderr","time":671.914922928,"data":"We detected that you are passing `past_key_values` as a tuple of tuples. This is deprecated and will be removed in v4.47. Please convert your cache or use an appropriate `Cache` class (https://huggingface.co/docs/transformers/kv_cache#legacy-cache-format)\n"}
+,{"stream_name":"stdout","time":1652.640794985,"data":"GPU PREFLIGHT PASSED for falcon7b: {'ok': True, 'backend': 'hf-nf4', 'gpu': 'Tesla T4', 'capability': [7, 5], 'linear4bit_layers': 196, 'param_devices': ['cuda']}\n"}
+,{"stream_name":"stderr","time":1713.759084254,"data":"\rLoading checkpoint shards:   0%|          | 0/4 [00:00\u003c?, ?it/s]\rLoading checkpoint shards:  25%|██▌       | 1/4 [00:16\u003c00:48, 16.20s/it]\rLoading checkpoint shards:  50%|█████     | 2/4 [00:31\u003c00:31, 15.95s/it]\rLoading checkpoint shards:  75%|███████▌  | 3/4 [00:46\u003c00:15, 15.46s/it]\rLoading checkpoint shards: 100%|██████████| 4/4 [01:01\u003c00:00, 14.99s/it]\rLoading checkpoint shards: 100%|██████████| 4/4 [01:01\u003c00:00, 15.28s/it]\n"}
+,{"stream_name":"stdout","time":2266.612470681,"data":"GPU PREFLIGHT PASSED for qwen7b: {'ok': True, 'backend': 'hf-nf4', 'gpu': 'Tesla T4', 'capability': [7, 5], 'linear4bit_layers': 196, 'param_devices': ['cuda']}\n"}
+,{"stream_name":"stdout","time":2274.55779606,"data":"launch projection {\"raw_s\": 2437.6488, \"stress_raw_s\": 3069.7587999999996, \"projected_h\": 0.8464058333333333, \"stress_projected_h\": 1.0658884722222222, \"cap_h\": 1.0, \"ok\": true}\n"}
+,{"stream_name":"stdout","time":2274.557830183,"data":"D1-E1d: done (rc=0)\n"}
+,{"stream_name":"stdout","time":2274.584819556,"data":"exit 0\n"}
+,{"stream_name":"stderr","time":2277.260244852,"data":"/usr/local/lib/python3.13/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\\|'\n"}
+,{"stream_name":"stderr","time":2277.260278954,"data":"  cells[i][c] = re.sub('\\\\\\\\\\|', '|', cell)\n"}
+,{"stream_name":"stderr","time":2277.617940088,"data":"/usr/local/lib/python3.13/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\\_'\n"}
+,{"stream_name":"stderr","time":2277.617967051,"data":"  text = re.sub(r'_', '\\_', text) # Escape underscores in display text\n"}
+,{"stream_name":"stderr","time":2279.151856347,"data":"[NbConvertApp] Converting notebook __script__.ipynb to html\n"}
+,{"stream_name":"stderr","time":2279.962060668,"data":"[NbConvertApp] Writing 279411 bytes to __results__.html\n"}
+]

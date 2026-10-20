@@ -1,0 +1,174 @@
+{
+ "D1": {
+  "ok": true,
+  "note": "from .done + recorded 'done', no terminal marker",
+  "detail": {
+   "dot_done": true,
+   "attempts": [
+    "done"
+   ]
+  }
+ },
+ "D2": {
+  "ok": true
+ },
+ "D3": {
+  "ok": true,
+  "detail": {
+   "qwen7b": {
+    "n": 16,
+    "identical": 16,
+    "batch1_s_per_call": 1.4515225291252136
+   },
+   "falcon7b": {
+    "n": 16,
+    "identical": 16,
+    "batch1_s_per_call": 1.4063570946455002
+   }
+  }
+ },
+ "D4": {
+  "ok": true
+ },
+ "D5": {
+  "ok": true,
+  "projected_T1_gpu_h": 2.974404947720564,
+  "cap": 4.0
+ },
+ "D6": {
+  "builds": 10,
+  "of": 10,
+  "roles_match": true,
+  "ok": true
+ },
+ "D7": {
+  "ok": true,
+  "per_pair": {
+   "baker/porter": {
+    "qwen7b": {
+     "D7a": 4,
+     "D7b": 4,
+     "D7c": 16,
+     "n_sel": 4,
+     "n_prose": 16,
+     "ok": true
+    },
+    "falcon7b": {
+     "D7a": 4,
+     "D7b": 4,
+     "D7c": 16,
+     "n_sel": 4,
+     "n_prose": 16,
+     "ok": true
+    }
+   },
+   "potter/bearer": {
+    "qwen7b": {
+     "D7a": 4,
+     "D7b": 4,
+     "D7c": 16,
+     "n_sel": 4,
+     "n_prose": 16,
+     "ok": true
+    },
+    "falcon7b": {
+     "D7a": 4,
+     "D7b": 4,
+     "D7c": 16,
+     "n_sel": 4,
+     "n_prose": 16,
+     "ok": true
+    }
+   },
+   "tanner/loader": {
+    "qwen7b": {
+     "D7a": 4,
+     "D7b": 4,
+     "D7c": 16,
+     "n_sel": 4,
+     "n_prose": 16,
+     "ok": true
+    },
+    "falcon7b": {
+     "D7a": 4,
+     "D7b": 4,
+     "D7c": 16,
+     "n_sel": 4,
+     "n_prose": 16,
+     "ok": true
+    }
+   }
+  }
+ },
+ "D8": {
+  "ok": true,
+  "per_pair": {
+   "baker/porter": {
+    "qwen7b_to_falcon7b": {
+     "prose_correct": 16,
+     "hybrid_correct": 16,
+     "n": 16,
+     "ok": true
+    },
+    "falcon7b_to_qwen7b": {
+     "prose_correct": 14,
+     "hybrid_correct": 16,
+     "n": 16,
+     "ok": true
+    }
+   },
+   "potter/bearer": {
+    "qwen7b_to_falcon7b": {
+     "prose_correct": 16,
+     "hybrid_correct": 16,
+     "n": 16,
+     "ok": true
+    },
+    "falcon7b_to_qwen7b": {
+     "prose_correct": 16,
+     "hybrid_correct": 16,
+     "n": 16,
+     "ok": true
+    }
+   },
+   "tanner/loader": {
+    "qwen7b_to_falcon7b": {
+     "prose_correct": 15,
+     "hybrid_correct": 16,
+     "n": 16,
+     "ok": true
+    },
+    "falcon7b_to_qwen7b": {
+     "prose_correct": 14,
+     "hybrid_correct": 16,
+     "n": 16,
+     "ok": true
+    }
+   }
+  },
+  "pooled": {
+   "qwen7b_to_falcon7b": {
+    "prose_correct": 47,
+    "hybrid_correct": 48,
+    "n": 48,
+    "ok": true
+   },
+   "falcon7b_to_qwen7b": {
+    "prose_correct": 44,
+    "hybrid_correct": 48,
+    "n": 48,
+    "ok": true
+   }
+  }
+ },
+ "wrong_pick_screen_reported_only": {
+  "qwen7b": 0.0,
+  "falcon7b": 0.0
+ },
+ "outcome_rule": {
+  "rule": 1,
+  "outcome": "qualified",
+  "failed": []
+ },
+ "eligible_for_freeze": true
+}

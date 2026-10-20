@@ -1,0 +1,1254 @@
+{
+ "stage": "D1-E1d",
+ "gpu_h": 0.6238120799619443,
+ "timing_s": {
+  "load1": 246.07697057724,
+  "send_verify_qwen7b": 205.09269952774048,
+  "load2": 268.07420563697815,
+  "send_verify_falcon7b": 250.15689063072205,
+  "recv_falcon7b": 566.0485999584198,
+  "load3": 136.88736867904663,
+  "recv_qwen7b": 473.9880669116974
+ },
+ "verifier_b1_check": {
+  "qwen7b": {
+   "n": 16,
+   "identical": 16,
+   "batch1_s_per_call": 1.4515225291252136
+  },
+  "falcon7b": {
+   "n": 16,
+   "identical": 16,
+   "batch1_s_per_call": 1.4063570946455002
+  }
+ },
+ "verifier_batch_size": 8,
+ "protocol_hash": "11d7af03575d5434c4c3a5e6f815db87a45bc3ad0abfbdca3ee198a06e8777a2",
+ "code_hash": "fa8d8b80b1917cd4b1168042e7170bf49d722abb222e890e1a624ddee63993c0",
+ "artifact_v1_dev": {
+  "artifact_bytes": 120030,
+  "manifest_bytes": 117,
+  "body_bytes": 119913,
+  "n_entries": 688,
+  "n_core": 172,
+  "gzip9_bytes": 11892,
+  "sha256": "30c00f0f24c5f2a1c85242725b7c776829014dc2f3ad7848e0813abe7ce26906"
+ },
+ "ids": {
+  "e1c_dev_sel": [
+   "F1-5929",
+   "F1-7927",
+   "F1-3305",
+   "F1-7315",
+   "F1-7345",
+   "F1-4045",
+   "F1-9128",
+   "F1-7625",
+   "F1-8566",
+   "F1-5344",
+   "F1-7887",
+   "F1-0936",
+   "F1-3045",
+   "F1-7155",
+   "F1-7099",
+   "F1-2754",
+   "F1-3668",
+   "F1-6144",
+   "F1-6104",
+   "F1-4376",
+   "F1-4565",
+   "F1-7892",
+   "F1-0908",
+   "F1-3897",
+   "F1-6153",
+   "F1-8669",
+   "F1-1543",
+   "F1-8648",
+   "F1-4320",
+   "F1-5744",
+   "F1-0006",
+   "F1-4133",
+   "F1-9168",
+   "F1-9770",
+   "F1-2699",
+   "F1-4846",
+   "F1-9036",
+   "F1-3339",
+   "F1-5841",
+   "F1-6598",
+   "F1-8366",
+   "F1-7656",
+   "F1-9870",
+   "F1-4124",
+   "F1-6617",
+   "F1-8401",
+   "F1-4327",
+   "F1-0517",
+   "F1-7717",
+   "F1-1120",
+   "F1-2060",
+   "F1-3265",
+   "F1-1746",
+   "F1-3217",
+   "F1-7308",
+   "F1-5056",
+   "F1-4137",
+   "F1-2672",
+   "F1-1895",
+   "F1-2519",
+   "F1-1673",
+   "F1-2264",
+   "F1-3935",
+   "F1-6347",
+   "F1-0646",
+   "F1-8050",
+   "F1-9529",
+   "F1-4860",
+   "F1-4730",
+   "F1-8620",
+   "F1-2922",
+   "F1-8611",
+   "F1-3212",
+   "F1-7751",
+   "F1-3614",
+   "F1-4506",
+   "F1-6625",
+   "F1-0876",
+   "F1-8851",
+   "F1-8360",
+   "F2-4705",
+   "F2-9388",
+   "F2-0918",
+   "F2-1793",
+   "F2-2083",
+   "F2-7186",
+   "F2-6661",
+   "F2-0477",
+   "F2-4959",
+   "F2-3933",
+   "F2-5074",
+   "F2-0002",
+   "F2-1453",
+   "F2-5231",
+   "F2-6997",
+   "F2-0273",
+   "F2-3273",
+   "F2-1962",
+   "F2-8877",
+   "F2-6219",
+   "F2-0231",
+   "F2-5767",
+   "F2-8450",
+   "F2-9945",
+   "F2-0166",
+   "F2-4466",
+   "F2-8095",
+   "F2-7502",
+   "F2-0137",
+   "F2-0464",
+   "F2-5155",
+   "F2-4131",
+   "F2-8890",
+   "F2-6334",
+   "F2-6297",
+   "F2-2453",
+   "F2-5912",
+   "F2-2638",
+   "F2-5431",
+   "F2-6003",
+   "F2-3471",
+   "F2-2300",
+   "F2-2712",
+   "F2-4067",
+   "F2-8418",
+   "F2-2717",
+   "F2-9249",
+   "F2-3852",
+   "F2-1193",
+   "F2-0309",
+   "F2-1980",
+   "F2-4462",
+   "F2-1070",
+   "F2-8710",
+   "F2-4406",
+   "F2-2201",
+   "F2-1386",
+   "F2-0103",
+   "F2-9590",
+   "F2-9770",
+   "F2-1136",
+   "F2-0463",
+   "F2-9601",
+   "F2-7173",
+   "F2-3291",
+   "F2-4832",
+   "F2-7873",
+   "F2-1408",
+   "F2-0560",
+   "F2-8790",
+   "F2-3896",
+   "F2-5667",
+   "F2-8907",
+   "F2-7758",
+   "F2-6981",
+   "F2-4552",
+   "F2-0203",
+   "F2-6479",
+   "F2-8201",
+   "F2-3467"
+  ],
+  "e1c_dev_recv": [
+   "F1-5929",
+   "F1-7927",
+   "F1-3305",
+   "F1-7315",
+   "F1-7345",
+   "F2-4705",
+   "F2-9388",
+   "F2-0918",
+   "F2-1793",
+   "F2-2083"
+  ],
+  "dev_new": [
+   "F2-1990",
+   "F2-1169",
+   "F2-0282",
+   "F2-5491",
+   "F2-6348",
+   "F2-6455",
+   "F2-2279",
+   "F2-5656",
+   "F2-7760",
+   "F2-0012",
+   "F2-4647",
+   "F2-7001"
+  ]
+ },
+ "selection": {
+  "qwen7b": {
+   "e1c_dev": {
+    "n": 160,
+    "complete": true,
+    "completeness": "ok",
+    "pick_acc": 0.91875,
+    "sender_invalid": 0,
+    "verifier_format_ok": 1.0,
+    "coverage": 0.9125,
+    "wrong_pick_accepted": 0,
+    "wrong_pick_accepted_rate": 0.0,
+    "wrong_pick_accepted_cp95_upper": 0.018549134077503752,
+    "correct_pick_rejected": 1,
+    "wrong_pick_caught": 13,
+    "parse_paths": {
+     "letter": 160
+    }
+   },
+   "dev_new": {
+    "n": 12,
+    "complete": true,
+    "completeness": "ok",
+    "pick_acc": 0.75,
+    "sender_invalid": 0,
+    "verifier_format_ok": 1.0,
+    "coverage": 0.75,
+    "wrong_pick_accepted": 0,
+    "wrong_pick_accepted_rate": 0.0,
+    "wrong_pick_accepted_cp95_upper": 0.22092219194555582,
+    "correct_pick_rejected": 0,
+    "wrong_pick_caught": 3,
+    "parse_paths": {
+     "letter": 12
+    }
+   },
+   "all": {
+    "n": 172,
+    "complete": true,
+    "completeness": "ok",
+    "pick_acc": 0.9069767441860465,
+    "sender_invalid": 0,
+    "verifier_format_ok": 1.0,
+    "coverage": 0.9011627906976745,
+    "wrong_pick_accepted": 0,
+    "wrong_pick_accepted_rate": 0.0,
+    "wrong_pick_accepted_cp95_upper": 0.017266248086044544,
+    "correct_pick_rejected": 1,
+    "wrong_pick_caught": 16,
+    "parse_paths": {
+     "letter": 172
+    }
+   }
+  },
+  "falcon7b": {
+   "e1c_dev": {
+    "n": 160,
+    "complete": true,
+    "completeness": "ok",
+    "pick_acc": 0.975,
+    "sender_invalid": 0,
+    "verifier_format_ok": 0.98125,
+    "coverage": 0.95,
+    "wrong_pick_accepted": 0,
+    "wrong_pick_accepted_rate": 0.0,
+    "wrong_pick_accepted_cp95_upper": 0.018549134077503752,
+    "correct_pick_rejected": 4,
+    "wrong_pick_caught": 4,
+    "parse_paths": {
+     "letter": 160
+    }
+   },
+   "dev_new": {
+    "n": 12,
+    "complete": true,
+    "completeness": "ok",
+    "pick_acc": 1.0,
+    "sender_invalid": 0,
+    "verifier_format_ok": 1.0,
+    "coverage": 1.0,
+    "wrong_pick_accepted": 0,
+    "wrong_pick_accepted_rate": 0.0,
+    "wrong_pick_accepted_cp95_upper": 0.22092219194555582,
+    "correct_pick_rejected": 0,
+    "wrong_pick_caught": 0,
+    "parse_paths": {
+     "letter": 12
+    }
+   },
+   "all": {
+    "n": 172,
+    "complete": true,
+    "completeness": "ok",
+    "pick_acc": 0.9767441860465116,
+    "sender_invalid": 0,
+    "verifier_format_ok": 0.9825581395348837,
+    "coverage": 0.9534883720930233,
+    "wrong_pick_accepted": 0,
+    "wrong_pick_accepted_rate": 0.0,
+    "wrong_pick_accepted_cp95_upper": 0.017266248086044544,
+    "correct_pick_rejected": 4,
+    "wrong_pick_caught": 4,
+    "parse_paths": {
+     "letter": 172
+    }
+   }
+  }
+ },
+ "directions": {
+  "qwen7b_to_falcon7b": {
+   "e1c_dev": {
+    "status": "COMPLETE",
+    "n_entries": 10,
+    "n_messages": 40,
+    "acc_hybrid": 1,
+    "acc_prose": 1,
+    "diff": 0,
+    "ci": [
+     0,
+     0
+    ],
+    "label": "non-inferior",
+    "coverage": 0.8,
+    "message_saving_payload_plus_case": 0.46752265861027187,
+    "payload_saving_per_message": 123.8,
+    "wrong_pick_accepted": 0,
+    "wrong_pick_accepted_cp95_upper": 0.2588655508930523,
+    "byte_boundary": "sender->receiver channel only; candidate prep and verifier are sender-local",
+    "gates": {
+     "G1": true,
+     "G2": false,
+     "G3": true
+    },
+    "success": false,
+    "lifetime": {
+     "W_base": {
+      "F_d": 2029148.5,
+      "M_d": 90000,
+      "a": 0.89,
+      "S_point": 0.3132090977682471,
+      "S_lower": 0.20065980250835957,
+      "H": 156.0,
+      "P": 279.8
+     },
+     "W_copy": {
+      "F_d": 1271543.0,
+      "M_d": 90000,
+      "a": 0.89,
+      "S_point": 0.34329429751409735,
+      "S_lower": 0.23040744014298908,
+      "H": 156.0,
+      "P": 279.8
+     },
+     "W_low": {
+      "F_d": 2029148.5,
+      "M_d": 22500,
+      "a": 0.89,
+      "S_point": 0.0714711301723453,
+      "S_lower": -0.03811270947940271,
+      "H": 156.0,
+      "P": 279.8
+     },
+     "W_churn": {
+      "F_d": 2633642.0,
+      "M_d": 90000,
+      "a": 0.88,
+      "S_point": 0.28477952505758086,
+      "S_lower": 0.1737850727536573,
+      "H": 156.0,
+      "P": 279.8
+     },
+     "W_low_churn": {
+      "F_d": 2633642.0,
+      "M_d": 22500,
+      "a": 0.88,
+      "S_point": -0.028973393693908278,
+      "S_lower": -0.13610362917855645,
+      "H": 156.0,
+      "P": 279.8
+     }
+    },
+    "lifetime_gzip9_secondary": {
+     "W_base": {
+      "F_d": 2029148.5,
+      "M_d": 90000,
+      "a": 0.89,
+      "S_point": 0.09711443482317272,
+      "S_lower": 0.03977585290526464,
+      "H": 144.425,
+      "P": 190.55
+     },
+     "W_copy": {
+      "F_d": 1271543.0,
+      "M_d": 90000,
+      "a": 0.89,
+      "S_point": 0.14129097058223272,
+      "S_lower": 0.08330701716584066,
+      "H": 144.425,
+      "P": 190.55
+     },
+     "W_low": {
+      "F_d": 2029148.5,
+      "M_d": 22500,
+      "a": 0.89,
+      "S_point": -0.2578490043441499,
+      "S_lower": -0.31154957441913966,
+      "H": 144.425,
+      "P": 190.55
+     },
+     "W_churn": {
+      "F_d": 2633642.0,
+      "M_d": 90000,
+      "a": 0.88,
+      "S_point": 0.059445348260882214,
+      "S_lower": 0.0032853838971486082,
+      "H": 144.425,
+      "P": 190.55
+     },
+     "W_low_churn": {
+      "F_d": 2633642.0,
+      "M_d": 22500,
+      "a": 0.88,
+      "S_point": -0.4012634770693022,
+      "S_lower": -0.45420516366989405,
+      "H": 144.425,
+      "P": 190.55
+     }
+    },
+    "e1c_secondary_reported_only": {
+     "payload_saving": 0.7094555873925501,
+     "breakeven_messages": 55.864297253634895,
+     "dict_bytes": 6916,
+     "checks": {
+      "noninferior": true,
+      "coverage": false,
+      "bytes": true,
+      "breakeven": true
+     },
+     "success": false
+    }
+   },
+   "dev_new": {
+    "status": "COMPLETE",
+    "n_entries": 12,
+    "n_messages": 48,
+    "acc_hybrid": 1,
+    "acc_prose": 0.9791666666666666,
+    "diff": 0.020833333333333332,
+    "ci": [
+     0,
+     0.0625
+    ],
+    "label": "non-inferior",
+    "coverage": 0.75,
+    "message_saving_payload_plus_case": 0.45272206303724927,
+    "payload_saving_per_message": 131.66666666666666,
+    "wrong_pick_accepted": 0,
+    "wrong_pick_accepted_cp95_upper": 0.22092219194555582,
+    "byte_boundary": "sender->receiver channel only; candidate prep and verifier are sender-local",
+    "gates": {
+     "G1": true,
+     "G2": false,
+     "G3": false
+    },
+    "success": false,
+    "lifetime": {
+     "W_base": {
+      "F_d": 2029148.5,
+      "M_d": 90000,
+      "a": 0.89,
+      "S_point": 0.30944056312443247,
+      "S_lower": 0.18252900672378503,
+      "H": 174.16666666666666,
+      "P": 305.8333333333333
+     },
+     "W_copy": {
+      "F_d": 1271543.0,
+      "M_d": 90000,
+      "a": 0.89,
+      "S_point": 0.33696483197093563,
+      "S_lower": 0.21003650956517783,
+      "H": 174.16666666666666,
+      "P": 305.8333333333333
+     },
+     "W_low": {
+      "F_d": 2029148.5,
+      "M_d": 22500,
+      "a": 0.89,
+      "S_point": 0.08827996366939161,
+      "S_lower": -0.03789827964281667,
+      "H": 174.16666666666666,
+      "P": 305.8333333333333
+     },
+     "W_churn": {
+      "F_d": 2633642.0,
+      "M_d": 90000,
+      "a": 0.88,
+      "S_point": 0.28317376930063587,
+      "S_lower": 0.15775301733894698,
+      "H": 174.16666666666666,
+      "P": 305.8333333333333
+     },
+     "W_low_churn": {
+      "F_d": 2633642.0,
+      "M_d": 22500,
+      "a": 0.88,
+      "S_point": -0.0038716802906446635,
+      "S_lower": -0.12797453505007161,
+      "H": 174.16666666666666,
+      "P": 305.8333333333333
+     }
+    },
+    "lifetime_gzip9_secondary": {
+     "W_base": {
+      "F_d": 2029148.5,
+      "M_d": 90000,
+      "a": 0.89,
+      "S_point": 0.09711072949389188,
+      "S_lower": 0.028354549582591093,
+      "H": 151.91666666666666,
+      "P": 198.95833333333334
+     },
+     "W_copy": {
+      "F_d": 1271543.0,
+      "M_d": 90000,
+      "a": 0.89,
+      "S_point": 0.13942028621291458,
+      "S_lower": 0.07065953549914705,
+      "H": 151.91666666666666,
+      "P": 198.95833333333334
+     },
+     "W_low": {
+      "F_d": 2029148.5,
+      "M_d": 22500,
+      "a": 0.89,
+      "S_point": -0.24285132286212918,
+      "S_lower": -0.3077902797827732,
+      "H": 151.91666666666666,
+      "P": 198.95833333333334
+     },
+     "W_churn": {
+      "F_d": 2633642.0,
+      "M_d": 90000,
+      "a": 0.88,
+      "S_point": 0.0609875322862129,
+      "S_lower": -0.006815947630488539,
+      "H": 151.91666666666666,
+      "P": 198.95833333333334
+     },
+     "W_low_churn": {
+      "F_d": 2633642.0,
+      "M_d": 22500,
+      "a": 0.88,
+      "S_point": -0.3802509179755671,
+      "S_lower": -0.4426780772131935,
+      "H": 151.91666666666666,
+      "P": 198.95833333333334
+     }
+    },
+    "e1c_secondary_reported_only": {
+     "payload_saving": 0.6743491250533504,
+     "breakeven_messages": 70.4354430379747,
+     "dict_bytes": 9274,
+     "checks": {
+      "noninferior": true,
+      "coverage": false,
+      "bytes": true,
+      "breakeven": true
+     },
+     "success": false
+    }
+   },
+   "per_pair": {
+    "baker/porter": {
+     "entries": 4,
+     "picks": 4,
+     "messages_per_arm": 16,
+     "coverage": 0.75,
+     "acc_hybrid": 1,
+     "acc_prose": 1,
+     "correct_hybrid": 16,
+     "correct_prose": 16,
+     "wrong_accepted": 0,
+     "wrong_accepted_cp95_upper": 0.5271291954984121,
+     "bytes_hybrid": 172.125,
+     "bytes_prose": 304.875
+    },
+    "potter/bearer": {
+     "entries": 4,
+     "picks": 4,
+     "messages_per_arm": 16,
+     "coverage": 0.5,
+     "acc_hybrid": 1,
+     "acc_prose": 1,
+     "correct_hybrid": 16,
+     "correct_prose": 16,
+     "wrong_accepted": 0,
+     "wrong_accepted_cp95_upper": 0.5271291954984121,
+     "bytes_hybrid": 220.75,
+     "bytes_prose": 307.75
+    },
+    "tanner/loader": {
+     "entries": 4,
+     "picks": 4,
+     "messages_per_arm": 16,
+     "coverage": 1.0,
+     "acc_hybrid": 1,
+     "acc_prose": 0.9375,
+     "correct_hybrid": 16,
+     "correct_prose": 15,
+     "wrong_accepted": 0,
+     "wrong_accepted_cp95_upper": 0.5271291954984121,
+     "bytes_hybrid": 129.625,
+     "bytes_prose": 304.875
+    },
+    "F2_new_pooled": {
+     "entries": 12,
+     "picks": 12,
+     "messages_per_arm": 48,
+     "coverage": 0.75,
+     "acc_hybrid": 1,
+     "acc_prose": 0.9791666666666666,
+     "correct_hybrid": 48,
+     "correct_prose": 47,
+     "wrong_accepted": 0,
+     "wrong_accepted_cp95_upper": 0.22092219194555582,
+     "bytes_hybrid": 174.16666666666666,
+     "bytes_prose": 305.8333333333333
+    },
+    "F1": {
+     "entries": 5,
+     "picks": 5,
+     "messages_per_arm": 20,
+     "coverage": 0.8,
+     "acc_hybrid": 1,
+     "acc_prose": 1,
+     "correct_hybrid": 20,
+     "correct_prose": 20,
+     "wrong_accepted": 0,
+     "wrong_accepted_cp95_upper": 0.450719728346941,
+     "bytes_hybrid": 144.1,
+     "bytes_prose": 252.5
+    },
+    "F2_old_pairs": {
+     "entries": 5,
+     "picks": 5,
+     "messages_per_arm": 20,
+     "coverage": 0.8,
+     "acc_hybrid": 1,
+     "acc_prose": 1,
+     "correct_hybrid": 20,
+     "correct_prose": 20,
+     "wrong_accepted": 0,
+     "wrong_accepted_cp95_upper": 0.450719728346941,
+     "bytes_hybrid": 167.9,
+     "bytes_prose": 307.1
+    },
+    "note": "reported, not gated; small denominators (imprecise)"
+   },
+   "speed": {
+    "prose": {
+     "wire_bytes": 294,
+     "prompt_tokens": 143.6590909090909,
+     "gen_tokens": 77.39772727272727,
+     "latency_s": 3.7453545454545454
+    },
+    "hybrid": {
+     "wire_bytes": 165.9090909090909,
+     "prompt_tokens": 139.3409090909091,
+     "gen_tokens": 76.76136363636364,
+     "latency_s": 3.3113727272727274
+    },
+    "sender": {
+     "sender_latency_s": 0.5045862184014431,
+     "sender_gen_tokens": 1.0,
+     "verifier_latency_s": 0.6648558139534884
+    }
+   }
+  },
+  "falcon7b_to_qwen7b": {
+   "e1c_dev": {
+    "status": "COMPLETE",
+    "n_entries": 10,
+    "n_messages": 40,
+    "acc_hybrid": 1,
+    "acc_prose": 1,
+    "diff": 0,
+    "ci": [
+     0,
+     0
+    ],
+    "label": "non-inferior",
+    "coverage": 1.0,
+    "message_saving_payload_plus_case": 0.5872356495468278,
+    "payload_saving_per_message": 155.5,
+    "wrong_pick_accepted": 0,
+    "wrong_pick_accepted_cp95_upper": 0.2588655508930523,
+    "byte_boundary": "sender->receiver channel only; candidate prep and verifier are sender-local",
+    "gates": {
+     "G1": true,
+     "G2": true,
+     "G3": true
+    },
+    "success": true,
+    "lifetime": {
+     "W_base": {
+      "F_d": 2029148.5,
+      "M_d": 90000,
+      "a": 0.89,
+      "S_point": 0.4140418354380113,
+      "S_lower": 0.4102698326929236,
+      "H": 124.3,
+      "P": 279.8
+     },
+     "W_copy": {
+      "F_d": 1271543.0,
+      "M_d": 90000,
+      "a": 0.89,
+      "S_point": 0.44412703518386154,
+      "S_lower": 0.4405934598142811,
+      "H": 124.3,
+      "P": 279.8
+     },
+     "W_low": {
+      "F_d": 2029148.5,
+      "M_d": 22500,
+      "a": 0.89,
+      "S_point": 0.1723038678421095,
+      "S_lower": 0.16647537764955722,
+      "H": 124.3,
+      "P": 279.8
+     },
+     "W_churn": {
+      "F_d": 2633642.0,
+      "M_d": 90000,
+      "a": 0.88,
+      "S_point": 0.3844793106186959,
+      "S_lower": 0.3805437083771468,
+      "H": 124.3,
+      "P": 279.8
+     },
+     "W_low_churn": {
+      "F_d": 2633642.0,
+      "M_d": 22500,
+      "a": 0.88,
+      "S_point": 0.07072639186720675,
+      "S_lower": 0.06405929665354537,
+      "H": 124.3,
+      "P": 279.8
+     }
+    },
+    "lifetime_gzip9_secondary": {
+     "W_base": {
+      "F_d": 2029148.5,
+      "M_d": 90000,
+      "a": 0.89,
+      "S_point": 0.15409685413568908,
+      "S_lower": 0.14664629335217572,
+      "H": 132.225,
+      "P": 190.55
+     },
+     "W_copy": {
+      "F_d": 1271543.0,
+      "M_d": 90000,
+      "a": 0.89,
+      "S_point": 0.19827338989474907,
+      "S_lower": 0.19129781191600814,
+      "H": 132.225,
+      "P": 190.55
+     },
+     "W_low": {
+      "F_d": 2029148.5,
+      "M_d": 22500,
+      "a": 0.89,
+      "S_point": -0.20086658503163357,
+      "S_lower": -0.21214542830210914,
+      "H": 132.225,
+      "P": 190.55
+     },
+     "W_churn": {
+      "F_d": 2633642.0,
+      "M_d": 90000,
+      "a": 0.88,
+      "S_point": 0.11578751567101098,
+      "S_lower": 0.10804567622920624,
+      "H": 132.225,
+      "P": 190.55
+     },
+     "W_low_churn": {
+      "F_d": 2633642.0,
+      "M_d": 22500,
+      "a": 0.88,
+      "S_point": -0.34492130965917367,
+      "S_lower": -0.35765543038067893,
+      "H": 132.225,
+      "P": 190.55
+     }
+    },
+    "e1c_secondary_reported_only": {
+     "payload_saving": 0.8911174785100286,
+     "breakeven_messages": 44.47588424437299,
+     "dict_bytes": 6916,
+     "checks": {
+      "noninferior": true,
+      "coverage": true,
+      "bytes": true,
+      "breakeven": true
+     },
+     "success": true
+    }
+   },
+   "dev_new": {
+    "status": "COMPLETE",
+    "n_entries": 12,
+    "n_messages": 48,
+    "acc_hybrid": 1,
+    "acc_prose": 0.9166666666666666,
+    "diff": 0.08333333333333333,
+    "ci": [
+     0,
+     0.16666666666666666
+    ],
+    "label": "non-inferior",
+    "coverage": 1.0,
+    "message_saving_payload_plus_case": 0.6060171919770774,
+    "payload_saving_per_message": 176.25,
+    "wrong_pick_accepted": 0,
+    "wrong_pick_accepted_cp95_upper": 0.22092219194555582,
+    "byte_boundary": "sender->receiver channel only; candidate prep and verifier are sender-local",
+    "gates": {
+     "G1": true,
+     "G2": true,
+     "G3": true
+    },
+    "success": true,
+    "lifetime": {
+     "W_base": {
+      "F_d": 2029148.5,
+      "M_d": 90000,
+      "a": 0.89,
+      "S_point": 0.4391817075386013,
+      "S_lower": 0.4366263408847215,
+      "H": 129.58333333333334,
+      "P": 305.8333333333333
+     },
+     "W_copy": {
+      "F_d": 1271543.0,
+      "M_d": 90000,
+      "a": 0.89,
+      "S_point": 0.46670597638510447,
+      "S_lower": 0.4642805922478498,
+      "H": 129.58333333333334,
+      "P": 305.8333333333333
+     },
+     "W_low": {
+      "F_d": 2029148.5,
+      "M_d": 22500,
+      "a": 0.89,
+      "S_point": 0.21802110808356034,
+      "S_lower": 0.21426565331507474,
+      "H": 129.58333333333334,
+      "P": 305.8333333333333
+     },
+     "W_churn": {
+      "F_d": 2633642.0,
+      "M_d": 90000,
+      "a": 0.88,
+      "S_point": 0.41145714804722977,
+      "S_lower": 0.4088228686149704,
+      "H": 129.58333333333334,
+      "P": 305.8333333333333
+     },
+     "W_low_churn": {
+      "F_d": 2633642.0,
+      "M_d": 22500,
+      "a": 0.88,
+      "S_point": 0.12441169845594913,
+      "S_lower": 0.12014560080442438,
+      "H": 129.58333333333334,
+      "P": 305.8333333333333
+     }
+    },
+    "lifetime_gzip9_secondary": {
+     "W_base": {
+      "F_d": 2029148.5,
+      "M_d": 90000,
+      "a": 0.89,
+      "S_point": 0.17147931588132648,
+      "S_lower": 0.16530876562775143,
+      "H": 135.29166666666666,
+      "P": 198.95833333333334
+     },
+     "W_copy": {
+      "F_d": 1271543.0,
+      "M_d": 90000,
+      "a": 0.89,
+      "S_point": 0.21378887260034918,
+      "S_lower": 0.20797630819071766,
+      "H": 135.29166666666666,
+      "P": 198.95833333333334
+     },
+     "W_low": {
+      "F_d": 2029148.5,
+      "M_d": 22500,
+      "a": 0.89,
+      "S_point": -0.16848273647469458,
+      "S_lower": -0.177556928049466,
+      "H": 135.29166666666666,
+      "P": 198.95833333333334
+     },
+     "W_churn": {
+      "F_d": 2633642.0,
+      "M_d": 90000,
+      "a": 0.88,
+      "S_point": 0.13452051657940667,
+      "S_lower": 0.12811645373596592,
+      "H": 135.29166666666666,
+      "P": 198.95833333333334
+     },
+     "W_low_churn": {
+      "F_d": 2633642.0,
+      "M_d": 22500,
+      "a": 0.88,
+      "S_point": -0.30671793368237354,
+      "S_lower": -0.31691032928332463,
+      "H": 135.29166666666666,
+      "P": 198.95833333333334
+     }
+    },
+    "e1c_secondary_reported_only": {
+     "payload_saving": 0.9026888604353394,
+     "breakeven_messages": 52.618439716312054,
+     "dict_bytes": 9274,
+     "checks": {
+      "noninferior": true,
+      "coverage": true,
+      "bytes": true,
+      "breakeven": true
+     },
+     "success": true
+    }
+   },
+   "per_pair": {
+    "baker/porter": {
+     "entries": 4,
+     "picks": 4,
+     "messages_per_arm": 16,
+     "coverage": 1.0,
+     "acc_hybrid": 1,
+     "acc_prose": 0.875,
+     "correct_hybrid": 16,
+     "correct_prose": 14,
+     "wrong_accepted": 0,
+     "wrong_accepted_cp95_upper": 0.5271291954984121,
+     "bytes_hybrid": 128.875,
+     "bytes_prose": 304.875
+    },
+    "potter/bearer": {
+     "entries": 4,
+     "picks": 4,
+     "messages_per_arm": 16,
+     "coverage": 1.0,
+     "acc_hybrid": 1,
+     "acc_prose": 1,
+     "correct_hybrid": 16,
+     "correct_prose": 16,
+     "wrong_accepted": 0,
+     "wrong_accepted_cp95_upper": 0.5271291954984121,
+     "bytes_hybrid": 130.25,
+     "bytes_prose": 307.75
+    },
+    "tanner/loader": {
+     "entries": 4,
+     "picks": 4,
+     "messages_per_arm": 16,
+     "coverage": 1.0,
+     "acc_hybrid": 1,
+     "acc_prose": 0.875,
+     "correct_hybrid": 16,
+     "correct_prose": 14,
+     "wrong_accepted": 0,
+     "wrong_accepted_cp95_upper": 0.5271291954984121,
+     "bytes_hybrid": 129.625,
+     "bytes_prose": 304.875
+    },
+    "F2_new_pooled": {
+     "entries": 12,
+     "picks": 12,
+     "messages_per_arm": 48,
+     "coverage": 1.0,
+     "acc_hybrid": 1,
+     "acc_prose": 0.9166666666666666,
+     "correct_hybrid": 48,
+     "correct_prose": 44,
+     "wrong_accepted": 0,
+     "wrong_accepted_cp95_upper": 0.22092219194555582,
+     "bytes_hybrid": 129.58333333333334,
+     "bytes_prose": 305.8333333333333
+    },
+    "F1": {
+     "entries": 5,
+     "picks": 5,
+     "messages_per_arm": 20,
+     "coverage": 1.0,
+     "acc_hybrid": 1,
+     "acc_prose": 1,
+     "correct_hybrid": 20,
+     "correct_prose": 20,
+     "wrong_accepted": 0,
+     "wrong_accepted_cp95_upper": 0.450719728346941,
+     "bytes_hybrid": 118.5,
+     "bytes_prose": 252.5
+    },
+    "F2_old_pairs": {
+     "entries": 5,
+     "picks": 5,
+     "messages_per_arm": 20,
+     "coverage": 1.0,
+     "acc_hybrid": 1,
+     "acc_prose": 1,
+     "correct_hybrid": 20,
+     "correct_prose": 20,
+     "wrong_accepted": 0,
+     "wrong_accepted_cp95_upper": 0.450719728346941,
+     "bytes_hybrid": 130.1,
+     "bytes_prose": 307.1
+    },
+    "note": "reported, not gated; small denominators (imprecise)"
+   },
+   "speed": {
+    "prose": {
+     "wire_bytes": 294,
+     "prompt_tokens": 130.82954545454547,
+     "gen_tokens": 58.53409090909091,
+     "latency_s": 2.617647727272727
+    },
+    "hybrid": {
+     "wire_bytes": 127.18181818181819,
+     "prompt_tokens": 127.14772727272727,
+     "gen_tokens": 56.28409090909091,
+     "latency_s": 2.6019977272727273
+    },
+    "sender": {
+     "sender_latency_s": 0.7189328379409258,
+     "sender_gen_tokens": 3.9825581395348837,
+     "verifier_latency_s": 0.7135046511627907
+    }
+   }
+  }
+ },
+ "note": "DEV (D1-E1d): descriptive + eligibility only; no E1d verdict. Lifetime numbers use the DEV artifact and are illustrative.",
+ "sizing": {
+  "sender_verifier_s_per_entry": 2.601879521458648,
+  "receiver_s_per_message": 5.7388772727272706,
+  "load_s": 268.07420563697815,
+  "projected_T1_gpu_h": 2.974404947720564,
+  "formula": "(3 x max load + sv x 160 + rv x 160 x 4 x 2) / 3600 x 1.25"
+ },
+ "eligibility_D2_D8": {
+  "D1": {
+   "ok": null,
+   "note": "from .done + recorded 'done', no terminal marker"
+  },
+  "D2": {
+   "ok": true
+  },
+  "D3": {
+   "ok": true,
+   "detail": {
+    "qwen7b": {
+     "n": 16,
+     "identical": 16,
+     "batch1_s_per_call": 1.4515225291252136
+    },
+    "falcon7b": {
+     "n": 16,
+     "identical": 16,
+     "batch1_s_per_call": 1.4063570946455002
+    }
+   }
+  },
+  "D4": {
+   "ok": true
+  },
+  "D5": {
+   "ok": true,
+   "projected_T1_gpu_h": 2.974404947720564,
+   "cap": 4.0
+  },
+  "D6": {
+   "builds": 10,
+   "of": 10,
+   "roles_match": true,
+   "ok": true
+  },
+  "D7": {
+   "ok": true,
+   "per_pair": {
+    "baker/porter": {
+     "qwen7b": {
+      "D7a": 4,
+      "D7b": 4,
+      "D7c": 16,
+      "n_sel": 4,
+      "n_prose": 16,
+      "ok": true
+     },
+     "falcon7b": {
+      "D7a": 4,
+      "D7b": 4,
+      "D7c": 16,
+      "n_sel": 4,
+      "n_prose": 16,
+      "ok": true
+     }
+    },
+    "potter/bearer": {
+     "qwen7b": {
+      "D7a": 4,
+      "D7b": 4,
+      "D7c": 16,
+      "n_sel": 4,
+      "n_prose": 16,
+      "ok": true
+     },
+     "falcon7b": {
+      "D7a": 4,
+      "D7b": 4,
+      "D7c": 16,
+      "n_sel": 4,
+      "n_prose": 16,
+      "ok": true
+     }
+    },
+    "tanner/loader": {
+     "qwen7b": {
+      "D7a": 4,
+      "D7b": 4,
+      "D7c": 16,
+      "n_sel": 4,
+      "n_prose": 16,
+      "ok": true
+     },
+     "falcon7b": {
+      "D7a": 4,
+      "D7b": 4,
+      "D7c": 16,
+      "n_sel": 4,
+      "n_prose": 16,
+      "ok": true
+     }
+    }
+   }
+  },
+  "D8": {
+   "ok": true,
+   "per_pair": {
+    "baker/porter": {
+     "qwen7b_to_falcon7b": {
+      "prose_correct": 16,
+      "hybrid_correct": 16,
+      "n": 16,
+      "ok": true
+     },
+     "falcon7b_to_qwen7b": {
+      "prose_correct": 14,
+      "hybrid_correct": 16,
+      "n": 16,
+      "ok": true
+     }
+    },
+    "potter/bearer": {
+     "qwen7b_to_falcon7b": {
+      "prose_correct": 16,
+      "hybrid_correct": 16,
+      "n": 16,
+      "ok": true
+     },
+     "falcon7b_to_qwen7b": {
+      "prose_correct": 16,
+      "hybrid_correct": 16,
+      "n": 16,
+      "ok": true
+     }
+    },
+    "tanner/loader": {
+     "qwen7b_to_falcon7b": {
+      "prose_correct": 15,
+      "hybrid_correct": 16,
+      "n": 16,
+      "ok": true
+     },
+     "falcon7b_to_qwen7b": {
+      "prose_correct": 14,
+      "hybrid_correct": 16,
+      "n": 16,
+      "ok": true
+     }
+    }
+   },
+   "pooled": {
+    "qwen7b_to_falcon7b": {
+     "prose_correct": 47,
+     "hybrid_correct": 48,
+     "n": 48,
+     "ok": true
+    },
+    "falcon7b_to_qwen7b": {
+     "prose_correct": 44,
+     "hybrid_correct": 48,
+     "n": 48,
+     "ok": true
+    }
+   }
+  },
+  "wrong_pick_screen_reported_only": {
+   "qwen7b": 0.0,
+   "falcon7b": 0.0
+  },
+  "outcome_rule": {
+   "rule": 1,
+   "outcome": "qualified",
+   "failed": []
+  },
+  "eligible_for_freeze": false
+ },
+ "attempt": 1
+}
