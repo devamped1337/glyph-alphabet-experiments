@@ -1,0 +1,18 @@
+{
+ "seed0": 95061,
+ "test_book_sha256": "e2c0b00066ba87c0881ba8fa8924788a1b1ff80e11d5c0b78b3744917960c2a1",
+ "artifact_v1": {
+  "artifact_bytes": 110651,
+  "manifest_bytes": 117,
+  "body_bytes": 110534,
+  "n_entries": 640,
+  "n_core": 160,
+  "gzip9_bytes": 9986,
+  "sha256": "eb83e299dc6960d6dacdbdcc1edf8ab9752166c7b67768260faecddc8ddba913"
+ },
+ "F2_by_pair": {
+  "baker/porter": 26,
+  "tanner/loader": 24,
+  "potter/bearer": 30
+ }
+}
