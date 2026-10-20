@@ -1,5 +1,5 @@
 {
- "code_hash": "625071563086ac0dbcb8c931f1482011a901108245a624e6ea7afe3f98d71270",
+ "code_hash": "98a61092a4c8b6f8e450f910659ed3c81a73ae16a3776c22af0db38804b0d550",
  "protocol_hash": "11d7af03575d5434c4c3a5e6f815db87a45bc3ad0abfbdca3ee198a06e8777a2",
  "execution_commit_dev": "f092214",
  "dev_code_hash": "fa8d8b80b1917cd4b1168042e7170bf49d722abb222e890e1a624ddee63993c0",
@@ -294,5 +294,7 @@
    "alloc": 0.5
   },
   "min_traffic_step": 1800
- }
+ },
+ "code_hash_freeze_r1": "625071563086ac0dbcb8c931f1482011a901108245a624e6ea7afe3f98d71270",
+ "freeze_r2_note": "r2: only kaggle/e1d_kaggle.py changed (it asserted the dev stage only, which would have refused T1-E1d); found after the TEST book was built; book build code untouched and check_freeze --exec rebuilds the book byte-identically"
 }

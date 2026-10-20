@@ -4,7 +4,7 @@ import os, subprocess, sys
 COMMIT = os.environ.get("E1D_COMMIT"); STAGE = os.environ.get("E1D_STAGE")
 assert COMMIT and STAGE, "set E1D_COMMIT and E1D_STAGE explicitly (no defaults, no automated launches)"
 assert os.environ.get("E1D_GO") == STAGE, "E1D_GO must equal E1D_STAGE"
-assert STAGE == "D1-E1d", "only the dev stage is launchable from this code"
+assert STAGE in ("D1-E1d", "T1-E1d"), "unknown E1d stage"
 subprocess.run("git clone https://github.com/devamped1337/glyph-alphabet-experiments.git /kaggle/working/glyph", shell=True, check=True)
 subprocess.run(f"cd /kaggle/working/glyph && git checkout {COMMIT}", shell=True, check=True)
 subprocess.run("pip install -q 'transformers==4.47.1' 'bitsandbytes==0.47.0' 'accelerate==1.1.1' 'huggingface_hub>=0.26' "
@@ -12,5 +12,5 @@ subprocess.run("pip install -q 'transformers==4.47.1' 'bitsandbytes==0.47.0' 'ac
 print("GPU:", subprocess.run("nvidia-smi --query-gpu=name,compute_cap --format=csv,noheader", shell=True, capture_output=True, text=True).stdout)
 D = "/kaggle/working/glyph/v6/e1d"
 r = subprocess.run(f"cd {D} && {sys.executable} run_e1d.py --check && {sys.executable} run_e1d.py --stage {STAGE}", shell=True)
-print("exit", r.returncode)   # 3 budget, 8 canary, 9 no GPU, 13 not dev, 14 no go, 16 code hash, 17 no start allowed, 18 terminal, 19 projection > cap
+print("exit", r.returncode)   # 3 budget, 8 canary, 9 no GPU, 13 not frozen, 14 no go, 16 code hash, 17 no start allowed, 18 terminal, 19 projection > cap or T1 not eligible
 subprocess.run(f"cd {D} && zip -qr /kaggle/working/e1d_results.zip results", shell=True)
