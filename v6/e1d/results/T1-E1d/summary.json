@@ -1,0 +1,1106 @@
+{
+ "stage": "T1-E1d",
+ "gpu_h": 2.3388241296897223,
+ "timing_s": {
+  "load1": 241.261332988739,
+  "send_verify_qwen7b": 183.89023637771606,
+  "load2": 274.99892234802246,
+  "send_verify_falcon7b": 223.20641374588013,
+  "recv_falcon7b": 4412.64643239975,
+  "load3": 117.40592837333679,
+  "recv_qwen7b": 2874.124519109726
+ },
+ "protocol_hash": "11d7af03575d5434c4c3a5e6f815db87a45bc3ad0abfbdca3ee198a06e8777a2",
+ "code_hash": "98a61092a4c8b6f8e450f910659ed3c81a73ae16a3776c22af0db38804b0d550",
+ "artifact_v1": {
+  "artifact_bytes": 110651,
+  "manifest_bytes": 117,
+  "body_bytes": 110534,
+  "n_entries": 640,
+  "n_core": 160,
+  "gzip9_bytes": 9986,
+  "sha256": "eb83e299dc6960d6dacdbdcc1edf8ab9752166c7b67768260faecddc8ddba913"
+ },
+ "lifecycle": {
+  "W_base": {
+   "L_rule": 690.8375,
+   "delta_body": 2764,
+   "rules_per_delta": 4,
+   "events": {
+    "F_total": 3806343,
+    "full": [
+     [
+      0,
+      1,
+      20
+     ],
+     [
+      15,
+      3,
+      2
+     ],
+     [
+      45,
+      7,
+      2
+     ],
+     [
+      75,
+      11,
+      2
+     ]
+    ],
+    "deltas": [
+     [
+      7,
+      2,
+      21
+     ],
+     [
+      14,
+      3,
+      21
+     ],
+     [
+      21,
+      4,
+      23
+     ],
+     [
+      28,
+      5,
+      23
+     ],
+     [
+      35,
+      6,
+      23
+     ],
+     [
+      42,
+      7,
+      23
+     ],
+     [
+      49,
+      8,
+      25
+     ],
+     [
+      56,
+      9,
+      25
+     ],
+     [
+      63,
+      10,
+      25
+     ],
+     [
+      70,
+      11,
+      25
+     ],
+     [
+      77,
+      12,
+      27
+     ],
+     [
+      84,
+      13,
+      27
+     ]
+    ],
+    "final_version": 13,
+    "final_participants": 26
+   }
+  },
+  "W_copy": {
+   "L_rule": 690.8375,
+   "delta_body": 11054,
+   "rules_per_delta": 16,
+   "events": {
+    "F_total": 1185415,
+    "full": [
+     [
+      0,
+      1,
+      6
+     ],
+     [
+      15,
+      1,
+      1
+     ],
+     [
+      45,
+      2,
+      1
+     ],
+     [
+      75,
+      3,
+      1
+     ]
+    ],
+    "deltas": [
+     [
+      30,
+      2,
+      7
+     ],
+     [
+      60,
+      3,
+      7
+     ]
+    ],
+    "final_version": 3,
+    "final_participants": 6
+   }
+  },
+  "W_low": {
+   "L_rule": 690.8375,
+   "delta_body": 2764,
+   "rules_per_delta": 4,
+   "events": {
+    "F_total": 3806343,
+    "full": [
+     [
+      0,
+      1,
+      20
+     ],
+     [
+      15,
+      3,
+      2
+     ],
+     [
+      45,
+      7,
+      2
+     ],
+     [
+      75,
+      11,
+      2
+     ]
+    ],
+    "deltas": [
+     [
+      7,
+      2,
+      21
+     ],
+     [
+      14,
+      3,
+      21
+     ],
+     [
+      21,
+      4,
+      23
+     ],
+     [
+      28,
+      5,
+      23
+     ],
+     [
+      35,
+      6,
+      23
+     ],
+     [
+      42,
+      7,
+      23
+     ],
+     [
+      49,
+      8,
+      25
+     ],
+     [
+      56,
+      9,
+      25
+     ],
+     [
+      63,
+      10,
+      25
+     ],
+     [
+      70,
+      11,
+      25
+     ],
+     [
+      77,
+      12,
+      27
+     ],
+     [
+      84,
+      13,
+      27
+     ]
+    ],
+    "final_version": 13,
+    "final_participants": 26
+   }
+  },
+  "W_churn": {
+   "L_rule": 690.8375,
+   "delta_body": 1382,
+   "rules_per_delta": 2,
+   "events": {
+    "F_total": 4954715,
+    "full": [
+     [
+      0,
+      1,
+      20
+     ],
+     [
+      15,
+      6,
+      4
+     ],
+     [
+      45,
+      16,
+      4
+     ],
+     [
+      75,
+      26,
+      4
+     ]
+    ],
+    "deltas": [
+     [
+      3,
+      2,
+      21
+     ],
+     [
+      6,
+      3,
+      21
+     ],
+     [
+      9,
+      4,
+      21
+     ],
+     [
+      12,
+      5,
+      21
+     ],
+     [
+      15,
+      6,
+      21
+     ],
+     [
+      18,
+      7,
+      25
+     ],
+     [
+      21,
+      8,
+      25
+     ],
+     [
+      24,
+      9,
+      25
+     ],
+     [
+      27,
+      10,
+      25
+     ],
+     [
+      30,
+      11,
+      25
+     ],
+     [
+      33,
+      12,
+      25
+     ],
+     [
+      36,
+      13,
+      25
+     ],
+     [
+      39,
+      14,
+      25
+     ],
+     [
+      42,
+      15,
+      25
+     ],
+     [
+      45,
+      16,
+      25
+     ],
+     [
+      48,
+      17,
+      29
+     ],
+     [
+      51,
+      18,
+      29
+     ],
+     [
+      54,
+      19,
+      29
+     ],
+     [
+      57,
+      20,
+      29
+     ],
+     [
+      60,
+      21,
+      29
+     ],
+     [
+      63,
+      22,
+      29
+     ],
+     [
+      66,
+      23,
+      29
+     ],
+     [
+      69,
+      24,
+      29
+     ],
+     [
+      72,
+      25,
+      29
+     ],
+     [
+      75,
+      26,
+      29
+     ],
+     [
+      78,
+      27,
+      33
+     ],
+     [
+      81,
+      28,
+      33
+     ],
+     [
+      84,
+      29,
+      33
+     ],
+     [
+      87,
+      30,
+      33
+     ]
+    ],
+    "final_version": 30,
+    "final_participants": 32
+   }
+  },
+  "W_low_churn": {
+   "L_rule": 690.8375,
+   "delta_body": 1382,
+   "rules_per_delta": 2,
+   "events": {
+    "F_total": 4954715,
+    "full": [
+     [
+      0,
+      1,
+      20
+     ],
+     [
+      15,
+      6,
+      4
+     ],
+     [
+      45,
+      16,
+      4
+     ],
+     [
+      75,
+      26,
+      4
+     ]
+    ],
+    "deltas": [
+     [
+      3,
+      2,
+      21
+     ],
+     [
+      6,
+      3,
+      21
+     ],
+     [
+      9,
+      4,
+      21
+     ],
+     [
+      12,
+      5,
+      21
+     ],
+     [
+      15,
+      6,
+      21
+     ],
+     [
+      18,
+      7,
+      25
+     ],
+     [
+      21,
+      8,
+      25
+     ],
+     [
+      24,
+      9,
+      25
+     ],
+     [
+      27,
+      10,
+      25
+     ],
+     [
+      30,
+      11,
+      25
+     ],
+     [
+      33,
+      12,
+      25
+     ],
+     [
+      36,
+      13,
+      25
+     ],
+     [
+      39,
+      14,
+      25
+     ],
+     [
+      42,
+      15,
+      25
+     ],
+     [
+      45,
+      16,
+      25
+     ],
+     [
+      48,
+      17,
+      29
+     ],
+     [
+      51,
+      18,
+      29
+     ],
+     [
+      54,
+      19,
+      29
+     ],
+     [
+      57,
+      20,
+      29
+     ],
+     [
+      60,
+      21,
+      29
+     ],
+     [
+      63,
+      22,
+      29
+     ],
+     [
+      66,
+      23,
+      29
+     ],
+     [
+      69,
+      24,
+      29
+     ],
+     [
+      72,
+      25,
+      29
+     ],
+     [
+      75,
+      26,
+      29
+     ],
+     [
+      78,
+      27,
+      33
+     ],
+     [
+      81,
+      28,
+      33
+     ],
+     [
+      84,
+      29,
+      33
+     ],
+     [
+      87,
+      30,
+      33
+     ]
+    ],
+    "final_version": 30,
+    "final_participants": 32
+   }
+  }
+ },
+ "selection": {
+  "qwen7b": {
+   "n": 160,
+   "complete": true,
+   "completeness": "ok",
+   "pick_acc": 0.86875,
+   "sender_invalid": 0,
+   "verifier_format_ok": 1.0,
+   "coverage": 0.86875,
+   "wrong_pick_accepted": 0,
+   "wrong_pick_accepted_rate": 0.0,
+   "wrong_pick_accepted_cp95_upper": 0.018549134077503752,
+   "correct_pick_rejected": 0,
+   "wrong_pick_caught": 21,
+   "parse_paths": {
+    "letter": 160
+   }
+  },
+  "falcon7b": {
+   "n": 160,
+   "complete": true,
+   "completeness": "ok",
+   "pick_acc": 0.95625,
+   "sender_invalid": 0,
+   "verifier_format_ok": 0.99375,
+   "coverage": 0.94375,
+   "wrong_pick_accepted": 0,
+   "wrong_pick_accepted_rate": 0.0,
+   "wrong_pick_accepted_cp95_upper": 0.018549134077503752,
+   "correct_pick_rejected": 2,
+   "wrong_pick_caught": 7,
+   "parse_paths": {
+    "letter": 160
+   }
+  }
+ },
+ "directions": {
+  "qwen7b_to_falcon7b": {
+   "status": "COMPLETE",
+   "n_entries": 160,
+   "n_messages": 640,
+   "acc_hybrid": 0.9984375,
+   "acc_prose": 0.99375,
+   "diff": 0.0046875,
+   "ci": [
+    0,
+    0.0109375
+   ],
+   "label": "non-inferior",
+   "coverage": 0.86875,
+   "message_saving_payload_plus_case": 0.5122774708410067,
+   "payload_saving_per_message": 135.60625,
+   "wrong_pick_accepted": 0,
+   "wrong_pick_accepted_cp95_upper": 0.018549134077503752,
+   "byte_boundary": "sender->receiver channel only; candidate prep and verifier are sender-local",
+   "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true
+   },
+   "success": true,
+   "lifetime": {
+    "W_base": {
+     "F_d": 1903171.5,
+     "M_d": 90000,
+     "a": 0.89,
+     "S_point": 0.35587688251329486,
+     "S_lower": 0.33303160395509535,
+     "H": 144.10625,
+     "P": 279.7125
+    },
+    "W_copy": {
+     "F_d": 1185415.0,
+     "M_d": 90000,
+     "a": 0.89,
+     "S_point": 0.384388558688733,
+     "S_lower": 0.3615601132734234,
+     "H": 144.10625,
+     "P": 279.7125
+    },
+    "W_low": {
+     "F_d": 1903171.5,
+     "M_d": 22500,
+     "a": 0.89,
+     "S_point": 0.12907597086293954,
+     "S_lower": 0.10613327962313346,
+     "H": 144.10625,
+     "P": 279.7125
+    },
+    "W_churn": {
+     "F_d": 2477357.5,
+     "M_d": 90000,
+     "a": 0.88,
+     "S_point": 0.3282202459867025,
+     "S_lower": 0.3056388382431715,
+     "H": 144.10625,
+     "P": 279.7125
+    },
+    "W_low_churn": {
+     "F_d": 2477357.5,
+     "M_d": 22500,
+     "a": 0.88,
+     "S_point": 0.03299359957893255,
+     "S_lower": 0.010275834820401286,
+     "H": 144.10625,
+     "P": 279.7125
+    }
+   },
+   "lifetime_gzip9_secondary": {
+    "W_base": {
+     "F_d": 1903171.5,
+     "M_d": 90000,
+     "a": 0.89,
+     "S_point": 0.12739520278823535,
+     "S_lower": 0.11476957678714117,
+     "H": 139.11562500000002,
+     "P": 190.084375
+    },
+    "W_copy": {
+     "F_d": 1185415.0,
+     "M_d": 90000,
+     "a": 0.89,
+     "S_point": 0.16935063559128516,
+     "S_lower": 0.15676799590441193,
+     "H": 139.11562500000002,
+     "P": 190.084375
+    },
+    "W_low": {
+     "F_d": 1903171.5,
+     "M_d": 22500,
+     "a": 0.89,
+     "S_point": -0.20634632646686502,
+     "S_lower": -0.21929527432622709,
+     "H": 139.11562500000002,
+     "P": 190.084375
+    },
+    "W_churn": {
+     "F_d": 2477357.5,
+     "M_d": 90000,
+     "a": 0.88,
+     "S_point": 0.09115060380715434,
+     "S_lower": 0.07865893283775327,
+     "H": 139.11562500000002,
+     "P": 190.084375
+    },
+    "W_low_churn": {
+     "F_d": 2477357.5,
+     "M_d": 22500,
+     "a": 0.88,
+     "S_point": -0.34328059724939397,
+     "S_lower": -0.35615526282390175,
+     "H": 139.11562500000002,
+     "P": 190.084375
+    }
+   },
+   "e1c_secondary_reported_only": {
+    "payload_saving": 0.7766959011992125,
+    "breakeven_messages": 815.1099230308338,
+    "dict_bytes": 110534,
+    "checks": {
+     "noninferior": true,
+     "coverage": true,
+     "bytes": true,
+     "breakeven": true
+    },
+    "success": true
+   },
+   "min_traffic_W_base_shape": 66600,
+   "per_pair": {
+    "baker/porter": {
+     "entries": 26,
+     "picks": 26,
+     "messages_per_arm": 104,
+     "coverage": 0.8076923076923077,
+     "acc_hybrid": 0.9903846153846154,
+     "acc_prose": 0.9807692307692307,
+     "correct_hybrid": 103,
+     "correct_prose": 102,
+     "wrong_accepted": 0,
+     "wrong_accepted_cp95_upper": 0.10883035576078476,
+     "bytes_hybrid": 162.52884615384616,
+     "bytes_prose": 305.25961538461536
+    },
+    "potter/bearer": {
+     "entries": 30,
+     "picks": 30,
+     "messages_per_arm": 120,
+     "coverage": 0.9333333333333333,
+     "acc_hybrid": 1,
+     "acc_prose": 0.9916666666666667,
+     "correct_hybrid": 120,
+     "correct_prose": 119,
+     "wrong_accepted": 0,
+     "wrong_accepted_cp95_upper": 0.09503385285530415,
+     "bytes_hybrid": 141.325,
+     "bytes_prose": 305.59166666666664
+    },
+    "tanner/loader": {
+     "entries": 24,
+     "picks": 24,
+     "messages_per_arm": 96,
+     "coverage": 0.875,
+     "acc_hybrid": 1,
+     "acc_prose": 0.9895833333333334,
+     "correct_hybrid": 96,
+     "correct_prose": 95,
+     "wrong_accepted": 0,
+     "wrong_accepted_cp95_upper": 0.11734615615494877,
+     "bytes_hybrid": 151.38541666666666,
+     "bytes_prose": 306.5520833333333
+    },
+    "F2_new_pooled": {
+     "entries": 80,
+     "picks": 80,
+     "messages_per_arm": 320,
+     "coverage": 0.875,
+     "acc_hybrid": 0.996875,
+     "acc_prose": 0.9875,
+     "correct_hybrid": 319,
+     "correct_prose": 316,
+     "wrong_accepted": 0,
+     "wrong_accepted_cp95_upper": 0.03675419777998229,
+     "bytes_hybrid": 151.234375,
+     "bytes_prose": 305.771875
+    },
+    "F1": {
+     "entries": 80,
+     "picks": 80,
+     "messages_per_arm": 320,
+     "coverage": 0.8625,
+     "acc_hybrid": 1,
+     "acc_prose": 1,
+     "correct_hybrid": 320,
+     "correct_prose": 320,
+     "wrong_accepted": 0,
+     "wrong_accepted_cp95_upper": 0.03675419777998229,
+     "bytes_hybrid": 136.978125,
+     "bytes_prose": 253.653125
+    },
+    "F2_old_pairs": "n/a",
+    "note": "reported, not gated; small denominators (imprecise)"
+   },
+   "speed": {
+    "prose": {
+     "wire_bytes": 279.7125,
+     "prompt_tokens": 137.5953125,
+     "gen_tokens": 76.8734375,
+     "latency_s": 3.777755625
+    },
+    "hybrid": {
+     "wire_bytes": 144.10625,
+     "prompt_tokens": 132.4765625,
+     "gen_tokens": 77.721875,
+     "latency_s": 3.42750046875
+    },
+    "sender": {
+     "sender_latency_s": 0.490407595038414,
+     "sender_gen_tokens": 1.0,
+     "verifier_latency_s": 0.637075
+    }
+   }
+  },
+  "falcon7b_to_qwen7b": {
+   "status": "COMPLETE",
+   "n_entries": 160,
+   "n_messages": 640,
+   "acc_hybrid": 0.9984375,
+   "acc_prose": 0.9828125,
+   "diff": 0.015625,
+   "ci": [
+    0.00625,
+    0.0265625
+   ],
+   "label": "non-inferior",
+   "coverage": 0.94375,
+   "message_saving_payload_plus_case": 0.5600179439958446,
+   "payload_saving_per_message": 148.24375,
+   "wrong_pick_accepted": 0,
+   "wrong_pick_accepted_cp95_upper": 0.018549134077503752,
+   "byte_boundary": "sender->receiver channel only; candidate prep and verifier are sender-local",
+   "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true
+   },
+   "success": true,
+   "lifetime": {
+    "W_base": {
+     "F_d": 1903171.5,
+     "M_d": 90000,
+     "a": 0.89,
+     "S_point": 0.3960873664923805,
+     "S_lower": 0.38293652373231946,
+     "H": 131.46875,
+     "P": 279.7125
+    },
+    "W_copy": {
+     "F_d": 1185415.0,
+     "M_d": 90000,
+     "a": 0.89,
+     "S_point": 0.42459904266781856,
+     "S_lower": 0.41145177397801447,
+     "H": 131.46875,
+     "P": 279.7125
+    },
+    "W_low": {
+     "F_d": 1903171.5,
+     "M_d": 22500,
+     "a": 0.89,
+     "S_point": 0.1692864548420252,
+     "S_lower": 0.15611636558635256,
+     "H": 131.46875,
+     "P": 279.7125
+    },
+    "W_churn": {
+     "F_d": 2477357.5,
+     "M_d": 90000,
+     "a": 0.88,
+     "S_point": 0.367978926775012,
+     "S_lower": 0.35496827686279486,
+     "H": 131.46875,
+     "P": 279.7125
+    },
+    "W_low_churn": {
+     "F_d": 2477357.5,
+     "M_d": 22500,
+     "a": 0.88,
+     "S_point": 0.07275228036724202,
+     "S_lower": 0.05968170202827683,
+     "H": 131.46875,
+     "P": 279.7125
+    }
+   },
+   "lifetime_gzip9_secondary": {
+    "W_base": {
+     "F_d": 1903171.5,
+     "M_d": 90000,
+     "a": 0.89,
+     "S_point": 0.1488964275732816,
+     "S_lower": 0.14124470338110118,
+     "H": 134.5234375,
+     "P": 190.084375
+    },
+    "W_copy": {
+     "F_d": 1185415.0,
+     "M_d": 90000,
+     "a": 0.89,
+     "S_point": 0.1908518603763314,
+     "S_lower": 0.1832429660558771,
+     "H": 134.5234375,
+     "P": 190.084375
+    },
+    "W_low": {
+     "F_d": 1903171.5,
+     "M_d": 22500,
+     "a": 0.89,
+     "S_point": -0.1848451016818189,
+     "S_lower": -0.19289268409059135,
+     "H": 134.5234375,
+     "P": 190.084375
+    },
+    "W_churn": {
+     "F_d": 2477357.5,
+     "M_d": 90000,
+     "a": 0.88,
+     "S_point": 0.11241024179686299,
+     "S_lower": 0.10481523907893797,
+     "H": 134.5234375,
+     "P": 190.084375
+    },
+    "W_low_churn": {
+     "F_d": 2477357.5,
+     "M_d": 22500,
+     "a": 0.88,
+     "S_point": -0.32202095925968544,
+     "S_lower": -0.3301235969123162,
+     "H": 134.5234375,
+     "P": 190.084375
+    }
+   },
+   "e1c_secondary_reported_only": {
+    "payload_saving": 0.8490782172901379,
+    "breakeven_messages": 745.623339938446,
+    "dict_bytes": 110534,
+    "checks": {
+     "noninferior": true,
+     "coverage": true,
+     "bytes": true,
+     "breakeven": true
+    },
+    "success": true
+   },
+   "min_traffic_W_base_shape": 54000,
+   "per_pair": {
+    "baker/porter": {
+     "entries": 26,
+     "picks": 26,
+     "messages_per_arm": 104,
+     "coverage": 1.0,
+     "acc_hybrid": 1,
+     "acc_prose": 0.9807692307692307,
+     "correct_hybrid": 104,
+     "correct_prose": 102,
+     "wrong_accepted": 0,
+     "wrong_accepted_cp95_upper": 0.10883035576078476,
+     "bytes_hybrid": 128.7596153846154,
+     "bytes_prose": 305.25961538461536
+    },
+    "potter/bearer": {
+     "entries": 30,
+     "picks": 30,
+     "messages_per_arm": 120,
+     "coverage": 1.0,
+     "acc_hybrid": 1,
+     "acc_prose": 0.9916666666666667,
+     "correct_hybrid": 120,
+     "correct_prose": 119,
+     "wrong_accepted": 0,
+     "wrong_accepted_cp95_upper": 0.09503385285530415,
+     "bytes_hybrid": 129.725,
+     "bytes_prose": 305.59166666666664
+    },
+    "tanner/loader": {
+     "entries": 24,
+     "picks": 24,
+     "messages_per_arm": 96,
+     "coverage": 1.0,
+     "acc_hybrid": 1,
+     "acc_prose": 0.9270833333333334,
+     "correct_hybrid": 96,
+     "correct_prose": 89,
+     "wrong_accepted": 0,
+     "wrong_accepted_cp95_upper": 0.11734615615494877,
+     "bytes_hybrid": 129.63541666666666,
+     "bytes_prose": 306.5520833333333
+    },
+    "F2_new_pooled": {
+     "entries": 80,
+     "picks": 80,
+     "messages_per_arm": 320,
+     "coverage": 1.0,
+     "acc_hybrid": 1,
+     "acc_prose": 0.96875,
+     "correct_hybrid": 320,
+     "correct_prose": 310,
+     "wrong_accepted": 0,
+     "wrong_accepted_cp95_upper": 0.03675419777998229,
+     "bytes_hybrid": 129.384375,
+     "bytes_prose": 305.771875
+    },
+    "F1": {
+     "entries": 80,
+     "picks": 80,
+     "messages_per_arm": 320,
+     "coverage": 0.8875,
+     "acc_hybrid": 0.996875,
+     "acc_prose": 0.996875,
+     "correct_hybrid": 319,
+     "correct_prose": 319,
+     "wrong_accepted": 0,
+     "wrong_accepted_cp95_upper": 0.03675419777998229,
+     "bytes_hybrid": 133.553125,
+     "bytes_prose": 253.653125
+    },
+    "F2_old_pairs": "n/a",
+    "note": "reported, not gated; small denominators (imprecise)"
+   },
+   "speed": {
+    "prose": {
+     "wire_bytes": 279.7125,
+     "prompt_tokens": 126.415625,
+     "gen_tokens": 53.7953125,
+     "latency_s": 2.2773384375
+    },
+    "hybrid": {
+     "wire_bytes": 131.46875,
+     "prompt_tokens": 122.528125,
+     "gen_tokens": 54.0234375,
+     "latency_s": 2.1860162499999998
+    },
+    "sender": {
+     "sender_latency_s": 0.7043642774224281,
+     "sender_gen_tokens": 3.98125,
+     "verifier_latency_s": 0.67002
+    }
+   }
+  }
+ },
+ "verdict": "SUCCESS",
+ "attempt": 1
+}

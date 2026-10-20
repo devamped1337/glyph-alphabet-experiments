@@ -1,0 +1,60 @@
+{
+ "note": "REPORTING ONLY (GPT test-code r1 non-blocking note 1): gzip-9 per-message arms with sync traffic F_d scaled by the measured v1 artifact gzip-9 ratio; frozen lifetime_boot, seed and index. Not a gate.",
+ "gzip_ratio": 0.09024771579109091,
+ "directions": {
+  "qwen7b_to_falcon7b": {
+   "W_base": {
+    "F_d_gz": 171756.88063370416,
+    "S_point": 0.2286025756466361,
+    "S_lower": 0.2160755120759904
+   },
+   "W_copy": {
+    "F_d_gz": 106980.99601449604,
+    "S_point": 0.23238895762213796,
+    "S_lower": 0.21986544553697207
+   },
+   "W_low": {
+    "F_d_gz": 171756.88063370416,
+    "S_point": 0.19848316496673768,
+    "S_lower": 0.18592704999064158
+   },
+   "W_churn": {
+    "F_d_gz": 223575.85557292748,
+    "S_point": 0.2228921963047592,
+    "S_lower": 0.21050293935543185
+   },
+   "W_low_churn": {
+    "F_d_gz": 223575.85557292748,
+    "S_point": 0.1836857727410257,
+    "S_lower": 0.1712597416244589
+   }
+  },
+  "falcon7b_to_qwen7b": {
+   "W_base": {
+    "F_d_gz": 171756.88063370416,
+    "S_point": 0.25010380043168234,
+    "S_lower": 0.24253517529286472
+   },
+   "W_copy": {
+    "F_d_gz": 106980.99601449604,
+    "S_point": 0.2538901824071842,
+    "S_lower": 0.24632457859401302
+   },
+   "W_low": {
+    "F_d_gz": 171756.88063370416,
+    "S_point": 0.21998438975178392,
+    "S_lower": 0.21239954395130622
+   },
+   "W_churn": {
+    "F_d_gz": 223575.85557292748,
+    "S_point": 0.24415183429446785,
+    "S_lower": 0.23666711010526842
+   },
+   "W_low_churn": {
+    "F_d_gz": 223575.85557292748,
+    "S_point": 0.20494541073073425,
+    "S_lower": 0.19743875937226918
+   }
+  }
+ }
+}

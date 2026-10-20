@@ -1,0 +1,24 @@
+{
+ "attempts": [
+  {
+   "n": 1,
+   "kind": "first",
+   "token": "c2822da560d4412ebe05434649cc7995",
+   "started_wall": 1792488216.7896426,
+   "started_mono": 195.754582278,
+   "budget_s": 14400.0,
+   "deadline_mono": 14595.754582278,
+   "prior_used_s": 0.0,
+   "code_hash": "98a61092a4c8b6f8e450f910659ed3c81a73ae16a3776c22af0db38804b0d550",
+   "protocol_hash": "11d7af03575d5434c4c3a5e6f815db87a45bc3ad0abfbdca3ee198a06e8777a2",
+   "outcome": "done",
+   "rc": 0,
+   "ended_wall": 1792496636.5819259,
+   "ended_mono": 8615.521449161,
+   "elapsed_s": 8419.766866883001,
+   "finalise_s": 0.025444622999202693
+  }
+ ],
+ "retry": null,
+ "cap_h": 4.0
+}
