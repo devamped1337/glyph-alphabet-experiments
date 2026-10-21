@@ -181,7 +181,7 @@ class ReceiverState(RejectMixin, unittest.TestCase):
         self.assertEqual(r.state.fingerprint(), before)
         t = link.totals()
         self.assertGreater(t["reject"], 0); self.assertGreater(t["fallback"], 0)
-        self.assertEqual(t["all"], t["ref"] + t["reject"] + t["fallback"])
+        self.assertEqual(t["all"], t["ref"] + t["reject"] + t["fallback"] + t["declare"])
 
     def test_receiver_copy_diverged_from_declaration(self):
         # Receiver lies/mis-declares v2 while holding a fork: decoder must reject, fallback delivers.
@@ -283,7 +283,7 @@ class ReviewR1Regressions(RejectMixin, unittest.TestCase):
         link = Link(self.pub.history, r); link.transmit(b"ACK")
         with self.assertRaises(AttributeError):
             link.frames.append(("fwd", "ref", 1))
-        self.assertEqual(len(link.frames), 1)
+        self.assertEqual(len(link.frames), 2)  # declare + raw
 
     def test_constructor_rejects_malformed_metadata(self):
         good = make_entry("a", 1, "a")

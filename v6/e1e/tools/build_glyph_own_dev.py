@@ -38,7 +38,6 @@ SANITISE = [
     (r"\b(sk-|ghp_|gho_|github_pat_|xox[abp]-|AKIA|AIza|hf_)[A-Za-z0-9_\-]{8,}", "<SECRET>"),
     (r"(?i)\b(authorization\s*:\s*)(bearer|basic|token)\s+\S+", r"\1<SECRET>"),
     (r"(?i)\bbearer\s+[A-Za-z0-9._~+/=\-]{8,}", "Bearer <SECRET>"),
-    (r"(?i)(\b(?:api[_-]?key|access[_-]?token|auth[_-]?token|refresh[_-]?token|client[_-]?secret|token|secret|password|passwd|pwd)[\"']?\s*[=:]\s*)[\"']?(?!<SECRET>)[^\s\"',;&}]{4,}[\"']?", r"\1<SECRET>"),
     (r"\beyJ[A-Za-z0-9_\-]{10,}\.[A-Za-z0-9_\-.]+", "<SECRET>"),
     (r"[\w.+-]+@[\w-]+(\.[\w-]+)+", "<EMAIL>"),
     (r"\b(https?|ssh|git)://[^\s)\]>\"'`]+", "<URL>"),
@@ -52,21 +51,94 @@ SANITISE = [
     (r"\bglyph-alphabet-experiments\b", "<REPO>"),
     (r"(?i)\bstefan( markovich)?\b", "<OPERATOR>"),
     (r"(?i)\bmarkovich\b", "<OPERATOR>"),
-    (r"(?i)\bdevamped1337\b", "<ORG>"),
+    (r"(?i)\bdevamped\w*", "<HANDLE>"),
+    (r"\bGlyph\b", "<AGENT_SELF>"),
+    # generic handle detectors
+    (r"(?<![\w@])@(?!(?:property|staticmethod|classmethod|dataclass|functools|abstractmethod)\b)[A-Za-z0-9_][A-Za-z0-9_.-]{1,}", "<HANDLE>"),
+    (r"(?<![\w/])u/[A-Za-z0-9_-]{2,}", "<HANDLE>"),
+    (r"\b(?=[A-Za-z0-9_.-]*[-_0-9])[A-Za-z][A-Za-z0-9_.-]*(?= (?:on|from|at) (?:1f916|[Mm]oltbook|[Oo]rbiobook)\b)", "<HANDLE>"),
 ]
+
+# Credential-context keys: any identifier ending in one of these (case-insensitive), optionally quoted
+# (also backslash-escaped quotes), followed by '=' or ':'.
+CRED_KEY = (r"(?i)(?<![A-Za-z0-9])(\\?[\"']?)([A-Za-z0-9_.-]*?(?:token|secret|password|passwd|passphrase|pwd|api[_-]?key"
+            r"|apikey|private[_-]?key|credentials?|cookie|session[_-]?key))(\\?[\"']?)(\s*[=:]\s*)")
+VALUE_RE = re.compile(r'\\"(?:[^"\\]|\\(?!")|\\\\)*?\\"'      # \"..\" inside escaped JSON
+                      r'|"(?:[^"\\]|\\.)*"'                     # "..." with escapes
+                      r"|'(?:[^'\\]|\\.)*'"                     # '...'
+                      r"|[^\s,;&}\])\"']+")                      # unquoted
+
+
+def redact_credentials(t):
+    out, pos = [], 0
+    for m in re.finditer(CRED_KEY, t):
+        if m.start() < pos:
+            continue
+        v = VALUE_RE.match(t, m.end())
+        out.append(t[pos:m.end()])
+        if v is None:
+            pos = m.end(); continue
+        val = v.group(0)
+        q = '\\"' if val.startswith('\\"') else val[0] if val[0] in "\"'" else ""
+        out.append(q + "<SECRET>" + q)
+        pos = v.end()
+    out.append(t[pos:])
+    return "".join(out)
+
+
+def known_handles():
+    """Forum handles/agent names from the box's forum JSON (author fields and 'X on <forum>' mentions)."""
+    names = set()
+    srcs = json.load(open(os.path.join(HERE, "glyph_own_dev_inputs.json")))["handle_sources"]
+    for f in [x["path"] for x in srcs if os.path.exists(x["path"])]:  # box-local; absent elsewhere
+        try:
+            raw = open(f, encoding="utf-8").read(); obj = json.loads(raw)
+        except Exception:
+            continue
+        stack = [obj]
+        while stack:
+            o = stack.pop()
+            if isinstance(o, dict):
+                for k, v in o.items():
+                    if k in ("author", "author_name", "username", "handle", "user", "agent_name") and isinstance(v, str):
+                        names.add(v)
+                    if k in ("author", "user", "agent") and isinstance(v, dict):
+                        for kk in ("name", "handle", "username", "display_name"):
+                            if isinstance(v.get(kk), str):
+                                names.add(v[kk])
+                    stack.append(v)
+            elif isinstance(o, list):
+                stack.extend(o)
+        names.update(re.findall(r"([A-Za-z0-9_.-]+) on (?:1f916|[Mm]oltbook|[Oo]rbiobook)", raw))
+    stop = {"posted", "reply", "comment", "thread", "post", "me", "us", "here", "this", "it"}
+    return sorted({n for n in names if len(n) >= 3 and n.lower() not in stop}, key=lambda n: (-len(n), n))
+
+
+HANDLES = known_handles()
 
 
 # Enforced post-sanitisation scan: any hit aborts the build before anything is written.
 FORBIDDEN = [
-    r"[\w.+-]+@[\w-]+\.[\w.-]+", r"(?i)\b(https?|ssh|git)://", r"(?i)stefan|markovich|devamped",
-    r"(?<![\w.])/(home|workspace|tmp|Users|root)/", r"\b(sk-|ghp_|gho_|github_pat_|xox[abp]-|AKIA|AIza|hf_)\w{6,}",
-    r"\beyJ[\w-]{10,}", r"-----BEGIN", r"(?i)\bbearer\s+(?!<SECRET>)\S{8,}",
-    r"\b[0-9a-fA-F]{32,}\b",
-    r"(?i)\b(?:api[_-]?key|access[_-]?token|auth[_-]?token|refresh[_-]?token|client[_-]?secret|token|secret|password|passwd|pwd)[\"']?\s*[=:]\s*[\"']?(?!<SECRET>)[^\s\"',;&}]{4,}", r"[A-Za-z0-9+/]{40,}={0,2}", r"(?i)session id",
+    r"[\w.+-]+@[\w-]+\.[\w.-]+", r"(?i)\b(https?|ssh|git|ftp)://", r"(?i)\bwww\.", r"(?i)stefan|markovich|devamped",
+    r"(?<![\w.])/(home|workspace|tmp|Users|root|cursor|private|Volumes)/", r"(?i)\b[A-Z]:\\\\Users",
+    r"\b(sk-|ghp_|gho_|github_pat_|xox[abp]-|AKIA|AIza|hf_|glpat-)\w{6,}",
+    r"\beyJ[\w-]{10,}", r"-----BEGIN", r"(?i)\b(bearer|basic)\s+(?!<SECRET>)[A-Za-z0-9._~+/=-]{6,}",
+    r"\b[0-9a-fA-F]{32,}\b", r"\b[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-", r"[A-Za-z0-9+/]{40,}={0,2}", r"(?i)session id",
+    r"\bGlyph\b", r"(?<![\w@])@(?!(?:property|staticmethod|classmethod|dataclass|functools|abstractmethod)\b)[A-Za-z0-9_][A-Za-z0-9_.-]+",
+    r"(?<![\w/])u/[A-Za-z0-9_-]{2,}",
 ]
 
 
 def scan(t):
+    """Independent rejection scan; raises SystemExit on any hit."""
+    for m in re.finditer(CRED_KEY, t):
+        v = VALUE_RE.match(t, m.end())
+        if v is not None and v.group(0).strip('\\"\'') != "<SECRET>":
+            raise SystemExit(f"post-sanitisation scan failed: credential value after {m.group(2)!r}")
+    low = t.lower()
+    for h in HANDLES:
+        if re.search(r"(?<![a-z0-9_])" + re.escape(h.lower()) + r"(?![a-z0-9_])", low):
+            raise SystemExit("post-sanitisation scan failed: known handle survived")
     for p in FORBIDDEN:
         m = re.search(p, t)
         if m:
@@ -74,6 +146,9 @@ def scan(t):
 
 
 def sanitise(t):
+    t = redact_credentials(t)
+    for h in HANDLES:
+        t = re.sub(r"(?i)(?<![A-Za-z0-9_])" + re.escape(h) + r"(?![A-Za-z0-9_])", "<HANDLE>", t)
     for pat, rep in SANITISE:
         t = re.sub(pat, rep, t, flags=re.S)
     return t
@@ -115,7 +190,28 @@ def git_time(path):
     return out[-1] if out else "9999"
 
 
+MANIFEST = os.path.join(HERE, "glyph_own_dev_inputs.json")
+
+
+def _sha(path):
+    import hashlib
+    return hashlib.sha256(open(path, "rb").read()).hexdigest()
+
+
+def load_manifest():
+    man = json.load(open(MANIFEST, encoding="utf-8"))
+    for group in ("transcripts", "forum_bodies", "review_files", "handle_sources"):
+        for item in man[group]:
+            full = item["path"] if item["path"].startswith("/") else os.path.join(REPO, item["path"])
+            if not os.path.exists(full) or _sha(full) != item["sha256"]:
+                raise SystemExit(f"pinned input missing or changed: {item['path']}")
+    return man
+
+
 def main():
+    man = load_manifest()
+    TRANSCRIPTS[:] = [(t["path"], t["label"]) for t in man["transcripts"]]
+    FORUM[:] = [f["path"] for f in man["forum_bodies"]]
     convs, seen_sid = [], set()
     for path, label in TRANSCRIPTS:
         if not os.path.exists(path):
@@ -130,8 +226,7 @@ def main():
     for p in FORUM:
         convs.append((os.path.getmtime(p), "forum_request_body", "forum_" + os.path.basename(p)[:-3],
                       [("orchestrator", "forum_agents", "broadcast_request", open(p, encoding="utf-8").read())]))
-    reviews = sorted(glob.glob(os.path.join(REPO, "v6", "*", "reviews", "*.md")),
-                     key=lambda p: (git_time(p), p))
+    reviews = [os.path.join(REPO, r["path"]) for r in man["review_files"]]  # pinned order
     for i, p in enumerate(reviews):
         rel = os.path.relpath(p, REPO)
         body = open(p, encoding="utf-8").read()

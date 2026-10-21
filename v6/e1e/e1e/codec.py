@@ -20,6 +20,12 @@ def raw_wire(msg):
     return canonical(obj)
 
 
+def declare_wire(decl):
+    """Canonical receiver snapshot declaration frame (E1E-MSG/1 type 'declare')."""
+    d = decl if isinstance(decl, dict) else {}
+    return canonical({"format": MSG_FORMAT, "type": "declare", "version": d.get("version"), "digest": d.get("digest")})
+
+
 def reject_wire(code, wire):
     return canonical({"format": MSG_FORMAT, "type": "reject", "code": code, "msg": sha256_hex(wire)})
 
@@ -129,6 +135,7 @@ class Link:
     def __init__(self, known, receiver):
         self._known, self._receiver = known, receiver
         self._frames = []  # (direction, kind, nbytes)
+        self._last_decl = None
 
     known = property(lambda self: self._known)
     receiver = property(lambda self: self._receiver)
@@ -139,7 +146,12 @@ class Link:
         return tuple(self._frames)
 
     def transmit(self, msg, declaration=None):
+        if len(msg) > MAX_MESSAGE_BYTES:
+            raise E1EError("E_TOO_LARGE", "message exceeds MAX_MESSAGE_BYTES; nothing is sent")
         decl = self._receiver.declare() if declaration is None else declaration
+        if decl != self._last_decl:  # receiver -> sender declaration frame, charged when it changes
+            self._frames.append(("back", "declare", len(declare_wire(decl))))
+            self._last_decl = dict(decl) if isinstance(decl, dict) else decl
         wire, info = encode(self._known, decl, msg)
         kind = "ref" if info["reason"] == "ref" else "raw"
         self._frames.append(("fwd", kind, len(wire)))

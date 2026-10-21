@@ -61,9 +61,9 @@ Each baseline reports the actual serialized bytes of every message; every result
   and rules apply to zstd dictionaries (baseline 4) and to repository artifacts (baselines 5–6).
 - Storage per participant: full snapshot bytes; dictionary bytes.
 - Control traffic: every receiver snapshot declaration (canonical bytes of its declaration message), any snapshot
-  epoch/index negotiation if a compact wire form is adopted (§8), reject frames, and fallback retransmissions. The
-  current `Link.totals()` counts message, reject and fallback frames only; the measurement code must add declaration
-  frames (one per receiver per snapshot change, plus one per conversation start) before it is used.
+  epoch/index negotiation if a compact wire form is adopted (§8), reject frames, and fallback retransmissions. `Link.totals()`
+  now counts declaration frames (`declare`, whenever the declaration used on a link changes); the replay must also
+  open a new link (hence a new declaration) at each conversation start.
 - Messages: forward bytes in both directions.
 - CPU time: indexing, encoding, decoding, replay; hardware recorded. Zero new model inference in the audit.
 - Report coverage, fallback causes and exact-reconstruction failures; total traffic; break-even on the observed

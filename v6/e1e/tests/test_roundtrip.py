@@ -69,3 +69,21 @@ class RoundTrip(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class DeclarationAccounting(unittest.TestCase):
+    def test_declarations_counted_once_per_change(self):
+        from e1e.codec import declare_wire
+        pub, deltas, fulls = build()
+        r = recv_at(fulls, 1)
+        link = Link(pub.history, r)
+        link.transmit(b"ACK"); link.transmit(b"ACK again")
+        decls = [f for f in link.frames if f[1] == "declare"]
+        self.assertEqual(len(decls), 1)
+        self.assertEqual(decls[0], ("back", "declare", len(declare_wire(r.declare()))))
+        r.apply_delta(deltas[2])
+        link.transmit(b"ACK")
+        self.assertEqual(sum(f[1] == "declare" for f in link.frames), 2)
+        t = link.totals()
+        self.assertEqual(t["all"], sum(n for _, _, n in link.frames))
+        self.assertEqual(t["declare"], 2 * len(declare_wire(r.declare())))

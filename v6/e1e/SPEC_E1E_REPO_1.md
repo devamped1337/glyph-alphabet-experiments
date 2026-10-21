@@ -80,6 +80,8 @@ immutable: entries are held privately and only deep copies are exposed, so a pub
 ## 8. Messages (E1E-MSG/1) and fallback
 - ref: `{"format":"E1E-MSG/1","type":"ref","snap":state_digest,"id","v","entry":entry_digest,"args":{name: value}}`
 - raw (fallback envelope): `{"format","type":"raw","text":str}` for UTF-8 messages, else `{"format","type":"raw","b64":str}` (canonical base64).
+- declare (receiver → sender): `{"format","type":"declare","version","digest"}`; charged in link accounting each time
+  the declaration used on a link changes (first use included).
 - reject (receiver → sender): `{"format","type":"reject","code":E_*,"msg":sha256 of rejected wire}`.
 - Receiver decoding: `snap` must equal the receiver's current digest (`E_STALE`); the entry must exist with the same
   `v` and digest (`E_UNKNOWN_REF`; `v` must be a JSON integer, not a boolean, else `E_SCHEMA`); args must have exactly the declared names and valid types (`E_PARAM`).
