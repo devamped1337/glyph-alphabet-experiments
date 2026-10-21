@@ -284,3 +284,13 @@ class ReviewR1Regressions(RejectMixin, unittest.TestCase):
         with self.assertRaises(AttributeError):
             link.frames.append(("fwd", "ref", 1))
         self.assertEqual(len(link.frames), 1)
+
+    def test_constructor_rejects_malformed_metadata(self):
+        good = make_entry("a", 1, "a")
+        for kw in ({"version": []}, {"version": True}, {"version": -1}, {"version": 1.0},
+                   {"seen": {("a", 1): []}}, {"seen": {("a", True): "sha256:00"}}, {"seen": {"a": "x"}},
+                   {"entries": {"b": good}}, {"entries": {"a": dict(good, body="x")}}):
+            with self.assertRaises(E1EError, msg=kw):
+                RepoState(**kw)
+        with self.assertRaises(E1EError):
+            Receiver(state={"version": 1})

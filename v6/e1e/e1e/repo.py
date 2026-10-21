@@ -23,6 +23,18 @@ class RepoState:
     """Immutable snapshot plus the (id, v) -> entry-digest history this holder has seen."""
 
     def __init__(self, version=0, entries=None, seen=None):
+        if type(version) is not int or not 0 <= version <= 2**31:
+            raise E1EError("E_SCHEMA", "RepoState version must be an int in 0..2^31")
+        entries = dict(entries or {})
+        for k, e in entries.items():
+            validate_entry(e)
+            if k != e["id"]:
+                raise E1EError("E_SCHEMA", "entries must be keyed by their id")
+        seen = dict(seen or {})
+        for key, d in seen.items():
+            if (not isinstance(key, tuple) or len(key) != 2 or not isinstance(key[0], str)
+                    or type(key[1]) is not int or not isinstance(d, str)):
+                raise E1EError("E_SCHEMA", "seen must map (str id, int v) -> str digest")
         set_ = object.__setattr__
         set_(self, "_version", version)
         set_(self, "_e", copy.deepcopy(dict(entries or {})))  # private; never shared with callers
@@ -192,6 +204,8 @@ class Holder:
     """Something that holds one current RepoState and swaps it only after full validation."""
 
     def __init__(self, state=None):
+        if state is not None and not isinstance(state, RepoState):
+            raise E1EError("E_SCHEMA", "holder state must be a RepoState")
         self._state = state or RepoState()
 
     @property
