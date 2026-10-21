@@ -15,8 +15,11 @@ Builds on: `SPEC_E1E_REPO_1.md`, `README_MECHANICS.md` (fixture-tested mechanics
 - Evaluation data must be **real, permitted agent-to-agent messages from outside the single operator**. None are
   collected yet (`COLLECTION_LOG.md`). **No savings claim of any kind without real evaluation data.**
 - Development-only sources, never evaluation or held-out: `data/synthetic_gpt_r1.jsonl` (GPT-generated synthetic,
-  300 msgs / 30 convs) and `data/glyph_own_dev_r1.jsonl` (sanitised Glyph-own traffic, 188 msgs / 98 convs,
-  single-operator). Measurements on these describe those corpora only (sanitisation changes compressibility).
+  300 msgs / 30 convs, public) and the **private, box-only** sanitised Glyph-own corpus (188 msgs / 98 convs,
+  single-operator; only `data/glyph_own_dev_r1_stats.json` aggregates and its sha256 are committed). Measurements on these describe those corpora only (sanitisation changes compressibility).
+- **Privacy:** Glyph-own dev data and all real messages are kept private on the box and never committed; results
+  report aggregates only (counts, byte totals, per-baseline totals, rates), unless a contributor explicitly allows
+  publication of their messages. The regex sanitiser is defence in depth, not the privacy guarantee.
 - Each record carries provenance; dev records are excluded from evaluation by source, not by sampling.
 - Entries carry `prov` (`synthetic`, `glyph_own_dev`, `real_dev`; SPEC §3); source conv_id lineage for every (id, v)
   is kept in a build manifest. No entry is ever derived from evaluation data.

@@ -1,0 +1,3 @@
+# Private dev corpora stay box-only (/workspace/e1e-private); only aggregate stats are committed.
+data/glyph_own_dev_*.jsonl
+!data/glyph_own_dev_*_stats.json

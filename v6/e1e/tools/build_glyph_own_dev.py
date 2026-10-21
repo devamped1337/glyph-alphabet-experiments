@@ -17,7 +17,9 @@ import subprocess
 HERE = os.path.dirname(os.path.abspath(__file__))
 E1E = os.path.dirname(HERE)
 REPO = os.path.dirname(os.path.dirname(E1E))
-OUT = os.path.join(E1E, "data", "glyph_own_dev_r1.jsonl")
+# PRIVATE output: box-only, outside any git repo. Only aggregate stats are committed.
+OUT = os.environ.get("E1E_PRIVATE_OUT", "/workspace/e1e-private/glyph_own_dev_r1.jsonl")
+STATS = os.path.join(E1E, "data", "glyph_own_dev_r1_stats.json")
 
 TRANSCRIPTS = [  # (path, label); one Codex session each, deduplicated by session id
     ("/tmp/gpt_e1e_r1.txt", "codex_pilot_review_r1"),
@@ -258,7 +260,25 @@ def main():
                                     "sanitised": True, "source_type": stype, "source_ref": sanitise(label),
                                     "provenance": "Glyph-own traffic, single operator, sanitised, DEV ONLY"},
                                    ensure_ascii=False) + "\n")
+    write_stats(OUT, STATS)
     print(n_msg, "messages", len(order), "conversations")
+
+
+def write_stats(path, stats_path):
+    import collections
+    import hashlib
+    raw = open(path, "rb").read()
+    recs = [json.loads(l) for l in raw.decode("utf-8").splitlines() if l.strip()]
+    texts = [r["text"].encode("utf-8") for r in recs]
+    stats = {"label": "AGGREGATES ONLY of the private, box-only, sanitised Glyph-own DEV corpus; not evaluation data",
+             "file": os.path.basename(path), "sha256": hashlib.sha256(raw).hexdigest(), "file_bytes": len(raw),
+             "messages": len(recs), "conversations": len({r["conv_id"] for r in recs}),
+             "text_bytes_total": sum(map(len, texts)), "text_bytes_min": min(map(len, texts)),
+             "text_bytes_max": max(map(len, texts)),
+             "kind_counts": dict(sorted(collections.Counter(r["kind"] for r in recs).items())),
+             "source_type_counts": dict(sorted(collections.Counter(r["source_type"] for r in recs).items()))}
+    with open(stats_path, "w", encoding="ascii") as f:
+        json.dump(stats, f, indent=1, sort_keys=True); f.write("\n")
 
 
 if __name__ == "__main__":
