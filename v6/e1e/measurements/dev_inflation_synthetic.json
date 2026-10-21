@@ -1,0 +1,41 @@
+{
+ "all_round_trips_exact": true,
+ "bytes_full_64hex": {
+  "raw_envelope_total_if_all_raw": 47194,
+  "raw_message_total": 32225,
+  "ref_messages_raw_total": 1415,
+  "ref_messages_wire_total": 5134,
+  "wire_total": 50058
+ },
+ "conversations": 30,
+ "data": "data/synthetic_gpt_r1.jsonl",
+ "dictionary": {
+  "entries": 8,
+  "full_snapshot_bytes": 2407,
+  "literal": 5,
+  "template": 3
+ },
+ "encoded_as_ref": 19,
+ "full_64hex": {
+  "ref_wire_gt_raw_envelope_bytes": 19,
+  "ref_wire_gt_raw_message_bytes": 19
+ },
+ "hypothetical_0hex_framing_only": {
+  "note": "HYPOTHETICAL: digests removed entirely; isolates JSON framing/key overhead",
+  "ref_wire_gt_raw_envelope_bytes": 13,
+  "ref_wire_gt_raw_message_bytes": 19
+ },
+ "hypothetical_12hex": {
+  "note": "HYPOTHETICAL: arithmetic only, 2 digests x 52 chars removed; no such format exists",
+  "ref_wire_gt_raw_envelope_bytes": 19,
+  "ref_wire_gt_raw_message_bytes": 19
+ },
+ "hypothetical_8hex": {
+  "note": "HYPOTHETICAL: arithmetic only, 2 digests x 56 chars removed; no such format exists",
+  "ref_wire_gt_raw_envelope_bytes": 19,
+  "ref_wire_gt_raw_message_bytes": 19
+ },
+ "label": "DEVELOPMENT DIAGNOSTIC ONLY - synthetic GPT-generated data, in-sample dictionary, NOT a savings claim",
+ "messages": 300,
+ "sent_raw": 281
+}
