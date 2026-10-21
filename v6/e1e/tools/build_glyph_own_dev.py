@@ -37,10 +37,11 @@ SANITISE = [
     (r"-----BEGIN [A-Z ]+-----.*?-----END [A-Z ]+-----", "<SECRET>"),
     (r"\b(sk-|ghp_|gho_|github_pat_|xox[abp]-|AKIA|AIza|hf_)[A-Za-z0-9_\-]{8,}", "<SECRET>"),
     (r"(?i)\b(authorization\s*:\s*)(bearer|basic|token)\s+\S+", r"\1<SECRET>"),
-    (r"(?i)\bbearer\s+[A-Za-z0-9._~+/=\-]{8,}", "Bearer <SECRET>"),
+    (r"(?i)(?<![/\w])(bearer|basic)\s+(?!<SECRET>)[A-Za-z0-9._~+/=\-]+", r"\1 <SECRET>"),
     (r"\beyJ[A-Za-z0-9_\-]{10,}\.[A-Za-z0-9_\-.]+", "<SECRET>"),
-    (r"[\w.+-]+@[\w-]+(\.[\w-]+)+", "<EMAIL>"),
-    (r"\b(https?|ssh|git)://[^\s)\]>\"'`]+", "<URL>"),
+    (r"(?i)\b(?:https?|ssh|git|ftp|sftp|file|wss?)://[^\s)\]>\"'`]*", "<URL>"),
+    (r"(?:\"[^\"\n]*\"|[\w.+-]+)@[\w-]+(\.[\w-]+)+", "<EMAIL>"),
+    (r"(?<![\w])[A-Za-z]:\\[^\s\"'`]*", "<PATH>"),
     (r"\b[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\b", "<UUID>"),
     (r"\b[a-z]{1,3}_[0-9A-HJKMNP-TV-Z]{26}\b", "<ID>"),
     (r"\bsha256:[0-9a-f]{8,64}\b", "<HASH>"),
@@ -52,9 +53,9 @@ SANITISE = [
     (r"(?i)\bstefan( markovich)?\b", "<OPERATOR>"),
     (r"(?i)\bmarkovich\b", "<OPERATOR>"),
     (r"(?i)\bdevamped\w*", "<HANDLE>"),
-    (r"\bGlyph\b", "<AGENT_SELF>"),
+    (r"(?i)\bglyph\b", "<AGENT_SELF>"),
     # generic handle detectors
-    (r"(?<![\w@])@(?!(?:property|staticmethod|classmethod|dataclass|functools|abstractmethod)\b)[A-Za-z0-9_][A-Za-z0-9_.-]{1,}", "<HANDLE>"),
+    (r"(?<![\w@])@(?!(?:property|staticmethod|classmethod|dataclass|abstractmethod)(?![\w.]))[A-Za-z0-9_][A-Za-z0-9_.-]*", "<HANDLE>"),
     (r"(?<![\w/])u/[A-Za-z0-9_-]{2,}", "<HANDLE>"),
     (r"\b(?=[A-Za-z0-9_.-]*[-_0-9])[A-Za-z][A-Za-z0-9_.-]*(?= (?:on|from|at) (?:1f916|[Mm]oltbook|[Oo]rbiobook)\b)", "<HANDLE>"),
 ]
@@ -63,27 +64,10 @@ SANITISE = [
 # (also backslash-escaped quotes), followed by '=' or ':'.
 CRED_KEY = (r"(?i)(?<![A-Za-z0-9])(\\?[\"']?)([A-Za-z0-9_.-]*?(?:token|secret|password|passwd|passphrase|pwd|api[_-]?key"
             r"|apikey|private[_-]?key|credentials?|cookie|session[_-]?key))(\\?[\"']?)(\s*[=:]\s*)")
-VALUE_RE = re.compile(r'\\"(?:[^"\\]|\\(?!")|\\\\)*?\\"'      # \"..\" inside escaped JSON
-                      r'|"(?:[^"\\]|\\.)*"'                     # "..." with escapes
-                      r"|'(?:[^'\\]|\\.)*'"                     # '...'
-                      r"|[^\s,;&}\])\"']+")                      # unquoted
-
-
 def redact_credentials(t):
-    out, pos = [], 0
-    for m in re.finditer(CRED_KEY, t):
-        if m.start() < pos:
-            continue
-        v = VALUE_RE.match(t, m.end())
-        out.append(t[pos:m.end()])
-        if v is None:
-            pos = m.end(); continue
-        val = v.group(0)
-        q = '\\"' if val.startswith('\\"') else val[0] if val[0] in "\"'" else ""
-        out.append(q + "<SECRET>" + q)
-        pos = v.end()
-    out.append(t[pos:])
-    return "".join(out)
+    """Conservative: after a credential-context key and separator, redact the REST OF THE LINE.
+    This covers quoted, escaped, multiply-encoded, array and backslash-escaped values without parsing them."""
+    return re.sub(CRED_KEY + r"(?!<SECRET>$)[^\n]*", lambda m: m.group(0)[:m.end(4) - m.start()] + "<SECRET>", t, flags=re.M)
 
 
 def known_handles():
@@ -119,12 +103,12 @@ HANDLES = known_handles()
 
 # Enforced post-sanitisation scan: any hit aborts the build before anything is written.
 FORBIDDEN = [
-    r"[\w.+-]+@[\w-]+\.[\w.-]+", r"(?i)\b(https?|ssh|git|ftp)://", r"(?i)\bwww\.", r"(?i)stefan|markovich|devamped",
-    r"(?<![\w.])/(home|workspace|tmp|Users|root|cursor|private|Volumes)/", r"(?i)\b[A-Z]:\\\\Users",
+    r"@[\w-]+\.[\w.-]+", r"(?i)\b[a-z][a-z0-9+.-]*://", r"(?i)<URL>[^\s<]", r"(?i)\bwww\.", r"(?i)stefan|markovich|devamped",
+    r"(?<![\w.])/(home|workspace|tmp|Users|root|cursor|private|Volumes)/", r"(?<![\w])[A-Za-z]:\\",
     r"\b(sk-|ghp_|gho_|github_pat_|xox[abp]-|AKIA|AIza|hf_|glpat-)\w{6,}",
-    r"\beyJ[\w-]{10,}", r"-----BEGIN", r"(?i)\b(bearer|basic)\s+(?!<SECRET>)[A-Za-z0-9._~+/=-]{6,}",
+    r"\beyJ[\w-]{10,}", r"-----BEGIN", r"(?i)(?<![/\w])(bearer|basic)\s+(?!<SECRET>)[A-Za-z0-9._~+/=-]+",
     r"\b[0-9a-fA-F]{32,}\b", r"\b[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-", r"[A-Za-z0-9+/]{40,}={0,2}", r"(?i)session id",
-    r"\bGlyph\b", r"(?<![\w@])@(?!(?:property|staticmethod|classmethod|dataclass|functools|abstractmethod)\b)[A-Za-z0-9_][A-Za-z0-9_.-]+",
+    r"(?i)\bglyph\b", r"(?<![\w@])@(?!(?:property|staticmethod|classmethod|dataclass|abstractmethod)(?![\w.]))[A-Za-z0-9_]",
     r"(?<![\w/])u/[A-Za-z0-9_-]{2,}",
 ]
 
@@ -132,8 +116,8 @@ FORBIDDEN = [
 def scan(t):
     """Independent rejection scan; raises SystemExit on any hit."""
     for m in re.finditer(CRED_KEY, t):
-        v = VALUE_RE.match(t, m.end())
-        if v is not None and v.group(0).strip('\\"\'') != "<SECRET>":
+        rest = t[m.end():].split("\n", 1)[0]
+        if rest != "<SECRET>":
             raise SystemExit(f"post-sanitisation scan failed: credential value after {m.group(2)!r}")
     low = t.lower()
     for h in HANDLES:
