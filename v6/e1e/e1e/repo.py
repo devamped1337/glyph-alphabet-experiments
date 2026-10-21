@@ -1,4 +1,6 @@
 """Repository state, full/delta artifacts and transactional operations (SPEC sections 3, 7)."""
+import copy
+
 from .canon import E1EError, canonical, parse_canonical, sha256_hex
 from .schema import validate_entry
 
@@ -21,21 +23,34 @@ class RepoState:
 
     def __init__(self, version=0, entries=None, seen=None):
         self.version = version
-        self.entries = dict(entries or {})
-        self.seen = dict(seen or {})
-        for e in self.entries.values():
-            self.seen.setdefault((e["id"], e["v"]), e["digest"])
-        self.digest = state_digest(version, self.entries)
+        self._e = copy.deepcopy(dict(entries or {}))  # private; never shared with callers
+        self._seen = dict(seen or {})
+        for e in self._e.values():
+            self._seen.setdefault((e["id"], e["v"]), e["digest"])
+        self.digest = state_digest(version, self._e)
+
+    @property
+    def entries(self):
+        """A defensive deep copy: mutating it cannot alter this snapshot or its digest."""
+        return copy.deepcopy(self._e)
+
+    @property
+    def seen(self):
+        return dict(self._seen)
+
+    def entry(self, id):
+        e = self._e.get(id)
+        return None if e is None else copy.deepcopy(e)
 
     def full_bytes(self):
         obj = {"format": FORMAT, "type": "full", "version": self.version,
-               "entries": [self.entries[k] for k in sorted(self.entries)], "digest": self.digest}
+               "entries": [self._e[k] for k in sorted(self._e)], "digest": self.digest}
         return canonical(obj)
 
     def fingerprint(self):
         """Everything observable about the state, for 'unchanged after rejection' assertions."""
-        return (self.version, self.digest, canonical([self.entries[k] for k in sorted(self.entries)]),
-                tuple(sorted(self.seen.items())))
+        return (self.version, self.digest, canonical([self._e[k] for k in sorted(self._e)]),
+                tuple(sorted(self._seen.items())))
 
 
 def _entries_list(obj):
@@ -79,15 +94,18 @@ def load_full(data, current=None):
             raise E1EError("E_STALE", f"full v{st.version} older than held v{current.version}")
         if st.version == current.version and st.digest != current.digest:
             raise E1EError("E_FORK", "same version, different snapshot digest")
+        missing = set(current._e) - set(st._e)
+        if missing:
+            raise E1EError("E_DELETION_DEFERRED", f"full artifact omits held entries {sorted(missing)}")
         for (i, v), d in current.seen.items():
-            e = st.entries.get(i)
+            e = st._e.get(i)
             if e is not None and e["v"] == v and e["digest"] != d:
                 raise E1EError("E_VERSION_REUSE", f"{i} v{v} has different content")
             if e is not None and e["v"] < v:
                 raise E1EError("E_VERSION", f"{i} would regress from v{v} to v{e['v']}")
         seen = dict(current.seen)
         seen.update(st.seen)
-        st = RepoState(st.version, st.entries, seen)
+        st = RepoState(st.version, st._e, seen)
     return st
 
 
@@ -115,7 +133,7 @@ def check_entry_progression(state, e):
     prior = state.seen.get((e["id"], e["v"]))
     if prior is not None and prior != e["digest"]:
         raise E1EError("E_VERSION_REUSE", f"{e['id']} v{e['v']} already has different content")
-    cur = state.entries.get(e["id"])
+    cur = state._e.get(e["id"])
     want = 1 if cur is None else cur["v"] + 1
     if e["v"] != want:
         raise E1EError("E_VERSION", f"{e['id']} must be v{want}, got v{e['v']}")
@@ -131,8 +149,8 @@ def apply_delta(state, data):
         raise E1EError("E_BASE_MISMATCH", "base digest differs from held snapshot (same version)")
     for e in ents:
         check_entry_progression(state, e)
-    new_entries = dict(state.entries)
-    seen = dict(state.seen)
+    new_entries = dict(state._e)
+    seen = dict(state._seen)
     for e in ents:
         new_entries[e["id"]] = e
         seen[(e["id"], e["v"])] = e["digest"]
@@ -144,7 +162,7 @@ def apply_delta(state, data):
 
 def make_delta(state, entries):
     ents = sorted(entries, key=lambda e: e["id"])
-    new_entries = dict(state.entries)
+    new_entries = dict(state._e)
     for e in ents:
         new_entries[e["id"]] = e
     body = {"format": FORMAT, "type": "delta", "base_version": state.version,

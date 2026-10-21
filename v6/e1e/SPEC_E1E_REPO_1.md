@@ -4,7 +4,8 @@ Status: draft for review. Implemented in `e1e/` and exercised by `tests/` with s
 It makes no corpus measurement and no savings claim. Follows `reviews/gpt_E1e_pilot_r1.md` §3 and §4.
 
 ## 1. Message bytes and text encoding
-- A message is an arbitrary byte string of at most `MAX_MESSAGE_BYTES` = 65536 bytes.
+- A message is an arbitrary byte string of at most `MAX_MESSAGE_BYTES` = 65536 bytes. Larger messages are refused
+  at the sender (`E_TOO_LARGE`) before any frame is sent or counted.
 - Reference encoding applies only to messages that decode as strict UTF-8. A BOM (U+FEFF) is ordinary content.
   Bytes that are not valid UTF-8 are always sent raw (base64).
 - No normalisation of any kind: whitespace, CR/LF/CRLF, NFC/NFD and BOMs are preserved exactly. Template literals
@@ -49,9 +50,10 @@ Delta: `{"format","type":"delta","base_version","base_digest","target_version","
 
 ## 6. Transactional operations
 All operations validate completely, compute the new state as a separate object, and swap it in only on success.
-A rejection leaves the holder's state (version, digest, entries, seen-history) unchanged.
+A rejection leaves the holder's state (version, digest, entries, seen-history) unchanged. Snapshots are
+immutable: entries are held privately and only deep copies are exposed, so a published snapshot cannot change under its digest.
 - **Full load**: parse, validate every entry, recompute the snapshot digest (`E_DIGEST`). Against a held state: older
-  version → `E_STALE`; same version with a different digest → `E_FORK`; content conflicting with held history
+  version → `E_STALE`; omitting any held entry → `E_DELETION_DEFERRED`; same version with a different digest → `E_FORK`; content conflicting with held history
   → `E_VERSION_REUSE` / `E_VERSION`. A joiner (version 0) accepts any valid full artifact.
 - **Delta apply**: base version must equal held version (`E_STALE` if the delta is ahead, `E_BASE_MISMATCH` if
   behind/replayed); base digest must equal held digest even when versions match (`E_BASE_MISMATCH`); every entry
@@ -78,7 +80,7 @@ A rejection leaves the holder's state (version, digest, entries, seen-history) u
 - raw (fallback envelope): `{"format","type":"raw","text":str}` for UTF-8 messages, else `{"format","type":"raw","b64":str}` (canonical base64).
 - reject (receiver → sender): `{"format","type":"reject","code":E_*,"msg":sha256 of rejected wire}`.
 - Receiver decoding: `snap` must equal the receiver's current digest (`E_STALE`); the entry must exist with the same
-  `v` and digest (`E_UNKNOWN_REF`); args must have exactly the declared names and valid types (`E_PARAM`).
+  `v` and digest (`E_UNKNOWN_REF`; `v` must be a JSON integer, not a boolean, else `E_SCHEMA`); args must have exactly the declared names and valid types (`E_PARAM`).
 - Senders never assume the receiver's snapshot: they encode against the receiver's declaration, and only if they hold
   that exact snapshot (else raw). A stale copy declared honestly yields raw/older refs; a stale declaration (receiver
   moved on) yields a rejection. On rejection the sender delivers the original bytes in a raw envelope. Accounting
@@ -86,4 +88,4 @@ A rejection leaves the holder's state (version, digest, entries, seen-history) u
 
 ## Error codes
 `E_MALFORMED E_NONCANONICAL E_DUP_KEY E_SCHEMA E_TOO_LARGE E_DIGEST E_DUP_ENTRY E_VERSION E_VERSION_REUSE
-E_BASE_MISMATCH E_TARGET_MISMATCH E_STALE E_FORK E_UNKNOWN_REF E_PARAM`
+E_BASE_MISMATCH E_TARGET_MISMATCH E_STALE E_FORK E_DELETION_DEFERRED E_UNKNOWN_REF E_PARAM`

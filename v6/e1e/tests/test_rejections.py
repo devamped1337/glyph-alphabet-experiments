@@ -201,3 +201,58 @@ class ReceiverState(RejectMixin, unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class ReviewR1Regressions(RejectMixin, unittest.TestCase):
+    """Regressions for gpt_E1e_code_r1 findings and its requested extra coverage."""
+
+    def setUp(self):
+        self.pub, self.deltas, self.fulls = build()
+
+    def _full(self, version, entries):
+        return RepoState(version, {e["id"]: e for e in entries}).full_bytes()
+
+    def test_full_load_cannot_delete(self):
+        r = recv_at(self.fulls, 0)
+        self.assertRejected(r, lambda: r.load_full(self._full(2, [])), "E_DELETION_DEFERRED")
+
+    def test_full_load_fork_and_history_conflict(self):
+        r = recv_at(self.fulls, 0)
+        fork = list(parse_full(self.fulls[0]).entries.values()) + [make_entry("zzz", 1, "extra")]
+        self.assertRejected(r, lambda: r.load_full(self._full(1, fork)), "E_FORK")
+        conflict = [make_entry("ack", 1, "ACK other")] + [e for e in parse_full(self.fulls[0]).entries.values() if e["id"] != "ack"]
+        self.assertRejected(r, lambda: r.load_full(self._full(2, conflict)), "E_VERSION_REUSE")
+
+    def test_snapshots_do_not_alias(self):
+        old = self.pub.history[parse_full(self.fulls[0]).digest]
+        b0, d0 = old.full_bytes(), self.pub.state.full_bytes()
+        old.entries["status"]["body"] = "changed"
+        self.pub.state.entries["status"]["body"] = "changed"
+        self.assertEqual((old.full_bytes(), self.pub.state.full_bytes()), (b0, d0))
+
+    def test_bool_version_rejected(self):
+        r = recv_at(self.fulls, 0); st = r.state
+        e = st.entry("ack")
+        w = canonical({"format": "E1E-MSG/1", "type": "ref", "snap": st.digest, "id": "ack", "v": True,
+                       "entry": e["digest"], "args": {}})
+        self.assertRejected(r, lambda: decode_message(st, w), "E_SCHEMA")
+
+    def test_oversized_send_records_nothing(self):
+        r = recv_at(self.fulls, 2); link = Link(self.pub.history, r)
+        with self.assertRaises(E1EError) as cm:
+            link.transmit(b"a" * 65537)
+        self.assertEqual((cm.exception.code, link.frames), ("E_TOO_LARGE", []))
+
+    def test_match_budget_and_candidate_limit(self):
+        e = make_entry("p", 1, "x{a}y{b}y{c}z", [("a", "text"), ("b", "text"), ("c", "text")])
+        self.assertIsNone(match_template(e, "x" + "y" * 400 + "q"))  # budget exhausted -> no match
+        pub = Publisher()
+        pub.publish([make_entry(f"c{i:02d}", 1, "hdr " + "h" * i + " {t}", [("t", "text")]) for i in range(12)])
+        st = pub.state
+        from e1e.codec import candidates
+        cs = candidates(st, "hdr " + "h" * 11 + " body")
+        self.assertEqual([c["id"] for c in cs], ["c11"])
+        cs = candidates(st, "hdr ")
+        self.assertEqual(cs, [])
+        many = Publisher(); many.publish([make_entry(f"d{i:02d}", 1, "same {t}", [("t", "text")]) for i in range(12)])
+        self.assertEqual([c["id"] for c in candidates(many.state, "same q")], [f"d{i:02d}" for i in range(8)])

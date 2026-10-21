@@ -46,7 +46,9 @@ def decode_message(state, wire):
             raise E1EError("E_SCHEMA", "bad ref message keys")
         if obj["snap"] != state.digest:
             raise E1EError("E_STALE", "reference names a snapshot the receiver does not hold")
-        e = state.entries.get(obj["id"]) if isinstance(obj["id"], str) else None
+        if type(obj["v"]) is not int or not isinstance(obj["id"], str):
+            raise E1EError("E_SCHEMA", "ref id must be a string and v an integer")
+        e = state._e.get(obj["id"])
         if e is None or e["v"] != obj["v"] or e["digest"] != obj["entry"]:
             raise E1EError("E_UNKNOWN_REF", f"no entry {obj['id']!r} v{obj['v']!r} with that digest")
         if e["kind"] == "template":
@@ -72,10 +74,10 @@ def _first_literal(e):
 def candidates(state, text, k=MAX_CANDIDATES):
     """Bounded, deterministic candidate set: entries whose leading literal prefixes the text,
     ordered by (longest leading literal first, id), truncated to k."""
-    cs = [(len(_first_literal(e)), e["id"]) for e in state.entries.values()
+    cs = [(len(_first_literal(e)), e["id"]) for e in state._e.values()
           if text.startswith(_first_literal(e))]
     cs.sort(key=lambda x: (-x[0], x[1]))
-    return [state.entries[i] for _, i in cs[:k]]
+    return [state._e[i] for _, i in cs[:k]]
 
 
 def encode(known, declaration, msg, k=MAX_CANDIDATES, require_smaller=False):
@@ -84,9 +86,9 @@ def encode(known, declaration, msg, k=MAX_CANDIDATES, require_smaller=False):
     require_smaller=False: this mechanics draft sends any verified reference, even when it is
     larger than the raw envelope (no savings policy is claimed)."""
     info = {"reason": None, "skipped": []}
-    raw = raw_wire(msg)
     if len(msg) > MAX_MESSAGE_BYTES:
-        info["reason"] = "too_large"; return raw, info
+        raise E1EError("E_TOO_LARGE", "message exceeds MAX_MESSAGE_BYTES; nothing is sent")
+    raw = raw_wire(msg)
     snap = known.get(declaration.get("digest")) if isinstance(declaration, dict) else None
     if snap is None or snap.version != declaration.get("version"):
         info["reason"] = "unknown_declared_snapshot"; return raw, info
