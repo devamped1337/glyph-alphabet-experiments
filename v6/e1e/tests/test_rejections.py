@@ -256,3 +256,10 @@ class ReviewR1Regressions(RejectMixin, unittest.TestCase):
         self.assertEqual(cs, [])
         many = Publisher(); many.publish([make_entry(f"d{i:02d}", 1, "same {t}", [("t", "text")]) for i in range(12)])
         self.assertEqual([c["id"] for c in candidates(many.state, "same q")], [f"d{i:02d}" for i in range(8)])
+
+    def test_candidates_do_not_alias(self):
+        from e1e.codec import candidates
+        st = self.pub.state; b0 = st.full_bytes()
+        candidates(st, "status: job a is ok after 1 steps")[0]["body"] = "changed"
+        self.assertEqual(st.full_bytes(), b0)
+        self.assertEqual(parse_full(st.full_bytes()).digest, st.digest)

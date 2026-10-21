@@ -1,5 +1,6 @@
 """Message codec: references, raw fallback, verification and receiver rejection (SPEC sections 6-8)."""
 import base64
+import copy
 
 from .canon import E1EError, canonical, parse_canonical, sha256_hex
 from .schema import match_template, render, validate_args
@@ -77,7 +78,7 @@ def candidates(state, text, k=MAX_CANDIDATES):
     cs = [(len(_first_literal(e)), e["id"]) for e in state._e.values()
           if text.startswith(_first_literal(e))]
     cs.sort(key=lambda x: (-x[0], x[1]))
-    return [state._e[i] for _, i in cs[:k]]
+    return [copy.deepcopy(state._e[i]) for _, i in cs[:k]]  # never expose snapshot internals
 
 
 def encode(known, declaration, msg, k=MAX_CANDIDATES, require_smaller=False):
