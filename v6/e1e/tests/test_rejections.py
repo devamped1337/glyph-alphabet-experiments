@@ -241,7 +241,7 @@ class ReviewR1Regressions(RejectMixin, unittest.TestCase):
         r = recv_at(self.fulls, 2); link = Link(self.pub.history, r)
         with self.assertRaises(E1EError) as cm:
             link.transmit(b"a" * 65537)
-        self.assertEqual((cm.exception.code, link.frames), ("E_TOO_LARGE", []))
+        self.assertEqual((cm.exception.code, link.frames), ("E_TOO_LARGE", ()))
 
     def test_match_budget_and_candidate_limit(self):
         e = make_entry("p", 1, "x{a}y{b}y{c}z", [("a", "text"), ("b", "text"), ("c", "text")])
@@ -263,3 +263,24 @@ class ReviewR1Regressions(RejectMixin, unittest.TestCase):
         candidates(st, "status: job a is ok after 1 steps")[0]["body"] = "changed"
         self.assertEqual(st.full_bytes(), b0)
         self.assertEqual(parse_full(st.full_bytes()).digest, st.digest)
+
+    def test_metadata_reassignment_blocked(self):
+        st = self.pub.state; b0, d0 = st.full_bytes(), st.digest
+        for name, val in (("version", 99), ("digest", "sha256:00"), ("_e", {}), ("_seen", {}), ("new", 1)):
+            with self.assertRaises(AttributeError):
+                setattr(st, name, val)
+        with self.assertRaises(AttributeError):
+            del st.version
+        self.assertEqual((st.full_bytes(), st.digest), (b0, d0))
+        self.assertIs(self.pub.history[d0], st)
+        with self.assertRaises(AttributeError):
+            self.pub.state = RepoState()
+        with self.assertRaises(TypeError):
+            self.pub.history["sha256:00"] = st
+        r = recv_at(self.fulls, 2)
+        with self.assertRaises(AttributeError):
+            r.state = RepoState()
+        link = Link(self.pub.history, r); link.transmit(b"ACK")
+        with self.assertRaises(AttributeError):
+            link.frames.append(("fwd", "ref", 1))
+        self.assertEqual(len(link.frames), 1)

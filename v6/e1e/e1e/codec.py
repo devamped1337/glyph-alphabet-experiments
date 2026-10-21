@@ -127,33 +127,41 @@ class Link:
     """One sender->receiver channel with byte accounting of every frame."""
 
     def __init__(self, known, receiver):
-        self.known, self.receiver = known, receiver
-        self.frames = []  # (direction, kind, nbytes)
+        self._known, self._receiver = known, receiver
+        self._frames = []  # (direction, kind, nbytes)
+
+    known = property(lambda self: self._known)
+    receiver = property(lambda self: self._receiver)
+
+    @property
+    def frames(self):
+        """Read-only copy of the accounting log."""
+        return tuple(self._frames)
 
     def transmit(self, msg, declaration=None):
-        decl = self.receiver.declare() if declaration is None else declaration
-        wire, info = encode(self.known, decl, msg)
+        decl = self._receiver.declare() if declaration is None else declaration
+        wire, info = encode(self._known, decl, msg)
         kind = "ref" if info["reason"] == "ref" else "raw"
-        self.frames.append(("fwd", kind, len(wire)))
-        before = self.receiver.state.fingerprint()
+        self._frames.append(("fwd", kind, len(wire)))
+        before = self._receiver.state.fingerprint()
         try:
-            out = decode_message(self.receiver.state, wire)
+            out = decode_message(self._receiver.state, wire)
             rejected = None
         except E1EError as err:
             rejected = err.code
             rej = reject_wire(err.code, wire)
-            self.frames.append(("back", "reject", len(rej)))
+            self._frames.append(("back", "reject", len(rej)))
             fb = raw_wire(msg)
-            self.frames.append(("fwd", "fallback", len(fb)))
-            out = decode_message(self.receiver.state, fb)
-        assert self.receiver.state.fingerprint() == before  # decoding never mutates state
+            self._frames.append(("fwd", "fallback", len(fb)))
+            out = decode_message(self._receiver.state, fb)
+        assert self._receiver.state.fingerprint() == before  # decoding never mutates state
         return out, {"kind": kind, "rejected": rejected, "reason": info["reason"]}
 
     def totals(self):
         t = {}
-        for d, k, n in self.frames:
+        for d, k, n in self._frames:
             t[k] = t.get(k, 0) + n
-        t["all"] = sum(n for _, _, n in self.frames)
+        t["all"] = sum(n for _, _, n in self._frames)
         return t
 
 

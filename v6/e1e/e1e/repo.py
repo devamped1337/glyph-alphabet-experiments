@@ -1,5 +1,6 @@
 """Repository state, full/delta artifacts and transactional operations (SPEC sections 3, 7)."""
 import copy
+import types
 
 from .canon import E1EError, canonical, parse_canonical, sha256_hex
 from .schema import validate_entry
@@ -22,12 +23,27 @@ class RepoState:
     """Immutable snapshot plus the (id, v) -> entry-digest history this holder has seen."""
 
     def __init__(self, version=0, entries=None, seen=None):
-        self.version = version
-        self._e = copy.deepcopy(dict(entries or {}))  # private; never shared with callers
-        self._seen = dict(seen or {})
+        set_ = object.__setattr__
+        set_(self, "_version", version)
+        set_(self, "_e", copy.deepcopy(dict(entries or {})))  # private; never shared with callers
+        set_(self, "_seen", dict(seen or {}))
         for e in self._e.values():
             self._seen.setdefault((e["id"], e["v"]), e["digest"])
-        self.digest = state_digest(version, self._e)
+        set_(self, "_digest", state_digest(version, self._e))
+
+    def __setattr__(self, name, value):
+        raise AttributeError("RepoState is immutable")
+
+    def __delattr__(self, name):
+        raise AttributeError("RepoState is immutable")
+
+    @property
+    def version(self):
+        return self._version
+
+    @property
+    def digest(self):
+        return self._digest
 
     @property
     def entries(self):
@@ -176,16 +192,21 @@ class Holder:
     """Something that holds one current RepoState and swaps it only after full validation."""
 
     def __init__(self, state=None):
-        self.state = state or RepoState()
+        self._state = state or RepoState()
+
+    @property
+    def state(self):
+        """Read-only: state changes only through validated load_full/apply_delta/publish."""
+        return self._state
 
     def load_full(self, data):
         new = load_full(data, self.state)
-        self.state = new
+        self._state = new
         return new
 
     def apply_delta(self, data):
         new = apply_delta(self.state, data)
-        self.state = new
+        self._state = new
         return new
 
 
@@ -194,7 +215,12 @@ class Publisher(Holder):
 
     def __init__(self):
         super().__init__()
-        self.history = {self.state.digest: self.state}
+        self._history = {self.state.digest: self.state}
+
+    @property
+    def history(self):
+        """Read-only view of digest -> immutable RepoState."""
+        return types.MappingProxyType(self._history)
 
     def publish(self, entries):
         """Transactional: validate all entries and the generated delta, then commit."""
@@ -208,8 +234,8 @@ class Publisher(Holder):
             raise E1EError("E_SCHEMA", "nothing to publish")
         delta = make_delta(self.state, entries)
         new = apply_delta(self.state, delta)  # same validator receivers run
-        self.state = new
-        self.history[new.digest] = new
+        self._state = new
+        self._history[new.digest] = new
         return delta, new.full_bytes()
 
 
