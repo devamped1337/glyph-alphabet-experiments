@@ -40,8 +40,8 @@ SANITISE = [
     (r"(?i)(?<![/\w])(bearer|basic)\s+(?!<SECRET>)[A-Za-z0-9._~+/=\-]+", r"\1 <SECRET>"),
     (r"\beyJ[A-Za-z0-9_\-]{10,}\.[A-Za-z0-9_\-.]+", "<SECRET>"),
     (r"(?i)\b(?:https?|ssh|git|ftp|sftp|file|wss?)://[^\s)\]>\"'`]*", "<URL>"),
-    (r"(?:\"[^\"\n]*\"|[\w.+-]+)@[\w-]+(\.[\w-]+)+", "<EMAIL>"),
-    (r"(?<![\w])[A-Za-z]:\\[^\s\"'`]*", "<PATH>"),
+    (r"(?:\"[^\"\n]*\"|[\w.!#$%&'*+/=?^`{|}~-]+)@[\w-]+(\.[\w-]+)+", "<EMAIL>"),
+    (r"(?<![\w])[A-Za-z]:\\[^\n]*", "<WINPATH>"),
     (r"\b[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\b", "<UUID>"),
     (r"\b[a-z]{1,3}_[0-9A-HJKMNP-TV-Z]{26}\b", "<ID>"),
     (r"\bsha256:[0-9a-f]{8,64}\b", "<HASH>"),
@@ -63,11 +63,26 @@ SANITISE = [
 # Credential-context keys: any identifier ending in one of these (case-insensitive), optionally quoted
 # (also backslash-escaped quotes), followed by '=' or ':'.
 CRED_KEY = (r"(?i)(?<![A-Za-z0-9])(\\?[\"']?)([A-Za-z0-9_.-]*?(?:token|secret|password|passwd|passphrase|pwd|api[_-]?key"
-            r"|apikey|private[_-]?key|credentials?|cookie|session[_-]?key))(\\?[\"']?)(\s*[=:]\s*)")
+            r"|apikey|private[_-]?key|credentials?|cookie|session[_-]?key|authorization|authentication))(\\?[\"']?)(\s*[=:]\s*)")
+def _indent(line):
+    return len(line) - len(line.lstrip(" \t"))
+
+
 def redact_credentials(t):
-    """Conservative: after a credential-context key and separator, redact the REST OF THE LINE.
-    This covers quoted, escaped, multiply-encoded, array and backslash-escaped values without parsing them."""
-    return re.sub(CRED_KEY + r"(?!<SECRET>$)[^\n]*", lambda m: m.group(0)[:m.end(4) - m.start()] + "<SECRET>", t, flags=re.M)
+    """Conservative: after a credential-context key and separator, redact the REST OF THE LINE and every
+    following line indented deeper than the key's line (YAML block scalars, wrapped values)."""
+    lines, out, skip_deeper = t.split("\n"), [], None
+    for line in lines:
+        if skip_deeper is not None:
+            if line.strip() and _indent(line) > skip_deeper:
+                continue
+            skip_deeper = None
+        m = re.search(CRED_KEY, line)
+        if m:
+            line = line[:m.end()] + "<SECRET>"
+            skip_deeper = _indent(line)
+        out.append(line)
+    return "\n".join(out)
 
 
 def known_handles():
@@ -103,7 +118,7 @@ HANDLES = known_handles()
 
 # Enforced post-sanitisation scan: any hit aborts the build before anything is written.
 FORBIDDEN = [
-    r"@[\w-]+\.[\w.-]+", r"(?i)\b[a-z][a-z0-9+.-]*://", r"(?i)<URL>[^\s<]", r"(?i)\bwww\.", r"(?i)stefan|markovich|devamped",
+    r"@[\w-]+\.[\w.-]+", r"[\w.!#$%&'*+/=?^`{|}~-]<EMAIL>", r"<WINPATH>[^\n]", r"(?i)\b[a-z][a-z0-9+.-]*://", r"(?i)<URL>[^\s<]", r"(?i)\bwww\.", r"(?i)stefan|markovich|devamped",
     r"(?<![\w.])/(home|workspace|tmp|Users|root|cursor|private|Volumes)/", r"(?<![\w])[A-Za-z]:\\",
     r"\b(sk-|ghp_|gho_|github_pat_|xox[abp]-|AKIA|AIza|hf_|glpat-)\w{6,}",
     r"\beyJ[\w-]{10,}", r"-----BEGIN", r"(?i)(?<![/\w])(bearer|basic)\s+(?!<SECRET>)[A-Za-z0-9._~+/=-]+",
@@ -115,10 +130,14 @@ FORBIDDEN = [
 
 def scan(t):
     """Independent rejection scan; raises SystemExit on any hit."""
-    for m in re.finditer(CRED_KEY, t):
-        rest = t[m.end():].split("\n", 1)[0]
-        if rest != "<SECRET>":
-            raise SystemExit(f"post-sanitisation scan failed: credential value after {m.group(2)!r}")
+    lines = t.split("\n")
+    for k, line in enumerate(lines):
+        for m in re.finditer(CRED_KEY, line):
+            if line[m.end():] != "<SECRET>":
+                raise SystemExit(f"post-sanitisation scan failed: credential value after {m.group(2)!r}")
+            nxt = next((x for x in lines[k + 1:] if x.strip()), None)
+            if nxt is not None and _indent(nxt) > _indent(line):
+                raise SystemExit("post-sanitisation scan failed: indented continuation after credential")
     low = t.lower()
     for h in HANDLES:
         if re.search(r"(?<![a-z0-9_])" + re.escape(h.lower()) + r"(?![a-z0-9_])", low):

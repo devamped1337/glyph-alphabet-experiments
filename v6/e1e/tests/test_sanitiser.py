@@ -50,7 +50,7 @@ class Sanitiser(unittest.TestCase):
 
     def test_urls_emails_paths(self):
         for t, want in [("ssh://git@host.example/alice/private.txt", "<URL>"), ('"alice smith"@host.example', "<EMAIL>"),
-                        ("C:\\Users\\alice\\private.txt", "<PATH>"), ("mail bob.x+tag@sub.example.org now", "mail <EMAIL> now"),
+                        ("C:\\Users\\alice\\private.txt", "<WINPATH>"), ("mail bob.x+tag@sub.example.org now", "mail <EMAIL> now"),
                         ("see https://a.example/p?q=1.", "see <URL>"), ("/home/box/secret.txt", "<PATH>")]:
             self.assertEqual(self.clean(t), want)
 
@@ -79,3 +79,20 @@ class Sanitiser(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class SanitiserR5(unittest.TestCase):
+    def clean(self, t):
+        o = b.sanitise(t); b.scan(o); return o
+
+    def test_r5_inputs(self):
+        self.assertEqual(self.clean("password: |\n  violet-horse-secret\nnext: ok"), "password: <SECRET>\nnext: ok")
+        self.assertEqual(self.clean("C:\\Users\\Alice Smith\\private.txt"), "<WINPATH>")
+        self.assertEqual(self.clean("alice!tag@example.org"), "<EMAIL>")
+        o = self.clean('Authorization: Digest username="alice", response="violet-secret"')
+        self.assertEqual(o, "Authorization: <SECRET>")
+
+    def test_scan_rejects_r5_survivors(self):
+        for bad in ["password: <SECRET>\n  leaked", "x<EMAIL>", "<WINPATH> Smith"]:
+            with self.assertRaises(SystemExit, msg=bad):
+                b.scan(bad)
