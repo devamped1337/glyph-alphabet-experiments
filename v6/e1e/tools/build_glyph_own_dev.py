@@ -38,7 +38,7 @@ SANITISE = [
     (r"\b(sk-|ghp_|gho_|github_pat_|xox[abp]-|AKIA|AIza|hf_)[A-Za-z0-9_\-]{8,}", "<SECRET>"),
     (r"(?i)\b(authorization\s*:\s*)(bearer|basic|token)\s+\S+", r"\1<SECRET>"),
     (r"(?i)\bbearer\s+[A-Za-z0-9._~+/=\-]{8,}", "Bearer <SECRET>"),
-    (r"(?i)\b((?:api[_-]?key|access[_-]?token|auth[_-]?token|token|secret|password|passwd|pwd)\s*[=:]\s*)(?!<)[\"']?[^\s\"',;&]{4,}[\"']?", r"\1<SECRET>"),
+    (r"(?i)(\b(?:api[_-]?key|access[_-]?token|auth[_-]?token|refresh[_-]?token|client[_-]?secret|token|secret|password|passwd|pwd)[\"']?\s*[=:]\s*)[\"']?(?!<SECRET>)[^\s\"',;&}]{4,}[\"']?", r"\1<SECRET>"),
     (r"\beyJ[A-Za-z0-9_\-]{10,}\.[A-Za-z0-9_\-.]+", "<SECRET>"),
     (r"[\w.+-]+@[\w-]+(\.[\w-]+)+", "<EMAIL>"),
     (r"\b(https?|ssh|git)://[^\s)\]>\"'`]+", "<URL>"),
@@ -61,7 +61,8 @@ FORBIDDEN = [
     r"[\w.+-]+@[\w-]+\.[\w.-]+", r"(?i)\b(https?|ssh|git)://", r"(?i)stefan|markovich|devamped",
     r"(?<![\w.])/(home|workspace|tmp|Users|root)/", r"\b(sk-|ghp_|gho_|github_pat_|xox[abp]-|AKIA|AIza|hf_)\w{6,}",
     r"\beyJ[\w-]{10,}", r"-----BEGIN", r"(?i)\bbearer\s+(?!<SECRET>)\S{8,}",
-    r"\b[0-9a-fA-F]{32,}\b", r"[A-Za-z0-9+/]{40,}={0,2}", r"(?i)session id",
+    r"\b[0-9a-fA-F]{32,}\b",
+    r"(?i)\b(?:api[_-]?key|access[_-]?token|auth[_-]?token|refresh[_-]?token|client[_-]?secret|token|secret|password|passwd|pwd)[\"']?\s*[=:]\s*[\"']?(?!<SECRET>)[^\s\"',;&}]{4,}", r"[A-Za-z0-9+/]{40,}={0,2}", r"(?i)session id",
 ]
 
 

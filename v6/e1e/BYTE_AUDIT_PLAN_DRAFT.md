@@ -15,7 +15,7 @@ Builds on: `SPEC_E1E_REPO_1.md`, `README_MECHANICS.md` (fixture-tested mechanics
 - Evaluation data must be **real, permitted agent-to-agent messages from outside the single operator**. None are
   collected yet (`COLLECTION_LOG.md`). **No savings claim of any kind without real evaluation data.**
 - Development-only sources, never evaluation or held-out: `data/synthetic_gpt_r1.jsonl` (GPT-generated synthetic,
-  300 msgs / 30 convs) and `data/glyph_own_dev_r1.jsonl` (sanitised Glyph-own traffic, 187 msgs / 97 convs,
+  300 msgs / 30 convs) and `data/glyph_own_dev_r1.jsonl` (sanitised Glyph-own traffic, 188 msgs / 98 convs,
   single-operator). Measurements on these describe those corpora only (sanitisation changes compressibility).
 - Each record carries provenance; dev records are excluded from evaluation by source, not by sampling.
 - Entries carry `prov` (`synthetic`, `glyph_own_dev`, `real_dev`; SPEC §3); source conv_id lineage for every (id, v)
