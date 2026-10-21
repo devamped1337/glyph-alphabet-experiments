@@ -87,7 +87,9 @@ def main():
     refs = [x for x in rows if x["is_ref"]]
 
     def larger(hexlen):
-        cut = DIGESTS_PER_REF * (HEX_FULL - hexlen)
+        return larger_cut(DIGESTS_PER_REF * (HEX_FULL - hexlen))
+
+    def larger_cut(cut):
         return {"ref_wire_gt_raw_message_bytes": sum(x["wire"] - cut > x["msg"] for x in refs),
                 "ref_wire_gt_raw_envelope_bytes": sum(x["wire"] - cut > x["env"] for x in refs)}
 
@@ -101,9 +103,12 @@ def main():
         "encoded_as_ref": len(refs), "sent_raw": len(rows) - len(refs),
         "all_round_trips_exact": True,
         "full_64hex": larger(64),
-        "hypothetical_12hex": dict(larger(12), note="HYPOTHETICAL: arithmetic only, 2 digests x 52 chars removed; no such format exists"),
-        "hypothetical_0hex_framing_only": dict(larger(0), note="HYPOTHETICAL: digests removed entirely; isolates JSON framing/key overhead"),
-        "hypothetical_8hex": dict(larger(8), note="HYPOTHETICAL: arithmetic only, 2 digests x 56 chars removed; no such format exists"),
+        "hypothetical_12hex": dict(larger(12), note="HYPOTHETICAL: arithmetic only, 2 digests x 52 hex chars removed, sha256: prefix kept; no such format exists"),
+        "hypothetical_no_digest_fields_values": dict(larger_cut(DIGESTS_PER_REF * len('"sha256:' + "0" * 64 + '"')), note="HYPOTHETICAL: both digest values removed entirely (quotes, sha256: prefix and 64 hex); keys, ids, versions, args and framing remain; does not isolate escaping"),
+        "excess_breakdown_full_64hex": {"ref_excess_over_raw_message_bytes_total": sum(x["wire"] - x["msg"] for x in refs),
+                                        "hex_digit_bytes_in_refs_total": DIGESTS_PER_REF * HEX_FULL * len(refs),
+                                        "note": "hex digits are part of the excess; the remainder is keys, prefixes, ids, versions, args, quoting/escaping, not separated here"},
+        "hypothetical_8hex": dict(larger(8), note="HYPOTHETICAL: arithmetic only, 2 digests x 56 hex chars removed, sha256: prefix kept; no such format exists"),
         "bytes_full_64hex": {"raw_message_total": sum(x["msg"] for x in rows),
                              "wire_total": sum(x["wire"] for x in rows),
                              "raw_envelope_total_if_all_raw": sum(x["env"] for x in rows),

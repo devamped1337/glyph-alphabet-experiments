@@ -36,20 +36,40 @@ FORUM = sorted(glob.glob("/workspace/e1dpost/body*.md"))
 SANITISE = [
     (r"-----BEGIN [A-Z ]+-----.*?-----END [A-Z ]+-----", "<SECRET>"),
     (r"\b(sk-|ghp_|gho_|github_pat_|xox[abp]-|AKIA|AIza|hf_)[A-Za-z0-9_\-]{8,}", "<SECRET>"),
+    (r"(?i)\b(authorization\s*:\s*)(bearer|basic|token)\s+\S+", r"\1<SECRET>"),
+    (r"(?i)\bbearer\s+[A-Za-z0-9._~+/=\-]{8,}", "Bearer <SECRET>"),
+    (r"(?i)\b((?:api[_-]?key|access[_-]?token|auth[_-]?token|token|secret|password|passwd|pwd)\s*[=:]\s*)(?!<)[\"']?[^\s\"',;&]{4,}[\"']?", r"\1<SECRET>"),
     (r"\beyJ[A-Za-z0-9_\-]{10,}\.[A-Za-z0-9_\-.]+", "<SECRET>"),
     (r"[\w.+-]+@[\w-]+(\.[\w-]+)+", "<EMAIL>"),
     (r"\b(https?|ssh|git)://[^\s)\]>\"'`]+", "<URL>"),
     (r"\b[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\b", "<UUID>"),
     (r"\b[a-z]{1,3}_[0-9A-HJKMNP-TV-Z]{26}\b", "<ID>"),
     (r"\bsha256:[0-9a-f]{8,64}\b", "<HASH>"),
-    (r"\b(?=[0-9a-f]*[a-f])(?=[0-9a-f]*[0-9])[0-9a-f]{7,64}\b", "<HASH>"),
-    (r"(?<![\w.])(/(home|workspace|tmp|cursor|root|usr|etc|var|opt|mnt)(/[^\s:\"'`)\],]*)?)", "<PATH>"),
+    (r"\b(?=[0-9a-fA-F]*[a-fA-F])(?=[0-9a-fA-F]*[0-9])[0-9a-fA-F]{7,64}\b", "<HASH>"),
+    (r"(?<![\w.])(/(home|workspace|tmp|cursor|root|usr|etc|var|opt|mnt|Users|private|Volumes)(/[^\s:\"'`)\],]*)?)", "<PATH>"),
     (r"\b\d{6,}\b", "<NUM>"),
     (r"\bdevamped1337\b", "<ORG>"),
     (r"\bglyph-alphabet-experiments\b", "<REPO>"),
-    (r"\bStefan( Markovich)?\b", "<OPERATOR>"),
-    (r"\bMarkovich\b", "<OPERATOR>"),
+    (r"(?i)\bstefan( markovich)?\b", "<OPERATOR>"),
+    (r"(?i)\bmarkovich\b", "<OPERATOR>"),
+    (r"(?i)\bdevamped1337\b", "<ORG>"),
 ]
+
+
+# Enforced post-sanitisation scan: any hit aborts the build before anything is written.
+FORBIDDEN = [
+    r"[\w.+-]+@[\w-]+\.[\w.-]+", r"(?i)\b(https?|ssh|git)://", r"(?i)stefan|markovich|devamped",
+    r"(?<![\w.])/(home|workspace|tmp|Users|root)/", r"\b(sk-|ghp_|gho_|github_pat_|xox[abp]-|AKIA|AIza|hf_)\w{6,}",
+    r"\beyJ[\w-]{10,}", r"-----BEGIN", r"(?i)\bbearer\s+(?!<SECRET>)\S{8,}",
+    r"\b[0-9a-fA-F]{32,}\b", r"[A-Za-z0-9+/]{40,}={0,2}", r"(?i)session id",
+]
+
+
+def scan(t):
+    for p in FORBIDDEN:
+        m = re.search(p, t)
+        if m:
+            raise SystemExit(f"post-sanitisation scan failed: {p!r} matched {m.group(0)[:20]!r}...")
 
 
 def sanitise(t):
@@ -119,6 +139,12 @@ def main():
     # in a fixed order (forum, reviews by git add time, transcripts by mtime), which is chronological per group.
     order = ([c for c in convs if c[1] == "forum_request_body"] + [c for c in convs if c[1] == "repo_review_file"]
              + sorted([c for c in convs if c[1] == "codex_transcript"], key=lambda c: c[0]))
+    rows = []
+    for ci, (_, stype, label, msgs) in enumerate(order, 1):
+        for s, r, k, text in msgs:
+            text = sanitise(text)
+            if text.strip():
+                scan(text); scan(sanitise(label))
     n_msg = 0
     with open(OUT, "w", encoding="utf-8", newline="") as f:
         for ci, (_, stype, label, msgs) in enumerate(order, 1):

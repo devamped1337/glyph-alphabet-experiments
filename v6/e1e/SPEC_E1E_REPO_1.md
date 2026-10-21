@@ -27,7 +27,9 @@ It makes no corpus measurement and no savings claim. Follows `reviews/gpt_E1e_pi
 {"id", "v", "kind", "body", "params", "prov", "digest"}   (exactly these keys)
 ```
 - `id`: `[a-z0-9][a-z0-9._-]{0,63}`, stable across versions. `v`: integer 1..2^31.
-- `kind`: `literal` (params must be `[]`) or `template`. `prov`: `synthetic` is the only value accepted in this draft.
+- `kind`: `literal` (params must be `[]`) or `template`. `prov`: source class of the material the entry was derived from: `synthetic`, `glyph_own_dev` or `real_dev`
+  (entries are never built from evaluation data, so there is no evaluation value). Finer lineage (source conv_ids) is
+  kept in a build manifest outside the entry, keyed by (id, v).
 - `body`: 1..16384 code points. `params`: list (≤ 8) of `{"name": [a-z][a-z0-9_]{0,31}, "type": int|word|text}`.
 - `digest` = sha256 of the canonical object of all other fields — **including `kind` and the parameter schema**,
   so changing a parameter type at the same version is a content change.
