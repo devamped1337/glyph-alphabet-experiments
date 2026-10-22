@@ -51,16 +51,28 @@ class ZstdCodec:
             kw["dict_data"] = self._dict
         return z.ZstdCompressor(level=self.level, **kw).compress(data)  # fresh context per message
 
-    def decompress(self, frame, max_output=1 << 20):
+    def decompress(self, frame, max_output=1 << 20, chunk=256):
+        """Exactly one complete frame: end of frame reached (checksum verified when the frame carries one),
+        no trailing bytes, output bounded during decoding (input fed in small chunks, so at most
+        max_output + one zstd block is ever buffered). Anything else raises E1EError."""
         z = _zstd()
         d = z.ZstdDecompressor(dict_data=self._dict) if self._dict is not None else z.ZstdDecompressor()
+        obj, out, n, fed = d.decompressobj(), [], 0, 0
         try:
-            out = d.decompressobj().decompress(frame)  # content size not in frame: use streaming API
+            while fed < len(frame) and not obj.eof:  # stop at end of frame; rest is trailing data
+                part = obj.decompress(frame[fed:fed + chunk])
+                fed += chunk
+                n += len(part)
+                if n > max_output:
+                    raise E1EError("E_TOO_LARGE", "decompressed output too large")
+                out.append(part)
         except z.ZstdError as e:
             raise E1EError("E_ZSTD", str(e))
-        if len(out) > max_output:
-            raise E1EError("E_TOO_LARGE", "decompressed output too large")
-        return out
+        if not obj.eof:
+            raise E1EError("E_ZSTD", "incomplete zstd frame")
+        if obj.unused_data or fed < len(frame):
+            raise E1EError("E_ZSTD", "trailing bytes after zstd frame")
+        return b"".join(out)
 
 
 def baseline3(level=DEFAULT_LEVEL, frame=HEADLINE_FRAME):

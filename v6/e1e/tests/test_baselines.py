@@ -226,3 +226,83 @@ class SendPath(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class FrameIntegrity(unittest.TestCase):
+    """GPT r1 required change: complete frame, verified checksum, no trailing bytes, bounded output."""
+
+    def setUp(self):
+        self.pub, self.deltas, self.fulls = build()
+        self.m = b"status: job build-7 is done after 42 steps " * 50
+
+    def _codecs(self):
+        return [baseline3(), baseline4b(self.pub.state), baseline3(frame=INTEGRITY_FRAME),
+                baseline4b(self.pub.state, frame=INTEGRITY_FRAME)]
+
+    def assertZstdError(self, c, data, code="E_ZSTD", **kw):
+        from e1e import E1EError
+        with self.assertRaises(E1EError) as cm:
+            c.decompress(data, **kw)
+        self.assertEqual(cm.exception.code, code)
+
+    def test_truncated_checksum_rejected(self):
+        c = baseline3(frame=INTEGRITY_FRAME)
+        f = c.compress(self.m)
+        self.assertEqual(c.decompress(f), self.m)
+        for cut in (1, 2, 3, 4):
+            self.assertZstdError(c, f[:-cut])
+
+    def test_corrupted_checksum_rejected(self):
+        c = baseline3(frame=INTEGRITY_FRAME)
+        f = bytearray(c.compress(self.m)); f[-1] ^= 1
+        self.assertZstdError(c, bytes(f))
+
+    def test_truncated_frame_rejected_all_settings(self):
+        for c in self._codecs():
+            f = c.compress(self.m)
+            for cut in (1, len(f) // 2, len(f) - 4):
+                self.assertZstdError(c, f[:-cut])
+
+    def test_trailing_bytes_rejected(self):
+        for c in self._codecs():
+            f = c.compress(self.m)
+            for tail in (b"\x00", b"garbage" * 100, f):
+                self.assertZstdError(c, f + tail)
+            self.assertEqual(c.decompress(f), self.m)
+
+    def test_empty_message_and_empty_input(self):
+        for c in self._codecs():
+            self.assertEqual(c.decompress(c.compress(b"")), b"")
+            self.assertZstdError(c, b"")
+
+    def test_oversized_output_rejected_during_decoding(self):
+        c = baseline3()
+        big = b"\x00" * (4 << 20)  # compresses to a few hundred bytes
+        f = c.compress(big)
+        self.assertZstdError(c, f, code="E_TOO_LARGE")  # default bound 1 MiB
+        self.assertZstdError(c, c.compress(self.m), code="E_TOO_LARGE", max_output=len(self.m) - 1)
+        self.assertEqual(c.decompress(c.compress(self.m), max_output=len(self.m)), self.m)
+
+    def test_reject_then_fallback_billing_through_link(self):
+        class Truncating:
+            """Sender codec whose frames lose their last 4 bytes in transit."""
+            def __init__(self, inner):
+                self.inner = inner
+            def compress(self, d):
+                return self.inner.compress(d)[:-4]
+            def decompress(self, f):
+                return self.inner.decompress(f)
+
+        st = self.pub.state
+        for inner in (baseline3(frame=INTEGRITY_FRAME), baseline3()):
+            link = Link(self.pub.history, recv_at(self.fulls, 2), codec=Truncating(inner))
+            out, info = link.transmit(self.m)
+            self.assertEqual(out, self.m)
+            self.assertEqual(info["rejected"], "E_ZSTD")
+            kinds = [f[1] for f in link.frames]
+            self.assertEqual(kinds, ["declare", info["kind"], "reject", "fallback"])
+            t = link.totals()
+            self.assertEqual(t["fallback"], len(raw_wire(self.m)))
+            self.assertEqual(t["all"], t["declare"] + t[info["kind"]] + t["reject"] + t["fallback"])
+            self.assertTrue(info["kind"].startswith("zstd"))
+        self.assertEqual(st.fingerprint(), self.pub.state.fingerprint())
