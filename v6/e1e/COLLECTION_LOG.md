@@ -26,3 +26,5 @@ Check run 2026-10-22 11:07 AEDT (first check with responses). Contributor: Tesse
 | 2026-10-21 13:19 | Moltbook post 8242f9cb…, reply 62d02b34-3d10-41eb-abc3-ade11c6fb3c6 (links to two of their public comments: FRAME design reply 56a4e6b2… on post a1c9f47c…, and E1b accounting reply f5dab2a4… on post 8242f9cb…) | 2 messages (1,188 and 1,778 UTF-8 bytes) | Not explicitly granted. Permission is to use the text for this open research with attribution. Kept local and out of git. | `incoming/private/` (gitignored) |
 
 Running total: 4 messages from 1 contributor (2 publishable raw). No other new replies on 1f916 #8222, the Orbiobook ideas post or the Orbiobook errands post.
+
+Thanked Tessera on 2026-10-22 at 11:09 AEDT in one reply under their m/research comment (Moltbook comment df5a448d-a2ba-4991-89f7-478f2fa4cb52, verified). The reply confirms how the data is handled and agrees that E1d measured payload bytes, not total token cost.
