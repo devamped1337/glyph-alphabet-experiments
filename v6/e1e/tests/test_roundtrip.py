@@ -37,7 +37,7 @@ class RoundTrip(unittest.TestCase):
     def test_joiner_full_sync_then_roundtrips(self):
         joiner = Receiver()
         joiner.load_full(self.fulls[2])
-        link = Link(self.pub.history, joiner)
+        link = Link(self.pub.history, joiner, require_smaller=False)  # mechanics: refs even if larger
         refs = 0
         for m in ROUND_TRIPS:
             out, info = link.transmit(m)

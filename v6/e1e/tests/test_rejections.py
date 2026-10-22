@@ -172,7 +172,7 @@ class ReceiverState(RejectMixin, unittest.TestCase):
         r = recv_at(self.fulls, 1)
         old_decl = r.declare()
         r.apply_delta(self.deltas[2])  # receiver advanced after declaring
-        link = Link(self.pub.history, r)
+        link = Link(self.pub.history, r, require_smaller=False)  # mechanics: force the ref path
         m = b"status: job a is ok after 1 steps"
         before = r.state.fingerprint()
         out, info = link.transmit(m, declaration=old_decl)
@@ -189,7 +189,7 @@ class ReceiverState(RejectMixin, unittest.TestCase):
         r = Receiver(); r.load_full(fork.state.full_bytes())
         v1 = parse_full(self.fulls[0])
         decl = {"version": 1, "digest": v1.digest}  # declares the real v1, holds a fork
-        out, info = Link(self.pub.history, r).transmit(b"status: job a is ok after 1 steps", decl)
+        out, info = Link(self.pub.history, r, require_smaller=False).transmit(b"status: job a is ok after 1 steps", decl)
         self.assertEqual(out, b"status: job a is ok after 1 steps")
         self.assertEqual(info["rejected"], "E_STALE")
 

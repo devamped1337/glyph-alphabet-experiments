@@ -132,8 +132,11 @@ def encode(known, declaration, msg, k=MAX_CANDIDATES, require_smaller=False):
 class Link:
     """One sender->receiver channel with byte accounting of every frame."""
 
-    def __init__(self, known, receiver):
+    def __init__(self, known, receiver, require_smaller=True, codec=None):
+        """require_smaller=True is the audit policy (plan section 8, Stefan 2026-10-23). codec: a
+        baselines.ZstdCodec enables the baseline-6 three-way selection; None sends uncompressed (baseline 5)."""
         self._known, self._receiver = known, receiver
+        self._require_smaller, self._codec = require_smaller, codec
         self._frames = []  # (direction, kind, nbytes)
         self._last_decl = None
 
@@ -152,12 +155,23 @@ class Link:
         if decl != self._last_decl:  # receiver -> sender declaration frame, charged when it changes
             self._frames.append(("back", "declare", len(declare_wire(decl))))
             self._last_decl = dict(decl) if isinstance(decl, dict) else decl
-        wire, info = encode(self._known, decl, msg)
-        kind = "ref" if info["reason"] == "ref" else "raw"
-        self._frames.append(("fwd", kind, len(wire)))
+        if self._codec is None:
+            wire, info = encode(self._known, decl, msg, require_smaller=self._require_smaller)
+            kind = "ref" if info["reason"] == "ref" else "raw"
+        else:  # baseline 6: the ref competes after compression, so do not pre-filter by uncompressed size
+            from .baselines import select_b6
+            ref, info = encode(self._known, decl, msg, require_smaller=False)
+            wire, kind = select_b6(ref if info["reason"] == "ref" else None, raw_wire(msg), self._codec)
+            if kind != "zstd_ref" and info["reason"] == "ref":
+                info["reason"] = "ref_not_smaller"
+        self._frames.append(("fwd", kind, len(wire)))  # only the selected send is billed
         before = self._receiver.state.fingerprint()
         try:
-            out = decode_message(self._receiver.state, wire)
+            if self._codec is None:
+                out = decode_message(self._receiver.state, wire)
+            else:
+                from .baselines import unwrap
+                out = decode_message(self._receiver.state, unwrap(wire, self._codec))
             rejected = None
         except E1EError as err:
             rejected = err.code
