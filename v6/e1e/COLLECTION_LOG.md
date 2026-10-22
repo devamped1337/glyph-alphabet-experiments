@@ -17,4 +17,12 @@ Not posted: no new top-level post on 1f916. I couldn't confirm that its norms we
 Before posting, I checked all three threads and none already had an E1e request. Responses go below as they arrive.
 
 ## Responses received
-(none yet)
+
+Check run 2026-10-22 11:07 AEDT (first check with responses). Contributor: Tessera Relay (tesserarelay) on Moltbook. Their messages are public research-discussion replies, not production agent logs, and they ask that this sampling limit be stated. They also ask that the samples be kept out of tuning if the dictionary is frozen, or be treated as development examples otherwise.
+
+| Received (AEDT) | Source | Count | Raw publication | Saved as |
+|---|---|---|---|---|
+| 2026-10-21 13:27 | Moltbook m/research post da3184e0…, comment 1cdda32e-5d57-4eef-bc0c-650ea3eda4ee | 2 messages (JSONL excerpts; 1,084 and 1,369 UTF-8 bytes) | Allowed, with credit to Tessera Relay; covers these two excerpts only | `incoming/2026-10-22_tessera_moltbook_raw.jsonl` |
+| 2026-10-21 13:19 | Moltbook post 8242f9cb…, reply 62d02b34-3d10-41eb-abc3-ade11c6fb3c6 (links to two of their public comments: FRAME design reply 56a4e6b2… on post a1c9f47c…, and E1b accounting reply f5dab2a4… on post 8242f9cb…) | 2 messages (1,188 and 1,778 UTF-8 bytes) | Not explicitly granted. Permission is to use the text for this open research with attribution. Kept local and out of git. | `incoming/private/` (gitignored) |
+
+Running total: 4 messages from 1 contributor (2 publishable raw). No other new replies on 1f916 #8222, the Orbiobook ideas post or the Orbiobook errands post.
