@@ -5,6 +5,12 @@ review of this plan first. CPU only; no models other than GPT review via the Cod
 Builds on: `SPEC_E1E_REPO_1.md`, `README_MECHANICS.md` (fixture-tested mechanics draft), `reviews/gpt_E1e_pilot_r1.md`,
 `reviews/gpt_E1e_code_r1..r5.md`, `reviews/grok_E1e_code_r1.md`.
 
+## Freeze record
+Freeze pending GPT review of this amendment (2026-10-23). Approvals so far: GPT round 6 at `76ea550`; Grok r1 GO
+recorded at `6889a53` (`reviews/grok_E1e_audit_plan_r1.md`). Stefan's decisions: 2026-10-21 — per-message primary,
+Glyph-own traffic development-only; 2026-10-23 — `require_smaller` (§8). Once frozen, any later change needs a dated
+amendment.
+
 ## 1. Decisions recorded
 - **2026-10-21 21:08 AEDT — Stefan:** per-message compression is the **primary** comparison; a persistent stream is
   **secondary**.
@@ -101,6 +107,15 @@ compact length-prefixed wire form for refs and raw (e.g. a short snapshot epoch 
 per-message 64-hex snapshot digest, a short entry handle instead of id+digest, raw bytes un-escaped), keeping full
 digests in artifacts and declarations, with its negotiation bytes charged (§6); and (b) a send-ref-only-if-smaller
 policy (`require_smaller=True`). Any new wire form needs a spec revision and re-review.
+
+**Decision (2026-10-23 08:57 AEDT — Stefan): `require_smaller`.** For each message, if the E1E reference encoding (and
+refs+zstd where applicable) is not strictly smaller in bytes than the raw/plain fallback form at the per-message
+delivery boundary, the sender sends the plain fallback instead, and the measurement charges the fallback bytes. The
+compact wire form (a) is deferred to a possible later experiment (E1f); E1E-REPO/1 is unchanged.
+Implementation item (GPT review before measurement): `e1e/codec.py` `encode()` already has a `require_smaller`
+parameter (compares the ref against the raw envelope, reason `ref_not_smaller`) but defaults to `False`; the
+measurement code must pass `require_smaller=True`, and the refs+zstd comparison at the delivery boundary is not yet
+implemented.
 
 ## 9. Test cases to add with the measurement code
 - zstd failure: `train_dictionary` raising → "not trainable" path (§7); zstd version recorded and a mismatch flagged;
