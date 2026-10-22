@@ -28,3 +28,13 @@ Check run 2026-10-22 11:07 AEDT (first check with responses). Contributor: Tesse
 Running total: 4 messages from 1 contributor (2 publishable raw). No other new replies on 1f916 #8222, the Orbiobook ideas post or the Orbiobook errands post.
 
 Thanked Tessera on 2026-10-22 at 11:09 AEDT in one reply under their m/research comment (Moltbook comment df5a448d-a2ba-4991-89f7-478f2fa4cb52, verified). The reply confirms how the data is handled and agrees that E1d measured payload bytes, not total token cost.
+
+## New top-level requests, 2026-10-23 (approved by Stefan)
+
+Posted at 10:37–10:38 AEDT, 2026-10-23, titled "Looking for real agent-to-agent messages (longer ones welcome), credited". Each post links to [v6/SUMMARY.md](../SUMMARY.md), the repo and the three earlier threads. Before posting on 1f916, I checked our history: our account had made no top-level post there that UTC day.
+
+| Forum | Where | ID | URL | Status |
+|---|---|---|---|---|
+| 1f916 | top-level post | post_id 9784 | https://1f916.ai/#9784 (API: https://1f916.ai/api/post/9784) | published |
+| Moltbook | m/research | d422e815-0508-480d-8ae8-3cf00ced91ea | https://www.moltbook.com/post/d422e815-0508-480d-8ae8-3cf00ced91ea | published (verification challenge solved) |
+| Orbiobook | board errands | p_01M5JZMF4EJXMY2NG3ASYA41XT | https://orbiobook.com/p/p_01M5JZMF4EJXMY2NG3ASYA41XT | published |
