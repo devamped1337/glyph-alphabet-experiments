@@ -102,7 +102,10 @@ synthetic set, in-sample dictionary of 8 entries by a deterministic rule; **not 
   (keys, prefixes, ids, versions, args, quoting/escaping) is not separated by this diagnostic.
 - The raw envelope adds 47,194 − 32,225 bytes (+46%) over the message bytes (JSON framing and `\u`/control escaping).
 Consequence: shorter digests reduce but do not remove inflation on short messages; the remaining reference metadata and
-the escaped-JSON envelope also matter. **Decision required before the held-out audit** (from dev data only): (a) a
+the escaped-JSON envelope also matter.
+
+*[Superseded by the 2026-10-23 decision below; kept as the historical record.]*
+**Decision required before the held-out audit** (from dev data only): (a) a
 compact length-prefixed wire form for refs and raw (e.g. a short snapshot epoch negotiated at sync instead of a
 per-message 64-hex snapshot digest, a short entry handle instead of id+digest, raw bytes un-escaped), keeping full
 digests in artifacts and declarations, with its negotiation bytes charged (§6); and (b) a send-ref-only-if-smaller
@@ -117,6 +120,27 @@ parameter (compares the ref against the raw envelope, reason `ref_not_smaller`) 
 measurement code must pass `require_smaller=True`, and the refs+zstd comparison at the delivery boundary is not yet
 implemented.
 
+### Exact selection rule
+- **Baseline 5 (refs, uncompressed):** send the ref envelope only if it is strictly smaller than `raw_wire(msg)`; ties
+  go to raw.
+- **Baseline 6 (refs + per-message zstd):** three candidates: (i) zstd(ref envelope); (ii) zstd(raw envelope) at the
+  same level and §4 frame settings, using the baseline-4 dictionary if §7 permits one (otherwise no dictionary); and
+  (iii) the uncompressed raw envelope. Send the smallest. Ties are broken in favour of (iii), then (ii), then (i). If
+  there is no ref match, only (ii) and (iii) compete.
+- **Framing:** no selector byte. An uncompressed envelope is canonical JSON starting with `{` (0x7B); every zstd frame
+  starts with the magic bytes `28 B5 2F FD`; after decoding, the envelope's `type` field distinguishes ref from raw.
+  The magic number and frame header are counted. Any transport length prefix is counted identically for all candidates.
+- **Charging:** exactly the bytes of the selected first send, plus any reject or retransmit bytes. Declarations,
+  artifacts, dictionaries and lifecycle traffic are charged separately as in §6. Candidates that are not sent are not
+  charged.
+
+### Pre-measurement implementation items (GPT review required before measurement)
+- Wire `Link.transmit()` to `encode(..., require_smaller=True)`.
+- Implement the baseline-6 three-way selection above.
+- Billing as above.
+- Tests: ties; Unicode/base64 envelope overhead; compressed-size flips in both directions; byte-exact round trips
+  through the real send path.
+
 ## 9. Test cases to add with the measurement code
 - zstd failure: `train_dictionary` raising → "not trainable" path (§7); zstd version recorded and a mismatch flagged;
   truncated frame → decode error or byte mismatch, both caught by the offline oracle and charged as raw re-send;
@@ -127,5 +151,5 @@ implemented.
 - gzip determinism (`mtime=0`) and byte-exact decompression for every baseline.
 
 ## 10. Open items (not Stefan decisions)
-- Choose and spec the compact wire form (§8) on dev data; GPT and Grok review of this plan; then freeze with code hash.
+- GPT review of the 2026-10-23 amendment; then freeze with code hash. (Compact wire form deferred to E1f, §8.)
 - Real evaluation data collection remains the blocker for any savings claim.
