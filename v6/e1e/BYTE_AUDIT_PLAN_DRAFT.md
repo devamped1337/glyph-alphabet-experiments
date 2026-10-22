@@ -153,3 +153,36 @@ implemented.
 ## 10. Open items (not Stefan decisions)
 - GPT review of the 2026-10-23 amendment; then freeze with code hash. (Compact wire form deferred to E1f, §8.)
 - Real evaluation data collection remains the blocker for any savings claim.
+
+## Amendment A1 (2026-10-23): baseline 4b
+Dated amendment, approved by Stefan on 2026-10-23 after Claude's review noted the gap. It adds one baseline and one
+decision rule; nothing else in §§1–10 changes. Implemented in `e1e/baselines.py` (tests: `tests/test_baselines.py`).
+
+**Baseline 4b — per-message zstd with the repository as a raw-content dictionary.** Purpose: the same shared knowledge
+the refs arm uses, with no per-message reference overhead.
+- **Source:** only the repository artifact the refs arm uses, at the **same snapshot version** the refs arm uses for
+  the message being measured (the snapshot the receiver declared). No dev messages, no other data.
+- **Dictionary bytes (deterministic):** take the snapshot's current entries sorted by `id` (ascending, by Unicode code
+  point, the same order as `full_bytes()`); for each, the UTF-8 encoding of its `body` field exactly as stored
+  (templates keep their `{name}` placeholders and `{{`/`}}` escapes); join with the single separator byte `0x0A` (LF);
+  no leading or trailing separator. Built as `zstandard.ZstdCompressionDict(data, dict_type=DICT_TYPE_RAWCONTENT)`;
+  no training, no other content. Function: `repo_dict_bytes(state)`.
+- **Compression:** the message bytes (same input as baselines 3 and 4), at the **same zstd level and §4 frame settings
+  as baseline 4** (headline: `write_content_size=False, write_checksum=False, write_dict_id=False`; the secondary
+  integrity run uses the same settings as baseline 4's secondary run). A fresh compressor per message.
+- **Decoding** is independent per message: each frame is decompressed alone with the dictionary of the declared
+  snapshot; no stream state. Every message is checked byte-exact by the offline oracle (§4).
+- **Empty repository** (no entries → zero dictionary bytes): no dictionary is used; 4b is then identical to baseline 3
+  and its sync cost is 0. A tiny repository is used as is (no minimum size); no fallback to other content.
+- **Sync cost (charged as repository artifact sync, §6):** the maintainer uploads each version's dictionary once;
+  every participant downloads it once per version (initial full sync, each new version, each joiner's full sync).
+  zstd dictionaries have no delta form, so every new version is charged as a **full rebuild** (the new version's full
+  dictionary bytes), never as a delta. Storage per participant: the current dictionary bytes. Function:
+  `sync_cost(dict_sizes_by_version, participants, joiners)`.
+- **Reporting:** 4b is reported alongside baselines 3, 4, 5 and 6 with the same per-message delivery boundary and
+  totals, including the sync cost.
+
+**Decision rule (proposed by Claude, adopted):** if neither baseline 5 nor baseline 6 has a total (messages plus all
+charged sync and control bytes, §6) strictly smaller than baseline 4b's total on the held-out real data, the
+byte-saving claim for repository IDs is **retired**, and the report states so explicitly. Repository IDs may still be
+reported for non-byte properties (exactness, auditability), but not as a byte saving.
