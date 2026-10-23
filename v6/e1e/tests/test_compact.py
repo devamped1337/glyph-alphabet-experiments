@@ -436,7 +436,7 @@ class TestCandidateGenerationA1(unittest.TestCase):
         pub.publish([make_entry("t0", 1, "{a}.{b}!", [("a", "word"), ("b", "word")])])
         st = pub.state
         cands, stats = C.find_candidates(st, "ab.cd!")
-        self.assertEqual((stats["matcher_calls"], stats["matcher_span_chars"]), (1, 6))  # one try, span "ab.cd!" = 6 chars
+        self.assertEqual((stats["matcher_calls"], stats["matcher_span_chars"]), (2, 11))  # starts 0 and 1: spans of 6 + 5 chars
 
     def test_exhausted_template_work_does_not_suppress_literals(self):
         pub = Publisher()
