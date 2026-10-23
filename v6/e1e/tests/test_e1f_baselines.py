@@ -257,6 +257,29 @@ class TestRunner(unittest.TestCase):
             adv0 = y["advantage_at_zero_updates_and_joins"] - 2 * y["per_join_delta_X_minus_Y"]
             self.assertAlmostEqual(y["break_even_updates"] * y["per_update_delta_X_minus_Y"], adv0, 6)
 
+    def test_crossover_sign_cases(self):
+        X = B.crossover
+        # A(u) = -1000 + 100u: X behind now, catches up at +10 (extra cost per count is negative: step = -100)
+        self.assertEqual(X(-1000, -100, "update"), 10.0)
+        # A(u) = 1000 - 100u: X ahead now, loses at +10
+        self.assertEqual(X(1000, 100, "update"), 10.0)
+        # never crosses at a count >= 0
+        self.assertEqual(X(1000, -100, "update"), "X ahead at every count")
+        self.assertEqual(X(-1000, 100, "update"), "X behind at every count")
+        # zero intercept
+        self.assertEqual(X(0, 100, "update"), "X ties Y at zero updates (crossover at 0)")
+        self.assertEqual(X(0, -100, "join"), "X ties Y at zero joins (crossover at 0)")
+        # identical cost and no observation
+        self.assertEqual(X(5, 0, "update"), "undefined: identical per-update cost (X ahead at every count)")
+        self.assertEqual(X(-5, 0, "join"), "undefined: identical per-join cost (X behind at every count)")
+        self.assertEqual(X(0, 0, "update"), "undefined: identical per-update cost (X tie at every count)")
+        self.assertEqual(X(5, None, "join"), "undefined: no join observed")
+        # the numeric result is never negative
+        for adv in (-7, -1, 0, 1, 7):
+            for step in (-3, -1, 1, 3):
+                r = X(adv, step, "update")
+                self.assertTrue(isinstance(r, str) or r > 0)
+
     def test_break_even_undefined_without_updates_or_joins(self):
         one = B.replay_arms(self.replay, self.chain[:1], lambda r: 1, ("3", "7"))
         be = B.scenario_totals(one, self.chain[:1], 2, [])["_break_even"]["pairs"]["7_vs_3"]

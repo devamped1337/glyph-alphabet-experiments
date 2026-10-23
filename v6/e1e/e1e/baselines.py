@@ -505,6 +505,24 @@ def replay_arms(replay, chain, version_index, arms=ARMS, level=DEFAULT_LEVEL, b4
     return {a: tallies[a].finish() for a in arms}
 
 
+def crossover(adv0, step, what, count_observed=None):
+    """Count n >= 0 at which A(n) = adv0 - n*step equals zero (adv0 = X's advantage at zero counts, step = X's extra cost per
+    count). The crossover is adv0/step for EITHER sign of step. A number is returned only when it is finite and positive;
+    otherwise an explicit status string: no observation, identical cost, a tie at zero counts, or X ahead/behind at every
+    count (the crossover would be negative: it never happens at a count >= 0)."""
+    if step is None:
+        return f"undefined: no {what} observed"
+    if step == 0:
+        side = "ahead" if adv0 > 0 else ("behind" if adv0 < 0 else "tie")
+        return f"undefined: identical per-{what} cost (X {side} at every count)"
+    n = adv0 / step
+    if n > 0 and n != float("inf"):
+        return n
+    if n == 0:
+        return f"X ties Y at zero {what}s (crossover at 0)"
+    return "X ahead at every count" if adv0 > 0 else "X behind at every count"
+
+
 BREAK_EVEN_PAIRS = tuple(("7", y) for y in ("3", "4", "4b", "4b-delta", "5", "6"))
 
 
@@ -528,7 +546,9 @@ def break_even(message_results, chain, participants, joiner_versions, b4_codec=N
     (msg = message + control bytes of the eligible messages, positive A = X smaller). Break-even counts are where A = 0
     solved separately for u (j at its observed J) and for j (u at its observed U); a count is reported only when it is
     defined, positive and finite; otherwise an explicit status string is given ('undefined: ...', 'X ahead at every
-    count', 'X behind at every count'). Everything is computed from emitted numbers (ingredients included)."""
+    count', 'X behind at every count'). Everything is computed from emitted numbers (ingredients included). The linear model is a FROZEN
+    observed-cost extrapolation (observed per-update and per-join costs taken as constants): varying the number of joins or
+    updates can change lifecycle costs and shared uploads, so these counts are not a fresh simulation of such scenarios."""
     J, U = len(joiner_versions), max(len(chain) - 1, 0)
     s0 = _sync_by_arm(chain, participants, [], b4_codec)
     s1 = _sync_by_arm(chain, participants, joiner_versions, b4_codec)
@@ -544,17 +564,7 @@ def break_even(message_results, chain, participants, joiner_versions, b4_codec=N
         ing[a] = {"initial_sync": initial[a], "per_update_sync": pu, "per_join_sync": pj,
                   "message_plus_control": message_results[a]["message_plus_control_total"], "sync_total": s1[a]["total"]}
 
-    def solve(adv0, step, what, count_observed):
-        if step is None:
-            return f"undefined: no {what} observed"
-        if step == 0:
-            return "undefined: identical per-" + what + " cost (X ahead at every count)" if adv0 > 0 else \
-                   ("undefined: identical per-" + what + " cost (X behind at every count)" if adv0 < 0 else "undefined: identical per-" + what + " cost (tie at every count)")
-        if step < 0:
-            return "X ahead at every count" if adv0 > 0 else f"{what} count where X catches up: {adv0 / -step:.3f}"
-        if adv0 <= 0:
-            return "X behind at every count"
-        return adv0 / step
+    solve = crossover
 
     out = {}
     for x, y in pairs:
