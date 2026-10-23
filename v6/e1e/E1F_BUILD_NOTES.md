@@ -107,3 +107,29 @@ what is unclear, what was implemented (always the most literal reading) and a pr
 24. **Baseline 4 in dev screening.** The §7 size selection uses fold = SHA-256("e1e-fold-1" NUL conv_id) mod 4 (seed frozen by
     §5.5; the plan says "seed fixed in the freeze") and charges dictionary bytes x (1 + 2 participants) in the CV score.
     On dev corpora arms 4/6 are trained on and replayed over the same messages (in-sample), so they are optimistic there.
+
+## Dev screening (tools/e1f_dev_screen.py)
+25. **§7 Stage 1 repository.** "covered bytes by curated entries" does not say which repository. Implemented (declared in the
+    tool's docstring before any number was seen): the V = 1 static repository from all dev conversations, joiners 0, curated
+    with the grid point chosen by the forward-only tuning; coverage = covered bytes of the arm-7 encoder's REF spans / bytes of
+    eligible (<= 65,536 B) dev messages. In-sample on dev (the entries are mined from the messages they cover), so it is an
+    optimistic number. The report also carries, labelled informational and not used for the gate, in-sample coverage at every
+    grid point (nothing was re-chosen).
+26. **§7 Stage 2 heuristic.** Not exactly specified. Implemented: estimate = (input bytes - covered bytes) + refs x measured
+    average REF bytes + 2 bytes per message (discriminator + epoch) + measured length prefixes + measured control bytes +
+    measured arm-7 sync, primary scenario, in-sample dev replay; a second figure adds 2 bytes per LIT segment. Compared with the
+    measured 4b-delta total (strictly smaller = "estimate below"). Because the average REF cost is measured from the same
+    in-sample encoding, the estimate is nearly the measured arm-7 total; it is a weak test by construction.
+27. **Dev scenarios replay the dev messages themselves (in-sample).** There is no held-out data. Versions follow §4 (message
+    rank r uses 1 + floor(r*V/M)); every dev conversation is in some version's prefix, so early messages are in the data their
+    snapshot was mined from. Arms 4 and 6 use a baseline-4 dictionary trained on the same messages. All numbers are DEV ONLY.
+28. **Observations the main agent should weigh (not deviations).** (a) Arm 7 stores literal residue uncompressed (the 7z variant
+    is deferred by §3.4), whereas arms 3/4b/4b-delta compress the residue, so arm 7 can only win through very high coverage;
+    on both dev corpora it is far from that. (b) Each declaration is a JSON frame with a 64-hex digest (~110 B) charged once
+    per link; with a (conv, sender, receiver) link model it is the single largest control charge for every repository arm
+    (equal across 4b, 4b-delta, 5, 6, 7, so the retirement-rule comparisons are unaffected) but it is a penalty arms 1, 3, 4
+    do not pay by construction. (c) With joiners = 3 the entry cost multiplier (1 + 3) makes G <= 0 for every candidate on both
+    dev corpora, so those scenarios publish no repository at all. (d) Tuning: on the synthetic corpus every C gives the same score (fewer than 50 picks exist), so the tie rule picks C = 50;
+    on Glyph-own the forward-only score is lowest for the strictest grid point (L = 256, k = 3; a handful of entries), because entries
+    mined from earlier blocks rarely recur in the next block while their sync bill is certain. This is what the frozen procedure
+    selects, not a bug; the chosen point then gives very low in-sample coverage (see the informational grid in the reports).

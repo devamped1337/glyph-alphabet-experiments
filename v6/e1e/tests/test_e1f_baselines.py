@@ -103,6 +103,14 @@ class TestRunner(unittest.TestCase):
         self.assertNotEqual(tot["4b"]["sync_total"], tot["4b-delta"]["sync_total"])
         self.assertEqual(tot["4b"]["message_bytes"], tot["4b-delta"]["message_bytes"])
 
+    def test_declaration_rule_is_the_same_for_repo_arms_including_empty_repository(self):
+        # no snapshot published for the first messages: every repo arm still pays the (version 0) declaration
+        res = B.replay_arms(self.replay, self.chain, lambda r: 0 if r < 4 else 1)
+        decl = {a: res[a]["declare_bytes_incl_prefix"] for a in ("4b", "4b-delta", "5", "6", "7")}
+        self.assertEqual(len(set(decl.values())), 1, decl)
+        self.assertGreater(decl["7"], 0)
+        self.assertEqual(res["3"]["declare_bytes_incl_prefix"], 0)
+
     def test_arm7_accounting_lines(self):
         res = self.run_it()
         r = res["7"]

@@ -144,6 +144,7 @@ ARMS = ("1", "3", "4", "4b", "4b-delta", "5", "6", "7")
 PRIMARY_SCENARIO = {"V": 5, "participants": 2, "joiners": 0}
 SCENARIO_GRID = [{"V": V, "participants": p, "joiners": j} for V in (1, 5, 20) for p in (2, 10) for j in (0, 3)]
 FOLD_SEED = "e1e-fold-1"
+EMPTY_DIGEST = None  # set lazily to the digest of the empty (version 0) repository
 
 
 def _compact():
@@ -255,6 +256,7 @@ class _Tally:
         self.over_n = self.over_input = self.over_bytes = self.over_prefix = 0
         self.covered = self.refs = self.ref_bytes = 0
         self.nonzero_cov_msgs = 0
+        self.lit_segments = 0
 
     def add_first(self, payload_len, kind, input_len):
         self.n += 1
@@ -299,7 +301,7 @@ class _Tally:
             "mean_per_message_ratio": (sum(per_msg_ratio) / len(per_msg_ratio)) if per_msg_ratio else None,
             "mean_message_frame_bytes": (msg_total / self.n) if self.n else None,
             "covered_bytes": self.covered, "refs": self.refs, "ref_bytes": self.ref_bytes,
-            "messages_with_refs": self.nonzero_cov_msgs,
+            "messages_with_refs": self.nonzero_cov_msgs, "lit_segments": self.lit_segments,
             "oversized": {"count": self.over_n, "input_bytes": self.over_input,
                           "fallback_bytes": self.over_bytes, "fallback_prefix_bytes": self.over_prefix},
         }
@@ -316,6 +318,9 @@ def replay_arms(replay, chain, version_index, arms=ARMS, level=DEFAULT_LEVEL, b4
     from .codec import Link, raw_wire, declare_wire
     from .compact import CompactLink, CompactReceiver
     from .repo import Receiver
+    from .repo import RepoState
+    global EMPTY_DIGEST
+    EMPTY_DIGEST = RepoState().digest
     C = _compact()
     tallies = {a: _Tally() for a in arms}
     codec3 = baseline3(level)
@@ -372,9 +377,8 @@ def replay_arms(replay, chain, version_index, arms=ARMS, level=DEFAULT_LEVEL, b4
                 if kind == "zstd":
                     assert cdc.decompress(data) == msg  # offline byte-exact oracle
                 mb = t.add_first(len(data), kind, n)
-                if a in ("4b", "4b-delta") and idx:
-                    st = chain[idx - 1]["state"]
-                    d = {"version": idx, "digest": st.digest}
+                if a in ("4b", "4b-delta"):  # same declaration rule as arms 5/6/7, the empty repository (v0) included
+                    d = {"version": idx, "digest": chain[idx - 1]["state"].digest if idx else EMPTY_DIGEST}
                     if decl4[a].get(key) != d:
                         decl4[a][key] = d
                         ctrl += t.add_ctrl("declare", len(declare_wire(d)))
@@ -409,6 +413,7 @@ def replay_arms(replay, chain, version_index, arms=ARMS, level=DEFAULT_LEVEL, b4
                     t.covered += info["covered_bytes"]
                     t.refs += info["refs"]
                     t.ref_bytes += info["ref_bytes"]
+                    t.lit_segments += info.get("lit_segments", 0)
                 elif a == "5" and info["kind"] == "ref":
                     t.covered += n
                     t.refs += 1
