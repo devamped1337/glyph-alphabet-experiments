@@ -180,10 +180,88 @@ class TestRunner(unittest.TestCase):
         for a, r in res.items():
             self.assertEqual(r["eligible_messages"], 2, a)
             self.assertEqual(r["oversized"], {"count": 1, "input_bytes": len(big), "fallback_bytes": len(data),
-                                              "fallback_prefix_bytes": B.prefix_len(len(data))}, a)
+                                              "fallback_prefix_bytes": B.prefix_len(len(data)),
+                                              "kinds": {kind: 1}, "verified_byte_exact": 1}, a)
         tot = B.scenario_totals(res, self.chain, 2, [])
         for a in B.ARMS:
             self.assertEqual(tot[a]["all_message_total"], tot[a]["total"] + len(data) + B.prefix_len(len(data)))
+
+    def test_named_baselines_use_their_native_zstd_frame_for_eligible_messages(self):
+        # b"hi" would be smaller as a raw envelope? no: the raw envelope is bigger than 2 bytes, and zstd frames of tiny
+        # messages are also larger than the message; the point is that arms 3/4/4b/4b-delta ALWAYS send the zstd frame.
+        rep = replay_of(["a", "b", BODY1, "zz"])
+        res = B.replay_arms(rep, self.chain, lambda r: 1, ("3", "4b", "4b-delta"))
+        c3 = B.baseline3()
+        self.assertEqual(res["3"]["kinds"], {"zstd": 4})
+        self.assertEqual(res["3"]["message_bytes"], sum(len(c3.compress(m["msg"])) for m in rep))
+        self.assertEqual(res["4b"]["kinds"], {"zstd": 4})
+        self.assertEqual(res["4b-delta"]["kinds"], {"zstd": 4})
+
+    def test_oversized_over_1mib_is_verified_byte_exact_without_a_fixed_ceiling(self):
+        big = (b"zq status line %d\n" * 1) * 1 + b"zq " * 600000   # ~1.8 MB, highly compressible
+        self.assertGreater(len(big), 1 << 20)
+        c3 = B.baseline3()
+        data, kind = B.oversized_fallback(big, c3)
+        self.assertEqual(kind, "zstd")
+        self.assertTrue(B.verify_oversized(data, kind, big, c3))
+        with self.assertRaises(E1EError):  # output bounded by the ORIGINAL length: a longer true output is rejected
+            B.verify_oversized(data, kind, big[:-1], c3)
+        res = B.replay_arms(replay_of([BODY1, big]), self.chain, lambda r: 1, ("3", "7"))
+        self.assertEqual(res["3"]["oversized"]["verified_byte_exact"], 1)
+        self.assertEqual(res["3"]["oversized"]["kinds"], {"zstd": 1})
+
+    def test_verify_oversized_checks_raw_envelopes_for_real(self):
+        from e1e.codec import raw_wire
+        c3 = B.baseline3()
+        msg = ("ab é " * 20000).encode()
+        wire = raw_wire(msg)
+        self.assertTrue(B.verify_oversized(wire, "raw", msg, c3))
+        with self.assertRaises(E1EError):
+            B.verify_oversized(wire, "raw", msg + b"x", c3)
+        bad = raw_wire(msg + b"x")
+        with self.assertRaises(E1EError):
+            B.verify_oversized(bad, "raw", msg, c3)
+        with self.assertRaises(E1EError):
+            B.verify_oversized(wire.replace(b"ab", b"AB", 1), "raw", msg, c3)
+        binmsg = bytes(range(256)) * 300  # invalid UTF-8 -> base64 form
+        self.assertTrue(B.verify_oversized(raw_wire(binmsg), "raw", binmsg, c3))
+
+    def test_arm7_encoder_statistics_are_emitted(self):
+        res = B.replay_arms(self.replay, self.chain, lambda r: 1, ("7",))
+        enc = res["7"]["encoder"]
+        self.assertEqual(enc["messages"], res["7"]["eligible_messages"])
+        self.assertEqual(sum(enc["reasons"].values()), enc["messages"])
+        for k in ("cap_hit_messages", "eval_cap_hit_messages", "match_cap_hit_messages", "verify_failed", "verified_ok",
+                  "receiver_rejects_after_send", "raw_fallback_sends", "candidates", "matcher_calls"):
+            self.assertIn(k, enc)
+        self.assertEqual(enc["verify_failed"], 0)
+
+    def test_break_even_results_and_explicit_undefined_cases(self):
+        c = self.chain
+        res = B.replay_arms(self.replay, c, lambda r: 1 if r < 10 else 2, ("3", "4b", "4b-delta", "7"))
+        tot = B.scenario_totals(res, c, 2, [1, 2])
+        be = tot["_break_even"]
+        self.assertEqual((be["updates_observed"], be["joins_observed"]), (1, 2))
+        pr = be["pairs"]
+        for y in ("3", "4b", "4b-delta"):
+            self.assertAlmostEqual(pr["7_vs_" + y]["advantage_observed"], tot[y]["total"] - tot["7"]["total"], 6)
+        self.assertTrue(pr["7_vs_4b-delta"]["break_even_updates"].startswith("undefined: identical per-update"))
+        self.assertTrue(pr["7_vs_4b-delta"]["break_even_joins"].startswith("undefined: identical per-join"))
+        for key in ("ingredients", "pairs"):
+            self.assertIn(key, be)
+        ing = be["ingredients"]["7"]
+        self.assertEqual(ing["initial_sync"], len(c[0]["full"]) * 3)
+        # a defined break-even count solves A(u) = 0 exactly
+        y = pr["7_vs_3"]
+        if isinstance(y["break_even_updates"], float):
+            adv0 = y["advantage_at_zero_updates_and_joins"] - 2 * y["per_join_delta_X_minus_Y"]
+            self.assertAlmostEqual(y["break_even_updates"] * y["per_update_delta_X_minus_Y"], adv0, 6)
+
+    def test_break_even_undefined_without_updates_or_joins(self):
+        one = B.replay_arms(self.replay, self.chain[:1], lambda r: 1, ("3", "7"))
+        be = B.scenario_totals(one, self.chain[:1], 2, [])["_break_even"]["pairs"]["7_vs_3"]
+        self.assertEqual(be["break_even_updates"], "undefined: no update observed")
+        self.assertEqual(be["break_even_joins"], "undefined: no join observed")
 
     def test_empty_repository_all_arms_still_exact(self):
         res = B.replay_arms(self.replay, [], lambda r: 0)

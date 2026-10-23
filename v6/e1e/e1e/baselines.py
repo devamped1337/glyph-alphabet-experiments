@@ -5,6 +5,7 @@ Baselines: 3 = per-message zstd, no dictionary; 4 = per-message zstd with a dict
 4b = per-message zstd with the repository entry bodies as a raw-content dictionary (Amendment A1);
 6 = three-way selection between zstd(ref envelope), zstd(raw envelope) and the raw envelope (section 8).
 """
+import collections
 from .canon import E1EError
 
 ZSTD_MAGIC = b"\x28\xb5\x2f\xfd"
@@ -158,23 +159,59 @@ def prefix_len(n):
 
 
 def zstd_or_raw(msg, codec):
-    """Per-message zstd frame vs raw envelope, strictly smaller wins, ties to the raw envelope (section 5.1 rule)."""
+    """Section 5.1 selection rule ONLY (the oversized-message fallback): the smaller of the zstd frame and the raw
+    envelope, ties to the raw envelope. Named baselines 3/4/4b/4b-delta do NOT use this: they send their zstd frame
+    (their native rule) for every eligible message (amendment A1, section 5.1)."""
     from .codec import raw_wire
     raw, z = raw_wire(msg), codec.compress(msg)
     return (z, "zstd") if len(z) < len(raw) else (raw, "raw")
 
 
 def oversized_fallback(msg, codec3):
-    """Section 5.1: the common fallback for messages > 65,536 B in EVERY arm: smaller of the baseline-3 zstd frame and
-    the raw envelope, ties to the raw envelope. The caller charges the canonical length prefix of the result."""
+    """Section 5.1: the common fallback for messages > 65,536 B in EVERY arm: smaller of the baseline-3 zstd frame and the
+    raw envelope, ties to the raw envelope. The caller charges the canonical length prefix of the result and must call
+    verify_oversized."""
     return zstd_or_raw(msg, codec3)
+
+
+def verify_oversized(data, kind, msg, codec3):
+    """Byte-exact check of an oversized fallback frame against the original message (amendment A1). zstd: exactly one
+    complete frame whose decompressed output is bounded by the ORIGINAL message length (no fixed ceiling) and equals the
+    message. raw: the envelope must be the canonical E1E-MSG/1 raw encoding (parsed with the limit set to its own length,
+    since the E1E-MSG/1 decoder's wire/size limits do not apply to this fallback) and decode to the message. Raises
+    E1EError on any mismatch; returns True otherwise."""
+    import base64
+    from .canon import E1EError, parse_canonical
+    from .codec import MSG_FORMAT
+    if kind == "zstd":
+        out = codec3.decompress(data, max_output=len(msg))
+        if out != msg:
+            raise E1EError("E_SCHEMA", "oversized zstd fallback does not reproduce the message")
+        return True
+    obj = parse_canonical(data, len(data))
+    if not isinstance(obj, dict) or obj.get("format") != MSG_FORMAT or obj.get("type") != "raw":
+        raise E1EError("E_SCHEMA", "oversized raw fallback is not a raw envelope")
+    if set(obj) == {"format", "type", "text"} and isinstance(obj["text"], str):
+        out = obj["text"].encode("utf-8")
+    elif set(obj) == {"format", "type", "b64"} and isinstance(obj["b64"], str):
+        out = base64.b64decode(obj["b64"], validate=True)
+    else:
+        raise E1EError("E_SCHEMA", "bad raw envelope")
+    if out != msg or raw_wire_of(msg) != bytes(data):
+        raise E1EError("E_SCHEMA", "oversized raw fallback does not reproduce the message")
+    return True
+
+
+def raw_wire_of(msg):
+    from .codec import raw_wire
+    return raw_wire(msg)
 
 
 def select_baseline4(dev_by_conv, participants=2, level=DEFAULT_LEVEL, frame=HEADLINE_FRAME):
     """Plan section 7 selection on dev only. dev_by_conv: [(conv_id, [bytes, ...])]. Eligible only with >= 50 messages
     and >= 8 conversations. Sizes {1024, 2048, 4096, 8192}; 4-fold CV grouped by conversation, fold = first 8 bytes
-    big-endian of SHA-256("e1e-fold-1" NUL conv_id) mod 4; score = total per-message zstd frame bytes of the held-out fold
-    plus dictionary bytes x (1 + participants); a fold where training raises fails that size. Returns
+    big-endian of SHA-256("e1e-fold-1" NUL conv_id) mod 4; score = total per-message zstd frame bytes of the held-out fold INCLUDING each
+    frame's canonical length prefix (amendment A1), plus dictionary bytes x (1 + participants); a fold where training raises fails that size. Returns
     (codec or None, report dict). 'not trainable' -> codec None."""
     import hashlib
     msgs = [(c, m) for c, ms in dev_by_conv for m in ms]
@@ -190,7 +227,7 @@ def select_baseline4(dev_by_conv, participants=2, level=DEFAULT_LEVEL, frame=HEA
             tr = [m for c, m in msgs if fold[c] != f]
             te = [m for c, m in msgs if fold[c] == f]
             cdc = baseline4(tr, size, level, frame)
-            sc.append(None if cdc is None else sum(len(cdc.compress(m)) for m in te)
+            sc.append(None if cdc is None else sum(len(f) + prefix_len(len(f)) for f in (cdc.compress(m) for m in te))
                       + len(cdc.dict_bytes) * (1 + participants))
         rep["sizes"][size] = {"fold_scores": sc, "eligible": None not in sc,
                               "mean": (sum(sc) / 4 if None not in sc else None)}
@@ -269,6 +306,10 @@ class _Tally:
         self.per_msg = []  # (message-frame bytes incl. prefix, control bytes incl. prefix, input bytes)
         self.rejected = 0
         self.over_n = self.over_input = self.over_bytes = self.over_prefix = 0
+        self.over_kinds, self.over_verified = {}, 0
+        self.enc = collections.Counter()
+        self.enc_reasons = collections.Counter()
+        self.enc_verify_errors = collections.Counter()
         self.covered = self.refs = self.ref_bytes = 0
         self.nonzero_cov_msgs = 0
         self.lit_segments = 0
@@ -294,7 +335,30 @@ class _Tally:
             self.retransmit += payload_len + p
         return payload_len + p
 
-    def add_oversized(self, payload_len, input_len):
+    def add_encoder_stats(self, info):
+        """Arm 7 encoder statistics per eligible message (amendment A1): reasons, cap hits, verification failures."""
+        e = self.enc
+        e["messages"] += 1
+        self.enc_reasons[info.get("reason")] += 1
+        if "verify_error" in info:
+            self.enc_verify_errors[info["verify_error"]] += 1
+        if "candidates" in info:  # the encoder reached candidate generation
+            e["enumerated_messages"] += 1
+            e["candidates"] += info["candidates"]
+            e["cap_hit_messages"] += bool(info["cap_hit"])
+            e["entries_pending"] += info["entries_pending"]
+            e["template_evaluations"] += info["template_evaluations"]
+            e["eval_cap_hit_messages"] += bool(info["eval_cap_hit"])
+            e["matcher_calls"] += info["matcher_calls"]
+            e["match_cap_hit_messages"] += bool(info["match_cap_hit"])
+        e["verified_ok"] += info.get("reason") in ("compact", "compact_not_smaller")
+        e["verify_failed"] += info.get("reason") == "verify_failed"
+        e["receiver_rejects_after_send"] += bool(info.get("rejected"))
+        e["raw_fallback_sends"] += info.get("kind") == "raw"
+
+    def add_oversized(self, payload_len, input_len, kind=None, verified=False):
+        self.over_kinds[kind] = self.over_kinds.get(kind, 0) + 1
+        self.over_verified += bool(verified)
         self.over_n += 1
         self.over_input += input_len
         self.over_bytes += payload_len
@@ -318,7 +382,10 @@ class _Tally:
             "covered_bytes": self.covered, "refs": self.refs, "ref_bytes": self.ref_bytes,
             "messages_with_refs": self.nonzero_cov_msgs, "lit_segments": self.lit_segments,
             "oversized": {"count": self.over_n, "input_bytes": self.over_input,
-                          "fallback_bytes": self.over_bytes, "fallback_prefix_bytes": self.over_prefix},
+                          "fallback_bytes": self.over_bytes, "fallback_prefix_bytes": self.over_prefix,
+                          "kinds": dict(self.over_kinds), "verified_byte_exact": self.over_verified},
+            **({"encoder": {**dict(self.enc), "reasons": {str(k): v for k, v in self.enc_reasons.items()},
+                            "verify_errors": dict(self.enc_verify_errors)}} if self.enc else {}),
         }
 
 
@@ -370,9 +437,9 @@ def replay_arms(replay, chain, version_index, arms=ARMS, level=DEFAULT_LEVEL, b4
         n = len(msg)
         if n > C.MAX_MESSAGE_BYTES:  # section 5.1: one common fallback in every arm
             data, kind = oversized_fallback(msg, codec3)
-            assert codec3.decompress(data) == msg if kind == "zstd" else True
+            ok = verify_oversized(data, kind, msg, codec3)  # byte-exact, bounded by the original length
             for a in arms:
-                tallies[a].add_oversized(len(data), n)
+                tallies[a].add_oversized(len(data), n, kind, ok)
             continue
         raw = raw_wire(msg)
         zr = None
@@ -388,9 +455,8 @@ def replay_arms(replay, chain, version_index, arms=ARMS, level=DEFAULT_LEVEL, b4
                     cdc = b4_codec or codec3  # not trainable: baseline 3 is the strongest zstd baseline
                 else:
                     cdc = codec_4b(idx)
-                data, kind = zstd_or_raw(msg, cdc)
-                if kind == "zstd":
-                    assert cdc.decompress(data) == msg  # offline byte-exact oracle
+                data, kind = cdc.compress(msg), "zstd"  # the named baseline's native rule: the zstd frame, always
+                assert cdc.decompress(data) == msg  # offline byte-exact oracle
                 mb = t.add_first(len(data), kind, n)
                 if a in ("4b", "4b-delta"):  # same declaration rule as arms 5/6/7, the empty repository (v0) included
                     d = {"version": idx, "digest": chain[idx - 1]["state"].digest if idx else EMPTY_DIGEST}
@@ -423,6 +489,7 @@ def replay_arms(replay, chain, version_index, arms=ARMS, level=DEFAULT_LEVEL, b4
                 if info.get("rejected"):
                     t.rejected += 1
                 if a == "7":
+                    t.add_encoder_stats(info)
                     if info["kind"] == "compact" and info["refs"]:
                         t.nonzero_cov_msgs += 1
                     t.covered += info["covered_bytes"]
@@ -437,18 +504,83 @@ def replay_arms(replay, chain, version_index, arms=ARMS, level=DEFAULT_LEVEL, b4
     return {a: tallies[a].finish() for a in arms}
 
 
-def scenario_totals(message_results, chain, participants, joiner_versions, b4_codec=None):
-    """Add sync/control accounting (sections 2, 6) to replay_arms results for one participants/joiners setting.
-    Message bytes and sync bytes stay separate lines; total = messages + prefixes + declarations/rejects/retransmits
-    + sync (+ the oversized fallback frames and their prefixes in 'all_message_total')."""
+BREAK_EVEN_PAIRS = tuple(("7", y) for y in ("3", "4", "4b", "4b-delta", "5", "6"))
+
+
+def _sync_by_arm(chain, participants, joiner_versions, b4_codec):
     d4 = static_dict_sync(b4_codec.dict_bytes, participants, len(joiner_versions)) if b4_codec is not None and b4_codec.dict_bytes else \
         {"upload": 0, "download": 0, "total": 0}
     art = repo_artifact_sync(chain, participants, joiner_versions)
     b4b = dict_rebuild_sync(chain, participants, joiner_versions)
-    sync = {"1": {"upload": 0, "download": 0, "total": 0}, "3": {"upload": 0, "download": 0, "total": 0},
-            "4": d4, "4b": b4b, "4b-delta": art, "5": art, "7": art,
+    zero = {"upload": 0, "download": 0, "total": 0}
+    return {"1": zero, "3": zero, "4": d4, "4b": b4b, "4b-delta": art, "5": art, "7": art,
             "6": {"upload": art["upload"] + d4["upload"], "download": art["download"] + d4["download"],
                   "total": art["total"] + d4["total"]}}
+
+
+def break_even(message_results, chain, participants, joiner_versions, b4_codec=None, pairs=BREAK_EVEN_PAIRS):
+    """Amendment A1 (section 6, break-even). For X vs Y (X = arm 7), on the OBSERVED message bytes: sync_total(arm) =
+    initial + U*per_update + J*per_join, where initial = sync with no updates observed beyond version 1 and no joiners (the
+    first artifact uploaded once and downloaded by every participant), per_update = (sync(no joiners) - initial)/U over the
+    U = P-1 observed publications after the first, per_join = (sync(with joiners) - sync(no joiners))/J. X's advantage over Y
+    at u updates and j joins is  A(u, j) = (msgY - msgX) + (initial_Y - initial_X) - u*(pu_X - pu_Y) - j*(pj_X - pj_Y),
+    (msg = message + control bytes of the eligible messages, positive A = X smaller). Break-even counts are where A = 0
+    solved separately for u (j at its observed J) and for j (u at its observed U); a count is reported only when it is
+    defined, positive and finite; otherwise an explicit status string is given ('undefined: ...', 'X ahead at every
+    count', 'X behind at every count'). Everything is computed from emitted numbers (ingredients included)."""
+    J, U = len(joiner_versions), max(len(chain) - 1, 0)
+    s0 = _sync_by_arm(chain, participants, [], b4_codec)
+    s1 = _sync_by_arm(chain, participants, joiner_versions, b4_codec)
+    first = len(chain[0]["full"]) * (1 + participants) if chain else 0
+    d4 = static_dict_sync(b4_codec.dict_bytes, participants, 0)["total"] if b4_codec is not None and b4_codec.dict_bytes else 0
+    sizes = [len(repo_dict_bytes(r["state"])) for r in chain]
+    initial = {"1": 0, "3": 0, "4": d4, "4b": (sizes[0] * (1 + participants) if sizes else 0), "4b-delta": first, "5": first,
+               "6": first + d4, "7": first}
+    ing = {}
+    for a in message_results:
+        pu = (s0[a]["total"] - initial[a]) / U if U else None
+        pj = (s1[a]["total"] - s0[a]["total"]) / J if J else None
+        ing[a] = {"initial_sync": initial[a], "per_update_sync": pu, "per_join_sync": pj,
+                  "message_plus_control": message_results[a]["message_plus_control_total"], "sync_total": s1[a]["total"]}
+
+    def solve(adv0, step, what, count_observed):
+        if step is None:
+            return f"undefined: no {what} observed"
+        if step == 0:
+            return "undefined: identical per-" + what + " cost (X ahead at every count)" if adv0 > 0 else \
+                   ("undefined: identical per-" + what + " cost (X behind at every count)" if adv0 < 0 else "undefined: identical per-" + what + " cost (tie at every count)")
+        if step < 0:
+            return "X ahead at every count" if adv0 > 0 else f"{what} count where X catches up: {adv0 / -step:.3f}"
+        if adv0 <= 0:
+            return "X behind at every count"
+        return adv0 / step
+
+    out = {}
+    for x, y in pairs:
+        if x not in message_results or y not in message_results:
+            continue
+        ix, iy = ing[x], ing[y]
+        base = (iy["message_plus_control"] - ix["message_plus_control"]) + (iy["initial_sync"] - ix["initial_sync"])
+        pu_x, pu_y, pj_x, pj_y = ix["per_update_sync"], iy["per_update_sync"], ix["per_join_sync"], iy["per_join_sync"]
+        du = None if pu_x is None else pu_x - pu_y
+        dj = None if pj_x is None else pj_x - pj_y
+        a_obs = base - U * (du or 0) - J * (dj or 0)
+        out[f"{x}_vs_{y}"] = {
+            "advantage_observed": a_obs,  # equals total_Y - total_X on the observed scenario
+            "advantage_at_zero_updates_and_joins": base,
+            "break_even_updates": solve(base - J * (dj or 0), du, "update", U),
+            "break_even_joins": solve(base - U * (du or 0), dj, "join", J),
+            "per_update_delta_X_minus_Y": du, "per_join_delta_X_minus_Y": dj}
+    return {"ingredients": ing, "pairs": out, "updates_observed": U, "joins_observed": J}
+
+
+def scenario_totals(message_results, chain, participants, joiner_versions, b4_codec=None):
+    """Add sync/control accounting (sections 2, 6) to replay_arms results for one participants/joiners setting.
+    Message bytes and sync bytes stay separate lines; total = messages + prefixes + declarations/rejects/retransmits
+    + sync (+ the oversized fallback frames and their prefixes in 'all_message_total'). The result also carries
+    '_break_even' (see break_even) and, per arm, the sync ingredients (initial, per_update, per_join)."""
+    art = repo_artifact_sync(chain, participants, joiner_versions)
+    sync = _sync_by_arm(chain, participants, joiner_versions, b4_codec)
     out = {}
     for a, res in message_results.items():
         r = dict(res)
@@ -459,6 +591,8 @@ def scenario_totals(message_results, chain, participants, joiner_versions, b4_co
         r["total_per_eligible_message"] = r["total"] / res["eligible_messages"] if res["eligible_messages"] else None
         r["total_over_input_bytes"] = r["total"] / res["input_bytes"] if res["input_bytes"] else None
         out[a] = r
+    out["_break_even"] = break_even(message_results, chain, participants, joiner_versions, b4_codec)
+    out["_sync_ingredients"] = {"repo_artifact": {k: art[k] for k in art}}
     return out
 
 
