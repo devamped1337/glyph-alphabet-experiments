@@ -290,6 +290,119 @@ class TestObjective(unittest.TestCase):
         self.assertEqual(a, b)
 
 
+class _GreedyStub:
+    """Minimal Miner stand-in: made-up occurrence lists, so occurrence contributions can be negative."""
+    prov = "synthetic"
+
+    def __init__(self, msg_lens, occ_by_body):
+        self.msgs = ["x" * n for n in msg_lens]
+        self.msg_conv = {i: f"c{i}" for i in range(len(msg_lens))}
+        self.occ_by_body = occ_by_body
+
+    def _occ_list(self, kind, body, params, cutoff):
+        return list(self.occ_by_body.get(body, []))
+
+    _gain = staticmethod(K.Miner._gain)
+
+
+def _naive_reference(stub, cands, C, joiners):
+    """Independent reference: after EVERY pick, recompute the gain of EVERY remaining candidate from scratch."""
+    mult = 1 + joiners
+    items = []
+    for key in sorted(cands, key=lambda x: (x[1], x[2])):
+        kind, body, params = cands[key]
+        occ = stub._occ_list(kind, body, params, None)
+        if occ:
+            items.append((kind, body, params, occ, K._record_size(kind, body, [dict(name=n, type=t) for n, t in params], stub.prov) * mult))
+    covered = set()
+    picks, alive = [], list(range(len(items)))
+    while len(picks) < C:
+        best = None
+        for i in alive:
+            kind, body, params, occ, rec = items[i]
+            g = tl = 0
+            taken, last_m, last_e = [], -1, -1
+            for m, s, e, lb, ab in occ:
+                if m != last_m:
+                    last_m, last_e = m, -1
+                if s < last_e or any((m, x) in covered for x in range(s, e)):
+                    continue
+                g += lb - (1 + K.PROVISIONAL_ORDINAL_BYTES + ab)
+                tl += lb
+                taken.append((m, s, e))
+                last_e = e
+            g -= rec
+            if g > 0:
+                key = (-g, -tl, body.encode("utf-8"), i)
+                if best is None or key < best[0]:
+                    best = (key, i, g, taken)
+        if best is None:
+            break
+        _, i, g, taken = best
+        for m, s, e in taken:
+            covered.update((m, x) for x in range(s, e))
+        picks.append((items[i][1], g))
+        alive.remove(i)
+    return picks
+
+
+class TestGreedyExactness(unittest.TestCase):
+    """GPT blocker 1: the greedy must equal a full recomputation after every pick (G can RISE when a negative-contribution
+    occurrence is masked)."""
+
+    def test_gain_rises_after_masking_a_negative_occurrence(self):
+        # GPT's +1, +1, -1 example: candidate B's occurrences contribute +rec, +1, -1 (messages 0, 1, 2).
+        rec = K._record_size("literal", "B" * 40, [], "synthetic")
+        # B: +rec+1 total only after the -1 occurrence is masked away; A (picked first, higher G) masks it.
+        stub = _GreedyStub([10, 10, 10],
+                           {"A" * 40: [(2, 0, 10, 10 + 3 + 400, 0)],
+                            "B" * 40: [(0, 0, 10, 3 + rec, 0), (1, 0, 10, 3 + 1, 0), (2, 0, 10, 3 - 1, 0)]})
+        cands = {("literal", b, ()): ("literal", b, ()) for b in ("A" * 40, "B" * 40)}
+        got = K.Miner._greedy(stub, cands, None, 10, 0)
+        ref = _naive_reference(stub, cands, 10, 0)
+        self.assertEqual([(p["body"], p["G"]) for p in got], ref)
+        # before A: G(B) = rec + 1 - 1 - rec = 0 (not pickable); after A: G(B) = rec + 1 - rec = 1 (picked)
+        self.assertEqual([b[0] for b in ref], ["A" * 40, "B" * 40])
+        self.assertEqual(ref[1][1], 1)
+
+    def test_randomised_equals_naive_full_recompute(self):
+        import random
+        rng = random.Random(77)
+        for trial in range(400):
+            nm = rng.randint(2, 6)
+            lens = [rng.randint(12, 40) for _ in range(nm)]
+            occ_by_body, cands = {}, {}
+            for ci in range(rng.randint(2, 8)):
+                body = chr(97 + ci) * rng.randint(30, 40)
+                occ = []
+                for m in range(nm):
+                    s = 0
+                    while s + 4 <= lens[m] and rng.random() < 0.7:
+                        e = rng.randint(s + 3, min(lens[m], s + 14))
+                        ab = rng.choice([0, 0, 1, 3, 9])
+                        lb = (e - s) + rng.choice([0, 0, 0, 20, 100, 150, 200])
+                        if ab and rng.random() < 0.5:
+                            lb = rng.randint(1, 3 + ab)  # a negative contribution
+                        occ.append((m, s, e, lb, ab))  # contributions lb-(3+ab) may be negative
+                        s = e + rng.randint(0, 3)
+                if occ:
+                    occ_by_body[body] = occ
+                    cands[("literal", body, ())] = ("literal", body, ())
+            stub = _GreedyStub(lens, occ_by_body)
+            joiners = rng.choice([0, 0, 3])
+            C = rng.choice([1, 2, 5, 50])
+            got = K.Miner._greedy(stub, cands, None, C, joiners)
+            self.assertEqual([(p["body"], p["G"]) for p in got], _naive_reference(stub, cands, C, joiners), trial)
+
+    def test_selection_is_deterministic(self):
+        rec = K._record_size("literal", "A" * 40, [], "synthetic")
+        stub = _GreedyStub([10, 10], {"A" * 40: [(0, 0, 10, 3 + rec + 5, 0)], "B" * 40: [(1, 0, 10, 3 + rec + 5, 0)]})
+        cands = {("literal", b, ()): ("literal", b, ()) for b in ("B" * 40, "A" * 40)}
+        runs = [[p["body"] for p in K.Miner._greedy(stub, cands, None, 5, 0)] for _ in range(3)]
+        self.assertEqual(runs[0], runs[1])
+        self.assertEqual(runs[0], ["A" * 40, "B" * 40])  # equal G and total length: lexicographically smaller body first
+
+
 class TestTemplates(unittest.TestCase):
     TAIL = "; report to the orchestrator now and attach the full log for the maintainers to read"
 

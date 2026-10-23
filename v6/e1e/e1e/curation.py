@@ -7,6 +7,7 @@ removal and the section 4 tie rules -> entries -> forward-only five-block tuning
 Where the spec is silent the most literal reading is implemented and recorded in E1F_BUILD_NOTES.md.
 """
 import hashlib
+import collections
 import heapq
 import json
 import math
@@ -496,9 +497,16 @@ class Miner:
         return [o for o in self.template_occurrences(e) if o[0] < cutoff]
 
     def _greedy(self, cands, cutoff, C, joiners):
+        """Section 4.4 greedy with an exact (not lazy) objective. After every selection each remaining candidate's gain
+        is the gain recomputed against the current mask. The candidate's gain depends on the mask only through the
+        messages of its own occurrences, so exactly the candidates with an occurrence in a message touched by the
+        selection are recomputed (the others are provably unchanged); no monotonicity of G is assumed, because a masked
+        occurrence with a negative contribution can raise a candidate's G. Selection: highest G, then larger total
+        matched bytes, then lexicographically smaller body bytes, then the candidate's fixed enumeration index; stop
+        when C picks exist or the best remaining G <= 0."""
         mult = 1 + joiners
         mask = {}
-        heap, store = [], []
+        store, by_msg = [], collections.defaultdict(list)
         for key in sorted(cands, key=lambda x: (x[1], x[2])):
             kind, body, params = cands[key]
             occ = self._occ_list(kind, body, params, cutoff)
@@ -507,29 +515,40 @@ class Miner:
             rec = _record_size(kind, body, [dict(name=n, type=t) for n, t in params], self.prov) * mult
             cid = len(store)
             store.append((kind, body, params, occ, rec))
-            g, tl, _ = self._gain(occ, rec, mask)
-            if g > 0:
-                heap.append((-g, -tl, body.encode("utf-8"), cid))
-        heapq.heapify(heap)
-        picks = []
-        while heap and len(picks) < C:
-            ng, ntl, bb, cid = heapq.heappop(heap)
+            for m in {o[0] for o in occ}:
+                by_msg[m].append(cid)
+        cur, ver, heap = {}, {}, []  # cid -> (G, total_len, spans) against the current mask; version stamps; max-heap
+
+        def refresh(cid):
             kind, body, params, occ, rec = store[cid]
-            g, tl, used = self._gain(occ, rec, mask)
-            if g <= 0:
-                continue  # gains only shrink: it can never be picked again
-            key = (-g, -tl, bb, cid)
-            if heap and heap[0] < key:
-                heapq.heappush(heap, key)
-                continue
+            cur[cid] = res = self._gain(occ, rec, mask)
+            ver[cid] = ver.get(cid, 0) + 1
+            if res[0] > 0:
+                heapq.heappush(heap, (-res[0], -res[1], body.encode("utf-8"), cid, ver[cid]))
+
+        for cid in range(len(store)):
+            refresh(cid)
+        picks = []
+        while len(picks) < C:
+            while heap and (heap[0][3] not in cur or heap[0][4] != ver[heap[0][3]]):
+                heapq.heappop(heap)  # stale entry: its candidate was picked or recomputed since
+            if not heap:
+                break
+            cid = heapq.heappop(heap)[3]
+            kind, body, params, occ, rec = store[cid]
+            g, tl, used = cur.pop(cid)
+            touched = set()
             for m, s, e in used:
                 mk = mask.get(m)
                 if mk is None:
                     mk = mask[m] = bytearray(len(self.msgs[m]))
                 mk[s:e] = b"\x01" * (e - s)
+                touched.add(m)
             picks.append({"kind": kind, "body": body, "params": params, "G": g, "total_len": tl,
                           "occurrences": len(used), "convs": sorted({self.msg_conv[m] for m, _, _ in used}),
                           "entry_cost": rec})
+            for c in sorted({c for m in touched for c in by_msg[m] if c in cur}):
+                refresh(c)
         return picks
 
     @staticmethod
