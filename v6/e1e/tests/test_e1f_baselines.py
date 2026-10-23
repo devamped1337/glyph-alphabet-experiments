@@ -56,15 +56,41 @@ class TestSyncAccounting(unittest.TestCase):
         self.assertEqual(s["download"], 2 * (full1 + d2 + d3))
         s = B.repo_artifact_sync(c, participants=10, joiner_versions=[2, 3, 3])
         up = full1 + d2 + d3 + len(c[1]["full"]) + len(c[2]["full"])  # joined versions' full snapshots uploaded once each
-        down = 10 * (full1 + d2 + d3) + len(c[1]["full"]) + 2 * len(c[2]["full"])
+        # a joiner is charged the joined full snapshot AND every later publication (here: the joiner at version 2 gets d3)
+        down = 10 * (full1 + d2 + d3) + len(c[1]["full"]) + 2 * len(c[2]["full"]) + d3
         self.assertEqual((s["upload"], s["download"], s["total"]), (up, down, up + down))
+        self.assertEqual(s["joiner_join_download"], len(c[1]["full"]) + 2 * len(c[2]["full"]))
+        self.assertEqual(s["joiner_update_download"], d3)
+
+    def test_joiner_lifecycle_before_first_publication_and_at_first(self):
+        c = self.chain
+        full1, d2, d3 = len(c[0]["full"]), len(c[1]["delta"]), len(c[2]["delta"])
+        for v in (0, 1):  # version 0 joins the initial snapshot: same cost as version 1, no extra upload
+            s = B.repo_artifact_sync(c, 2, [v])
+            self.assertEqual(s["upload"], full1 + d2 + d3)
+            self.assertEqual(s["download"], 3 * (full1 + d2 + d3))
+        s = B.repo_artifact_sync(c, 2, [3])
+        self.assertEqual(s["joiner_update_download"], 0)
+
+    def test_zero_joiner_results_equal_the_pre_lifecycle_formula(self):
+        c = self.chain
+        arts = [len(c[0]["full"])] + [len(r["delta"]) for r in c[1:]]
+        for P in (2, 10):
+            s = B.repo_artifact_sync(c, P)
+            self.assertEqual((s["upload"], s["download"]), (sum(arts), P * sum(arts)))
+            sizes = [len(B.repo_dict_bytes(r["state"])) for r in c]
+            d = B.dict_rebuild_sync(c, P)
+            self.assertEqual((d["upload"], d["download"]), (sum(sizes), P * sum(sizes)))
 
     def test_4b_full_rebuild_vs_4b_delta_sync(self):
         c = self.chain
         sizes = [len(B.repo_dict_bytes(r["state"])) for r in c]
         a1 = B.dict_rebuild_sync(c, 2, [3])
         self.assertEqual(a1["upload"], sum(sizes))
-        self.assertEqual(a1["download"], 2 * sum(sizes) + sizes[2])
+        self.assertEqual(a1["download"], 2 * sum(sizes) + sizes[2])  # joiner at the last version: nothing later
+        a2 = B.dict_rebuild_sync(c, 2, [1, 0])  # a joiner at version 1 (or 0) also downloads every later dictionary
+        self.assertEqual(a2["download"], 2 * sum(sizes) + 2 * sum(sizes))
+        self.assertEqual(a2["joiner_update_download"], 2 * sum(sizes[1:]))
         delta = B.repo_artifact_sync(c, 2, [3])
         self.assertNotEqual(a1["total"], delta["total"])
 

@@ -206,34 +206,49 @@ def select_baseline4(dev_by_conv, participants=2, level=DEFAULT_LEVEL, frame=HEA
 
 
 def repo_artifact_sync(chain, participants, joiner_versions=()):
-    """Repository artifact distribution (arms 4b-delta, 5, 6, 7; section 2): the maintainer uploads every artifact once
-    (the initial full snapshot, each delta, and a joiner's full snapshot once per distinct joined version other than
-    the initial one); every participant downloads each artifact once (initial full sync, each delta); each joiner
-    downloads the full snapshot of the version current when it joins. chain: records with 'full' and 'delta' bytes.
-    joiner_versions: published indexes (1-based) at which joiners join, one entry per joiner."""
+    """Repository artifact distribution (arms 4b-delta, 5, 6, 7; section 2; amendment A1 joiner lifecycle): the maintainer
+    uploads every artifact once (the initial full snapshot, each delta, and a joiner's full snapshot once per distinct
+    joined version other than the initial one); every participant downloads each artifact once (initial full sync, each
+    delta). A joiner is a participant from its join onward: it downloads the full snapshot of the version current when it
+    joins (a joiner before the first publication, version 0, downloads the initial full snapshot) AND every later
+    publication's delta, in the same lifecycle. chain: records with 'full' and 'delta' bytes. joiner_versions: published
+    indexes (0 = before the first publication, else 1-based) at which joiners join, one entry per joiner."""
     if not chain:
         return {"upload": 0, "download": 0, "total": 0, "initial": 0, "per_update_download": 0, "per_join": 0,
-                "artifacts": 0}
+                "artifacts": 0, "joiner_join_download": 0, "joiner_update_download": 0}
     arts = [len(chain[0]["full"])] + [len(r["delta"]) for r in chain[1:]]
     upload = sum(arts)
     download = sum(arts) * participants
-    jv = [v for v in joiner_versions if v >= 1]  # a joiner before the first publication fetches nothing
+    jv = [max(v, 1) for v in joiner_versions]
     for v in sorted(set(jv)):
         if v != 1:
             upload += len(chain[v - 1]["full"])
-    download += sum(len(chain[v - 1]["full"]) for v in jv)
+    join_dl = sum(len(chain[v - 1]["full"]) for v in jv)
+    later_dl = sum(sum(arts[v:]) for v in jv)  # deltas of every publication after the joined version
+    download += join_dl + later_dl
     return {"upload": upload, "download": download, "total": upload + download, "artifacts": len(arts),
             "initial": arts[0] * (1 + participants),
             "per_update_download": (sum(arts[1:]) * participants / (len(arts) - 1)) if len(arts) > 1 else 0,
-            "per_join": (sum(len(chain[v - 1]["full"]) for v in jv) / len(jv)) if jv else 0}
+            "per_join": (join_dl / len(jv)) if jv else 0,
+            "joiner_join_download": join_dl, "joiner_update_download": later_dl}
 
 
 def dict_rebuild_sync(chain, participants, joiner_versions=()):
     """Arm 4b under A1: every published version's full raw-content dictionary is uploaded once and downloaded by every
-    participant (initial and each new version, a full rebuild, never a delta); each joiner downloads its version's."""
+    participant (initial and each new version, a full rebuild, never a delta). A joiner downloads the dictionary of the
+    version current when it joins (version 0: the first) and EVERY later published version's dictionary (lifecycle)."""
     sizes = [len(repo_dict_bytes(r["state"])) for r in chain]
-    return sync_cost(sizes, participants, [(v - 1, 1) for v in joiner_versions if v >= 1]) if sizes else \
-        {"upload": 0, "download": 0, "total": 0, "storage_per_participant": 0}
+    if not sizes:
+        return {"upload": 0, "download": 0, "total": 0, "storage_per_participant": 0, "joiner_join_download": 0,
+                "joiner_update_download": 0}
+    out = sync_cost(sizes, participants)
+    jv = [max(v, 1) for v in joiner_versions]
+    join_dl = sum(sizes[v - 1] for v in jv)
+    later_dl = sum(sum(sizes[v:]) for v in jv)
+    out["download"] += join_dl + later_dl
+    out["total"] = out["upload"] + out["download"]
+    out["joiner_join_download"], out["joiner_update_download"] = join_dl, later_dl
+    return out
 
 
 def static_dict_sync(dict_bytes, participants, joiners=0):
