@@ -403,6 +403,95 @@ class TestGreedyExactness(unittest.TestCase):
         self.assertEqual(runs[0], ["A" * 40, "B" * 40])  # equal G and total length: lexicographically smaller body first
 
 
+class _ChainStub:
+    """Scripted curation: picks_by_n[n_convs] -> list of literal bodies (pick order)."""
+    prov = "synthetic"
+
+    def __init__(self, picks_by_n):
+        self.picks_by_n, self.calls = picks_by_n, []
+
+    def curate(self, n, L, k, C, joiners):
+        self.calls.append(n)
+        picks = [{"kind": "literal", "body": b, "params": [], "G": 100 - i, "total_len": 50, "occurrences": 3,
+                  "convs": [f"conv{i}"], "entry_cost": 10} for i, b in enumerate(self.picks_by_n.get(n, []))]
+        return picks, {"n_convs": n}
+
+
+class TestAppendOnlyChain(unittest.TestCase):
+    """Amendment A1 section 4.7: the append-only publication rule, stated and tested exactly."""
+    A, B, C_, D = ("alpha " * 8, "bravo " * 8, "charlie " * 8, "delta " * 8)
+
+    def test_stable_ids_union_and_published_vs_scheduled_numbering(self):
+        # n_dev=10, V=5 -> prefixes 2,4,6,8,10 (ceil(j*10/5))
+        stub = _ChainStub({2: [self.A], 4: [self.A], 6: [self.B, self.A], 8: [self.B], 10: [self.C_]})
+        ch = K.build_repository_chain(stub, 10, 5, 32, 2, 50, 0)
+        self.assertEqual(stub.calls, [2, 4, 6, 8, 10])          # every scheduled version <= max_version is curated
+        self.assertEqual([r["sched_version"] for r in ch], [1, 3, 5])   # 2 and 4 added nothing: no publication
+        self.assertEqual([r["skipped_versions"] for r in ch], [[], [2], [4]])
+        ids = lambda r: {e["body"]: e["id"] for e in r["state"].entries.values()}
+        self.assertEqual(ids(ch[0]), {self.A: "e00001"})
+        self.assertEqual(ids(ch[1]), {self.A: "e00001", self.B: "e00002"})          # A keeps its id; B appended
+        self.assertEqual(ids(ch[2]), {self.A: "e00001", self.B: "e00002", self.C_: "e00003"})  # union keeps B although v4 omitted it
+        self.assertEqual([r["state"].version for r in ch], [1, 2, 3])               # published numbering is consecutive
+        self.assertIsNone(ch[0]["delta"])
+        self.assertIsNotNone(ch[1]["delta"])
+        self.assertEqual([row["status"] for row in ch.schedule], ["published", "empty", "published", "empty", "published"])
+        self.assertEqual([row["published_index"] for row in ch.schedule], [1, None, 2, None, 3])
+        self.assertEqual(ch.trailing_skipped, [])
+        self.assertEqual([x["id"] for x in ch[1]["entry_lineage"]], ["e00002"])
+        self.assertEqual(ch[1]["entry_lineage"][0]["convs"], ["conv0"])  # first-publication lineage (pick 0 of version 3)
+
+    def test_empty_snapshots_and_trailing_skipped_versions_are_preserved(self):
+        stub = _ChainStub({2: [self.A]})
+        ch = K.build_repository_chain(stub, 10, 5, 32, 2, 50, 0)
+        self.assertEqual(len(ch), 1)
+        self.assertEqual(ch.trailing_skipped, [2, 3, 4, 5])
+        self.assertEqual(len(ch.schedule), 5)
+        self.assertEqual([r["status"] for r in ch.schedule], ["published", "empty", "empty", "empty", "empty"])
+
+    def test_max_version_leaves_higher_versions_unused(self):
+        stub = _ChainStub({2: [self.A], 4: [self.B], 6: [self.C_]})
+        ch = K.build_repository_chain(stub, 10, 5, 32, 2, 50, 0, max_version=2)
+        self.assertEqual(stub.calls, [2, 4])
+        self.assertEqual([r["status"] for r in ch.schedule], ["published", "published", "unused", "unused", "unused"])
+        self.assertEqual(ch.trailing_skipped, [3, 4, 5])
+        self.assertEqual(ch.max_version, 2)
+
+    def test_nothing_published_at_all(self):
+        ch = K.build_repository_chain(_ChainStub({}), 10, 2, 32, 2, 50, 0)
+        self.assertEqual(len(ch), 0)
+        self.assertEqual(ch.trailing_skipped, [1, 2])
+
+    def test_union_limit_and_overflow_drops_the_last_new_entries_in_pick_order(self):
+        old = K.MAX_ENTRIES
+        K.MAX_ENTRIES = 3
+        try:
+            stub = _ChainStub({2: [self.A, self.B], 4: [self.C_, self.A, self.D]})
+            ch = K.build_repository_chain(stub, 10, 5, 32, 2, 50, 0)
+        finally:
+            K.MAX_ENTRIES = old
+        self.assertEqual([r["new_entries"] for r in ch], [2, 1])
+        self.assertEqual([r["overflow"] for r in ch], [0, 1])
+        self.assertEqual({e["body"] for e in ch[1]["state"].entries.values()}, {self.A, self.B, self.C_})  # D (last new in pick order) dropped
+        self.assertEqual(ch.schedule[1]["overflow"], 1)
+
+    def test_a_full_repository_publishes_nothing_more(self):
+        old = K.MAX_ENTRIES
+        K.MAX_ENTRIES = 2
+        try:
+            ch = K.build_repository_chain(_ChainStub({2: [self.A, self.B], 4: [self.C_]}), 10, 5, 32, 2, 50, 0)
+        finally:
+            K.MAX_ENTRIES = old
+        self.assertEqual(len(ch), 1)
+        self.assertEqual(ch.schedule[1]["status"], "empty")
+        self.assertEqual(ch.schedule[1]["overflow"], 1)
+
+    def test_C_does_not_limit_the_union(self):
+        stub = _ChainStub({2: [self.A], 4: [self.B], 6: [self.C_]})
+        ch = K.build_repository_chain(stub, 10, 5, 32, 2, 1, 0)   # C=1 per version, but the union holds 3 entries
+        self.assertEqual(len(ch[-1]["state"].entries), 3)
+
+
 class TestTemplates(unittest.TestCase):
     TAIL = "; report to the orchestrator now and attach the full log for the maintainers to read"
 

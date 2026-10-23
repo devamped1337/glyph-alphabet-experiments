@@ -92,7 +92,7 @@ def version_map(chain, sched_version):
 def scenario_message_results(miner, replay, n_dev, params, V, joiners, b4):
     M = len(replay)
     sched = [K.version_for_rank(r, M, V) for r in range(M)]
-    chain = K.build_repository_chain(miner, n_dev, V, *params, joiners, used_versions=set(sched))
+    chain = K.build_repository_chain(miner, n_dev, V, *params, joiners, max_version=max(sched) if sched else 0)
     vi = [version_map(chain, v) for v in sched]
     res = B.replay_arms(replay, chain, lambda r: vi[r], B.ARMS, b4_codec=b4)
     return chain, vi, res

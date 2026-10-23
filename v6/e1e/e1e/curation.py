@@ -629,30 +629,68 @@ def tune(miner, evaluate, grid_L=GRID_L, grid_k=GRID_K, grid_C=GRID_C):
 
 
 # ---------------------------------------------------------------- repository chain for a scenario
-def build_repository_chain(miner, n_dev, V, L, k, C, joiners, used_versions=None):
-    """Publish the curated versions as an append-only E1E-REPO/1 chain (build note 13). `used_versions` are the
-    schedule versions (1..V) some replayed message actually uses (default all); each is curated from the first
-    prefix_size(j, n_dev, V) dev conversations only. Returns a list of dicts, one per PUBLISHED snapshot in order
-    (published index i = repository version i): {sched_version, state, full (bytes), delta (bytes|None), picks,
-    stats, new_entries, overflow, empty_sched_versions}. A schedule version that adds no new entry publishes nothing
-    (the previous snapshot stays current) and is listed in the next record's `skipped_versions`."""
+class Chain(list):
+    """The published snapshots of one scenario, in publication order (list index i-1 = repository version i), plus the
+    complete scheduled-version metadata: `schedule` has one dict per scheduled version 1..V
+    {sched_version, n_convs, status ('published'|'empty'|'unused'), published_index|None, new_entries, overflow, picks};
+    `trailing_skipped` = scheduled versions after the last publication (empty or unused); `max_version` = the highest
+    scheduled version curated; `V`."""
+    schedule = ()
+    trailing_skipped = ()
+    max_version = 0
+    V = 0
+
+
+def build_repository_chain(miner, n_dev, V, L, k, C, joiners, max_version=None):
+    """AMENDMENT A1, section 4.7 (append-only publication). Scheduled version j (1..V) is curated from the first
+    prefix_size(j, n_dev, V) dev conversations for EVERY j <= max_version (default V; a caller passes the highest
+    scheduled version any replayed message uses; higher versions cannot influence a message and are not curated, status
+    'unused'). The repository is the append-only union of everything published so far: the picks of version j (the
+    top-C greedy sequence, in pick order) whose (kind, body, params) are not already in the repository become new
+    entries; an existing entry keeps its id and v=1 forever (deletion and updates are deferred); a new entry gets id
+    e{N:05d} with N = 1 + the largest numeric id so far, in pick order. The union (not C) is limited by MAX_ENTRIES =
+    4096: if the new entries do not fit, the LAST new entries in pick order are dropped and counted as `overflow`. A
+    scheduled version with no new entry (an unchanged or empty snapshot) publishes NOTHING: the previous snapshot stays
+    current and the version is `empty`. Repository versions are numbered 1..P consecutively over the non-empty
+    publications only, so V is a count of scheduled curation points, not of repository versions. A message scheduled at
+    version s uses the latest published snapshot whose sched_version <= s (version 0 = the empty repository if none).
+    Returns a Chain of per-publication records {sched_version, state, full, delta (None for the first), picks, stats,
+    new_entries, overflow, skipped_versions (scheduled versions with no publication since the previous one),
+    entry_lineage [{id, kind, G, occurrences, convs}] (source-conversation lineage of each new entry at first
+    publication; PRIVATE: conversation ids)}."""
     from .repo import Publisher
-    used = list(range(1, V + 1)) if used_versions is None else sorted(set(used_versions))
+    mv = V if max_version is None else min(V, max_version)
     pub = Publisher()
-    chain, skipped = [], []
-    for j in used:
+    chain, skipped = Chain(), []
+    sched = []
+    for j in range(1, V + 1):
         nj = prefix_size(j, n_dev, V)
-        picks, st = miner.curate(nj, L, k, C, joiners)
-        ents = entries_from_picks(picks, miner.prov, pub.state.entries if chain else None)
-        room = MAX_ENTRIES - len(pub.state.entries)
-        overflow = max(0, len(ents) - room)
-        ents = ents[:room] if overflow else ents
-        if not ents:
+        row = {"sched_version": j, "n_convs": nj, "status": "unused", "published_index": None, "new_entries": 0,
+               "overflow": 0, "picks": 0}
+        sched.append(row)
+        if j > mv:
             skipped.append(j)
             continue
+        picks, st = miner.curate(nj, L, k, C, joiners)
+        row["picks"] = len(picks)
+        prev = pub.state.entries if chain else None
+        assigned = [(i, p) for i, p, new in assign_ids(picks, prev) if new]
+        room = MAX_ENTRIES - len(pub.state.entries)
+        overflow = max(0, len(assigned) - room)
+        assigned = assigned[:room] if overflow else assigned
+        row["overflow"] = overflow
+        if not assigned:
+            row["status"] = "empty"
+            skipped.append(j)
+            continue
+        ents = [make_entry_strict(i, 1, p["body"], p["params"] or None, prov=miner.prov) for i, p in assigned]
         delta, full = pub.publish(ents)
+        row.update(status="published", published_index=len(chain) + 1, new_entries=len(ents))
         chain.append({"sched_version": j, "state": pub.state, "full": full, "delta": delta if len(chain) else None,
                       "picks": picks, "stats": st, "new_entries": len(ents), "overflow": overflow,
-                      "skipped_versions": skipped})
+                      "skipped_versions": skipped,
+                      "entry_lineage": [{"id": i, "kind": p["kind"], "G": p["G"], "occurrences": p["occurrences"],
+                                         "convs": p["convs"]} for i, p in assigned]})
         skipped = []
+    chain.schedule, chain.trailing_skipped, chain.max_version, chain.V = sched, list(skipped), mv, V
     return chain
