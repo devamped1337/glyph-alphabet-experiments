@@ -510,6 +510,180 @@ class TestAppendOnlyChain(unittest.TestCase):
         self.assertEqual(len(ch[-1]["state"].entries), 3)
 
 
+class TestSizeAwareOverflow(unittest.TestCase):
+    """GPT r2 blocker 1 / amendment A1.3.1: the byte limit (E1E-REPO/1 1 MiB, inclusive) applies to BOTH the canonical full
+    snapshot and the publication delta, measured on exact serialized bytes; the longest prefix of new entries in pick order
+    is admitted; the first pick that does not fit ends the prefix."""
+    LIMIT = 1 << 20
+
+    @staticmethod
+    def body(i, n, ch="a"):
+        h = f"<{i:04d}>"
+        return (h + ch * n)[:n] if n >= len(h) else (h)[:n]
+
+    @staticmethod
+    def sizes(state, bodies, first_id=None):
+        """Exact (len(full), len(delta)) for publishing `bodies` on `state` with sequential ids (reference, independent of
+        artifacts_fit: it uses the real Publisher machinery and canonical serialization)."""
+        from e1e.repo import Publisher, make_delta, RepoState
+        n0 = len(state._e)
+        ents = [K.make_entry_strict(f"e{n0 + 1 + i:05d}", 1, b, None, prov="synthetic") for i, b in enumerate(bodies)]
+        merged = dict(state._e)
+        merged.update({e["id"]: e for e in ents})
+        return len(RepoState(state.version + 1, merged).full_bytes()), len(make_delta(state, ents))
+
+    def reference_prefix(self, state, bodies):
+        k = 0
+        for i in range(1, len(bodies) + 1):
+            f, d = self.sizes(state, bodies[:i])
+            if f <= self.LIMIT and d <= self.LIMIT:
+                k = i
+            else:
+                break
+        return k
+
+    def chain_of_bodies(self, picks_by_n, n_dev=10, V=5):
+        return K.build_repository_chain(_ChainStub(picks_by_n), n_dev, V, 32, 2, 1000, 0)
+
+    def test_64_entries_of_16384_ascii_chars_no_longer_raise(self):
+        from e1e.repo import RepoState
+        bodies = [self.body(i, 16384) for i in range(64)]
+        ch = self.chain_of_bodies({2: bodies})
+        k = self.reference_prefix(RepoState(), bodies)
+        self.assertEqual(k, 63)                      # 64 x 16,384 B alone exceeds 1 MiB
+        self.assertEqual(ch[0]["new_entries"], k)
+        self.assertEqual((ch[0]["overflow_bytes"], ch[0]["overflow_count"], ch[0]["overflow"]), (64 - k, 0, 64 - k))
+        self.assertLessEqual(len(ch[0]["full"]), self.LIMIT)
+        self.assertEqual([x["id"] for x in ch[0]["entry_lineage"]], [f"e{i + 1:05d}" for i in range(k)])  # the prefix in pick order
+        self.assertEqual(ch.schedule[0]["overflow_bytes"], 64 - k)
+
+    def test_escaped_and_non_ascii_bodies_are_measured_on_serialized_bytes(self):
+        from e1e.repo import RepoState
+        bodies = []
+        for i in range(40):
+            ch = ["\u00e9", "\U0001F600", "\"", "\\", "\n"][i % 5]  # 6, 12, 2, 2, 2 serialized bytes per code point
+            bodies.append(self.body(i, 16384, ch=ch))
+        chain = self.chain_of_bodies({2: bodies})
+        k = self.reference_prefix(RepoState(), bodies)
+        self.assertGreater(k, 0)
+        self.assertLess(k, 40)
+        self.assertEqual(chain[0]["new_entries"], k)
+        self.assertEqual(chain[0]["overflow_bytes"], 40 - k)
+        self.assertLessEqual(len(chain[0]["full"]), self.LIMIT)
+        # the next pick would have fit by raw character count (16,384 x k+1 chars < 1 MiB) but not by serialized bytes
+        self.assertLess(16384 * (k + 1), self.LIMIT)
+
+    def test_overflow_against_an_existing_repository_preserves_existing_entries(self):
+        first = [self.body(0, 16384), self.body(1, 16384)]
+        more = [self.body(2 + i, 16384) for i in range(70)]
+        ch = self.chain_of_bodies({2: first, 4: first + more})
+        self.assertEqual(len(ch), 2)
+        st1 = ch[0]["state"]
+        k = self.reference_prefix(st1, more)
+        self.assertGreater(k, 55)
+        self.assertLess(k, 70)
+        self.assertEqual(ch[1]["new_entries"], k)
+        self.assertEqual(ch[1]["overflow_bytes"], 70 - k)
+        self.assertEqual(len(ch[1]["state"]._e), 2 + k)
+        for i, e in st1._e.items():                     # existing entries preserved unchanged
+            self.assertEqual(ch[1]["state"]._e[i], e)
+        self.assertLessEqual(len(ch[1]["full"]), self.LIMIT)
+        self.assertLessEqual(len(ch[1]["delta"]), self.LIMIT)
+
+    def _fill_and_tune(self, state, want, which, extra=()):
+        """(fill bodies, n): `fill` = f maximal 16,384-char bodies (f as large as possible) then one body of n chars (50 <= n <=
+        16,384) such that the chosen artifact (0 = full snapshot, 1 = delta) of publishing extra + fill + tuned on `state` is
+        EXACTLY `want` bytes. Exact serialized sizes, ASCII bodies (1 byte per char)."""
+        for f in range(64, 0, -1):
+            fill = [self.body(1 + i, 16384) for i in range(f)]
+            n0 = 100
+            a = self.sizes(state, list(extra) + fill + [self.body(900, n0)])[which]
+            n = n0 + (want - a)
+            if 50 <= n <= 16384:
+                bodies = list(extra) + fill + [self.body(900, n)]
+                assert self.sizes(state, bodies)[which] == want
+                return fill, n
+        raise AssertionError("no tuning found")
+
+    def test_exact_boundary_is_inclusive_full_snapshot(self):
+        small = [self.body(0, 200)]
+        st1 = self.chain_of_bodies({2: small})[0]["state"]
+        for extra, admitted in ((0, True), (1, False)):
+            fill, n = self._fill_and_tune(st1, self.LIMIT + extra, 0)
+            nf = len(fill)
+            ch = self.chain_of_bodies({2: small, 4: small + fill + [self.body(900, n)]})
+            self.assertEqual(len(ch), 2)
+            self.assertLessEqual(len(ch[1]["full"]), self.LIMIT)
+            if admitted:
+                self.assertEqual(len(ch[1]["full"]), self.LIMIT)       # exactly the limit: admitted (inclusive)
+                self.assertEqual((ch[1]["new_entries"], ch[1]["overflow_bytes"]), (nf + 1, 0))
+            else:
+                self.assertEqual((ch[1]["new_entries"], ch[1]["overflow_bytes"]), (nf, 1))  # one byte over: last entry dropped
+
+    def test_exact_boundary_is_inclusive_delta(self):
+        from e1e.repo import RepoState
+        for extra, admitted in ((0, True), (1, False)):
+            fill, n = self._fill_and_tune(RepoState(), self.LIMIT + extra, 1)
+            nf = len(fill)
+            ch = self.chain_of_bodies({2: fill + [self.body(900, n)]})
+            self.assertEqual((ch[0]["new_entries"], ch[0]["overflow_bytes"]), (nf + 1, 0) if admitted else (nf, 1))
+            self.assertLessEqual(len(ch[0]["full"]), self.LIMIT)
+        # (for the first publication the delta is the binding artifact: it is larger than the full snapshot)
+
+    def test_delta_over_the_limit_while_the_full_snapshot_fits(self):
+        from e1e.repo import RepoState
+        fill, n = self._fill_and_tune(RepoState(), self.LIMIT + 1, 1)   # delta exactly one byte over
+        bodies = fill + [self.body(900, n)]
+        f, d = self.sizes(RepoState(), bodies)
+        self.assertTrue(f <= self.LIMIT < d, (f, d))
+        ch = self.chain_of_bodies({2: bodies})
+        self.assertEqual(ch[0]["new_entries"], len(fill))     # the last is dropped because of the DELTA, although the full fits
+        self.assertEqual(ch[0]["overflow_bytes"], 1)
+
+    def test_nothing_fits_publishes_nothing_and_never_skips_to_a_later_smaller_pick(self):
+        small = [self.body(0, 200)]
+        st1 = self.chain_of_bodies({2: small})[0]["state"]
+        fill, n = self._fill_and_tune(st1, self.LIMIT - 400, 0)   # existing repository: full snapshot 400 B below the limit
+        first = small + fill + [self.body(900, n)]
+        too_big = self.body(901, 3000)
+        tiny = self.body(902, 50)
+        ch = self.chain_of_bodies({2: small, 4: first, 6: first + [too_big, tiny]})
+        self.assertEqual([r["sched_version"] for r in ch], [1, 2])
+        r3 = ch.schedule[2]
+        self.assertEqual((r3["status"], r3["new_entries"], r3["overflow_bytes"], r3["overflow_count"]), ("empty", 0, 2, 0))
+        self.assertEqual(ch.trailing_skipped, [3, 4, 5])
+        self.assertEqual(len(ch[1]["state"]._e), len(first))   # current snapshot preserved; "tiny" not admitted in place of "too_big"
+        f, d = self.sizes(ch[1]["state"], [tiny])
+        self.assertTrue(f <= self.LIMIT and d <= self.LIMIT, (f, d))            # tiny alone WOULD have fit
+
+    def test_count_limit_and_byte_limit_overflow_are_reported_separately(self):
+        old = K.MAX_ENTRIES
+        K.MAX_ENTRIES = 5
+        try:
+            bodies = [self.body(i, 16384) for i in range(8)]   # 8 new picks: count limit keeps 5, bytes keep all 5 (5 x 16 KiB)
+            ch = self.chain_of_bodies({2: bodies})
+        finally:
+            K.MAX_ENTRIES = old
+        self.assertEqual((ch[0]["new_entries"], ch[0]["overflow_count"], ch[0]["overflow_bytes"], ch[0]["overflow"]), (5, 3, 0, 3))
+        old = K.MAX_ENTRIES
+        K.MAX_ENTRIES = 70
+        try:
+            bodies = [self.body(i, 16384) for i in range(72)]  # count limit 70 -> drops 2; then the byte limit keeps 63
+            ch = self.chain_of_bodies({2: bodies})
+        finally:
+            K.MAX_ENTRIES = old
+        self.assertEqual((ch[0]["new_entries"], ch[0]["overflow_count"], ch[0]["overflow_bytes"], ch[0]["overflow"]), (63, 2, 7, 9))
+
+    def test_longest_fitting_prefix_matches_a_linear_scan(self):
+        import random
+        from e1e.repo import RepoState
+        rng = random.Random(5)
+        for _ in range(4):
+            bodies = [self.body(i, rng.choice([2000, 9000, 16384, 16384])) for i in range(100)]
+            ents = [K.make_entry_strict(f"e{i + 1:05d}", 1, b, None, prov="synthetic") for i, b in enumerate(bodies)]
+            self.assertEqual(K.longest_fitting_prefix(RepoState(), ents), self.reference_prefix(RepoState(), bodies))
+
+
 class TestTemplates(unittest.TestCase):
     TAIL = "; report to the orchestrator now and attach the full log for the maintainers to read"
 

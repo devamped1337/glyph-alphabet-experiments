@@ -128,6 +128,10 @@ def aggregate_chain(chain):
             "full_artifact_bytes_final": len(chain[-1]["full"]) if chain else 0,
             "new_entries_per_snapshot": [r["new_entries"] for r in chain],
             "overflow_entries_dropped": sum(r["overflow"] for r in chain),
+            "overflow_entries_dropped_count_limit": sum(r["overflow_count"] for r in chain),
+            "overflow_entries_dropped_byte_limit": sum(r["overflow_bytes"] for r in chain),
+            "overflow_by_scheduled_version": [[row["sched_version"], row.get("overflow_count", 0), row.get("overflow_bytes", 0)]
+                                              for row in getattr(chain, "schedule", ()) if row.get("overflow", 0)],
             "skipped_schedule_versions": [v for r in chain for v in r["skipped_versions"]],
             "kinds_final": ({k: sum(1 for e in chain[-1]["state"].entries.values() if e["kind"] == k)
                              for k in ("literal", "template")} if chain else {})}

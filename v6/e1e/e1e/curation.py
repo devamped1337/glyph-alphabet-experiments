@@ -13,8 +13,9 @@ import json
 import math
 import re
 
-from .canon import E1EError, canonical
+from .canon import E1EError, MAX_ARTIFACT_BYTES, canonical
 from .compact import END_TRIES, entry_matcher, template_end, template_starts, MATCH_CALL_CAP, MATCH_WORK_CAP
+from .repo import RepoState, make_delta
 from .schema import INT_RE, MAX_BODY_CHARS, MAX_PARAMS, PROVS, WORD_RE, make_entry, match_template, parse_template
 
 SEED = "e1e-fold-1"
@@ -632,6 +633,35 @@ def tune(miner, evaluate, grid_L=GRID_L, grid_k=GRID_K, grid_C=GRID_C):
 
 
 # ---------------------------------------------------------------- repository chain for a scenario
+def artifacts_fit(state, ents):
+    """Exact serialized-size test (amendment A1.3.1, size-aware overflow): publishing `ents` on top of `state` as version
+    state.version + 1 yields a canonical delta AND a canonical full snapshot that both fit the E1E-REPO/1 artifact limit
+    MAX_ARTIFACT_BYTES (inclusive). Measured on the real serialization (metadata, escaping, actual version)."""
+    merged = dict(state._e)
+    for e in ents:
+        merged[e["id"]] = e
+    full = RepoState(state.version + 1, merged).full_bytes()
+    if len(full) > MAX_ARTIFACT_BYTES:
+        return False
+    return len(make_delta(state, ents)) <= MAX_ARTIFACT_BYTES
+
+
+def longest_fitting_prefix(state, ents):
+    """Largest k such that artifacts_fit(state, ents[:k]). Both sizes are non-decreasing in k, so a prefix that fits has
+    every shorter prefix fitting too and binary search finds the same k as a linear scan. A pick that does not fit ends
+    the admitted prefix: later (smaller) picks are NOT admitted in its place."""
+    if not ents or artifacts_fit(state, ents):
+        return len(ents)
+    lo, hi = 0, len(ents)  # invariant: ents[:lo] fits (the empty prefix is a no-op), ents[:hi] does not
+    while hi - lo > 1:
+        mid = (lo + hi) // 2
+        if artifacts_fit(state, ents[:mid]):
+            lo = mid
+        else:
+            hi = mid
+    return lo
+
+
 class Chain(list):
     """The published snapshots of one scenario, in publication order (list index i-1 = repository version i), plus the
     complete scheduled-version metadata: `schedule` has one dict per scheduled version 1..V
@@ -652,7 +682,12 @@ def build_repository_chain(miner, n_dev, V, L, k, C, joiners, max_version=None):
     top-C greedy sequence, in pick order) whose (kind, body, params) are not already in the repository become new
     entries; an existing entry keeps its id and v=1 forever (deletion and updates are deferred); a new entry gets id
     e{N:05d} with N = 1 + the largest numeric id so far, in pick order. The union (not C) is limited by MAX_ENTRIES =
-    4096: if the new entries do not fit, the LAST new entries in pick order are dropped and counted as `overflow`. A
+    4096 AND by the E1E-REPO/1 artifact limit (see below): if the new entries do not fit, the LAST new entries in pick
+    order are dropped and counted (`overflow_count` for the entry-count limit, `overflow_bytes` for the byte limit,
+    `overflow` = their sum). Byte limit: the longest prefix of the new entries in pick order for which BOTH the canonical
+    full snapshot of the prospective version AND the canonical delta publishing it are <= MAX_ARTIFACT_BYTES (1 MiB,
+    inclusive, exact serialized bytes); a pick that does not fit ends the prefix (later picks are not admitted in its
+    place); existing entries are always preserved. A
     scheduled version with no new entry (an unchanged or empty snapshot) publishes NOTHING: the previous snapshot stays
     current and the version is `empty`. Repository versions are numbered 1..P consecutively over the non-empty
     publications only, so V is a count of scheduled curation points, not of repository versions. A message scheduled at
@@ -669,7 +704,7 @@ def build_repository_chain(miner, n_dev, V, L, k, C, joiners, max_version=None):
     for j in range(1, V + 1):
         nj = prefix_size(j, n_dev, V)
         row = {"sched_version": j, "n_convs": nj, "status": "unused", "published_index": None, "new_entries": 0,
-               "overflow": 0, "picks": 0}
+               "overflow": 0, "overflow_count": 0, "overflow_bytes": 0, "picks": 0}
         sched.append(row)
         if j > mv:
             skipped.append(j)
@@ -678,20 +713,25 @@ def build_repository_chain(miner, n_dev, V, L, k, C, joiners, max_version=None):
         row["picks"] = len(picks)
         prev = pub.state.entries if chain else None
         assigned = [(i, p) for i, p, new in assign_ids(picks, prev) if new]
-        room = MAX_ENTRIES - len(pub.state.entries)
-        overflow = max(0, len(assigned) - room)
-        assigned = assigned[:room] if overflow else assigned
-        row["overflow"] = overflow
+        room = MAX_ENTRIES - len(pub.state._e)
+        count_over = max(0, len(assigned) - room)
+        assigned = assigned[:room] if count_over else assigned
+        cand_ents = [make_entry_strict(i, 1, p["body"], p["params"] or None, prov=miner.prov) for i, p in assigned]
+        fit = longest_fitting_prefix(pub.state, cand_ents)
+        byte_over = len(assigned) - fit
+        assigned, cand_ents = assigned[:fit], cand_ents[:fit]
+        overflow = count_over + byte_over
+        row["overflow"], row["overflow_count"], row["overflow_bytes"] = overflow, count_over, byte_over
         if not assigned:
             row["status"] = "empty"
             skipped.append(j)
             continue
-        ents = [make_entry_strict(i, 1, p["body"], p["params"] or None, prov=miner.prov) for i, p in assigned]
+        ents = cand_ents
         delta, full = pub.publish(ents)
         row.update(status="published", published_index=len(chain) + 1, new_entries=len(ents))
         chain.append({"sched_version": j, "state": pub.state, "full": full, "delta": delta if len(chain) else None,
                       "picks": picks, "stats": st, "new_entries": len(ents), "overflow": overflow,
-                      "skipped_versions": skipped,
+                      "overflow_count": count_over, "overflow_bytes": byte_over, "skipped_versions": skipped,
                       "entry_lineage": [{"id": i, "kind": p["kind"], "G": p["G"], "occurrences": p["occurrences"],
                                          "convs": p["convs"]} for i, p in assigned]})
         skipped = []
