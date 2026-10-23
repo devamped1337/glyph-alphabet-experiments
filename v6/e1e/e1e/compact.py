@@ -359,6 +359,39 @@ def _encode_args(entry, args):
     return bytes(out)
 
 
+def template_end(m, e, text, s, lastpos, tries=END_TRIES):
+    """Section 3.5 template end search at start s: ends after occurrences of the last literal character, tried in
+    descending order, at most `tries` of them; the first with exactly one parse wins. Returns (end, parse) or None.
+    `lastpos` is a per-message cache {char: [positions]}."""
+    lp = lastpos.get(m.last)
+    if lp is None:
+        lp = [i for i, c in enumerate(text) if c == m.last]
+        lastpos[m.last] = lp
+    lo = bisect.bisect_left(lp, s)
+    hi = len(lp) - 1
+    t = 0
+    while hi >= lo and t < tries:
+        end = lp[hi] + 1
+        hi -= 1
+        t += 1
+        if m.full.fullmatch(text, s, end) is None:
+            continue
+        parses = match_template(e, text[s:end])
+        if parses is not None and len(parses) == 1:
+            return end, parses[0]
+    return None
+
+
+def entry_matcher(entry):
+    """Matcher record for one entry (same construction the snapshot view uses)."""
+    class _V:
+        pass
+    v = _V()
+    v.entries = [entry]
+    v.toks = [parse_template(entry["body"], entry["params"]) if entry["kind"] == "template" else None]
+    return _build_matchers(v)[0]
+
+
 def find_candidates(state, text, cap=CANDIDATE_CAP, tries=END_TRIES):
     """Section 3.5 enumeration for a snapshot and a str message. Returns (candidates, stats); a candidate is
     (start_char, end_char, ordinal, ref_bytes) in enumeration order: ascending offset, then ascending ordinal."""
@@ -399,23 +432,10 @@ def find_candidates(state, text, cap=CANDIDATE_CAP, tries=END_TRIES):
             if parses is not None and len(parses) == 1:
                 cands.append((0, n, o, bytes([OP_REF]) + encode_varint(o) + _encode_args(e, parses[0])))
             continue
-        lp = lastpos.get(m.last)
-        if lp is None:
-            lp = [i for i, c in enumerate(text) if c == m.last]
-            lastpos[m.last] = lp
-        lo = bisect.bisect_left(lp, s)
-        hi = len(lp) - 1
-        t = 0
-        while hi >= lo and t < tries:
-            end = lp[hi] + 1
-            hi -= 1
-            t += 1
-            if m.full.fullmatch(text, s, end) is None:
-                continue
-            parses = match_template(e, text[s:end])
-            if parses is not None and len(parses) == 1:
-                cands.append((s, end, o, bytes([OP_REF]) + encode_varint(o) + _encode_args(e, parses[0])))
-                break
+        hit = template_end(m, e, text, s, lastpos, tries)
+        if hit is not None:
+            end, parse = hit
+            cands.append((s, end, o, bytes([OP_REF]) + encode_varint(o) + _encode_args(e, parse)))
     return cands, {"candidates": len(cands), "cap_hit": cap_hit, "unconsidered_pairs": unconsidered,
                    "prefilter_pairs": len(pairs)}
 
