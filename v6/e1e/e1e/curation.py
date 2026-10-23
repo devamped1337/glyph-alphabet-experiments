@@ -246,7 +246,10 @@ class Miner:
 
     def common_substrings(self, cutoff_m, L):
         """Strings (str) from maximal common substrings of pairs of messages from different conversations, both
-        inside the cutoff; the >= L test is applied before trimming to code-point boundaries (build note)."""
+        inside the cutoff. Amendment A1 (note 10, choice made): for each pair (a < b) the suffix automaton is built on
+        message a and message b is walked; a maximal common substring is a (start-in-b, length) pair that is left- and
+        right-maximal in the BYTES of a and b; it is trimmed to UTF-8 code-point boundaries (taken from b's bytes), and
+        the minimum length L applies to the TRIMMED byte length (a result shorter than L after trimming is discarded)."""
         out, skipped = set(), 0
         for a in range(cutoff_m):
             for b in range(a + 1, cutoff_m):
@@ -256,7 +259,7 @@ class Miner:
                     if ln < L:
                         continue
                     bs = trim_utf8(self.bmsgs[b][st:st + ln])
-                    if not bs:
+                    if len(bs) < L:
                         continue
                     s = bs.decode("utf-8")
                     if len(s) > MAX_BODY_CHARS:

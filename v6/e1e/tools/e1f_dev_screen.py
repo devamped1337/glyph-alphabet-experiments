@@ -98,8 +98,31 @@ def scenario_message_results(miner, replay, n_dev, params, V, joiners, b4):
     return chain, vi, res
 
 
+def lineage_records(chain):
+    """PRIVATE per-entry source-conversation lineage (conversation ids): written only under /workspace/e1e-private/e1f_*."""
+    return [{"published_index": i, "sched_version": r["sched_version"],
+             "entries": [{"id": x["id"], "kind": x["kind"], "G": x["G"], "occurrences": x["occurrences"],
+                          "body_sha256": hashlib.sha256(r["state"].entries[x["id"]]["body"].encode()).hexdigest(),
+                          "source_conversations": x["convs"]} for x in r["entry_lineage"]]}
+            for i, r in enumerate(chain, 1)]
+
+
+def lineage_aggregate(chain):
+    """Aggregate lineage (no ids, no text): how many entries were supported by n distinct dev conversations."""
+    hist = {}
+    for r in chain:
+        for x in r["entry_lineage"]:
+            n = len(x["convs"])
+            hist[n] = hist.get(n, 0) + 1
+    return {"entries_by_number_of_source_conversations": {str(k): v for k, v in sorted(hist.items())}}
+
+
 def aggregate_chain(chain):
     return {"published_snapshots": len(chain),
+            "scheduled_versions": [{k_: v for k_, v in row.items()} for row in getattr(chain, "schedule", ())],
+            "trailing_skipped_schedule_versions": list(getattr(chain, "trailing_skipped", ())),
+            "max_scheduled_version_curated": getattr(chain, "max_version", None),
+            "lineage": lineage_aggregate(chain),
             "entries_final": len(chain[-1]["state"].entries) if chain else 0,
             "entry_body_bytes_final": sum(len(e["body"].encode()) for e in chain[-1]["state"].entries.values()) if chain else 0,
             "full_artifact_bytes_final": len(chain[-1]["full"]) if chain else 0,
@@ -116,22 +139,21 @@ def brief(a):
             "retransmit_bytes_incl_prefix", "message_plus_control_total", "sync_upload", "sync_download", "sync_total",
             "total", "all_message_total", "total_per_eligible_message", "total_over_input_bytes", "kinds", "rejected",
             "byte_weighted_message_ratio", "mean_per_message_ratio", "covered_bytes", "refs", "ref_bytes",
-            "messages_with_refs", "lit_segments", "oversized")
+            "messages_with_refs", "lit_segments", "oversized", "encoder")
     return {k: a[k] for k in keys if k in a}
 
 
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--corpus", required=True, choices=sorted(CORPORA))
-    ap.add_argument("--out", help="private output dir (required for non-public corpora)")
+    ap.add_argument("--out", required=True, help="private output dir under /workspace/e1e-private/e1f_*/ (full report + lineage manifest)")
     ap.add_argument("--aggregates", help="aggregates-only JSON to write (safe to commit)")
     a = ap.parse_args()
     t0 = time.time()
     cfg, convs, replay, sha = load(a.corpus)
-    if not cfg["public"]:
-        if not a.out or not os.path.realpath(a.out).startswith("/workspace/e1e-private/e1f_"):
-            raise SystemExit("private corpus: --out must be under /workspace/e1e-private/e1f_*/")
-        os.makedirs(a.out, exist_ok=True)
+    if not a.out or not os.path.realpath(a.out).startswith("/workspace/e1e-private/e1f_"):
+        raise SystemExit("--out is required for every corpus (private lineage manifest): it must be under /workspace/e1e-private/e1f_*/")
+    os.makedirs(a.out, exist_ok=True)
     prov = cfg["prov"]
     miner = K.Miner(convs, prov)
     n_dev = len(convs)
@@ -174,49 +196,59 @@ def main():
     dev_by_conv = [(c, [m["msg"] for m in replay_by_conv[i] if len(m["msg"]) <= 65536]) for i, (c, _) in enumerate(convs)]
     b4, b4rep = B.select_baseline4(dev_by_conv, participants=2)
     # ---- scenarios (message-level cached per (V, joiners); participants only change sync)
-    cache, scenarios = {}, []
+    cache, scenarios, lineage = {}, [], {}
     for sc in B.SCENARIO_GRID:
         key = (sc["V"], sc["joiners"])
         if key not in cache:
             cache[key] = scenario_message_results(miner, replay, n_dev, params, sc["V"], sc["joiners"], b4)
         chain, vi, res = cache[key]
+        lineage.setdefault(f"V{sc['V']}_joiners{sc['joiners']}", lineage_records(chain))
         M = len(replay)
         jv = [vi[i] for i in B.joiner_indexes(M)] if sc["joiners"] else []
         tot = B.scenario_totals(res, chain, sc["participants"], jv, b4)
         scenarios.append({"scenario": sc, "primary": sc == B.PRIMARY_SCENARIO, "chain": aggregate_chain(chain),
+                          "joiner_published_indexes": jv, "break_even": tot["_break_even"],
                           "arms": {arm: brief(tot[arm]) for arm in B.ARMS},
                           "arm7_vs_4b_delta_total": tot["7"]["total"] - tot["4b-delta"]["total"],
                           "arm7_vs_arm6_total": tot["7"]["total"] - tot["6"]["total"],
                           "arm7_vs_4b_total": tot["7"]["total"] - tot["4b"]["total"]})
     prim = [s for s in scenarios if s["primary"]][0]
     p7, pd = prim["arms"]["7"], prim["arms"]["4b-delta"]
-    # ---- Stage 2 heuristic (primary scenario, in-sample dev replay)
+    # ---- Stage 2 heuristic (amendment A1 section 7, exact formula; primary scenario, in-sample dev replay)
     avg_ref = p7["ref_bytes"] / p7["refs"] if p7["refs"] else 0.0
     n_el = p7["eligible_messages"]
-    est_core = (p7["input_bytes"] - p7["covered_bytes"]) + p7["refs"] * avg_ref + 2 * n_el  # literal bytes + REFs + discriminator + epoch
-    est = est_core + p7["message_prefix_bytes"] + p7["control_bytes"] + p7["control_prefix_bytes"] + p7["sync_total"]
-    est_lit = est + 2 * p7["lit_segments"]
-    stage2 = {"definition": "estimate = (input bytes - covered bytes) + refs x measured average REF bytes + 2 bytes per message (0x01 discriminator + epoch) + measured length prefixes + measured control bytes + measured arm-7 sync; compared with the measured 4b-delta total; primary scenario, in-sample dev replay",
-              "average_ref_bytes_measured": avg_ref, "estimate_total": est, "estimate_total_with_lit_overhead_2_bytes_per_lit_segment": est_lit,
-              "measured_arm7_total": p7["total"], "measured_4b_delta_total": pd["total"],
-              "measured_arm6_total": prim["arms"]["6"]["total"],
-              "estimate_below_4b_delta": est < pd["total"], "estimate_with_lit_overhead_below_4b_delta": est_lit < pd["total"],
-              "measured_arm7_below_4b_delta": p7["total"] < pd["total"]}
+    prim_entries = prim["chain"]["entries_final"]
+    if prim_entries == 0:
+        stage2 = {"definition": "undefined: the primary-scenario repository is empty, every arm-7 message is a raw envelope; no estimate is made",
+                  "measured_arm7_total": p7["total"], "measured_4b_delta_total": pd["total"],
+                  "estimate_total": None, "estimate_below_4b_delta": None, "measured_arm7_below_4b_delta": p7["total"] < pd["total"]}
+    else:
+        est_core = (p7["input_bytes"] - p7["covered_bytes"]) + p7["refs"] * avg_ref + 2 * n_el
+        est = est_core + p7["message_prefix_bytes"] + p7["control_bytes"] + p7["control_prefix_bytes"] + p7["sync_total"]
+        est_lit = est + 2 * p7["lit_segments"]
+        stage2 = {"definition": "AMENDMENT A1 section 7 Stage 2: estimate = (eligible input bytes - covered bytes) + REFs x measured average REF bytes + 2 x eligible messages (0x01 discriminator + a ONE-byte epoch; assumes every message is sent compact) + measured length prefixes + measured control bytes + measured arm-7 sync; the variant adds 2 bytes per measured LIT segment (opcode + a one-byte length; understates LIT longer than 127 bytes). Approximate: ignores raw-envelope sends and the empty-repository case. Compared with the measured 4b-delta total; primary scenario; in-sample dev replay",
+                  "average_ref_bytes_measured": avg_ref, "estimate_total": est, "estimate_total_with_lit_overhead_2_bytes_per_lit_segment": est_lit,
+                  "measured_arm7_total": p7["total"], "measured_4b_delta_total": pd["total"],
+                  "measured_arm6_total": prim["arms"]["6"]["total"],
+                  "estimate_below_4b_delta": est < pd["total"], "estimate_with_lit_overhead_below_4b_delta": est_lit < pd["total"],
+                  "measured_arm7_below_4b_delta": p7["total"] < pd["total"]}
     out = {
         "label": "DEV SCREENING ONLY. Heuristic, in-sample on dev corpora; not held-out evidence; no savings claim. "
                  + ("Glyph-own corpus is single-operator and self-similar (sanitised)." if a.corpus == "glyph_own" else "GPT-generated synthetic corpus."),
         "corpus": corpus_stats, "tuning": {"chosen": {"L": L, "k": k, "C": C},
                                            "scores_mean_arm7_total_bytes": {f"L{g[0]}_k{g[1]}_C{g[2]}": s for g, s in sorted(scores.items())},
                                            "seconds": round(t_tune, 1)},
-        "stage1": stage1, "stage2": stage2,
+        "stage1": stage1, "stage2": stage2, "spec": "E1F_PROPOSAL_DRAFT.md + E1F_AMENDMENT_A1_DRAFT.md",
         "informational_in_sample_coverage_by_grid_point_not_used_for_the_gate": sens, "baseline4_selection": {k_: v for k_, v in b4rep.items()},
         "scenarios": scenarios, "elapsed_seconds": round(time.time() - t0, 1),
         "code_sha256": {f: hashlib.sha256(open(os.path.join(ROOT, f), "rb").read()).hexdigest()
                         for f in ("e1e/compact.py", "e1e/curation.py", "e1e/baselines.py", "tools/e1f_dev_screen.py")},
     }
-    if a.out:
-        with open(os.path.join(a.out, f"{a.corpus}_report.json"), "w") as f:
-            json.dump(out, f, indent=1, sort_keys=True)
+    with open(os.path.join(a.out, f"{a.corpus}_report.json"), "w") as f:
+        json.dump(out, f, indent=1, sort_keys=True)
+    with open(os.path.join(a.out, f"{a.corpus}_lineage_manifest.json"), "w") as f:  # PRIVATE: conversation ids; never committed
+        json.dump({"label": "PRIVATE per-entry source-conversation lineage; do not commit", "corpus": a.corpus,
+                   "chains": lineage}, f, indent=1, sort_keys=True)
     if a.aggregates:
         with open(a.aggregates, "w") as f:
             json.dump(out, f, indent=1, sort_keys=True)

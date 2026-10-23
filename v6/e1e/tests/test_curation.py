@@ -196,6 +196,24 @@ class TestCandidates(unittest.TestCase):
             self.assertTrue(all(e["prov"] == prov for e in K.entries_from_picks(picks, prov)))
 
 
+class TestMinimumLengthAfterTrimming(unittest.TestCase):
+    """Amendment A1 note 10 (choice made): L applies to the byte length AFTER trimming to code-point boundaries."""
+
+    def test_result_shorter_than_L_after_trimming_is_discarded(self):
+        X = "abcdefghijklmnopqrstuvwxyz01234"   # 31 ASCII bytes
+        m = K.Miner([("c1", ["P" + X + "\u00e9!"]), ("c2", ["R" + X + "\u00e8?"])], "synthetic")
+        self.assertEqual(m.pair_results(0, 1), [(1, 32)])  # the raw maximal common byte string is X + 0xC3 (32 bytes)
+        out, _ = m.common_substrings(2, 32)
+        self.assertEqual(out, set())                         # trimmed to 31 bytes: below L = 32
+        out, _ = m.common_substrings(2, 31)
+        self.assertEqual(out, {X})
+
+    def test_orientation_is_earlier_message_automaton_later_message_walk(self):
+        X = "abcdefghijklmnopqrstuvwxyz0123456"
+        m = K.Miner([("c1", ["1" + X + "!"]), ("c2", ["2" + X + "?"])], "synthetic")
+        self.assertEqual(m.pair_results(0, 1), [(1, len(X))])  # start offset is in the LATER message (b)
+
+
 class TestObjective(unittest.TestCase):
     def test_gain_arithmetic_literal(self):
         spec = {"c1": ["a" + LINE_A + "1"], "c2": ["b" + LINE_A + "2"], "c3": ["c" + LINE_A + "3"]}
