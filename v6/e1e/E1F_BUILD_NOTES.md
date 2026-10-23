@@ -82,3 +82,28 @@ what is unclear, what was implemented (always the most literal reading) and a pr
 17. **§5.3 provenance.** `make_entry`'s default `prov="synthetic"` is part of the existing E1E code and its 69 tests, so it
     is not changed; E1f constructs entries only through `curation.make_entry_strict` (keyword-only `prov`, no default, must
     be one of the three values; `Miner` also refuses a missing prov). Proposed fix: say E1f call sites, as done here.
+
+## Arms, accounting and scenario runner (e1e/baselines.py, additions only)
+18. **Empty repository and arm 7.** Epochs are >= 1 (build note 8), so with no published snapshot arm 7 cannot form even an
+    all-LIT frame and sends the raw envelope; arms 5/6 likewise. Arm 4b equals baseline 3 (A1). Reported, not fixed.
+19. **Frame choice in arms 3/4/4b/4b-delta.** The spec does not say whether these may fall back to the envelope. Implemented:
+    the zstd frame is sent unless the raw envelope is not larger (ties to the raw envelope), the same rule as §5.1's
+    fallback; in practice the zstd frame always wins for eligible messages. Arm 1 sends the envelope.
+20. **Links, declarations and receivers.** §6 does not fix the link model. Implemented: a link is (conv_id, sender_role,
+    receiver_role); a declaration is charged when the declaration used on a link changes, first use included; one shared
+    receiver state per arm (all participants hold identical snapshots, applied at the same message index);
+    participants only multiply sync downloads. Declarations are charged for the repository arms (4b, 4b-delta, 5, 6, 7),
+    not for arms 1, 3, 4. Joiners are charged their full-sync download only (no separate declaration).
+21. **Which versions are published.** Held-out/replay messages may skip schedule versions (e.g. V = 20 with few messages).
+    Implemented: only schedule versions some message uses are curated and published, as consecutive repository versions
+    1, 2, ... (E1E-REPO/1 requires target = base + 1); a version that adds no new entry publishes nothing. `build_repository_chain`
+    records the skipped schedule versions. Proposed fix: say so in §4/§6.
+22. **Joiner upload and arm 4b.** A joiner's full snapshot artifact is uploaded once per distinct joined version other than
+    the initial one (arms 4b-delta/5/6/7); under A1 the joined version's dictionary was already uploaded when published.
+    Joiners at message indexes floor(M*q/4), q = 1, 2, 3 join at the version current for that message.
+23. **Break-even counts (§6).** Not collapsed to one number because 4b-delta and arm 7 distribute identical artifacts (per-update
+    and per-join costs are equal, so a break-even in updates/joins is undefined/infinite against 4b-delta). The runner reports
+    `initial`, `per_update_download` and `per_join` ingredients; break-even against 4b (full rebuild) can be computed from them.
+24. **Baseline 4 in dev screening.** The §7 size selection uses fold = SHA-256("e1e-fold-1" NUL conv_id) mod 4 (seed frozen by
+    §5.5; the plan says "seed fixed in the freeze") and charges dictionary bytes x (1 + 2 participants) in the CV score.
+    On dev corpora arms 4/6 are trained on and replayed over the same messages (in-sample), so they are optimistic there.

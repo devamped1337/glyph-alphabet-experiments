@@ -608,3 +608,33 @@ def tune(miner, evaluate, grid_L=GRID_L, grid_k=GRID_K, grid_C=GRID_C):
     scores = {g: s / 4 for g, s in sums.items()}
     best = min(sums, key=lambda g: (sums[g], g[0], g[1], g[2]))
     return best, scores
+
+
+# ---------------------------------------------------------------- repository chain for a scenario
+def build_repository_chain(miner, n_dev, V, L, k, C, joiners, used_versions=None):
+    """Publish the curated versions as an append-only E1E-REPO/1 chain (build note 13). `used_versions` are the
+    schedule versions (1..V) some replayed message actually uses (default all); each is curated from the first
+    prefix_size(j, n_dev, V) dev conversations only. Returns a list of dicts, one per PUBLISHED snapshot in order
+    (published index i = repository version i): {sched_version, state, full (bytes), delta (bytes|None), picks,
+    stats, new_entries, overflow, empty_sched_versions}. A schedule version that adds no new entry publishes nothing
+    (the previous snapshot stays current) and is listed in the next record's `skipped_versions`."""
+    from .repo import Publisher
+    used = list(range(1, V + 1)) if used_versions is None else sorted(set(used_versions))
+    pub = Publisher()
+    chain, skipped = [], []
+    for j in used:
+        nj = prefix_size(j, n_dev, V)
+        picks, st = miner.curate(nj, L, k, C, joiners)
+        ents = entries_from_picks(picks, miner.prov, pub.state.entries if chain else None)
+        room = MAX_ENTRIES - len(pub.state.entries)
+        overflow = max(0, len(ents) - room)
+        ents = ents[:room] if overflow else ents
+        if not ents:
+            skipped.append(j)
+            continue
+        delta, full = pub.publish(ents)
+        chain.append({"sched_version": j, "state": pub.state, "full": full, "delta": delta if len(chain) else None,
+                      "picks": picks, "stats": st, "new_entries": len(ents), "overflow": overflow,
+                      "skipped_versions": skipped})
+        skipped = []
+    return chain
