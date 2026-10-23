@@ -1,6 +1,6 @@
 # E1f amendment A1 (DRAFT) — to `E1F_PROPOSAL_DRAFT.md` revision 3
 
-Dated 2026-10-23 (Australia/Sydney). Status: **draft for GPT review; not frozen, not tagged.** It amends and clarifies the approved
+Dated 2026-10-23 (Australia/Sydney); revised the same day after GPT code review r2 (size-aware overflow, break-even sign, whole-message cap flag). Status: **draft for GPT review; not frozen, not tagged.** It amends and clarifies the approved
 proposal after GPT's code review r1 (`reviews/gpt_E1f_code_r1.md`, build commit `5539d39`). `E1F_PROPOSAL_DRAFT.md` is **not edited**;
 where this amendment is silent the proposal governs. **Unchanged by this amendment:** the tuning grid (L ∈ {32,64,128,256},
 k ∈ {2,3}, C ∈ {50,200,1000}), the 20 % Stage 1 coverage floor, the retirement rule and every threshold. The failed dev screening is
@@ -58,14 +58,14 @@ or not it passes); a try is skipped without calling the matcher unless the span 
 condition); otherwise the E1E-REPO/1 matcher (`match_template`, its own 20,000-step budget) decides, and the first try with
 **exactly one parse** is the candidate's end. A start where no try succeeds produces no candidate. Enumeration stops as soon as
 **4,096 candidates** exist. The prefilters only skip pairs the spec's test could not accept, so outputs are identical to evaluating
-every pair (regression-tested against the pre-amendment implementation on made-up inputs below the cap).
+every pair: **when the evaluation/matching caps below do not truncate enumeration**, the output equals that of evaluating every pair (regression-tested against the pre-amendment implementation on made-up inputs below the candidate cap). When a cap does truncate a message the output is the deterministic truncated one and the cap flag is set.
 
 **Work bounds on non-candidate evaluations (blocker 3) [CHOICE].** The proposal bounds produced candidates, not evaluations. Per
 message: at most `EVAL_CAP` = 65,536 template (offset, entry) evaluations, at most `MATCH_CALL_CAP` = 4,096 matcher invocations, and at
 most `MATCH_WORK_CAP` = 2²⁰ characters summed over the spans handed to the matcher. (The E1E matcher's 20,000-step budget is not a time
 bound — each step slices and regex-matches the remaining span, so one call on a ~40,000-character span costs ≈ 0.3 s — hence the
 character budget.) When any of these is exhausted all remaining template pairs of that message are dropped; literal candidates are
-unaffected; the outcome is deterministic and reported (`eval_cap_hit`, `match_cap_hit`).
+unaffected; the outcome is deterministic and reported (`eval_cap_hit`, `match_cap_hit`). **The caps are a deterministic work guard, not a latency guarantee:** the span-character budget together with the E1E step limit conservatively bounds matcher work but establishes no wall-clock deadline (no matcher rewrite and no timeout is part of this amendment). The flag `match_cap_hit` is set whenever the call or character budget suppresses a template evaluation or a whole-message match, including the final or only pair; the characters actually handed to the matcher are emitted as `matcher_span_chars`.
 
 **Reported statistics (note 6).** Per message: `candidates`, `cap_hit` (the 4,096 limit was reached with at least one entry still
 having an unexamined start), `entries_pending` (the number of entries whose start iterator was not exhausted when enumeration stopped —
@@ -153,8 +153,17 @@ keyword-only, no default, one of the three values; `Miner` refuses a missing pro
 3. **Union (append-only).** The repository is the union of everything published so far. The picks of version j (in pick order) whose
    (kind, body, params) are not already in the repository are its *new entries*. An existing entry keeps its id and v = 1 forever
    (no update or deletion; E1E-REPO/1 defers deletion). A new entry gets id `e{N:05d}`, N = 1 + the largest numeric id so far, in pick order.
-4. **Limit and overflow.** The union (not C) is limited by MAX_ENTRIES = 4,096. If the new entries do not fit, the **last** new entries in
-   pick order are dropped and counted (`overflow`).
+4. **Limit and overflow (count and bytes).** The union (not C) is limited by MAX_ENTRIES = 4,096 **and by the E1E-REPO/1 artifact limit of
+   1 MiB (1,048,576 bytes, unchanged, inclusive)**. Existing entries are always preserved. The admitted new entries are the **longest prefix, in
+   pick order,** of the new entries that remain after the count limit, for which BOTH (i) the prospective canonical full snapshot (its actual
+   next version, all entries, metadata and escaping) AND (ii) the canonical delta that publishes them (actual base/target versions and digests)
+   are ≤ 1,048,576 bytes, measured on the exact serialized bytes. (For the first publication the delta, which carries extra metadata, is
+   the binding artifact; for later publications the full snapshot is.) The first pick that does not fit ends the prefix: **a later, smaller
+   pick is never admitted in its place** (nor is an oversized pick skipped). The remaining suffix is dropped. If no new entry fits, nothing is
+   published, the current snapshot is kept and the version is `empty`. Dropped entries are counted **separately**: `overflow_count`
+   (entry-count limit) and `overflow_bytes` (byte limit); `overflow` is their sum. Because both artifacts only grow when an entry is added,
+   the longest fitting prefix is found by binary search with the same result as a linear scan. A dropped pick can be proposed again by a later
+   scheduled version and is then a new entry again.
 5. **Publication.** A scheduled version with no new entry (unchanged or empty) publishes nothing: the previous snapshot stays current and
    the version is recorded as `empty`. Published repository versions are numbered 1..P **consecutively over non-empty publications only**
    (E1E-REPO/1 requires target = base + 1); the first is a full snapshot, later ones deltas.
@@ -205,7 +214,7 @@ advantage A(u, j) = (msg_Y − msg_X) + (initial_Y − initial_X) − u·(pu_X �
 A = 0 with j at its observed J; **break-even join count** = the j where A = 0 with u at its observed U. A count is a number only when defined,
 positive and finite; otherwise an explicit string: `undefined: no update observed`, `undefined: no join observed`,
 `undefined: identical per-update/per-join cost (X ahead|behind|tie at every count)` (always the case against 4b-delta, which distributes the
-same artifacts), `X ahead at every count`, `X behind at every count`.
+same artifacts), `X ties Y at zero {updates|joins} (crossover at 0)`, `X ahead at every count`, `X behind at every count`. The crossover is `A₀ / step` (A₀ = X's advantage at zero counts of the solved quantity, step = X's extra cost per count) for **either sign** of step; it is returned as a number only when positive and finite (e.g. A(u) = −1000 + 100u gives +10); a negative crossover means it never happens at a count ≥ 0 and is reported as ahead/behind at every count. **The linear model is a frozen observed-cost extrapolation** (observed per-update and per-join costs taken as constants), **not a fresh simulation**: varying the number of joins or updates can change lifecycle costs and shared uploads.
 
 ## A1.6 §7 Dev screening (notes 24, 25, 26, 27)
 
@@ -243,7 +252,7 @@ candidate generation vs. a frozen copy of the pre-amendment code (`tests/old_com
 65,536-character stress test (< 5 s; the old code materialised ≈ 2.7×10⁸ pairs); matcher call/character caps; append-only chain rule (stable ids,
 union, overflow order, unchanged/empty snapshots, `unused` versions, trailing skipped); joiner lifecycle incl. version 0 and zero-joiner invariance;
 byte-exact oversized verification for a > 1 MiB compressible message and raw envelopes; native zstd rule for arms 3/4/4b/4b-delta; encoder
-statistics; break-even incl. undefined cases; the 65,536-byte all-LIT fallback; L-after-trimming and automaton orientation.
+statistics; break-even incl. undefined cases; the 65,536-byte all-LIT fallback; L-after-trimming and automaton orientation. Added after GPT r2: size-aware overflow (64 × 16,384-char bodies, a delta over the limit while the full snapshot fits, escaped and non-ASCII bodies, overflow against an existing repository, exact inclusive boundaries for both artifacts, a later smaller pick never admitted, separate count/byte overflow); break-even crossover for both slope signs and a zero intercept; whole-message match suppressed by the character budget reported (`x{w}`, `xabcd`, work cap 1).
 
 ## 8. Choices made (for GPT to overrule)
 | # | Note/blocker | Choice |
@@ -254,8 +263,8 @@ statistics; break-even incl. undefined cases; the 65,536-byte all-LIT fallback; 
 | C4 | 3 | Caps `EVAL_CAP` 65,536, `MATCH_CALL_CAP` 4,096, `MATCH_WORK_CAP` 2²⁰ chars per message; when exhausted, template pairs are dropped, literals continue. |
 | C5 | 6 | `entries_pending` / `cap_hit` definitions (A1.2); "unconsidered pairs" withdrawn. |
 | C6 | 13/21 | Curate every scheduled version ≤ Vmax (not only used ones); versions > Vmax `unused`. |
-| C7 | 13 | Overflow drops the last new entries in pick order; first-publication lineage. |
-| C8 | 23 | Break-even definitions (per-update/per-join from emitted sync totals; X = arm 7 vs each other arm). |
+| C7 | 13 | Overflow drops the last new entries in pick order (count limit, then the longest prefix that fits the 1 MiB limit on exact full and delta bytes — GPT r2 ruling); first-publication lineage. |
+| C8 | 23 | Break-even definitions (per-update/per-join from emitted sync totals; X = arm 7 vs each other arm); a frozen observed-cost extrapolation, not a fresh simulation. |
 | C9 | 24 | CV score includes length prefixes; selection rule frozen as in A1.6. |
 | C10 | 2 | The frame-size limit (E_TOO_LARGE) is checked before the epoch; reconstructed size last. |
 | C11 | 22 | A joiner at version 0 downloads the initial snapshot with no extra upload and then every later publication. |
@@ -268,7 +277,6 @@ See `E1F_BUILD_NOTES.md` (each note marked resolved/accepted with its commit) an
 3 → A1.2, 4 → A1.5, 5 → A1.4, 6 → A1.2/A1.5/A1.3.1(8), 7 → A1.4.
 
 ## 10. Unresolved / possible spec issues
-- A full repository can exceed E1E-REPO/1's 1 MiB artifact limit before 4,096 entries (4,096 × up to 16,384-character bodies); curation checks
-  only the entry-count limit, so `publish` would raise. Cannot occur on the dev corpora; needs a ruling (size-aware overflow).
+- (Resolved by GPT code review r2, implemented in A1.3.1 item 4: size-aware overflow on exact full and delta bytes.)
 - The E1E matcher's step budget does not bound time (A1.2); the character-work cap is this amendment's guard.
 - Per-link declarations are the largest control charge; they are a topology cost in the proposal's link model.

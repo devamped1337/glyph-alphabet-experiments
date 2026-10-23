@@ -19,6 +19,18 @@ trimming, Stage 2). Each item below carries its status tag; where the item text 
 | 2, 4, 5, 6, 11, 13, 16, 19, 21, 22, 23 | REQUIRED CHANGE | resolved (see tags) |
 | 10, 15b, 26 | REQUIRED CHANGE (design choice) | resolved with a [CHOICE] listed in the amendment section 8 for GPT to overrule |
 
+## Resolution status after GPT code review r2 (2026-10-23, Australia/Sydney)
+
+GPT r2 (`reviews/gpt_E1f_code_r2.md`) resolved blockers 1-5 and 7 and accepted choices C1-C14, and required three fixes (all in the
+amendment, `E1F_AMENDMENT_A1_DRAFT.md`, revised):
+- **r2-1 size-aware publication overflow** (note 13 / C7): `c80559a`; A1.3.1 item 4. Longest prefix of new entries in pick order whose exact canonical full
+  snapshot AND delta are <= 1,048,576 bytes; count-limit and byte-limit overflow reported separately; the E1E limit is unchanged.
+- **r2-2 break-even sign error** (note 23 / C8): `b145d0a`; A1.5. Crossover = A0/step for either slope sign; numeric only when positive and finite;
+  explicit statuses otherwise; stated as a frozen observed-cost extrapolation. Affected reports regenerated.
+- **r2-3 whole-message character-budget suppression unreported** (note 6 / C4): `9f9162e` + `8110b24`; A1.2. The flag is set at rejection;
+  `matcher_span_chars` is emitted; the A1.2 equivalence claim is qualified; C4 is a deterministic work guard, not a latency guarantee.
+The earlier "possible spec issue" about the 1 MiB artifact limit (amendment section 10) is resolved by r2-1.
+
 ## Compact codec (e1e/compact.py)
 1. **§3.1/§3.2, empty frame (zero-length payload).** *[accepted (A1.1, ddcf798)]* No first byte exists; the spec lists only "any other first byte:
    E_SCHEMA". Implemented: E_SCHEMA (same as an unknown discriminator). Proposed fix: state it.
