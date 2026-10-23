@@ -432,6 +432,21 @@ class TestCandidateGenerationA1(unittest.TestCase):
         self.assertTrue(stats["eval_cap_hit"])
         self.assertEqual(stats["template_evaluations"], 10)
 
+    def test_all_lit_saving_is_not_universal_a_65536_byte_unmatched_message_goes_raw(self):
+        """Amendment A1 note 4: the all-LIT frame is 4+ bytes longer than the message, so at 65,536 bytes it is an
+        oversized compact frame (E_TOO_LARGE in the real decoder) and the send rule falls back to the raw envelope."""
+        pub = Publisher()
+        pub.publish([make_entry("e1", 1, "nothing like the message " * 3)])
+        st = pub.state
+        known = {st.digest: st}
+        msg = b"q" * 65536
+        p, info = C.encode(known, {"version": 1, "digest": st.digest}, msg)
+        self.assertEqual((info["kind"], info["reason"], info.get("verify_error")), ("raw", "verify_failed", "E_TOO_LARGE"))
+        self.assertEqual(p, raw_wire(msg))
+        small = b"q" * 65000
+        p, info = C.encode(known, {"version": 1, "digest": st.digest}, small)
+        self.assertEqual((info["kind"], info["reason"]), ("compact", "compact"))
+
     def test_default_caps(self):
         self.assertEqual(C.EVAL_CAP, 65536)
         self.assertEqual(C.MATCH_CALL_CAP, 4096)
