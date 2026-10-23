@@ -415,6 +415,29 @@ class TestCandidateGenerationA1(unittest.TestCase):
         self.assertTrue(stats["match_cap_hit"])
         self.assertLess(time.time() - t, 30)  # no regex backtracking anywhere in candidate generation
 
+    def test_whole_message_match_suppressed_by_the_character_budget_is_reported(self):
+        pub = Publisher()
+        pub.publish([make_entry("t0", 1, "x{w}", [("w", "word")])])
+        st = pub.state
+        cands, stats = C.find_candidates(st, "xabcd", work_cap=1)
+        self.assertEqual(cands, [])
+        self.assertEqual(stats["matcher_calls"], 0)
+        self.assertEqual(stats["matcher_span_chars"], 0)
+        self.assertTrue(stats["match_cap_hit"])
+        cands, stats = C.find_candidates(st, "xabcd")          # with the default budget the match is found
+        self.assertEqual([(c[0], c[1]) for c in cands], [(0, 5)])
+        self.assertFalse(stats["match_cap_hit"])
+        self.assertEqual((stats["matcher_calls"], stats["matcher_span_chars"]), (1, 5))
+        cands, stats = C.find_candidates(st, "xabcd", match_cap=0)  # call cap exhausted before the only pair
+        self.assertTrue(stats["match_cap_hit"])
+
+    def test_matcher_span_characters_are_emitted(self):
+        pub = Publisher()
+        pub.publish([make_entry("t0", 1, "{a}.{b}!", [("a", "word"), ("b", "word")])])
+        st = pub.state
+        cands, stats = C.find_candidates(st, "ab.cd!")
+        self.assertEqual((stats["matcher_calls"], stats["matcher_span_chars"]), (1, 6))  # one try, span "ab.cd!" = 6 chars
+
     def test_exhausted_template_work_does_not_suppress_literals(self):
         pub = Publisher()
         pub.publish([make_entry("t0", 1, "{n}x!", [("n", "int")]), make_entry("l0", 1, "zz")])

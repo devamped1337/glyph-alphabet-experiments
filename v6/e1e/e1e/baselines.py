@@ -350,6 +350,7 @@ class _Tally:
             e["template_evaluations"] += info["template_evaluations"]
             e["eval_cap_hit_messages"] += bool(info["eval_cap_hit"])
             e["matcher_calls"] += info["matcher_calls"]
+            e["matcher_span_chars"] += info["matcher_span_chars"]
             e["match_cap_hit_messages"] += bool(info["match_cap_hit"])
         e["verified_ok"] += info.get("reason") in ("compact", "compact_not_smaller")
         e["verify_failed"] += info.get("reason") == "verify_failed"

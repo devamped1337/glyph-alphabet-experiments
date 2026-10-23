@@ -434,7 +434,7 @@ def find_candidates(state, text, cap=CANDIDATE_CAP, tries=END_TRIES, eval_cap=EV
     materialised); enumeration stops as soon as `cap` candidates exist. stats: candidates, cap_hit (stopped with at
     least one unexamined prefiltered pair left), entries_pending (entries that still had an unexamined start),
     template_evaluations, eval_cap_hit (template evaluations reached `eval_cap`; enumeration stopped there),
-    matcher_calls, match_cap_hit (matcher invocations or summed span characters reached `match_cap`/`work_cap`; template
+    matcher_calls, matcher_span_chars (summed span characters actually handed to the matcher), match_cap_hit (matcher invocations or summed span characters reached `match_cap`/`work_cap`; template
     candidates after that point are not generated)."""
     view = snap_view(state)
     ms = view.matcher()
@@ -487,6 +487,7 @@ def find_candidates(state, text, cap=CANDIDATE_CAP, tries=END_TRIES, eval_cap=EV
         elif m.whole_only:
             if budget[0] <= 0 or budget[1] < n:
                 budget[0] = 0
+                match_hit = True  # the budget suppressed this whole-message match: report it
                 continue
             budget[0] -= 1
             budget[1] -= n
@@ -503,7 +504,8 @@ def find_candidates(state, text, cap=CANDIDATE_CAP, tries=END_TRIES, eval_cap=EV
                 cands.append((s, end, o, bytes([OP_REF]) + encode_varint(o) + _encode_args(e, parse)))
     return cands, {"candidates": len(cands), "cap_hit": cap_hit, "entries_pending": len(heap),
                    "template_evaluations": evals, "eval_cap_hit": eval_hit,
-                   "matcher_calls": budget[2], "match_cap_hit": match_hit}
+                   "matcher_calls": budget[2], "matcher_span_chars": work_cap - budget[1],
+                   "match_cap_hit": match_hit}
 
 
 def plan_segments(text, cands):
