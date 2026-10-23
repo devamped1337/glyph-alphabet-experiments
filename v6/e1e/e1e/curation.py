@@ -13,7 +13,7 @@ import math
 import re
 
 from .canon import E1EError, canonical
-from .compact import END_TRIES, entry_matcher, template_end
+from .compact import END_TRIES, entry_matcher, template_end, template_starts, MATCH_CALL_CAP, MATCH_WORK_CAP
 from .schema import INT_RE, MAX_BODY_CHARS, MAX_PARAMS, PROVS, WORD_RE, make_entry, match_template, parse_template
 
 SEED = "e1e-fold-1"
@@ -302,10 +302,9 @@ class Miner:
             for m in sorted(seen):
                 text = self.msgs[m]
                 if eligible_segmented(entry, toks):
-                    lastpos = {}
-                    for mo in mt.look.finditer(text):
-                        s = mo.start()
-                        hit = template_end(mt, entry, text, s, lastpos, END_TRIES)
+                    lastpos, budget = {}, [MATCH_CALL_CAP, MATCH_WORK_CAP, 0]
+                    for s in template_starts(mt, text):
+                        hit = template_end(mt, entry, text, s, lastpos, END_TRIES, budget)
                         if hit is not None:
                             e, parse = hit
                             r.append((m, s, e, len(text[s:e].encode("utf-8")), len(_encode_args(entry, parse))))

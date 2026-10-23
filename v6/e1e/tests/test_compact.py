@@ -254,7 +254,7 @@ class TestEncoder(unittest.TestCase):
         cands, stats = C.find_candidates(st, "aaaaaa", cap=3)
         self.assertEqual(len(cands), 3)
         self.assertTrue(stats["cap_hit"])
-        self.assertEqual(stats["unconsidered_pairs"], 2)
+        self.assertEqual(stats["entries_pending"], 2)  # both entries still had an unexamined start
 
     def test_default_cap_is_4096(self):
         self.assertEqual(C.CANDIDATE_CAP, 4096)
@@ -262,7 +262,7 @@ class TestEncoder(unittest.TestCase):
         cands, stats = C.find_candidates(st, "a" * 5000)
         self.assertEqual(len(cands), 4096)
         self.assertTrue(stats["cap_hit"])
-        self.assertEqual(stats["unconsidered_pairs"], (5000 - 3) - 4096)
+        self.assertEqual(stats["entries_pending"], 1)
 
     def test_template_segment_and_end_choice(self):
         tpl = [("build {n} ok.", [("n", "int")])]
@@ -347,6 +347,95 @@ class TestEncoder(unittest.TestCase):
         finally:
             C.plan_segments = orig
         self.assertEqual((p, info["reason"]), (raw_wire(b"abcdef"), "verify_failed"))
+
+
+class TestCandidateGenerationA1(unittest.TestCase):
+    """Amendment A1 (blocker 3): incremental, bounded candidate generation; outputs equal the pre-A1 enumeration."""
+
+    def test_regression_against_pre_a1_enumeration(self):
+        from tests import old_compact_ref as OLD
+        rng = random.Random(404)
+        words = ["alpha", "beta", "x1", "job-7", "Q.z", "9", "-3", "done."]
+        for trial in range(120):
+            ents = []
+            for i in range(rng.randint(1, 8)):
+                kind = rng.randrange(4)
+                lit = "".join(rng.choice("ab .:-") for _ in range(rng.randint(1, 6)))
+                if kind == 0:
+                    ents.append(make_entry(f"e{i:03d}", 1, lit * rng.randint(1, 3) + "!"))
+                elif kind == 1:
+                    ents.append(make_entry(f"e{i:03d}", 1, "k" + lit + "{n}" + lit + ".", [("n", "int")]))
+                elif kind == 2:
+                    ents.append(make_entry(f"e{i:03d}", 1, "{w}" + lit + "{n}" + lit + "z", [("w", "word"), ("n", "int")]))
+                else:
+                    ents.append(make_entry(f"e{i:03d}", 1, lit + "{t}" + lit + "!", [("t", "text")]))
+            pub = Publisher()
+            pub.publish(ents)
+            st = pub.state
+            text = "".join(rng.choice(words + ["k", "a", "b", " ", ".", ":", "!", "z", "\n"]) for _ in range(rng.randint(5, 60)))
+            new, ns = C.find_candidates(st, text)
+            old, os_ = OLD.find_candidates(st, text)
+            self.assertEqual(new, old, (trial, text, [e["body"] for e in ents]))
+            self.assertFalse(ns["cap_hit"])
+            cap = rng.randint(1, 6)
+            n2, s2 = C.find_candidates(st, text, cap=cap)
+            o2, _ = OLD.find_candidates(st, text, cap=cap)
+            self.assertEqual(n2, o2)
+
+    def test_stress_4096_literal_entries_vs_65536_char_message(self):
+        import time
+        ents = [make_entry(f"e{i:04d}", 1, "aaaa") for i in range(4096)]  # 4096 entries, each matching everywhere
+        pub = Publisher()
+        pub.publish(ents)
+        st = pub.state
+        text = "a" * 65536
+        t = time.time()
+        cands, stats = C.find_candidates(st, text)
+        dt = time.time() - t
+        self.assertEqual(len(cands), 4096)
+        self.assertTrue(stats["cap_hit"])
+        self.assertLess(dt, 5.0, dt)  # the pre-A1 code materialised ~2.7e8 pairs here
+        self.assertEqual([c[:3] for c in cands[:3]], [(0, 4, 0), (0, 4, 1), (0, 4, 2)])
+        known = {st.digest: st}
+        p, info = C.encode(known, {"version": 1, "digest": st.digest}, text.encode())
+        self.assertIn(info["reason"], ("compact", "compact_not_smaller", "verify_failed"))
+
+    def test_template_work_is_bounded_by_matcher_call_and_character_budgets(self):
+        import time
+        pub = Publisher()
+        pub.publish([make_entry("t0", 1, "{a}.{b}.{c}.{d}!", [("a", "word"), ("b", "word"), ("c", "word"), ("d", "word")])])
+        st = pub.state
+        text = "a." * 2000 + "x!"   # ~4,000-char spans; each E1E matcher call exhausts its 20,000-step budget
+        t = time.time()
+        cands, stats = C.find_candidates(st, text, match_cap=5)
+        self.assertEqual(stats["matcher_calls"], 5)
+        self.assertTrue(stats["match_cap_hit"])
+        cands, stats = C.find_candidates(st, text, work_cap=9000)
+        self.assertEqual(stats["matcher_calls"], 2)  # 4,002- and 4,000-char spans fit in 9,000 characters; the third does not
+        self.assertTrue(stats["match_cap_hit"])
+        self.assertLess(time.time() - t, 30)  # no regex backtracking anywhere in candidate generation
+
+    def test_exhausted_template_work_does_not_suppress_literals(self):
+        pub = Publisher()
+        pub.publish([make_entry("t0", 1, "{n}x!", [("n", "int")]), make_entry("l0", 1, "zz")])
+        st = pub.state
+        text = "1" * 200 + "x!" + "zz"
+        cands, stats = C.find_candidates(st, text, eval_cap=1)
+        self.assertTrue(stats["eval_cap_hit"])
+        self.assertIn((len(text) - 2, len(text), 0), [(c[0], c[1], c[2]) for c in cands])
+
+    def test_eval_cap_stops_template_enumeration(self):
+        pub = Publisher()
+        pub.publish([make_entry("t0", 1, "{n}x!", [("n", "int")])])
+        st = pub.state
+        cands, stats = C.find_candidates(st, "1" * 500 + "x!", eval_cap=10)
+        self.assertTrue(stats["eval_cap_hit"])
+        self.assertEqual(stats["template_evaluations"], 10)
+
+    def test_default_caps(self):
+        self.assertEqual(C.EVAL_CAP, 65536)
+        self.assertEqual(C.MATCH_CALL_CAP, 4096)
+        self.assertEqual(C.MATCH_WORK_CAP, 1 << 20)
 
 
 class TestLimits(FixtureBase):

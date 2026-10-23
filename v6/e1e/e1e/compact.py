@@ -10,7 +10,7 @@ Where the frozen spec text is silent the most literal reading is implemented and
 """
 import bisect
 import collections
-import re
+import heapq
 
 from .canon import E1EError
 from .codec import MAX_MESSAGE_BYTES, decode_message, declare_wire, raw_wire, reject_wire
@@ -304,12 +304,14 @@ def eligible_segmented(entry, toks):
     return toks[-1][0] == "lit" and all(p["type"] in ("int", "word") for p in entry["params"])
 
 
-_INT_RX = r"-?(?:0|[1-9][0-9]{0,17})"
-_WORD_RX = r"[A-Za-z0-9_.-]+"
+_FIRST_CLASS = {"int": frozenset("-0123456789"), "word": frozenset("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_.-")}
+MATCH_CALL_CAP = 4096  # amendment A1: at most this many E1E matcher (match_template) invocations per message; each is bounded by the E1E step budget
+MATCH_WORK_CAP = 1 << 20  # amendment A1: and at most this many characters summed over the spans handed to the matcher per message
+EVAL_CAP = 65536  # section 3.5 amendment A1: at most this many template (offset, entry) evaluations per message
 
 
 class _M:
-    __slots__ = ("kind", "body", "entry", "toks", "look", "full", "last", "lead", "tail", "whole_only")
+    __slots__ = ("kind", "body", "entry", "toks", "last", "lead", "tail", "whole_only", "first_cls", "lit1")
 
 
 def _build_matchers(view):
@@ -327,11 +329,9 @@ def _build_matchers(view):
             m.whole_only = not eligible_segmented(e, toks)
             if not m.whole_only:
                 types = {p["name"]: p["type"] for p in e["params"]}
-                rx = "".join(re.escape(t[1]) if t[0] == "lit" else (_INT_RX if types[t[1]] == "int" else _WORD_RX)
-                             for t in toks)
-                m.full = re.compile(rx, re.DOTALL)
-                m.look = re.compile("(?=" + rx + ")", re.DOTALL)
                 m.last = toks[-1][1][-1]
+                m.first_cls = _FIRST_CLASS[types[toks[0][1]]] if toks[0][0] == "param" else None
+                m.lit1 = toks[1][1] if toks[0][0] == "param" else None
         out.append(m)
     return out
 
@@ -359,10 +359,12 @@ def _encode_args(entry, args):
     return bytes(out)
 
 
-def template_end(m, e, text, s, lastpos, tries=END_TRIES):
+def template_end(m, e, text, s, lastpos, tries=END_TRIES, budget=None):
     """Section 3.5 template end search at start s: ends after occurrences of the last literal character, tried in
     descending order, at most `tries` of them; the first with exactly one parse wins. Returns (end, parse) or None.
-    `lastpos` is a per-message cache {char: [positions]}."""
+    `lastpos` is a per-message cache {char: [positions]}. `budget` (optional [calls, chars, calls_made] list) counts down the per-message
+    matcher invocations and the summed span lengths handed to the matcher; when either is exhausted no further matcher
+    call is made (the search returns None and calls is set to 0)."""
     lp = lastpos.get(m.last)
     if lp is None:
         lp = [i for i, c in enumerate(text) if c == m.last]
@@ -370,16 +372,42 @@ def template_end(m, e, text, s, lastpos, tries=END_TRIES):
     lo = bisect.bisect_left(lp, s)
     hi = len(lp) - 1
     t = 0
+    tail = m.tail
     while hi >= lo and t < tries:
         end = lp[hi] + 1
         hi -= 1
         t += 1
-        if m.full.fullmatch(text, s, end) is None:
+        # necessary conditions only (linear time, no backtracking); the E1E matcher, under its own step budget, decides
+        if end - s < len(tail) or not text.endswith(tail, s, end):
             continue
+        if budget is not None:
+            if budget[0] <= 0 or budget[1] < end - s:
+                budget[0] = 0
+                return None
+            budget[0] -= 1
+            budget[1] -= end - s
+            budget[2] += 1
         parses = match_template(e, text[s:end])
         if parses is not None and len(parses) == 1:
             return end, parses[0]
     return None
+
+
+def template_starts(m, text):
+    """Ascending start offsets (chars) where an eligible template can possibly match: a linear-time necessary
+    condition (leading literal occurs at s; or, for a leading param, the first character is in its class and the
+    following literal still occurs later). The matcher decides; this never produces a non-superset."""
+    if m.lead:
+        i = text.find(m.lead)
+        while i >= 0:
+            yield i
+            i = text.find(m.lead, i + 1)
+    else:
+        lim = text.rfind(m.lit1)
+        cls = m.first_cls
+        for s in range(min(len(text), lim)):  # the literal must start at >= s + 1, so s <= lim - 1
+            if text[s] in cls:
+                yield s
 
 
 def entry_matcher(entry):
@@ -392,52 +420,90 @@ def entry_matcher(entry):
     return _build_matchers(v)[0]
 
 
-def find_candidates(state, text, cap=CANDIDATE_CAP, tries=END_TRIES):
+def _literal_starts(body, text):
+    i = text.find(body)
+    while i >= 0:
+        yield i
+        i = text.find(body, i + 1)
+
+
+def find_candidates(state, text, cap=CANDIDATE_CAP, tries=END_TRIES, eval_cap=EVAL_CAP, match_cap=MATCH_CALL_CAP, work_cap=MATCH_WORK_CAP):
     """Section 3.5 enumeration for a snapshot and a str message. Returns (candidates, stats); a candidate is
-    (start_char, end_char, ordinal, ref_bytes) in enumeration order: ascending offset, then ascending ordinal."""
+    (start_char, end_char, ordinal, ref_bytes) in enumeration order: ascending offset, then ascending ordinal.
+    (offset, entry) pairs are produced incrementally from per-entry start iterators merged in that order (never all
+    materialised); enumeration stops as soon as `cap` candidates exist. stats: candidates, cap_hit (stopped with at
+    least one unexamined prefiltered pair left), entries_pending (entries that still had an unexamined start),
+    template_evaluations, eval_cap_hit (template evaluations reached `eval_cap`; enumeration stopped there),
+    matcher_calls, match_cap_hit (matcher invocations or summed span characters reached `match_cap`/`work_cap`; template
+    candidates after that point are not generated)."""
     view = snap_view(state)
     ms = view.matcher()
     n = len(text)
-    pairs = []
     lastpos = {}
+    heap, iters = [], {}
     for o, m in enumerate(ms):
         if m.kind == "lit":
-            b = m.body
-            if len(b) > n:
+            if len(m.body) > n:
                 continue
-            i = text.find(b)
-            while i >= 0:
-                pairs.append((i, o))
-                i = text.find(b, i + 1)
+            it = _literal_starts(m.body, text)
         elif m.whole_only:
             if n >= 1 and text.startswith(m.lead) and text.endswith(m.tail):
-                pairs.append((0, o))
+                it = iter((0,))
+            else:
+                continue
         else:
-            for mt in m.look.finditer(text):
-                pairs.append((mt.start(), o))
-    pairs.sort()
-    cands, unconsidered, cap_hit = [], 0, False
-    for k, (s, o) in enumerate(pairs):
+            it = template_starts(m, text)
+        first = next(it, None)
+        if first is not None:
+            iters[o] = it
+            heap.append((first, o))
+    heapq.heapify(heap)
+    cands, evals, cap_hit, eval_hit, match_hit = [], 0, False, False, False
+    budget = [match_cap, work_cap, 0]  # calls left, chars left, calls made
+    while heap:
         if len(cands) >= cap:
             cap_hit = True
-            unconsidered = len(pairs) - k
             break
+        s, o = heap[0]
         m = ms[o]
+        if m.kind == "tpl":
+            if evals >= eval_cap or budget[0] <= 0:
+                # template work is exhausted: drop every remaining template iterator, literals continue unaffected
+                eval_hit = eval_hit or evals >= eval_cap
+                match_hit = match_hit or budget[0] <= 0
+                heap = [(x, q) for x, q in heap if ms[q].kind == "lit"]
+                heapq.heapify(heap)
+                continue
+            evals += 1
+        nxt = next(iters[o], None)
+        if nxt is None:
+            heapq.heappop(heap)
+            del iters[o]
+        else:
+            heapq.heapreplace(heap, (nxt, o))
         e = view.entries[o]
         if m.kind == "lit":
             cands.append((s, s + len(m.body), o, bytes([OP_REF]) + encode_varint(o)))
-            continue
-        if m.whole_only:
+        elif m.whole_only:
+            if budget[0] <= 0 or budget[1] < n:
+                budget[0] = 0
+                continue
+            budget[0] -= 1
+            budget[1] -= n
+            budget[2] += 1
             parses = match_template(e, text)
             if parses is not None and len(parses) == 1:
                 cands.append((0, n, o, bytes([OP_REF]) + encode_varint(o) + _encode_args(e, parses[0])))
-            continue
-        hit = template_end(m, e, text, s, lastpos, tries)
-        if hit is not None:
-            end, parse = hit
-            cands.append((s, end, o, bytes([OP_REF]) + encode_varint(o) + _encode_args(e, parse)))
-    return cands, {"candidates": len(cands), "cap_hit": cap_hit, "unconsidered_pairs": unconsidered,
-                   "prefilter_pairs": len(pairs)}
+        else:
+            hit = template_end(m, e, text, s, lastpos, tries, budget)
+            if hit is None and budget[0] <= 0:
+                match_hit = True
+            if hit is not None:
+                end, parse = hit
+                cands.append((s, end, o, bytes([OP_REF]) + encode_varint(o) + _encode_args(e, parse)))
+    return cands, {"candidates": len(cands), "cap_hit": cap_hit, "entries_pending": len(heap),
+                   "template_evaluations": evals, "eval_cap_hit": eval_hit,
+                   "matcher_calls": budget[2], "match_cap_hit": match_hit}
 
 
 def plan_segments(text, cands):
