@@ -1,0 +1,7303 @@
+{
+ "baseline4_selection": {
+  "chosen": 1024,
+  "eligible": true,
+  "sizes": {
+   "1024": {
+    "eligible": true,
+    "fold_scores": [
+     30609,
+     28858,
+     25822,
+     50273
+    ],
+    "mean": 33890.5
+   },
+   "2048": {
+    "eligible": true,
+    "fold_scores": [
+     33198,
+     30940,
+     28486,
+     50459
+    ],
+    "mean": 35770.75
+   },
+   "4096": {
+    "eligible": true,
+    "fold_scores": [
+     37297,
+     35457,
+     32880,
+     54178
+    ],
+    "mean": 39953.0
+   },
+   "8192": {
+    "eligible": true,
+    "fold_scores": [
+     47307,
+     46837,
+     43945,
+     63750
+    ],
+    "mean": 50459.75
+   }
+  },
+  "status": "trained"
+ },
+ "code_sha256": {
+  "e1e/baselines.py": "fbe0bcf1711e16aafa5b52499e5100c772457fc53b7f9b5bcff59cfa79c1435b",
+  "e1e/compact.py": "3e1d119d81568a5429a40b197782d4414e35b8bf9003fdeb4772984aa63849c5",
+  "e1e/curation.py": "62994ca2011b3f4e920de8c273df08a90022d4febd8ddb773a9c85c3f3b40693",
+  "tools/e1f_dev_screen.py": "0747f6d8318e66e509ec68a26326d46234dd082b66583a7b7b7fbcaa65b6c618"
+ },
+ "corpus": {
+  "conversations": 98,
+  "corpus": "glyph_own",
+  "eligible_bytes": 281901,
+  "eligible_messages": 187,
+  "file_sha256": "1dc9d91559fe062b24a3472192de49029bb72432762b38efa950c2899d48b318",
+  "has_timestamps": false,
+  "messages": 188,
+  "oversized_bytes": 75183,
+  "oversized_messages": 1,
+  "prov": "glyph_own_dev"
+ },
+ "elapsed_seconds": 6.4,
+ "informational_in_sample_coverage_by_grid_point_not_used_for_the_gate": {
+  "L128_k2_Cmax": {
+   "coverage": 0.14145391467217214,
+   "covered_bytes": 39876,
+   "entries": 18,
+   "refs": 55
+  },
+  "L128_k3_Cmax": {
+   "coverage": 0.02381332453591864,
+   "covered_bytes": 6713,
+   "entries": 7,
+   "refs": 27
+  },
+  "L256_k2_Cmax": {
+   "coverage": 0.12426348257012214,
+   "covered_bytes": 35030,
+   "entries": 9,
+   "refs": 22
+  },
+  "L256_k3_Cmax": {
+   "coverage": 0.011599816957016826,
+   "covered_bytes": 3270,
+   "entries": 1,
+   "refs": 3
+  },
+  "L32_k2_Cmax": {
+   "coverage": 0.1575872380729405,
+   "covered_bytes": 44424,
+   "entries": 29,
+   "refs": 163
+  },
+  "L32_k3_Cmax": {
+   "coverage": 0.041415248615648756,
+   "covered_bytes": 11675,
+   "entries": 19,
+   "refs": 157
+  },
+  "L64_k2_Cmax": {
+   "coverage": 0.15135100620430578,
+   "covered_bytes": 42666,
+   "entries": 25,
+   "refs": 95
+  },
+  "L64_k3_Cmax": {
+   "coverage": 0.03119534872171436,
+   "covered_bytes": 8794,
+   "entries": 12,
+   "refs": 61
+  }
+ },
+ "label": "DEV SCREENING ONLY. Heuristic, in-sample on dev corpora; not held-out evidence; no savings claim. Glyph-own corpus is single-operator and self-similar (sanitised).",
+ "scenarios": [
+  {
+   "arm7_vs_4b_delta_total": 150116,
+   "arm7_vs_4b_total": 151055,
+   "arm7_vs_arm6_total": 148660,
+   "arms": {
+    "1": {
+     "all_message_total": 312672,
+     "byte_weighted_message_ratio": 1.0582686829773573,
+     "control_bytes": 0,
+     "control_prefix_bytes": 0,
+     "covered_bytes": 0,
+     "declare_bytes_incl_prefix": 0,
+     "eligible_messages": 187,
+     "input_bytes": 281901,
+     "kinds": {
+      "raw": 187
+     },
+     "lit_segments": 0,
+     "mean_per_message_ratio": 1.286159993774758,
+     "message_bytes": 297983,
+     "message_plus_control_total": 298327,
+     "message_prefix_bytes": 344,
+     "messages_with_refs": 0,
+     "oversized": {
+      "count": 1,
+      "fallback_bytes": 14343,
+      "fallback_prefix_bytes": 2,
+      "input_bytes": 75183,
+      "kinds": {
+       "zstd": 1
+      },
+      "verified_byte_exact": 1
+     },
+     "ref_bytes": 0,
+     "refs": 0,
+     "reject_bytes_incl_prefix": 0,
+     "rejected": 0,
+     "retransmit_bytes_incl_prefix": 0,
+     "sync_download": 0,
+     "sync_total": 0,
+     "sync_upload": 0,
+     "total": 298327,
+     "total_over_input_bytes": 1.0582686829773573,
+     "total_per_eligible_message": 1595.331550802139
+    },
+    "3": {
+     "all_message_total": 147948,
+     "byte_weighted_message_ratio": 0.47393588529306385,
+     "control_bytes": 0,
+     "control_prefix_bytes": 0,
+     "covered_bytes": 0,
+     "declare_bytes_incl_prefix": 0,
+     "eligible_messages": 187,
+     "input_bytes": 281901,
+     "kinds": {
+      "zstd": 187
+     },
+     "lit_segments": 0,
+     "mean_per_message_ratio": 0.7648065698386581,
+     "message_bytes": 133305,
+     "message_plus_control_total": 133603,
+     "message_prefix_bytes": 298,
+     "messages_with_refs": 0,
+     "oversized": {
+      "count": 1,
+      "fallback_bytes": 14343,
+      "fallback_prefix_bytes": 2,
+      "input_bytes": 75183,
+      "kinds": {
+       "zstd": 1
+      },
+      "verified_byte_exact": 1
+     },
+     "ref_bytes": 0,
+     "refs": 0,
+     "reject_bytes_incl_prefix": 0,
+     "rejected": 0,
+     "retransmit_bytes_incl_prefix": 0,
+     "sync_download": 0,
+     "sync_total": 0,
+     "sync_upload": 0,
+     "total": 133603,
+     "total_over_input_bytes": 0.47393588529306385,
+     "total_per_eligible_message": 714.4545454545455
+    },
+    "4": {
+     "all_message_total": 137556,
+     "byte_weighted_message_ratio": 0.42617443712509,
+     "control_bytes": 0,
+     "control_prefix_bytes": 0,
+     "covered_bytes": 0,
+     "declare_bytes_incl_prefix": 0,
+     "eligible_messages": 187,
+     "input_bytes": 281901,
+     "kinds": {
+      "zstd": 187
+     },
+     "lit_segments": 0,
+     "mean_per_message_ratio": 0.5930005454081945,
+     "message_bytes": 119847,
+     "message_plus_control_total": 120139,
+     "message_prefix_bytes": 292,
+     "messages_with_refs": 0,
+     "oversized": {
+      "count": 1,
+      "fallback_bytes": 14343,
+      "fallback_prefix_bytes": 2,
+      "input_bytes": 75183,
+      "kinds": {
+       "zstd": 1
+      },
+      "verified_byte_exact": 1
+     },
+     "ref_bytes": 0,
+     "refs": 0,
+     "reject_bytes_incl_prefix": 0,
+     "rejected": 0,
+     "retransmit_bytes_incl_prefix": 0,
+     "sync_download": 2048,
+     "sync_total": 3072,
+     "sync_upload": 1024,
+     "total": 123211,
+     "total_over_input_bytes": 0.43707187984434254,
+     "total_per_eligible_message": 658.8823529411765
+    },
+    "4b": {
+     "all_message_total": 162155,
+     "byte_weighted_message_ratio": 0.4601473566961451,
+     "control_bytes": 14606,
+     "control_prefix_bytes": 218,
+     "covered_bytes": 0,
+     "declare_bytes_incl_prefix": 14824,
+     "eligible_messages": 187,
+     "input_bytes": 281901,
+     "kinds": {
+      "zstd": 187
+     },
+     "lit_segments": 0,
+     "mean_per_message_ratio": 0.7450156495828834,
+     "message_bytes": 129418,
+     "message_plus_control_total": 144540,
+     "message_prefix_bytes": 298,
+     "messages_with_refs": 0,
+     "oversized": {
+      "count": 1,
+      "fallback_bytes": 14343,
+      "fallback_prefix_bytes": 2,
+      "input_bytes": 75183,
+      "kinds": {
+       "zstd": 1
+      },
+      "verified_byte_exact": 1
+     },
+     "ref_bytes": 0,
+     "refs": 0,
+     "reject_bytes_incl_prefix": 0,
+     "rejected": 0,
+     "retransmit_bytes_incl_prefix": 0,
+     "sync_download": 2180,
+     "sync_total": 3270,
+     "sync_upload": 1090,
+     "total": 147810,
+     "total_over_input_bytes": 0.5243330105249715,
+     "total_per_eligible_message": 790.427807486631
+    },
+    "4b-delta": {
+     "all_message_total": 163094,
+     "byte_weighted_message_ratio": 0.4601473566961451,
+     "control_bytes": 14606,
+     "control_prefix_bytes": 218,
+     "covered_bytes": 0,
+     "declare_bytes_incl_prefix": 14824,
+     "eligible_messages": 187,
+     "input_bytes": 281901,
+     "kinds": {
+      "zstd": 187
+     },
+     "lit_segments": 0,
+     "mean_per_message_ratio": 0.7450156495828834,
+     "message_bytes": 129418,
+     "message_plus_control_total": 144540,
+     "message_prefix_bytes": 298,
+     "messages_with_refs": 0,
+     "oversized": {
+      "count": 1,
+      "fallback_bytes": 14343,
+      "fallback_prefix_bytes": 2,
+      "input_bytes": 75183,
+      "kinds": {
+       "zstd": 1
+      },
+      "verified_byte_exact": 1
+     },
+     "ref_bytes": 0,
+     "refs": 0,
+     "reject_bytes_incl_prefix": 0,
+     "rejected": 0,
+     "retransmit_bytes_incl_prefix": 0,
+     "sync_download": 2806,
+     "sync_total": 4209,
+     "sync_upload": 1403,
+     "total": 148749,
+     "total_over_input_bytes": 0.5276639671373993,
+     "total_per_eligible_message": 795.4491978609626
+    },
+    "5": {
+     "all_message_total": 331705,
+     "byte_weighted_message_ratio": 1.0582686829773573,
+     "control_bytes": 14606,
+     "control_prefix_bytes": 218,
+     "covered_bytes": 0,
+     "declare_bytes_incl_prefix": 14824,
+     "eligible_messages": 187,
+     "input_bytes": 281901,
+     "kinds": {
+      "raw": 187
+     },
+     "lit_segments": 0,
+     "mean_per_message_ratio": 1.286159993774758,
+     "message_bytes": 297983,
+     "message_plus_control_total": 313151,
+     "message_prefix_bytes": 344,
+     "messages_with_refs": 0,
+     "oversized": {
+      "count": 1,
+      "fallback_bytes": 14343,
+      "fallback_prefix_bytes": 2,
+      "input_bytes": 75183,
+      "kinds": {
+       "zstd": 1
+      },
+      "verified_byte_exact": 1
+     },
+     "ref_bytes": 0,
+     "refs": 0,
+     "reject_bytes_incl_prefix": 0,
+     "rejected": 0,
+     "retransmit_bytes_incl_prefix": 0,
+     "sync_download": 2806,
+     "sync_total": 4209,
+     "sync_upload": 1403,
+     "total": 317360,
+     "total_over_input_bytes": 1.1257852934186114,
+     "total_per_eligible_message": 1697.1122994652405
+    },
+    "6": {
+     "all_message_total": 164550,
+     "byte_weighted_message_ratio": 0.45441484776570495,
+     "control_bytes": 14606,
+     "control_prefix_bytes": 218,
+     "covered_bytes": 0,
+     "declare_bytes_incl_prefix": 14824,
+     "eligible_messages": 187,
+     "input_bytes": 281901,
+     "kinds": {
+      "zstd_raw": 187
+     },
+     "lit_segments": 0,
+     "mean_per_message_ratio": 0.8071593871804496,
+     "message_bytes": 127799,
+     "message_plus_control_total": 142924,
+     "message_prefix_bytes": 301,
+     "messages_with_refs": 0,
+     "oversized": {
+      "count": 1,
+      "fallback_bytes": 14343,
+      "fallback_prefix_bytes": 2,
+      "input_bytes": 75183,
+      "kinds": {
+       "zstd": 1
+      },
+      "verified_byte_exact": 1
+     },
+     "ref_bytes": 0,
+     "refs": 0,
+     "reject_bytes_incl_prefix": 0,
+     "rejected": 0,
+     "retransmit_bytes_incl_prefix": 0,
+     "sync_download": 4854,
+     "sync_total": 7281,
+     "sync_upload": 2427,
+     "total": 150205,
+     "total_over_input_bytes": 0.5328289009262117,
+     "total_per_eligible_message": 803.2352941176471
+    },
+    "7": {
+     "all_message_total": 313210,
+     "byte_weighted_message_ratio": 0.9926605439498264,
+     "control_bytes": 14606,
+     "control_prefix_bytes": 218,
+     "covered_bytes": 3270,
+     "declare_bytes_incl_prefix": 14824,
+     "eligible_messages": 187,
+     "encoder": {
+      "candidates": 3,
+      "cap_hit_messages": 0,
+      "entries_pending": 0,
+      "enumerated_messages": 187,
+      "eval_cap_hit_messages": 0,
+      "match_cap_hit_messages": 0,
+      "matcher_calls": 0,
+      "matcher_span_chars": 0,
+      "messages": 187,
+      "raw_fallback_sends": 0,
+      "reasons": {
+       "compact": 187
+      },
+      "receiver_rejects_after_send": 0,
+      "template_evaluations": 0,
+      "verified_ok": 187,
+      "verify_errors": {},
+      "verify_failed": 0
+     },
+     "input_bytes": 281901,
+     "kinds": {
+      "compact": 187
+     },
+     "lit_segments": 187,
+     "mean_per_message_ratio": 1.0197746189756713,
+     "message_bytes": 279513,
+     "message_plus_control_total": 294656,
+     "message_prefix_bytes": 319,
+     "messages_with_refs": 3,
+     "oversized": {
+      "count": 1,
+      "fallback_bytes": 14343,
+      "fallback_prefix_bytes": 2,
+      "input_bytes": 75183,
+      "kinds": {
+       "zstd": 1
+      },
+      "verified_byte_exact": 1
+     },
+     "ref_bytes": 6,
+     "refs": 3,
+     "reject_bytes_incl_prefix": 0,
+     "rejected": 0,
+     "retransmit_bytes_incl_prefix": 0,
+     "sync_download": 2806,
+     "sync_total": 4209,
+     "sync_upload": 1403,
+     "total": 298865,
+     "total_over_input_bytes": 1.0601771543910805,
+     "total_per_eligible_message": 1598.2085561497327
+    }
+   },
+   "break_even": {
+    "ingredients": {
+     "1": {
+      "initial_sync": 0,
+      "message_plus_control": 298327,
+      "per_join_sync": null,
+      "per_update_sync": null,
+      "sync_total": 0
+     },
+     "3": {
+      "initial_sync": 0,
+      "message_plus_control": 133603,
+      "per_join_sync": null,
+      "per_update_sync": null,
+      "sync_total": 0
+     },
+     "4": {
+      "initial_sync": 3072,
+      "message_plus_control": 120139,
+      "per_join_sync": null,
+      "per_update_sync": null,
+      "sync_total": 3072
+     },
+     "4b": {
+      "initial_sync": 3270,
+      "message_plus_control": 144540,
+      "per_join_sync": null,
+      "per_update_sync": null,
+      "sync_total": 3270
+     },
+     "4b-delta": {
+      "initial_sync": 4209,
+      "message_plus_control": 144540,
+      "per_join_sync": null,
+      "per_update_sync": null,
+      "sync_total": 4209
+     },
+     "5": {
+      "initial_sync": 4209,
+      "message_plus_control": 313151,
+      "per_join_sync": null,
+      "per_update_sync": null,
+      "sync_total": 4209
+     },
+     "6": {
+      "initial_sync": 7281,
+      "message_plus_control": 142924,
+      "per_join_sync": null,
+      "per_update_sync": null,
+      "sync_total": 7281
+     },
+     "7": {
+      "initial_sync": 4209,
+      "message_plus_control": 294656,
+      "per_join_sync": null,
+      "per_update_sync": null,
+      "sync_total": 4209
+     }
+    },
+    "joins_observed": 0,
+    "pairs": {
+     "7_vs_3": {
+      "advantage_at_zero_updates_and_joins": -165262,
+      "advantage_observed": -165262,
+      "break_even_joins": "undefined: no join observed",
+      "break_even_updates": "undefined: no update observed",
+      "per_join_delta_X_minus_Y": null,
+      "per_update_delta_X_minus_Y": null
+     },
+     "7_vs_4": {
+      "advantage_at_zero_updates_and_joins": -175654,
+      "advantage_observed": -175654,
+      "break_even_joins": "undefined: no join observed",
+      "break_even_updates": "undefined: no update observed",
+      "per_join_delta_X_minus_Y": null,
+      "per_update_delta_X_minus_Y": null
+     },
+     "7_vs_4b": {
+      "advantage_at_zero_updates_and_joins": -151055,
+      "advantage_observed": -151055,
+      "break_even_joins": "undefined: no join observed",
+      "break_even_updates": "undefined: no update observed",
+      "per_join_delta_X_minus_Y": null,
+      "per_update_delta_X_minus_Y": null
+     },
+     "7_vs_4b-delta": {
+      "advantage_at_zero_updates_and_joins": -150116,
+      "advantage_observed": -150116,
+      "break_even_joins": "undefined: no join observed",
+      "break_even_updates": "undefined: no update observed",
+      "per_join_delta_X_minus_Y": null,
+      "per_update_delta_X_minus_Y": null
+     },
+     "7_vs_5": {
+      "advantage_at_zero_updates_and_joins": 18495,
+      "advantage_observed": 18495,
+      "break_even_joins": "undefined: no join observed",
+      "break_even_updates": "undefined: no update observed",
+      "per_join_delta_X_minus_Y": null,
+      "per_update_delta_X_minus_Y": null
+     },
+     "7_vs_6": {
+      "advantage_at_zero_updates_and_joins": -148660,
+      "advantage_observed": -148660,
+      "break_even_joins": "undefined: no join observed",
+      "break_even_updates": "undefined: no update observed",
+      "per_join_delta_X_minus_Y": null,
+      "per_update_delta_X_minus_Y": null
+     }
+    },
+    "updates_observed": 0
+   },
+   "chain": {
+    "entries_final": 1,
+    "entry_body_bytes_final": 1090,
+    "full_artifact_bytes_final": 1403,
+    "kinds_final": {
+     "literal": 1,
+     "template": 0
+    },
+    "lineage": {
+     "entries_by_number_of_source_conversations": {
+      "3": 1
+     }
+    },
+    "max_scheduled_version_curated": 1,
+    "new_entries_per_snapshot": [
+     1
+    ],
+    "overflow_by_scheduled_version": [],
+    "overflow_entries_dropped": 0,
+    "overflow_entries_dropped_byte_limit": 0,
+    "overflow_entries_dropped_count_limit": 0,
+    "published_snapshots": 1,
+    "scheduled_versions": [
+     {
+      "n_convs": 98,
+      "new_entries": 1,
+      "overflow": 0,
+      "overflow_bytes": 0,
+      "overflow_count": 0,
+      "picks": 1,
+      "published_index": 1,
+      "sched_version": 1,
+      "status": "published"
+     }
+    ],
+    "skipped_schedule_versions": [],
+    "trailing_skipped_schedule_versions": []
+   },
+   "joiner_published_indexes": [],
+   "primary": false,
+   "scenario": {
+    "V": 1,
+    "joiners": 0,
+    "participants": 2
+   }
+  },
+  {
+   "arm7_vs_4b_delta_total": 164724,
+   "arm7_vs_4b_total": 164724,
+   "arm7_vs_arm6_total": 164083,
+   "arms": {
+    "1": {
+     "all_message_total": 312672,
+     "byte_weighted_message_ratio": 1.0582686829773573,
+     "control_bytes": 0,
+     "control_prefix_bytes": 0,
+     "covered_bytes": 0,
+     "declare_bytes_incl_prefix": 0,
+     "eligible_messages": 187,
+     "input_bytes": 281901,
+     "kinds": {
+      "raw": 187
+     },
+     "lit_segments": 0,
+     "mean_per_message_ratio": 1.286159993774758,
+     "message_bytes": 297983,
+     "message_plus_control_total": 298327,
+     "message_prefix_bytes": 344,
+     "messages_with_refs": 0,
+     "oversized": {
+      "count": 1,
+      "fallback_bytes": 14343,
+      "fallback_prefix_bytes": 2,
+      "input_bytes": 75183,
+      "kinds": {
+       "zstd": 1
+      },
+      "verified_byte_exact": 1
+     },
+     "ref_bytes": 0,
+     "refs": 0,
+     "reject_bytes_incl_prefix": 0,
+     "rejected": 0,
+     "retransmit_bytes_incl_prefix": 0,
+     "sync_download": 0,
+     "sync_total": 0,
+     "sync_upload": 0,
+     "total": 298327,
+     "total_over_input_bytes": 1.0582686829773573,
+     "total_per_eligible_message": 1595.331550802139
+    },
+    "3": {
+     "all_message_total": 147948,
+     "byte_weighted_message_ratio": 0.47393588529306385,
+     "control_bytes": 0,
+     "control_prefix_bytes": 0,
+     "covered_bytes": 0,
+     "declare_bytes_incl_prefix": 0,
+     "eligible_messages": 187,
+     "input_bytes": 281901,
+     "kinds": {
+      "zstd": 187
+     },
+     "lit_segments": 0,
+     "mean_per_message_ratio": 0.7648065698386581,
+     "message_bytes": 133305,
+     "message_plus_control_total": 133603,
+     "message_prefix_bytes": 298,
+     "messages_with_refs": 0,
+     "oversized": {
+      "count": 1,
+      "fallback_bytes": 14343,
+      "fallback_prefix_bytes": 2,
+      "input_bytes": 75183,
+      "kinds": {
+       "zstd": 1
+      },
+      "verified_byte_exact": 1
+     },
+     "ref_bytes": 0,
+     "refs": 0,
+     "reject_bytes_incl_prefix": 0,
+     "rejected": 0,
+     "retransmit_bytes_incl_prefix": 0,
+     "sync_download": 0,
+     "sync_total": 0,
+     "sync_upload": 0,
+     "total": 133603,
+     "total_over_input_bytes": 0.47393588529306385,
+     "total_per_eligible_message": 714.4545454545455
+    },
+    "4": {
+     "all_message_total": 140628,
+     "byte_weighted_message_ratio": 0.42617443712509,
+     "control_bytes": 0,
+     "control_prefix_bytes": 0,
+     "covered_bytes": 0,
+     "declare_bytes_incl_prefix": 0,
+     "eligible_messages": 187,
+     "input_bytes": 281901,
+     "kinds": {
+      "zstd": 187
+     },
+     "lit_segments": 0,
+     "mean_per_message_ratio": 0.5930005454081945,
+     "message_bytes": 119847,
+     "message_plus_control_total": 120139,
+     "message_prefix_bytes": 292,
+     "messages_with_refs": 0,
+     "oversized": {
+      "count": 1,
+      "fallback_bytes": 14343,
+      "fallback_prefix_bytes": 2,
+      "input_bytes": 75183,
+      "kinds": {
+       "zstd": 1
+      },
+      "verified_byte_exact": 1
+     },
+     "ref_bytes": 0,
+     "refs": 0,
+     "reject_bytes_incl_prefix": 0,
+     "rejected": 0,
+     "retransmit_bytes_incl_prefix": 0,
+     "sync_download": 5120,
+     "sync_total": 6144,
+     "sync_upload": 1024,
+     "total": 126283,
+     "total_over_input_bytes": 0.447969322563595,
+     "total_per_eligible_message": 675.3101604278074
+    },
+    "4b": {
+     "all_message_total": 162772,
+     "byte_weighted_message_ratio": 0.47393588529306385,
+     "control_bytes": 14606,
+     "control_prefix_bytes": 218,
+     "covered_bytes": 0,
+     "declare_bytes_incl_prefix": 14824,
+     "eligible_messages": 187,
+     "input_bytes": 281901,
+     "kinds": {
+      "zstd": 187
+     },
+     "lit_segments": 0,
+     "mean_per_message_ratio": 0.7648065698386581,
+     "message_bytes": 133305,
+     "message_plus_control_total": 148427,
+     "message_prefix_bytes": 298,
+     "messages_with_refs": 0,
+     "oversized": {
+      "count": 1,
+      "fallback_bytes": 14343,
+      "fallback_prefix_bytes": 2,
+      "input_bytes": 75183,
+      "kinds": {
+       "zstd": 1
+      },
+      "verified_byte_exact": 1
+     },
+     "ref_bytes": 0,
+     "refs": 0,
+     "reject_bytes_incl_prefix": 0,
+     "rejected": 0,
+     "retransmit_bytes_incl_prefix": 0,
+     "sync_download": 0,
+     "sync_total": 0,
+     "sync_upload": 0,
+     "total": 148427,
+     "total_over_input_bytes": 0.5265217221648735,
+     "total_per_eligible_message": 793.7272727272727
+    },
+    "4b-delta": {
+     "all_message_total": 162772,
+     "byte_weighted_message_ratio": 0.47393588529306385,
+     "control_bytes": 14606,
+     "control_prefix_bytes": 218,
+     "covered_bytes": 0,
+     "declare_bytes_incl_prefix": 14824,
+     "eligible_messages": 187,
+     "input_bytes": 281901,
+     "kinds": {
+      "zstd": 187
+     },
+     "lit_segments": 0,
+     "mean_per_message_ratio": 0.7648065698386581,
+     "message_bytes": 133305,
+     "message_plus_control_total": 148427,
+     "message_prefix_bytes": 298,
+     "messages_with_refs": 0,
+     "oversized": {
+      "count": 1,
+      "fallback_bytes": 14343,
+      "fallback_prefix_bytes": 2,
+      "input_bytes": 75183,
+      "kinds": {
+       "zstd": 1
+      },
+      "verified_byte_exact": 1
+     },
+     "ref_bytes": 0,
+     "refs": 0,
+     "reject_bytes_incl_prefix": 0,
+     "rejected": 0,
+     "retransmit_bytes_incl_prefix": 0,
+     "sync_download": 0,
+     "sync_total": 0,
+     "sync_upload": 0,
+     "total": 148427,
+     "total_over_input_bytes": 0.5265217221648735,
+     "total_per_eligible_message": 793.7272727272727
+    },
+    "5": {
+     "all_message_total": 327496,
+     "byte_weighted_message_ratio": 1.0582686829773573,
+     "control_bytes": 14606,
+     "control_prefix_bytes": 218,
+     "covered_bytes": 0,
+     "declare_bytes_incl_prefix": 14824,
+     "eligible_messages": 187,
+     "input_bytes": 281901,
+     "kinds": {
+      "raw": 187
+     },
+     "lit_segments": 0,
+     "mean_per_message_ratio": 1.286159993774758,
+     "message_bytes": 297983,
+     "message_plus_control_total": 313151,
+     "message_prefix_bytes": 344,
+     "messages_with_refs": 0,
+     "oversized": {
+      "count": 1,
+      "fallback_bytes": 14343,
+      "fallback_prefix_bytes": 2,
+      "input_bytes": 75183,
+      "kinds": {
+       "zstd": 1
+      },
+      "verified_byte_exact": 1
+     },
+     "ref_bytes": 0,
+     "refs": 0,
+     "reject_bytes_incl_prefix": 0,
+     "rejected": 0,
+     "retransmit_bytes_incl_prefix": 0,
+     "sync_download": 0,
+     "sync_total": 0,
+     "sync_upload": 0,
+     "total": 313151,
+     "total_over_input_bytes": 1.1108545198491668,
+     "total_per_eligible_message": 1674.6042780748662
+    },
+    "6": {
+     "all_message_total": 163413,
+     "byte_weighted_message_ratio": 0.45441484776570495,
+     "control_bytes": 14606,
+     "control_prefix_bytes": 218,
+     "covered_bytes": 0,
+     "declare_bytes_incl_prefix": 14824,
+     "eligible_messages": 187,
+     "input_bytes": 281901,
+     "kinds": {
+      "zstd_raw": 187
+     },
+     "lit_segments": 0,
+     "mean_per_message_ratio": 0.8071593871804496,
+     "message_bytes": 127799,
+     "message_plus_control_total": 142924,
+     "message_prefix_bytes": 301,
+     "messages_with_refs": 0,
+     "oversized": {
+      "count": 1,
+      "fallback_bytes": 14343,
+      "fallback_prefix_bytes": 2,
+      "input_bytes": 75183,
+      "kinds": {
+       "zstd": 1
+      },
+      "verified_byte_exact": 1
+     },
+     "ref_bytes": 0,
+     "refs": 0,
+     "reject_bytes_incl_prefix": 0,
+     "rejected": 0,
+     "retransmit_bytes_incl_prefix": 0,
+     "sync_download": 5120,
+     "sync_total": 6144,
+     "sync_upload": 1024,
+     "total": 149068,
+     "total_over_input_bytes": 0.5287955700760196,
+     "total_per_eligible_message": 797.1550802139037
+    },
+    "7": {
+     "all_message_total": 327496,
+     "byte_weighted_message_ratio": 1.0582686829773573,
+     "control_bytes": 14606,
+     "control_prefix_bytes": 218,
+     "covered_bytes": 0,
+     "declare_bytes_incl_prefix": 14824,
+     "eligible_messages": 187,
+     "encoder": {
+      "messages": 187,
+      "raw_fallback_sends": 187,
+      "reasons": {
+       "unknown_declared_snapshot": 187
+      },
+      "receiver_rejects_after_send": 0,
+      "verified_ok": 0,
+      "verify_errors": {},
+      "verify_failed": 0
+     },
+     "input_bytes": 281901,
+     "kinds": {
+      "raw": 187
+     },
+     "lit_segments": 0,
+     "mean_per_message_ratio": 1.286159993774758,
+     "message_bytes": 297983,
+     "message_plus_control_total": 313151,
+     "message_prefix_bytes": 344,
+     "messages_with_refs": 0,
+     "oversized": {
+      "count": 1,
+      "fallback_bytes": 14343,
+      "fallback_prefix_bytes": 2,
+      "input_bytes": 75183,
+      "kinds": {
+       "zstd": 1
+      },
+      "verified_byte_exact": 1
+     },
+     "ref_bytes": 0,
+     "refs": 0,
+     "reject_bytes_incl_prefix": 0,
+     "rejected": 0,
+     "retransmit_bytes_incl_prefix": 0,
+     "sync_download": 0,
+     "sync_total": 0,
+     "sync_upload": 0,
+     "total": 313151,
+     "total_over_input_bytes": 1.1108545198491668,
+     "total_per_eligible_message": 1674.6042780748662
+    }
+   },
+   "break_even": {
+    "ingredients": {
+     "1": {
+      "initial_sync": 0,
+      "message_plus_control": 298327,
+      "per_join_sync": 0.0,
+      "per_update_sync": null,
+      "sync_total": 0
+     },
+     "3": {
+      "initial_sync": 0,
+      "message_plus_control": 133603,
+      "per_join_sync": 0.0,
+      "per_update_sync": null,
+      "sync_total": 0
+     },
+     "4": {
+      "initial_sync": 3072,
+      "message_plus_control": 120139,
+      "per_join_sync": 1024.0,
+      "per_update_sync": null,
+      "sync_total": 6144
+     },
+     "4b": {
+      "initial_sync": 0,
+      "message_plus_control": 148427,
+      "per_join_sync": 0.0,
+      "per_update_sync": null,
+      "sync_total": 0
+     },
+     "4b-delta": {
+      "initial_sync": 0,
+      "message_plus_control": 148427,
+      "per_join_sync": 0.0,
+      "per_update_sync": null,
+      "sync_total": 0
+     },
+     "5": {
+      "initial_sync": 0,
+      "message_plus_control": 313151,
+      "per_join_sync": 0.0,
+      "per_update_sync": null,
+      "sync_total": 0
+     },
+     "6": {
+      "initial_sync": 3072,
+      "message_plus_control": 142924,
+      "per_join_sync": 1024.0,
+      "per_update_sync": null,
+      "sync_total": 6144
+     },
+     "7": {
+      "initial_sync": 0,
+      "message_plus_control": 313151,
+      "per_join_sync": 0.0,
+      "per_update_sync": null,
+      "sync_total": 0
+     }
+    },
+    "joins_observed": 3,
+    "pairs": {
+     "7_vs_3": {
+      "advantage_at_zero_updates_and_joins": -179548,
+      "advantage_observed": -179548,
+      "break_even_joins": "undefined: identical per-join cost (X behind at every count)",
+      "break_even_updates": "undefined: no update observed",
+      "per_join_delta_X_minus_Y": 0.0,
+      "per_update_delta_X_minus_Y": null
+     },
+     "7_vs_4": {
+      "advantage_at_zero_updates_and_joins": -189940,
+      "advantage_observed": -186868.0,
+      "break_even_joins": 185.48828125,
+      "break_even_updates": "undefined: no update observed",
+      "per_join_delta_X_minus_Y": -1024.0,
+      "per_update_delta_X_minus_Y": null
+     },
+     "7_vs_4b": {
+      "advantage_at_zero_updates_and_joins": -164724,
+      "advantage_observed": -164724,
+      "break_even_joins": "undefined: identical per-join cost (X behind at every count)",
+      "break_even_updates": "undefined: no update observed",
+      "per_join_delta_X_minus_Y": 0.0,
+      "per_update_delta_X_minus_Y": null
+     },
+     "7_vs_4b-delta": {
+      "advantage_at_zero_updates_and_joins": -164724,
+      "advantage_observed": -164724,
+      "break_even_joins": "undefined: identical per-join cost (X behind at every count)",
+      "break_even_updates": "undefined: no update observed",
+      "per_join_delta_X_minus_Y": 0.0,
+      "per_update_delta_X_minus_Y": null
+     },
+     "7_vs_5": {
+      "advantage_at_zero_updates_and_joins": 0,
+      "advantage_observed": 0,
+      "break_even_joins": "undefined: identical per-join cost (X tie at every count)",
+      "break_even_updates": "undefined: no update observed",
+      "per_join_delta_X_minus_Y": 0.0,
+      "per_update_delta_X_minus_Y": null
+     },
+     "7_vs_6": {
+      "advantage_at_zero_updates_and_joins": -167155,
+      "advantage_observed": -164083.0,
+      "break_even_joins": 163.2373046875,
+      "break_even_updates": "undefined: no update observed",
+      "per_join_delta_X_minus_Y": -1024.0,
+      "per_update_delta_X_minus_Y": null
+     }
+    },
+    "updates_observed": 0
+   },
+   "chain": {
+    "entries_final": 0,
+    "entry_body_bytes_final": 0,
+    "full_artifact_bytes_final": 0,
+    "kinds_final": {},
+    "lineage": {
+     "entries_by_number_of_source_conversations": {}
+    },
+    "max_scheduled_version_curated": 1,
+    "new_entries_per_snapshot": [],
+    "overflow_by_scheduled_version": [],
+    "overflow_entries_dropped": 0,
+    "overflow_entries_dropped_byte_limit": 0,
+    "overflow_entries_dropped_count_limit": 0,
+    "published_snapshots": 0,
+    "scheduled_versions": [
+     {
+      "n_convs": 98,
+      "new_entries": 0,
+      "overflow": 0,
+      "overflow_bytes": 0,
+      "overflow_count": 0,
+      "picks": 0,
+      "published_index": null,
+      "sched_version": 1,
+      "status": "empty"
+     }
+    ],
+    "skipped_schedule_versions": [],
+    "trailing_skipped_schedule_versions": [
+     1
+    ]
+   },
+   "joiner_published_indexes": [
+    0,
+    0,
+    0
+   ],
+   "primary": false,
+   "scenario": {
+    "V": 1,
+    "joiners": 3,
+    "participants": 2
+   }
+  },
+  {
+   "arm7_vs_4b_delta_total": 150116,
+   "arm7_vs_4b_total": 153559,
+   "arm7_vs_arm6_total": 140468,
+   "arms": {
+    "1": {
+     "all_message_total": 312672,
+     "byte_weighted_message_ratio": 1.0582686829773573,
+     "control_bytes": 0,
+     "control_prefix_bytes": 0,
+     "covered_bytes": 0,
+     "declare_bytes_incl_prefix": 0,
+     "eligible_messages": 187,
+     "input_bytes": 281901,
+     "kinds": {
+      "raw": 187
+     },
+     "lit_segments": 0,
+     "mean_per_message_ratio": 1.286159993774758,
+     "message_bytes": 297983,
+     "message_plus_control_total": 298327,
+     "message_prefix_bytes": 344,
+     "messages_with_refs": 0,
+     "oversized": {
+      "count": 1,
+      "fallback_bytes": 14343,
+      "fallback_prefix_bytes": 2,
+      "input_bytes": 75183,
+      "kinds": {
+       "zstd": 1
+      },
+      "verified_byte_exact": 1
+     },
+     "ref_bytes": 0,
+     "refs": 0,
+     "reject_bytes_incl_prefix": 0,
+     "rejected": 0,
+     "retransmit_bytes_incl_prefix": 0,
+     "sync_download": 0,
+     "sync_total": 0,
+     "sync_upload": 0,
+     "total": 298327,
+     "total_over_input_bytes": 1.0582686829773573,
+     "total_per_eligible_message": 1595.331550802139
+    },
+    "3": {
+     "all_message_total": 147948,
+     "byte_weighted_message_ratio": 0.47393588529306385,
+     "control_bytes": 0,
+     "control_prefix_bytes": 0,
+     "covered_bytes": 0,
+     "declare_bytes_incl_prefix": 0,
+     "eligible_messages": 187,
+     "input_bytes": 281901,
+     "kinds": {
+      "zstd": 187
+     },
+     "lit_segments": 0,
+     "mean_per_message_ratio": 0.7648065698386581,
+     "message_bytes": 133305,
+     "message_plus_control_total": 133603,
+     "message_prefix_bytes": 298,
+     "messages_with_refs": 0,
+     "oversized": {
+      "count": 1,
+      "fallback_bytes": 14343,
+      "fallback_prefix_bytes": 2,
+      "input_bytes": 75183,
+      "kinds": {
+       "zstd": 1
+      },
+      "verified_byte_exact": 1
+     },
+     "ref_bytes": 0,
+     "refs": 0,
+     "reject_bytes_incl_prefix": 0,
+     "rejected": 0,
+     "retransmit_bytes_incl_prefix": 0,
+     "sync_download": 0,
+     "sync_total": 0,
+     "sync_upload": 0,
+     "total": 133603,
+     "total_over_input_bytes": 0.47393588529306385,
+     "total_per_eligible_message": 714.4545454545455
+    },
+    "4": {
+     "all_message_total": 145748,
+     "byte_weighted_message_ratio": 0.42617443712509,
+     "control_bytes": 0,
+     "control_prefix_bytes": 0,
+     "covered_bytes": 0,
+     "declare_bytes_incl_prefix": 0,
+     "eligible_messages": 187,
+     "input_bytes": 281901,
+     "kinds": {
+      "zstd": 187
+     },
+     "lit_segments": 0,
+     "mean_per_message_ratio": 0.5930005454081945,
+     "message_bytes": 119847,
+     "message_plus_control_total": 120139,
+     "message_prefix_bytes": 292,
+     "messages_with_refs": 0,
+     "oversized": {
+      "count": 1,
+      "fallback_bytes": 14343,
+      "fallback_prefix_bytes": 2,
+      "input_bytes": 75183,
+      "kinds": {
+       "zstd": 1
+      },
+      "verified_byte_exact": 1
+     },
+     "ref_bytes": 0,
+     "refs": 0,
+     "reject_bytes_incl_prefix": 0,
+     "rejected": 0,
+     "retransmit_bytes_incl_prefix": 0,
+     "sync_download": 10240,
+     "sync_total": 11264,
+     "sync_upload": 1024,
+     "total": 131403,
+     "total_over_input_bytes": 0.4661317270956825,
+     "total_per_eligible_message": 702.6898395721926
+    },
+    "4b": {
+     "all_message_total": 170875,
+     "byte_weighted_message_ratio": 0.4601473566961451,
+     "control_bytes": 14606,
+     "control_prefix_bytes": 218,
+     "covered_bytes": 0,
+     "declare_bytes_incl_prefix": 14824,
+     "eligible_messages": 187,
+     "input_bytes": 281901,
+     "kinds": {
+      "zstd": 187
+     },
+     "lit_segments": 0,
+     "mean_per_message_ratio": 0.7450156495828834,
+     "message_bytes": 129418,
+     "message_plus_control_total": 144540,
+     "message_prefix_bytes": 298,
+     "messages_with_refs": 0,
+     "oversized": {
+      "count": 1,
+      "fallback_bytes": 14343,
+      "fallback_prefix_bytes": 2,
+      "input_bytes": 75183,
+      "kinds": {
+       "zstd": 1
+      },
+      "verified_byte_exact": 1
+     },
+     "ref_bytes": 0,
+     "refs": 0,
+     "reject_bytes_incl_prefix": 0,
+     "rejected": 0,
+     "retransmit_bytes_incl_prefix": 0,
+     "sync_download": 10900,
+     "sync_total": 11990,
+     "sync_upload": 1090,
+     "total": 156530,
+     "total_over_input_bytes": 0.555265855743683,
+     "total_per_eligible_message": 837.0588235294117
+    },
+    "4b-delta": {
+     "all_message_total": 174318,
+     "byte_weighted_message_ratio": 0.4601473566961451,
+     "control_bytes": 14606,
+     "control_prefix_bytes": 218,
+     "covered_bytes": 0,
+     "declare_bytes_incl_prefix": 14824,
+     "eligible_messages": 187,
+     "input_bytes": 281901,
+     "kinds": {
+      "zstd": 187
+     },
+     "lit_segments": 0,
+     "mean_per_message_ratio": 0.7450156495828834,
+     "message_bytes": 129418,
+     "message_plus_control_total": 144540,
+     "message_prefix_bytes": 298,
+     "messages_with_refs": 0,
+     "oversized": {
+      "count": 1,
+      "fallback_bytes": 14343,
+      "fallback_prefix_bytes": 2,
+      "input_bytes": 75183,
+      "kinds": {
+       "zstd": 1
+      },
+      "verified_byte_exact": 1
+     },
+     "ref_bytes": 0,
+     "refs": 0,
+     "reject_bytes_incl_prefix": 0,
+     "rejected": 0,
+     "retransmit_bytes_incl_prefix": 0,
+     "sync_download": 14030,
+     "sync_total": 15433,
+     "sync_upload": 1403,
+     "total": 159973,
+     "total_over_input_bytes": 0.5674793633225849,
+     "total_per_eligible_message": 855.4705882352941
+    },
+    "5": {
+     "all_message_total": 342929,
+     "byte_weighted_message_ratio": 1.0582686829773573,
+     "control_bytes": 14606,
+     "control_prefix_bytes": 218,
+     "covered_bytes": 0,
+     "declare_bytes_incl_prefix": 14824,
+     "eligible_messages": 187,
+     "input_bytes": 281901,
+     "kinds": {
+      "raw": 187
+     },
+     "lit_segments": 0,
+     "mean_per_message_ratio": 1.286159993774758,
+     "message_bytes": 297983,
+     "message_plus_control_total": 313151,
+     "message_prefix_bytes": 344,
+     "messages_with_refs": 0,
+     "oversized": {
+      "count": 1,
+      "fallback_bytes": 14343,
+      "fallback_prefix_bytes": 2,
+      "input_bytes": 75183,
+      "kinds": {
+       "zstd": 1
+      },
+      "verified_byte_exact": 1
+     },
+     "ref_bytes": 0,
+     "refs": 0,
+     "reject_bytes_incl_prefix": 0,
+     "rejected": 0,
+     "retransmit_bytes_incl_prefix": 0,
+     "sync_download": 14030,
+     "sync_total": 15433,
+     "sync_upload": 1403,
+     "total": 328584,
+     "total_over_input_bytes": 1.1656006896037971,
+     "total_per_eligible_message": 1757.1336898395723
+    },
+    "6": {
+     "all_message_total": 183966,
+     "byte_weighted_message_ratio": 0.45441484776570495,
+     "control_bytes": 14606,
+     "control_prefix_bytes": 218,
+     "covered_bytes": 0,
+     "declare_bytes_incl_prefix": 14824,
+     "eligible_messages": 187,
+     "input_bytes": 281901,
+     "kinds": {
+      "zstd_raw": 187
+     },
+     "lit_segments": 0,
+     "mean_per_message_ratio": 0.8071593871804496,
+     "message_bytes": 127799,
+     "message_plus_control_total": 142924,
+     "message_prefix_bytes": 301,
+     "messages_with_refs": 0,
+     "oversized": {
+      "count": 1,
+      "fallback_bytes": 14343,
+      "fallback_prefix_bytes": 2,
+      "input_bytes": 75183,
+      "kinds": {
+       "zstd": 1
+      },
+      "verified_byte_exact": 1
+     },
+     "ref_bytes": 0,
+     "refs": 0,
+     "reject_bytes_incl_prefix": 0,
+     "rejected": 0,
+     "retransmit_bytes_incl_prefix": 0,
+     "sync_download": 24270,
+     "sync_total": 26697,
+     "sync_upload": 2427,
+     "total": 169621,
+     "total_over_input_bytes": 0.6017041443627372,
+     "total_per_eligible_message": 907.0641711229947
+    },
+    "7": {
+     "all_message_total": 324434,
+     "byte_weighted_message_ratio": 0.9926605439498264,
+     "control_bytes": 14606,
+     "control_prefix_bytes": 218,
+     "covered_bytes": 3270,
+     "declare_bytes_incl_prefix": 14824,
+     "eligible_messages": 187,
+     "encoder": {
+      "candidates": 3,
+      "cap_hit_messages": 0,
+      "entries_pending": 0,
+      "enumerated_messages": 187,
+      "eval_cap_hit_messages": 0,
+      "match_cap_hit_messages": 0,
+      "matcher_calls": 0,
+      "matcher_span_chars": 0,
+      "messages": 187,
+      "raw_fallback_sends": 0,
+      "reasons": {
+       "compact": 187
+      },
+      "receiver_rejects_after_send": 0,
+      "template_evaluations": 0,
+      "verified_ok": 187,
+      "verify_errors": {},
+      "verify_failed": 0
+     },
+     "input_bytes": 281901,
+     "kinds": {
+      "compact": 187
+     },
+     "lit_segments": 187,
+     "mean_per_message_ratio": 1.0197746189756713,
+     "message_bytes": 279513,
+     "message_plus_control_total": 294656,
+     "message_prefix_bytes": 319,
+     "messages_with_refs": 3,
+     "oversized": {
+      "count": 1,
+      "fallback_bytes": 14343,
+      "fallback_prefix_bytes": 2,
+      "input_bytes": 75183,
+      "kinds": {
+       "zstd": 1
+      },
+      "verified_byte_exact": 1
+     },
+     "ref_bytes": 6,
+     "refs": 3,
+     "reject_bytes_incl_prefix": 0,
+     "rejected": 0,
+     "retransmit_bytes_incl_prefix": 0,
+     "sync_download": 14030,
+     "sync_total": 15433,
+     "sync_upload": 1403,
+     "total": 310089,
+     "total_over_input_bytes": 1.0999925505762662,
+     "total_per_eligible_message": 1658.2299465240642
+    }
+   },
+   "break_even": {
+    "ingredients": {
+     "1": {
+      "initial_sync": 0,
+      "message_plus_control": 298327,
+      "per_join_sync": null,
+      "per_update_sync": null,
+      "sync_total": 0
+     },
+     "3": {
+      "initial_sync": 0,
+      "message_plus_control": 133603,
+      "per_join_sync": null,
+      "per_update_sync": null,
+      "sync_total": 0
+     },
+     "4": {
+      "initial_sync": 11264,
+      "message_plus_control": 120139,
+      "per_join_sync": null,
+      "per_update_sync": null,
+      "sync_total": 11264
+     },
+     "4b": {
+      "initial_sync": 11990,
+      "message_plus_control": 144540,
+      "per_join_sync": null,
+      "per_update_sync": null,
+      "sync_total": 11990
+     },
+     "4b-delta": {
+      "initial_sync": 15433,
+      "message_plus_control": 144540,
+      "per_join_sync": null,
+      "per_update_sync": null,
+      "sync_total": 15433
+     },
+     "5": {
+      "initial_sync": 15433,
+      "message_plus_control": 313151,
+      "per_join_sync": null,
+      "per_update_sync": null,
+      "sync_total": 15433
+     },
+     "6": {
+      "initial_sync": 26697,
+      "message_plus_control": 142924,
+      "per_join_sync": null,
+      "per_update_sync": null,
+      "sync_total": 26697
+     },
+     "7": {
+      "initial_sync": 15433,
+      "message_plus_control": 294656,
+      "per_join_sync": null,
+      "per_update_sync": null,
+      "sync_total": 15433
+     }
+    },
+    "joins_observed": 0,
+    "pairs": {
+     "7_vs_3": {
+      "advantage_at_zero_updates_and_joins": -176486,
+      "advantage_observed": -176486,
+      "break_even_joins": "undefined: no join observed",
+      "break_even_updates": "undefined: no update observed",
+      "per_join_delta_X_minus_Y": null,
+      "per_update_delta_X_minus_Y": null
+     },
+     "7_vs_4": {
+      "advantage_at_zero_updates_and_joins": -178686,
+      "advantage_observed": -178686,
+      "break_even_joins": "undefined: no join observed",
+      "break_even_updates": "undefined: no update observed",
+      "per_join_delta_X_minus_Y": null,
+      "per_update_delta_X_minus_Y": null
+     },
+     "7_vs_4b": {
+      "advantage_at_zero_updates_and_joins": -153559,
+      "advantage_observed": -153559,
+      "break_even_joins": "undefined: no join observed",
+      "break_even_updates": "undefined: no update observed",
+      "per_join_delta_X_minus_Y": null,
+      "per_update_delta_X_minus_Y": null
+     },
+     "7_vs_4b-delta": {
+      "advantage_at_zero_updates_and_joins": -150116,
+      "advantage_observed": -150116,
+      "break_even_joins": "undefined: no join observed",
+      "break_even_updates": "undefined: no update observed",
+      "per_join_delta_X_minus_Y": null,
+      "per_update_delta_X_minus_Y": null
+     },
+     "7_vs_5": {
+      "advantage_at_zero_updates_and_joins": 18495,
+      "advantage_observed": 18495,
+      "break_even_joins": "undefined: no join observed",
+      "break_even_updates": "undefined: no update observed",
+      "per_join_delta_X_minus_Y": null,
+      "per_update_delta_X_minus_Y": null
+     },
+     "7_vs_6": {
+      "advantage_at_zero_updates_and_joins": -140468,
+      "advantage_observed": -140468,
+      "break_even_joins": "undefined: no join observed",
+      "break_even_updates": "undefined: no update observed",
+      "per_join_delta_X_minus_Y": null,
+      "per_update_delta_X_minus_Y": null
+     }
+    },
+    "updates_observed": 0
+   },
+   "chain": {
+    "entries_final": 1,
+    "entry_body_bytes_final": 1090,
+    "full_artifact_bytes_final": 1403,
+    "kinds_final": {
+     "literal": 1,
+     "template": 0
+    },
+    "lineage": {
+     "entries_by_number_of_source_conversations": {
+      "3": 1
+     }
+    },
+    "max_scheduled_version_curated": 1,
+    "new_entries_per_snapshot": [
+     1
+    ],
+    "overflow_by_scheduled_version": [],
+    "overflow_entries_dropped": 0,
+    "overflow_entries_dropped_byte_limit": 0,
+    "overflow_entries_dropped_count_limit": 0,
+    "published_snapshots": 1,
+    "scheduled_versions": [
+     {
+      "n_convs": 98,
+      "new_entries": 1,
+      "overflow": 0,
+      "overflow_bytes": 0,
+      "overflow_count": 0,
+      "picks": 1,
+      "published_index": 1,
+      "sched_version": 1,
+      "status": "published"
+     }
+    ],
+    "skipped_schedule_versions": [],
+    "trailing_skipped_schedule_versions": []
+   },
+   "joiner_published_indexes": [],
+   "primary": false,
+   "scenario": {
+    "V": 1,
+    "joiners": 0,
+    "participants": 10
+   }
+  },
+  {
+   "arm7_vs_4b_delta_total": 164724,
+   "arm7_vs_4b_total": 164724,
+   "arm7_vs_arm6_total": 155891,
+   "arms": {
+    "1": {
+     "all_message_total": 312672,
+     "byte_weighted_message_ratio": 1.0582686829773573,
+     "control_bytes": 0,
+     "control_prefix_bytes": 0,
+     "covered_bytes": 0,
+     "declare_bytes_incl_prefix": 0,
+     "eligible_messages": 187,
+     "input_bytes": 281901,
+     "kinds": {
+      "raw": 187
+     },
+     "lit_segments": 0,
+     "mean_per_message_ratio": 1.286159993774758,
+     "message_bytes": 297983,
+     "message_plus_control_total": 298327,
+     "message_prefix_bytes": 344,
+     "messages_with_refs": 0,
+     "oversized": {
+      "count": 1,
+      "fallback_bytes": 14343,
+      "fallback_prefix_bytes": 2,
+      "input_bytes": 75183,
+      "kinds": {
+       "zstd": 1
+      },
+      "verified_byte_exact": 1
+     },
+     "ref_bytes": 0,
+     "refs": 0,
+     "reject_bytes_incl_prefix": 0,
+     "rejected": 0,
+     "retransmit_bytes_incl_prefix": 0,
+     "sync_download": 0,
+     "sync_total": 0,
+     "sync_upload": 0,
+     "total": 298327,
+     "total_over_input_bytes": 1.0582686829773573,
+     "total_per_eligible_message": 1595.331550802139
+    },
+    "3": {
+     "all_message_total": 147948,
+     "byte_weighted_message_ratio": 0.47393588529306385,
+     "control_bytes": 0,
+     "control_prefix_bytes": 0,
+     "covered_bytes": 0,
+     "declare_bytes_incl_prefix": 0,
+     "eligible_messages": 187,
+     "input_bytes": 281901,
+     "kinds": {
+      "zstd": 187
+     },
+     "lit_segments": 0,
+     "mean_per_message_ratio": 0.7648065698386581,
+     "message_bytes": 133305,
+     "message_plus_control_total": 133603,
+     "message_prefix_bytes": 298,
+     "messages_with_refs": 0,
+     "oversized": {
+      "count": 1,
+      "fallback_bytes": 14343,
+      "fallback_prefix_bytes": 2,
+      "input_bytes": 75183,
+      "kinds": {
+       "zstd": 1
+      },
+      "verified_byte_exact": 1
+     },
+     "ref_bytes": 0,
+     "refs": 0,
+     "reject_bytes_incl_prefix": 0,
+     "rejected": 0,
+     "retransmit_bytes_incl_prefix": 0,
+     "sync_download": 0,
+     "sync_total": 0,
+     "sync_upload": 0,
+     "total": 133603,
+     "total_over_input_bytes": 0.47393588529306385,
+     "total_per_eligible_message": 714.4545454545455
+    },
+    "4": {
+     "all_message_total": 148820,
+     "byte_weighted_message_ratio": 0.42617443712509,
+     "control_bytes": 0,
+     "control_prefix_bytes": 0,
+     "covered_bytes": 0,
+     "declare_bytes_incl_prefix": 0,
+     "eligible_messages": 187,
+     "input_bytes": 281901,
+     "kinds": {
+      "zstd": 187
+     },
+     "lit_segments": 0,
+     "mean_per_message_ratio": 0.5930005454081945,
+     "message_bytes": 119847,
+     "message_plus_control_total": 120139,
+     "message_prefix_bytes": 292,
+     "messages_with_refs": 0,
+     "oversized": {
+      "count": 1,
+      "fallback_bytes": 14343,
+      "fallback_prefix_bytes": 2,
+      "input_bytes": 75183,
+      "kinds": {
+       "zstd": 1
+      },
+      "verified_byte_exact": 1
+     },
+     "ref_bytes": 0,
+     "refs": 0,
+     "reject_bytes_incl_prefix": 0,
+     "rejected": 0,
+     "retransmit_bytes_incl_prefix": 0,
+     "sync_download": 13312,
+     "sync_total": 14336,
+     "sync_upload": 1024,
+     "total": 134475,
+     "total_over_input_bytes": 0.47702916981493504,
+     "total_per_eligible_message": 719.1176470588235
+    },
+    "4b": {
+     "all_message_total": 162772,
+     "byte_weighted_message_ratio": 0.47393588529306385,
+     "control_bytes": 14606,
+     "control_prefix_bytes": 218,
+     "covered_bytes": 0,
+     "declare_bytes_incl_prefix": 14824,
+     "eligible_messages": 187,
+     "input_bytes": 281901,
+     "kinds": {
+      "zstd": 187
+     },
+     "lit_segments": 0,
+     "mean_per_message_ratio": 0.7648065698386581,
+     "message_bytes": 133305,
+     "message_plus_control_total": 148427,
+     "message_prefix_bytes": 298,
+     "messages_with_refs": 0,
+     "oversized": {
+      "count": 1,
+      "fallback_bytes": 14343,
+      "fallback_prefix_bytes": 2,
+      "input_bytes": 75183,
+      "kinds": {
+       "zstd": 1
+      },
+      "verified_byte_exact": 1
+     },
+     "ref_bytes": 0,
+     "refs": 0,
+     "reject_bytes_incl_prefix": 0,
+     "rejected": 0,
+     "retransmit_bytes_incl_prefix": 0,
+     "sync_download": 0,
+     "sync_total": 0,
+     "sync_upload": 0,
+     "total": 148427,
+     "total_over_input_bytes": 0.5265217221648735,
+     "total_per_eligible_message": 793.7272727272727
+    },
+    "4b-delta": {
+     "all_message_total": 162772,
+     "byte_weighted_message_ratio": 0.47393588529306385,
+     "control_bytes": 14606,
+     "control_prefix_bytes": 218,
+     "covered_bytes": 0,
+     "declare_bytes_incl_prefix": 14824,
+     "eligible_messages": 187,
+     "input_bytes": 281901,
+     "kinds": {
+      "zstd": 187
+     },
+     "lit_segments": 0,
+     "mean_per_message_ratio": 0.7648065698386581,
+     "message_bytes": 133305,
+     "message_plus_control_total": 148427,
+     "message_prefix_bytes": 298,
+     "messages_with_refs": 0,
+     "oversized": {
+      "count": 1,
+      "fallback_bytes": 14343,
+      "fallback_prefix_bytes": 2,
+      "input_bytes": 75183,
+      "kinds": {
+       "zstd": 1
+      },
+      "verified_byte_exact": 1
+     },
+     "ref_bytes": 0,
+     "refs": 0,
+     "reject_bytes_incl_prefix": 0,
+     "rejected": 0,
+     "retransmit_bytes_incl_prefix": 0,
+     "sync_download": 0,
+     "sync_total": 0,
+     "sync_upload": 0,
+     "total": 148427,
+     "total_over_input_bytes": 0.5265217221648735,
+     "total_per_eligible_message": 793.7272727272727
+    },
+    "5": {
+     "all_message_total": 327496,
+     "byte_weighted_message_ratio": 1.0582686829773573,
+     "control_bytes": 14606,
+     "control_prefix_bytes": 218,
+     "covered_bytes": 0,
+     "declare_bytes_incl_prefix": 14824,
+     "eligible_messages": 187,
+     "input_bytes": 281901,
+     "kinds": {
+      "raw": 187
+     },
+     "lit_segments": 0,
+     "mean_per_message_ratio": 1.286159993774758,
+     "message_bytes": 297983,
+     "message_plus_control_total": 313151,
+     "message_prefix_bytes": 344,
+     "messages_with_refs": 0,
+     "oversized": {
+      "count": 1,
+      "fallback_bytes": 14343,
+      "fallback_prefix_bytes": 2,
+      "input_bytes": 75183,
+      "kinds": {
+       "zstd": 1
+      },
+      "verified_byte_exact": 1
+     },
+     "ref_bytes": 0,
+     "refs": 0,
+     "reject_bytes_incl_prefix": 0,
+     "rejected": 0,
+     "retransmit_bytes_incl_prefix": 0,
+     "sync_download": 0,
+     "sync_total": 0,
+     "sync_upload": 0,
+     "total": 313151,
+     "total_over_input_bytes": 1.1108545198491668,
+     "total_per_eligible_message": 1674.6042780748662
+    },
+    "6": {
+     "all_message_total": 171605,
+     "byte_weighted_message_ratio": 0.45441484776570495,
+     "control_bytes": 14606,
+     "control_prefix_bytes": 218,
+     "covered_bytes": 0,
+     "declare_bytes_incl_prefix": 14824,
+     "eligible_messages": 187,
+     "input_bytes": 281901,
+     "kinds": {
+      "zstd_raw": 187
+     },
+     "lit_segments": 0,
+     "mean_per_message_ratio": 0.8071593871804496,
+     "message_bytes": 127799,
+     "message_plus_control_total": 142924,
+     "message_prefix_bytes": 301,
+     "messages_with_refs": 0,
+     "oversized": {
+      "count": 1,
+      "fallback_bytes": 14343,
+      "fallback_prefix_bytes": 2,
+      "input_bytes": 75183,
+      "kinds": {
+       "zstd": 1
+      },
+      "verified_byte_exact": 1
+     },
+     "ref_bytes": 0,
+     "refs": 0,
+     "reject_bytes_incl_prefix": 0,
+     "rejected": 0,
+     "retransmit_bytes_incl_prefix": 0,
+     "sync_download": 13312,
+     "sync_total": 14336,
+     "sync_upload": 1024,
+     "total": 157260,
+     "total_over_input_bytes": 0.5578554173273597,
+     "total_per_eligible_message": 840.9625668449198
+    },
+    "7": {
+     "all_message_total": 327496,
+     "byte_weighted_message_ratio": 1.0582686829773573,
+     "control_bytes": 14606,
+     "control_prefix_bytes": 218,
+     "covered_bytes": 0,
+     "declare_bytes_incl_prefix": 14824,
+     "eligible_messages": 187,
+     "encoder": {
+      "messages": 187,
+      "raw_fallback_sends": 187,
+      "reasons": {
+       "unknown_declared_snapshot": 187
+      },
+      "receiver_rejects_after_send": 0,
+      "verified_ok": 0,
+      "verify_errors": {},
+      "verify_failed": 0
+     },
+     "input_bytes": 281901,
+     "kinds": {
+      "raw": 187
+     },
+     "lit_segments": 0,
+     "mean_per_message_ratio": 1.286159993774758,
+     "message_bytes": 297983,
+     "message_plus_control_total": 313151,
+     "message_prefix_bytes": 344,
+     "messages_with_refs": 0,
+     "oversized": {
+      "count": 1,
+      "fallback_bytes": 14343,
+      "fallback_prefix_bytes": 2,
+      "input_bytes": 75183,
+      "kinds": {
+       "zstd": 1
+      },
+      "verified_byte_exact": 1
+     },
+     "ref_bytes": 0,
+     "refs": 0,
+     "reject_bytes_incl_prefix": 0,
+     "rejected": 0,
+     "retransmit_bytes_incl_prefix": 0,
+     "sync_download": 0,
+     "sync_total": 0,
+     "sync_upload": 0,
+     "total": 313151,
+     "total_over_input_bytes": 1.1108545198491668,
+     "total_per_eligible_message": 1674.6042780748662
+    }
+   },
+   "break_even": {
+    "ingredients": {
+     "1": {
+      "initial_sync": 0,
+      "message_plus_control": 298327,
+      "per_join_sync": 0.0,
+      "per_update_sync": null,
+      "sync_total": 0
+     },
+     "3": {
+      "initial_sync": 0,
+      "message_plus_control": 133603,
+      "per_join_sync": 0.0,
+      "per_update_sync": null,
+      "sync_total": 0
+     },
+     "4": {
+      "initial_sync": 11264,
+      "message_plus_control": 120139,
+      "per_join_sync": 1024.0,
+      "per_update_sync": null,
+      "sync_total": 14336
+     },
+     "4b": {
+      "initial_sync": 0,
+      "message_plus_control": 148427,
+      "per_join_sync": 0.0,
+      "per_update_sync": null,
+      "sync_total": 0
+     },
+     "4b-delta": {
+      "initial_sync": 0,
+      "message_plus_control": 148427,
+      "per_join_sync": 0.0,
+      "per_update_sync": null,
+      "sync_total": 0
+     },
+     "5": {
+      "initial_sync": 0,
+      "message_plus_control": 313151,
+      "per_join_sync": 0.0,
+      "per_update_sync": null,
+      "sync_total": 0
+     },
+     "6": {
+      "initial_sync": 11264,
+      "message_plus_control": 142924,
+      "per_join_sync": 1024.0,
+      "per_update_sync": null,
+      "sync_total": 14336
+     },
+     "7": {
+      "initial_sync": 0,
+      "message_plus_control": 313151,
+      "per_join_sync": 0.0,
+      "per_update_sync": null,
+      "sync_total": 0
+     }
+    },
+    "joins_observed": 3,
+    "pairs": {
+     "7_vs_3": {
+      "advantage_at_zero_updates_and_joins": -179548,
+      "advantage_observed": -179548,
+      "break_even_joins": "undefined: identical per-join cost (X behind at every count)",
+      "break_even_updates": "undefined: no update observed",
+      "per_join_delta_X_minus_Y": 0.0,
+      "per_update_delta_X_minus_Y": null
+     },
+     "7_vs_4": {
+      "advantage_at_zero_updates_and_joins": -181748,
+      "advantage_observed": -178676.0,
+      "break_even_joins": 177.48828125,
+      "break_even_updates": "undefined: no update observed",
+      "per_join_delta_X_minus_Y": -1024.0,
+      "per_update_delta_X_minus_Y": null
+     },
+     "7_vs_4b": {
+      "advantage_at_zero_updates_and_joins": -164724,
+      "advantage_observed": -164724,
+      "break_even_joins": "undefined: identical per-join cost (X behind at every count)",
+      "break_even_updates": "undefined: no update observed",
+      "per_join_delta_X_minus_Y": 0.0,
+      "per_update_delta_X_minus_Y": null
+     },
+     "7_vs_4b-delta": {
+      "advantage_at_zero_updates_and_joins": -164724,
+      "advantage_observed": -164724,
+      "break_even_joins": "undefined: identical per-join cost (X behind at every count)",
+      "break_even_updates": "undefined: no update observed",
+      "per_join_delta_X_minus_Y": 0.0,
+      "per_update_delta_X_minus_Y": null
+     },
+     "7_vs_5": {
+      "advantage_at_zero_updates_and_joins": 0,
+      "advantage_observed": 0,
+      "break_even_joins": "undefined: identical per-join cost (X tie at every count)",
+      "break_even_updates": "undefined: no update observed",
+      "per_join_delta_X_minus_Y": 0.0,
+      "per_update_delta_X_minus_Y": null
+     },
+     "7_vs_6": {
+      "advantage_at_zero_updates_and_joins": -158963,
+      "advantage_observed": -155891.0,
+      "break_even_joins": 155.2373046875,
+      "break_even_updates": "undefined: no update observed",
+      "per_join_delta_X_minus_Y": -1024.0,
+      "per_update_delta_X_minus_Y": null
+     }
+    },
+    "updates_observed": 0
+   },
+   "chain": {
+    "entries_final": 0,
+    "entry_body_bytes_final": 0,
+    "full_artifact_bytes_final": 0,
+    "kinds_final": {},
+    "lineage": {
+     "entries_by_number_of_source_conversations": {}
+    },
+    "max_scheduled_version_curated": 1,
+    "new_entries_per_snapshot": [],
+    "overflow_by_scheduled_version": [],
+    "overflow_entries_dropped": 0,
+    "overflow_entries_dropped_byte_limit": 0,
+    "overflow_entries_dropped_count_limit": 0,
+    "published_snapshots": 0,
+    "scheduled_versions": [
+     {
+      "n_convs": 98,
+      "new_entries": 0,
+      "overflow": 0,
+      "overflow_bytes": 0,
+      "overflow_count": 0,
+      "picks": 0,
+      "published_index": null,
+      "sched_version": 1,
+      "status": "empty"
+     }
+    ],
+    "skipped_schedule_versions": [],
+    "trailing_skipped_schedule_versions": [
+     1
+    ]
+   },
+   "joiner_published_indexes": [
+    0,
+    0,
+    0
+   ],
+   "primary": false,
+   "scenario": {
+    "V": 1,
+    "joiners": 3,
+    "participants": 10
+   }
+  },
+  {
+   "arm7_vs_4b_delta_total": 150116,
+   "arm7_vs_4b_total": 151055,
+   "arm7_vs_arm6_total": 148660,
+   "arms": {
+    "1": {
+     "all_message_total": 312672,
+     "byte_weighted_message_ratio": 1.0582686829773573,
+     "control_bytes": 0,
+     "control_prefix_bytes": 0,
+     "covered_bytes": 0,
+     "declare_bytes_incl_prefix": 0,
+     "eligible_messages": 187,
+     "input_bytes": 281901,
+     "kinds": {
+      "raw": 187
+     },
+     "lit_segments": 0,
+     "mean_per_message_ratio": 1.286159993774758,
+     "message_bytes": 297983,
+     "message_plus_control_total": 298327,
+     "message_prefix_bytes": 344,
+     "messages_with_refs": 0,
+     "oversized": {
+      "count": 1,
+      "fallback_bytes": 14343,
+      "fallback_prefix_bytes": 2,
+      "input_bytes": 75183,
+      "kinds": {
+       "zstd": 1
+      },
+      "verified_byte_exact": 1
+     },
+     "ref_bytes": 0,
+     "refs": 0,
+     "reject_bytes_incl_prefix": 0,
+     "rejected": 0,
+     "retransmit_bytes_incl_prefix": 0,
+     "sync_download": 0,
+     "sync_total": 0,
+     "sync_upload": 0,
+     "total": 298327,
+     "total_over_input_bytes": 1.0582686829773573,
+     "total_per_eligible_message": 1595.331550802139
+    },
+    "3": {
+     "all_message_total": 147948,
+     "byte_weighted_message_ratio": 0.47393588529306385,
+     "control_bytes": 0,
+     "control_prefix_bytes": 0,
+     "covered_bytes": 0,
+     "declare_bytes_incl_prefix": 0,
+     "eligible_messages": 187,
+     "input_bytes": 281901,
+     "kinds": {
+      "zstd": 187
+     },
+     "lit_segments": 0,
+     "mean_per_message_ratio": 0.7648065698386581,
+     "message_bytes": 133305,
+     "message_plus_control_total": 133603,
+     "message_prefix_bytes": 298,
+     "messages_with_refs": 0,
+     "oversized": {
+      "count": 1,
+      "fallback_bytes": 14343,
+      "fallback_prefix_bytes": 2,
+      "input_bytes": 75183,
+      "kinds": {
+       "zstd": 1
+      },
+      "verified_byte_exact": 1
+     },
+     "ref_bytes": 0,
+     "refs": 0,
+     "reject_bytes_incl_prefix": 0,
+     "rejected": 0,
+     "retransmit_bytes_incl_prefix": 0,
+     "sync_download": 0,
+     "sync_total": 0,
+     "sync_upload": 0,
+     "total": 133603,
+     "total_over_input_bytes": 0.47393588529306385,
+     "total_per_eligible_message": 714.4545454545455
+    },
+    "4": {
+     "all_message_total": 137556,
+     "byte_weighted_message_ratio": 0.42617443712509,
+     "control_bytes": 0,
+     "control_prefix_bytes": 0,
+     "covered_bytes": 0,
+     "declare_bytes_incl_prefix": 0,
+     "eligible_messages": 187,
+     "input_bytes": 281901,
+     "kinds": {
+      "zstd": 187
+     },
+     "lit_segments": 0,
+     "mean_per_message_ratio": 0.5930005454081945,
+     "message_bytes": 119847,
+     "message_plus_control_total": 120139,
+     "message_prefix_bytes": 292,
+     "messages_with_refs": 0,
+     "oversized": {
+      "count": 1,
+      "fallback_bytes": 14343,
+      "fallback_prefix_bytes": 2,
+      "input_bytes": 75183,
+      "kinds": {
+       "zstd": 1
+      },
+      "verified_byte_exact": 1
+     },
+     "ref_bytes": 0,
+     "refs": 0,
+     "reject_bytes_incl_prefix": 0,
+     "rejected": 0,
+     "retransmit_bytes_incl_prefix": 0,
+     "sync_download": 2048,
+     "sync_total": 3072,
+     "sync_upload": 1024,
+     "total": 123211,
+     "total_over_input_bytes": 0.43707187984434254,
+     "total_per_eligible_message": 658.8823529411765
+    },
+    "4b": {
+     "all_message_total": 162155,
+     "byte_weighted_message_ratio": 0.4601473566961451,
+     "control_bytes": 14606,
+     "control_prefix_bytes": 218,
+     "covered_bytes": 0,
+     "declare_bytes_incl_prefix": 14824,
+     "eligible_messages": 187,
+     "input_bytes": 281901,
+     "kinds": {
+      "zstd": 187
+     },
+     "lit_segments": 0,
+     "mean_per_message_ratio": 0.7450156495828834,
+     "message_bytes": 129418,
+     "message_plus_control_total": 144540,
+     "message_prefix_bytes": 298,
+     "messages_with_refs": 0,
+     "oversized": {
+      "count": 1,
+      "fallback_bytes": 14343,
+      "fallback_prefix_bytes": 2,
+      "input_bytes": 75183,
+      "kinds": {
+       "zstd": 1
+      },
+      "verified_byte_exact": 1
+     },
+     "ref_bytes": 0,
+     "refs": 0,
+     "reject_bytes_incl_prefix": 0,
+     "rejected": 0,
+     "retransmit_bytes_incl_prefix": 0,
+     "sync_download": 2180,
+     "sync_total": 3270,
+     "sync_upload": 1090,
+     "total": 147810,
+     "total_over_input_bytes": 0.5243330105249715,
+     "total_per_eligible_message": 790.427807486631
+    },
+    "4b-delta": {
+     "all_message_total": 163094,
+     "byte_weighted_message_ratio": 0.4601473566961451,
+     "control_bytes": 14606,
+     "control_prefix_bytes": 218,
+     "covered_bytes": 0,
+     "declare_bytes_incl_prefix": 14824,
+     "eligible_messages": 187,
+     "input_bytes": 281901,
+     "kinds": {
+      "zstd": 187
+     },
+     "lit_segments": 0,
+     "mean_per_message_ratio": 0.7450156495828834,
+     "message_bytes": 129418,
+     "message_plus_control_total": 144540,
+     "message_prefix_bytes": 298,
+     "messages_with_refs": 0,
+     "oversized": {
+      "count": 1,
+      "fallback_bytes": 14343,
+      "fallback_prefix_bytes": 2,
+      "input_bytes": 75183,
+      "kinds": {
+       "zstd": 1
+      },
+      "verified_byte_exact": 1
+     },
+     "ref_bytes": 0,
+     "refs": 0,
+     "reject_bytes_incl_prefix": 0,
+     "rejected": 0,
+     "retransmit_bytes_incl_prefix": 0,
+     "sync_download": 2806,
+     "sync_total": 4209,
+     "sync_upload": 1403,
+     "total": 148749,
+     "total_over_input_bytes": 0.5276639671373993,
+     "total_per_eligible_message": 795.4491978609626
+    },
+    "5": {
+     "all_message_total": 331705,
+     "byte_weighted_message_ratio": 1.0582686829773573,
+     "control_bytes": 14606,
+     "control_prefix_bytes": 218,
+     "covered_bytes": 0,
+     "declare_bytes_incl_prefix": 14824,
+     "eligible_messages": 187,
+     "input_bytes": 281901,
+     "kinds": {
+      "raw": 187
+     },
+     "lit_segments": 0,
+     "mean_per_message_ratio": 1.286159993774758,
+     "message_bytes": 297983,
+     "message_plus_control_total": 313151,
+     "message_prefix_bytes": 344,
+     "messages_with_refs": 0,
+     "oversized": {
+      "count": 1,
+      "fallback_bytes": 14343,
+      "fallback_prefix_bytes": 2,
+      "input_bytes": 75183,
+      "kinds": {
+       "zstd": 1
+      },
+      "verified_byte_exact": 1
+     },
+     "ref_bytes": 0,
+     "refs": 0,
+     "reject_bytes_incl_prefix": 0,
+     "rejected": 0,
+     "retransmit_bytes_incl_prefix": 0,
+     "sync_download": 2806,
+     "sync_total": 4209,
+     "sync_upload": 1403,
+     "total": 317360,
+     "total_over_input_bytes": 1.1257852934186114,
+     "total_per_eligible_message": 1697.1122994652405
+    },
+    "6": {
+     "all_message_total": 164550,
+     "byte_weighted_message_ratio": 0.45441484776570495,
+     "control_bytes": 14606,
+     "control_prefix_bytes": 218,
+     "covered_bytes": 0,
+     "declare_bytes_incl_prefix": 14824,
+     "eligible_messages": 187,
+     "input_bytes": 281901,
+     "kinds": {
+      "zstd_raw": 187
+     },
+     "lit_segments": 0,
+     "mean_per_message_ratio": 0.8071593871804496,
+     "message_bytes": 127799,
+     "message_plus_control_total": 142924,
+     "message_prefix_bytes": 301,
+     "messages_with_refs": 0,
+     "oversized": {
+      "count": 1,
+      "fallback_bytes": 14343,
+      "fallback_prefix_bytes": 2,
+      "input_bytes": 75183,
+      "kinds": {
+       "zstd": 1
+      },
+      "verified_byte_exact": 1
+     },
+     "ref_bytes": 0,
+     "refs": 0,
+     "reject_bytes_incl_prefix": 0,
+     "rejected": 0,
+     "retransmit_bytes_incl_prefix": 0,
+     "sync_download": 4854,
+     "sync_total": 7281,
+     "sync_upload": 2427,
+     "total": 150205,
+     "total_over_input_bytes": 0.5328289009262117,
+     "total_per_eligible_message": 803.2352941176471
+    },
+    "7": {
+     "all_message_total": 313210,
+     "byte_weighted_message_ratio": 0.9926605439498264,
+     "control_bytes": 14606,
+     "control_prefix_bytes": 218,
+     "covered_bytes": 3270,
+     "declare_bytes_incl_prefix": 14824,
+     "eligible_messages": 187,
+     "encoder": {
+      "candidates": 3,
+      "cap_hit_messages": 0,
+      "entries_pending": 0,
+      "enumerated_messages": 187,
+      "eval_cap_hit_messages": 0,
+      "match_cap_hit_messages": 0,
+      "matcher_calls": 0,
+      "matcher_span_chars": 0,
+      "messages": 187,
+      "raw_fallback_sends": 0,
+      "reasons": {
+       "compact": 187
+      },
+      "receiver_rejects_after_send": 0,
+      "template_evaluations": 0,
+      "verified_ok": 187,
+      "verify_errors": {},
+      "verify_failed": 0
+     },
+     "input_bytes": 281901,
+     "kinds": {
+      "compact": 187
+     },
+     "lit_segments": 187,
+     "mean_per_message_ratio": 1.0197746189756713,
+     "message_bytes": 279513,
+     "message_plus_control_total": 294656,
+     "message_prefix_bytes": 319,
+     "messages_with_refs": 3,
+     "oversized": {
+      "count": 1,
+      "fallback_bytes": 14343,
+      "fallback_prefix_bytes": 2,
+      "input_bytes": 75183,
+      "kinds": {
+       "zstd": 1
+      },
+      "verified_byte_exact": 1
+     },
+     "ref_bytes": 6,
+     "refs": 3,
+     "reject_bytes_incl_prefix": 0,
+     "rejected": 0,
+     "retransmit_bytes_incl_prefix": 0,
+     "sync_download": 2806,
+     "sync_total": 4209,
+     "sync_upload": 1403,
+     "total": 298865,
+     "total_over_input_bytes": 1.0601771543910805,
+     "total_per_eligible_message": 1598.2085561497327
+    }
+   },
+   "break_even": {
+    "ingredients": {
+     "1": {
+      "initial_sync": 0,
+      "message_plus_control": 298327,
+      "per_join_sync": null,
+      "per_update_sync": null,
+      "sync_total": 0
+     },
+     "3": {
+      "initial_sync": 0,
+      "message_plus_control": 133603,
+      "per_join_sync": null,
+      "per_update_sync": null,
+      "sync_total": 0
+     },
+     "4": {
+      "initial_sync": 3072,
+      "message_plus_control": 120139,
+      "per_join_sync": null,
+      "per_update_sync": null,
+      "sync_total": 3072
+     },
+     "4b": {
+      "initial_sync": 3270,
+      "message_plus_control": 144540,
+      "per_join_sync": null,
+      "per_update_sync": null,
+      "sync_total": 3270
+     },
+     "4b-delta": {
+      "initial_sync": 4209,
+      "message_plus_control": 144540,
+      "per_join_sync": null,
+      "per_update_sync": null,
+      "sync_total": 4209
+     },
+     "5": {
+      "initial_sync": 4209,
+      "message_plus_control": 313151,
+      "per_join_sync": null,
+      "per_update_sync": null,
+      "sync_total": 4209
+     },
+     "6": {
+      "initial_sync": 7281,
+      "message_plus_control": 142924,
+      "per_join_sync": null,
+      "per_update_sync": null,
+      "sync_total": 7281
+     },
+     "7": {
+      "initial_sync": 4209,
+      "message_plus_control": 294656,
+      "per_join_sync": null,
+      "per_update_sync": null,
+      "sync_total": 4209
+     }
+    },
+    "joins_observed": 0,
+    "pairs": {
+     "7_vs_3": {
+      "advantage_at_zero_updates_and_joins": -165262,
+      "advantage_observed": -165262,
+      "break_even_joins": "undefined: no join observed",
+      "break_even_updates": "undefined: no update observed",
+      "per_join_delta_X_minus_Y": null,
+      "per_update_delta_X_minus_Y": null
+     },
+     "7_vs_4": {
+      "advantage_at_zero_updates_and_joins": -175654,
+      "advantage_observed": -175654,
+      "break_even_joins": "undefined: no join observed",
+      "break_even_updates": "undefined: no update observed",
+      "per_join_delta_X_minus_Y": null,
+      "per_update_delta_X_minus_Y": null
+     },
+     "7_vs_4b": {
+      "advantage_at_zero_updates_and_joins": -151055,
+      "advantage_observed": -151055,
+      "break_even_joins": "undefined: no join observed",
+      "break_even_updates": "undefined: no update observed",
+      "per_join_delta_X_minus_Y": null,
+      "per_update_delta_X_minus_Y": null
+     },
+     "7_vs_4b-delta": {
+      "advantage_at_zero_updates_and_joins": -150116,
+      "advantage_observed": -150116,
+      "break_even_joins": "undefined: no join observed",
+      "break_even_updates": "undefined: no update observed",
+      "per_join_delta_X_minus_Y": null,
+      "per_update_delta_X_minus_Y": null
+     },
+     "7_vs_5": {
+      "advantage_at_zero_updates_and_joins": 18495,
+      "advantage_observed": 18495,
+      "break_even_joins": "undefined: no join observed",
+      "break_even_updates": "undefined: no update observed",
+      "per_join_delta_X_minus_Y": null,
+      "per_update_delta_X_minus_Y": null
+     },
+     "7_vs_6": {
+      "advantage_at_zero_updates_and_joins": -148660,
+      "advantage_observed": -148660,
+      "break_even_joins": "undefined: no join observed",
+      "break_even_updates": "undefined: no update observed",
+      "per_join_delta_X_minus_Y": null,
+      "per_update_delta_X_minus_Y": null
+     }
+    },
+    "updates_observed": 0
+   },
+   "chain": {
+    "entries_final": 1,
+    "entry_body_bytes_final": 1090,
+    "full_artifact_bytes_final": 1403,
+    "kinds_final": {
+     "literal": 1,
+     "template": 0
+    },
+    "lineage": {
+     "entries_by_number_of_source_conversations": {
+      "3": 1
+     }
+    },
+    "max_scheduled_version_curated": 5,
+    "new_entries_per_snapshot": [
+     1
+    ],
+    "overflow_by_scheduled_version": [],
+    "overflow_entries_dropped": 0,
+    "overflow_entries_dropped_byte_limit": 0,
+    "overflow_entries_dropped_count_limit": 0,
+    "published_snapshots": 1,
+    "scheduled_versions": [
+     {
+      "n_convs": 20,
+      "new_entries": 1,
+      "overflow": 0,
+      "overflow_bytes": 0,
+      "overflow_count": 0,
+      "picks": 1,
+      "published_index": 1,
+      "sched_version": 1,
+      "status": "published"
+     },
+     {
+      "n_convs": 40,
+      "new_entries": 0,
+      "overflow": 0,
+      "overflow_bytes": 0,
+      "overflow_count": 0,
+      "picks": 1,
+      "published_index": null,
+      "sched_version": 2,
+      "status": "empty"
+     },
+     {
+      "n_convs": 59,
+      "new_entries": 0,
+      "overflow": 0,
+      "overflow_bytes": 0,
+      "overflow_count": 0,
+      "picks": 1,
+      "published_index": null,
+      "sched_version": 3,
+      "status": "empty"
+     },
+     {
+      "n_convs": 79,
+      "new_entries": 0,
+      "overflow": 0,
+      "overflow_bytes": 0,
+      "overflow_count": 0,
+      "picks": 1,
+      "published_index": null,
+      "sched_version": 4,
+      "status": "empty"
+     },
+     {
+      "n_convs": 98,
+      "new_entries": 0,
+      "overflow": 0,
+      "overflow_bytes": 0,
+      "overflow_count": 0,
+      "picks": 1,
+      "published_index": null,
+      "sched_version": 5,
+      "status": "empty"
+     }
+    ],
+    "skipped_schedule_versions": [],
+    "trailing_skipped_schedule_versions": [
+     2,
+     3,
+     4,
+     5
+    ]
+   },
+   "joiner_published_indexes": [],
+   "primary": true,
+   "scenario": {
+    "V": 5,
+    "joiners": 0,
+    "participants": 2
+   }
+  },
+  {
+   "arm7_vs_4b_delta_total": 164724,
+   "arm7_vs_4b_total": 164724,
+   "arm7_vs_arm6_total": 164083,
+   "arms": {
+    "1": {
+     "all_message_total": 312672,
+     "byte_weighted_message_ratio": 1.0582686829773573,
+     "control_bytes": 0,
+     "control_prefix_bytes": 0,
+     "covered_bytes": 0,
+     "declare_bytes_incl_prefix": 0,
+     "eligible_messages": 187,
+     "input_bytes": 281901,
+     "kinds": {
+      "raw": 187
+     },
+     "lit_segments": 0,
+     "mean_per_message_ratio": 1.286159993774758,
+     "message_bytes": 297983,
+     "message_plus_control_total": 298327,
+     "message_prefix_bytes": 344,
+     "messages_with_refs": 0,
+     "oversized": {
+      "count": 1,
+      "fallback_bytes": 14343,
+      "fallback_prefix_bytes": 2,
+      "input_bytes": 75183,
+      "kinds": {
+       "zstd": 1
+      },
+      "verified_byte_exact": 1
+     },
+     "ref_bytes": 0,
+     "refs": 0,
+     "reject_bytes_incl_prefix": 0,
+     "rejected": 0,
+     "retransmit_bytes_incl_prefix": 0,
+     "sync_download": 0,
+     "sync_total": 0,
+     "sync_upload": 0,
+     "total": 298327,
+     "total_over_input_bytes": 1.0582686829773573,
+     "total_per_eligible_message": 1595.331550802139
+    },
+    "3": {
+     "all_message_total": 147948,
+     "byte_weighted_message_ratio": 0.47393588529306385,
+     "control_bytes": 0,
+     "control_prefix_bytes": 0,
+     "covered_bytes": 0,
+     "declare_bytes_incl_prefix": 0,
+     "eligible_messages": 187,
+     "input_bytes": 281901,
+     "kinds": {
+      "zstd": 187
+     },
+     "lit_segments": 0,
+     "mean_per_message_ratio": 0.7648065698386581,
+     "message_bytes": 133305,
+     "message_plus_control_total": 133603,
+     "message_prefix_bytes": 298,
+     "messages_with_refs": 0,
+     "oversized": {
+      "count": 1,
+      "fallback_bytes": 14343,
+      "fallback_prefix_bytes": 2,
+      "input_bytes": 75183,
+      "kinds": {
+       "zstd": 1
+      },
+      "verified_byte_exact": 1
+     },
+     "ref_bytes": 0,
+     "refs": 0,
+     "reject_bytes_incl_prefix": 0,
+     "rejected": 0,
+     "retransmit_bytes_incl_prefix": 0,
+     "sync_download": 0,
+     "sync_total": 0,
+     "sync_upload": 0,
+     "total": 133603,
+     "total_over_input_bytes": 0.47393588529306385,
+     "total_per_eligible_message": 714.4545454545455
+    },
+    "4": {
+     "all_message_total": 140628,
+     "byte_weighted_message_ratio": 0.42617443712509,
+     "control_bytes": 0,
+     "control_prefix_bytes": 0,
+     "covered_bytes": 0,
+     "declare_bytes_incl_prefix": 0,
+     "eligible_messages": 187,
+     "input_bytes": 281901,
+     "kinds": {
+      "zstd": 187
+     },
+     "lit_segments": 0,
+     "mean_per_message_ratio": 0.5930005454081945,
+     "message_bytes": 119847,
+     "message_plus_control_total": 120139,
+     "message_prefix_bytes": 292,
+     "messages_with_refs": 0,
+     "oversized": {
+      "count": 1,
+      "fallback_bytes": 14343,
+      "fallback_prefix_bytes": 2,
+      "input_bytes": 75183,
+      "kinds": {
+       "zstd": 1
+      },
+      "verified_byte_exact": 1
+     },
+     "ref_bytes": 0,
+     "refs": 0,
+     "reject_bytes_incl_prefix": 0,
+     "rejected": 0,
+     "retransmit_bytes_incl_prefix": 0,
+     "sync_download": 5120,
+     "sync_total": 6144,
+     "sync_upload": 1024,
+     "total": 126283,
+     "total_over_input_bytes": 0.447969322563595,
+     "total_per_eligible_message": 675.3101604278074
+    },
+    "4b": {
+     "all_message_total": 162772,
+     "byte_weighted_message_ratio": 0.47393588529306385,
+     "control_bytes": 14606,
+     "control_prefix_bytes": 218,
+     "covered_bytes": 0,
+     "declare_bytes_incl_prefix": 14824,
+     "eligible_messages": 187,
+     "input_bytes": 281901,
+     "kinds": {
+      "zstd": 187
+     },
+     "lit_segments": 0,
+     "mean_per_message_ratio": 0.7648065698386581,
+     "message_bytes": 133305,
+     "message_plus_control_total": 148427,
+     "message_prefix_bytes": 298,
+     "messages_with_refs": 0,
+     "oversized": {
+      "count": 1,
+      "fallback_bytes": 14343,
+      "fallback_prefix_bytes": 2,
+      "input_bytes": 75183,
+      "kinds": {
+       "zstd": 1
+      },
+      "verified_byte_exact": 1
+     },
+     "ref_bytes": 0,
+     "refs": 0,
+     "reject_bytes_incl_prefix": 0,
+     "rejected": 0,
+     "retransmit_bytes_incl_prefix": 0,
+     "sync_download": 0,
+     "sync_total": 0,
+     "sync_upload": 0,
+     "total": 148427,
+     "total_over_input_bytes": 0.5265217221648735,
+     "total_per_eligible_message": 793.7272727272727
+    },
+    "4b-delta": {
+     "all_message_total": 162772,
+     "byte_weighted_message_ratio": 0.47393588529306385,
+     "control_bytes": 14606,
+     "control_prefix_bytes": 218,
+     "covered_bytes": 0,
+     "declare_bytes_incl_prefix": 14824,
+     "eligible_messages": 187,
+     "input_bytes": 281901,
+     "kinds": {
+      "zstd": 187
+     },
+     "lit_segments": 0,
+     "mean_per_message_ratio": 0.7648065698386581,
+     "message_bytes": 133305,
+     "message_plus_control_total": 148427,
+     "message_prefix_bytes": 298,
+     "messages_with_refs": 0,
+     "oversized": {
+      "count": 1,
+      "fallback_bytes": 14343,
+      "fallback_prefix_bytes": 2,
+      "input_bytes": 75183,
+      "kinds": {
+       "zstd": 1
+      },
+      "verified_byte_exact": 1
+     },
+     "ref_bytes": 0,
+     "refs": 0,
+     "reject_bytes_incl_prefix": 0,
+     "rejected": 0,
+     "retransmit_bytes_incl_prefix": 0,
+     "sync_download": 0,
+     "sync_total": 0,
+     "sync_upload": 0,
+     "total": 148427,
+     "total_over_input_bytes": 0.5265217221648735,
+     "total_per_eligible_message": 793.7272727272727
+    },
+    "5": {
+     "all_message_total": 327496,
+     "byte_weighted_message_ratio": 1.0582686829773573,
+     "control_bytes": 14606,
+     "control_prefix_bytes": 218,
+     "covered_bytes": 0,
+     "declare_bytes_incl_prefix": 14824,
+     "eligible_messages": 187,
+     "input_bytes": 281901,
+     "kinds": {
+      "raw": 187
+     },
+     "lit_segments": 0,
+     "mean_per_message_ratio": 1.286159993774758,
+     "message_bytes": 297983,
+     "message_plus_control_total": 313151,
+     "message_prefix_bytes": 344,
+     "messages_with_refs": 0,
+     "oversized": {
+      "count": 1,
+      "fallback_bytes": 14343,
+      "fallback_prefix_bytes": 2,
+      "input_bytes": 75183,
+      "kinds": {
+       "zstd": 1
+      },
+      "verified_byte_exact": 1
+     },
+     "ref_bytes": 0,
+     "refs": 0,
+     "reject_bytes_incl_prefix": 0,
+     "rejected": 0,
+     "retransmit_bytes_incl_prefix": 0,
+     "sync_download": 0,
+     "sync_total": 0,
+     "sync_upload": 0,
+     "total": 313151,
+     "total_over_input_bytes": 1.1108545198491668,
+     "total_per_eligible_message": 1674.6042780748662
+    },
+    "6": {
+     "all_message_total": 163413,
+     "byte_weighted_message_ratio": 0.45441484776570495,
+     "control_bytes": 14606,
+     "control_prefix_bytes": 218,
+     "covered_bytes": 0,
+     "declare_bytes_incl_prefix": 14824,
+     "eligible_messages": 187,
+     "input_bytes": 281901,
+     "kinds": {
+      "zstd_raw": 187
+     },
+     "lit_segments": 0,
+     "mean_per_message_ratio": 0.8071593871804496,
+     "message_bytes": 127799,
+     "message_plus_control_total": 142924,
+     "message_prefix_bytes": 301,
+     "messages_with_refs": 0,
+     "oversized": {
+      "count": 1,
+      "fallback_bytes": 14343,
+      "fallback_prefix_bytes": 2,
+      "input_bytes": 75183,
+      "kinds": {
+       "zstd": 1
+      },
+      "verified_byte_exact": 1
+     },
+     "ref_bytes": 0,
+     "refs": 0,
+     "reject_bytes_incl_prefix": 0,
+     "rejected": 0,
+     "retransmit_bytes_incl_prefix": 0,
+     "sync_download": 5120,
+     "sync_total": 6144,
+     "sync_upload": 1024,
+     "total": 149068,
+     "total_over_input_bytes": 0.5287955700760196,
+     "total_per_eligible_message": 797.1550802139037
+    },
+    "7": {
+     "all_message_total": 327496,
+     "byte_weighted_message_ratio": 1.0582686829773573,
+     "control_bytes": 14606,
+     "control_prefix_bytes": 218,
+     "covered_bytes": 0,
+     "declare_bytes_incl_prefix": 14824,
+     "eligible_messages": 187,
+     "encoder": {
+      "messages": 187,
+      "raw_fallback_sends": 187,
+      "reasons": {
+       "unknown_declared_snapshot": 187
+      },
+      "receiver_rejects_after_send": 0,
+      "verified_ok": 0,
+      "verify_errors": {},
+      "verify_failed": 0
+     },
+     "input_bytes": 281901,
+     "kinds": {
+      "raw": 187
+     },
+     "lit_segments": 0,
+     "mean_per_message_ratio": 1.286159993774758,
+     "message_bytes": 297983,
+     "message_plus_control_total": 313151,
+     "message_prefix_bytes": 344,
+     "messages_with_refs": 0,
+     "oversized": {
+      "count": 1,
+      "fallback_bytes": 14343,
+      "fallback_prefix_bytes": 2,
+      "input_bytes": 75183,
+      "kinds": {
+       "zstd": 1
+      },
+      "verified_byte_exact": 1
+     },
+     "ref_bytes": 0,
+     "refs": 0,
+     "reject_bytes_incl_prefix": 0,
+     "rejected": 0,
+     "retransmit_bytes_incl_prefix": 0,
+     "sync_download": 0,
+     "sync_total": 0,
+     "sync_upload": 0,
+     "total": 313151,
+     "total_over_input_bytes": 1.1108545198491668,
+     "total_per_eligible_message": 1674.6042780748662
+    }
+   },
+   "break_even": {
+    "ingredients": {
+     "1": {
+      "initial_sync": 0,
+      "message_plus_control": 298327,
+      "per_join_sync": 0.0,
+      "per_update_sync": null,
+      "sync_total": 0
+     },
+     "3": {
+      "initial_sync": 0,
+      "message_plus_control": 133603,
+      "per_join_sync": 0.0,
+      "per_update_sync": null,
+      "sync_total": 0
+     },
+     "4": {
+      "initial_sync": 3072,
+      "message_plus_control": 120139,
+      "per_join_sync": 1024.0,
+      "per_update_sync": null,
+      "sync_total": 6144
+     },
+     "4b": {
+      "initial_sync": 0,
+      "message_plus_control": 148427,
+      "per_join_sync": 0.0,
+      "per_update_sync": null,
+      "sync_total": 0
+     },
+     "4b-delta": {
+      "initial_sync": 0,
+      "message_plus_control": 148427,
+      "per_join_sync": 0.0,
+      "per_update_sync": null,
+      "sync_total": 0
+     },
+     "5": {
+      "initial_sync": 0,
+      "message_plus_control": 313151,
+      "per_join_sync": 0.0,
+      "per_update_sync": null,
+      "sync_total": 0
+     },
+     "6": {
+      "initial_sync": 3072,
+      "message_plus_control": 142924,
+      "per_join_sync": 1024.0,
+      "per_update_sync": null,
+      "sync_total": 6144
+     },
+     "7": {
+      "initial_sync": 0,
+      "message_plus_control": 313151,
+      "per_join_sync": 0.0,
+      "per_update_sync": null,
+      "sync_total": 0
+     }
+    },
+    "joins_observed": 3,
+    "pairs": {
+     "7_vs_3": {
+      "advantage_at_zero_updates_and_joins": -179548,
+      "advantage_observed": -179548,
+      "break_even_joins": "undefined: identical per-join cost (X behind at every count)",
+      "break_even_updates": "undefined: no update observed",
+      "per_join_delta_X_minus_Y": 0.0,
+      "per_update_delta_X_minus_Y": null
+     },
+     "7_vs_4": {
+      "advantage_at_zero_updates_and_joins": -189940,
+      "advantage_observed": -186868.0,
+      "break_even_joins": 185.48828125,
+      "break_even_updates": "undefined: no update observed",
+      "per_join_delta_X_minus_Y": -1024.0,
+      "per_update_delta_X_minus_Y": null
+     },
+     "7_vs_4b": {
+      "advantage_at_zero_updates_and_joins": -164724,
+      "advantage_observed": -164724,
+      "break_even_joins": "undefined: identical per-join cost (X behind at every count)",
+      "break_even_updates": "undefined: no update observed",
+      "per_join_delta_X_minus_Y": 0.0,
+      "per_update_delta_X_minus_Y": null
+     },
+     "7_vs_4b-delta": {
+      "advantage_at_zero_updates_and_joins": -164724,
+      "advantage_observed": -164724,
+      "break_even_joins": "undefined: identical per-join cost (X behind at every count)",
+      "break_even_updates": "undefined: no update observed",
+      "per_join_delta_X_minus_Y": 0.0,
+      "per_update_delta_X_minus_Y": null
+     },
+     "7_vs_5": {
+      "advantage_at_zero_updates_and_joins": 0,
+      "advantage_observed": 0,
+      "break_even_joins": "undefined: identical per-join cost (X tie at every count)",
+      "break_even_updates": "undefined: no update observed",
+      "per_join_delta_X_minus_Y": 0.0,
+      "per_update_delta_X_minus_Y": null
+     },
+     "7_vs_6": {
+      "advantage_at_zero_updates_and_joins": -167155,
+      "advantage_observed": -164083.0,
+      "break_even_joins": 163.2373046875,
+      "break_even_updates": "undefined: no update observed",
+      "per_join_delta_X_minus_Y": -1024.0,
+      "per_update_delta_X_minus_Y": null
+     }
+    },
+    "updates_observed": 0
+   },
+   "chain": {
+    "entries_final": 0,
+    "entry_body_bytes_final": 0,
+    "full_artifact_bytes_final": 0,
+    "kinds_final": {},
+    "lineage": {
+     "entries_by_number_of_source_conversations": {}
+    },
+    "max_scheduled_version_curated": 5,
+    "new_entries_per_snapshot": [],
+    "overflow_by_scheduled_version": [],
+    "overflow_entries_dropped": 0,
+    "overflow_entries_dropped_byte_limit": 0,
+    "overflow_entries_dropped_count_limit": 0,
+    "published_snapshots": 0,
+    "scheduled_versions": [
+     {
+      "n_convs": 20,
+      "new_entries": 0,
+      "overflow": 0,
+      "overflow_bytes": 0,
+      "overflow_count": 0,
+      "picks": 0,
+      "published_index": null,
+      "sched_version": 1,
+      "status": "empty"
+     },
+     {
+      "n_convs": 40,
+      "new_entries": 0,
+      "overflow": 0,
+      "overflow_bytes": 0,
+      "overflow_count": 0,
+      "picks": 0,
+      "published_index": null,
+      "sched_version": 2,
+      "status": "empty"
+     },
+     {
+      "n_convs": 59,
+      "new_entries": 0,
+      "overflow": 0,
+      "overflow_bytes": 0,
+      "overflow_count": 0,
+      "picks": 0,
+      "published_index": null,
+      "sched_version": 3,
+      "status": "empty"
+     },
+     {
+      "n_convs": 79,
+      "new_entries": 0,
+      "overflow": 0,
+      "overflow_bytes": 0,
+      "overflow_count": 0,
+      "picks": 0,
+      "published_index": null,
+      "sched_version": 4,
+      "status": "empty"
+     },
+     {
+      "n_convs": 98,
+      "new_entries": 0,
+      "overflow": 0,
+      "overflow_bytes": 0,
+      "overflow_count": 0,
+      "picks": 0,
+      "published_index": null,
+      "sched_version": 5,
+      "status": "empty"
+     }
+    ],
+    "skipped_schedule_versions": [],
+    "trailing_skipped_schedule_versions": [
+     1,
+     2,
+     3,
+     4,
+     5
+    ]
+   },
+   "joiner_published_indexes": [
+    0,
+    0,
+    0
+   ],
+   "primary": false,
+   "scenario": {
+    "V": 5,
+    "joiners": 3,
+    "participants": 2
+   }
+  },
+  {
+   "arm7_vs_4b_delta_total": 150116,
+   "arm7_vs_4b_total": 153559,
+   "arm7_vs_arm6_total": 140468,
+   "arms": {
+    "1": {
+     "all_message_total": 312672,
+     "byte_weighted_message_ratio": 1.0582686829773573,
+     "control_bytes": 0,
+     "control_prefix_bytes": 0,
+     "covered_bytes": 0,
+     "declare_bytes_incl_prefix": 0,
+     "eligible_messages": 187,
+     "input_bytes": 281901,
+     "kinds": {
+      "raw": 187
+     },
+     "lit_segments": 0,
+     "mean_per_message_ratio": 1.286159993774758,
+     "message_bytes": 297983,
+     "message_plus_control_total": 298327,
+     "message_prefix_bytes": 344,
+     "messages_with_refs": 0,
+     "oversized": {
+      "count": 1,
+      "fallback_bytes": 14343,
+      "fallback_prefix_bytes": 2,
+      "input_bytes": 75183,
+      "kinds": {
+       "zstd": 1
+      },
+      "verified_byte_exact": 1
+     },
+     "ref_bytes": 0,
+     "refs": 0,
+     "reject_bytes_incl_prefix": 0,
+     "rejected": 0,
+     "retransmit_bytes_incl_prefix": 0,
+     "sync_download": 0,
+     "sync_total": 0,
+     "sync_upload": 0,
+     "total": 298327,
+     "total_over_input_bytes": 1.0582686829773573,
+     "total_per_eligible_message": 1595.331550802139
+    },
+    "3": {
+     "all_message_total": 147948,
+     "byte_weighted_message_ratio": 0.47393588529306385,
+     "control_bytes": 0,
+     "control_prefix_bytes": 0,
+     "covered_bytes": 0,
+     "declare_bytes_incl_prefix": 0,
+     "eligible_messages": 187,
+     "input_bytes": 281901,
+     "kinds": {
+      "zstd": 187
+     },
+     "lit_segments": 0,
+     "mean_per_message_ratio": 0.7648065698386581,
+     "message_bytes": 133305,
+     "message_plus_control_total": 133603,
+     "message_prefix_bytes": 298,
+     "messages_with_refs": 0,
+     "oversized": {
+      "count": 1,
+      "fallback_bytes": 14343,
+      "fallback_prefix_bytes": 2,
+      "input_bytes": 75183,
+      "kinds": {
+       "zstd": 1
+      },
+      "verified_byte_exact": 1
+     },
+     "ref_bytes": 0,
+     "refs": 0,
+     "reject_bytes_incl_prefix": 0,
+     "rejected": 0,
+     "retransmit_bytes_incl_prefix": 0,
+     "sync_download": 0,
+     "sync_total": 0,
+     "sync_upload": 0,
+     "total": 133603,
+     "total_over_input_bytes": 0.47393588529306385,
+     "total_per_eligible_message": 714.4545454545455
+    },
+    "4": {
+     "all_message_total": 145748,
+     "byte_weighted_message_ratio": 0.42617443712509,
+     "control_bytes": 0,
+     "control_prefix_bytes": 0,
+     "covered_bytes": 0,
+     "declare_bytes_incl_prefix": 0,
+     "eligible_messages": 187,
+     "input_bytes": 281901,
+     "kinds": {
+      "zstd": 187
+     },
+     "lit_segments": 0,
+     "mean_per_message_ratio": 0.5930005454081945,
+     "message_bytes": 119847,
+     "message_plus_control_total": 120139,
+     "message_prefix_bytes": 292,
+     "messages_with_refs": 0,
+     "oversized": {
+      "count": 1,
+      "fallback_bytes": 14343,
+      "fallback_prefix_bytes": 2,
+      "input_bytes": 75183,
+      "kinds": {
+       "zstd": 1
+      },
+      "verified_byte_exact": 1
+     },
+     "ref_bytes": 0,
+     "refs": 0,
+     "reject_bytes_incl_prefix": 0,
+     "rejected": 0,
+     "retransmit_bytes_incl_prefix": 0,
+     "sync_download": 10240,
+     "sync_total": 11264,
+     "sync_upload": 1024,
+     "total": 131403,
+     "total_over_input_bytes": 0.4661317270956825,
+     "total_per_eligible_message": 702.6898395721926
+    },
+    "4b": {
+     "all_message_total": 170875,
+     "byte_weighted_message_ratio": 0.4601473566961451,
+     "control_bytes": 14606,
+     "control_prefix_bytes": 218,
+     "covered_bytes": 0,
+     "declare_bytes_incl_prefix": 14824,
+     "eligible_messages": 187,
+     "input_bytes": 281901,
+     "kinds": {
+      "zstd": 187
+     },
+     "lit_segments": 0,
+     "mean_per_message_ratio": 0.7450156495828834,
+     "message_bytes": 129418,
+     "message_plus_control_total": 144540,
+     "message_prefix_bytes": 298,
+     "messages_with_refs": 0,
+     "oversized": {
+      "count": 1,
+      "fallback_bytes": 14343,
+      "fallback_prefix_bytes": 2,
+      "input_bytes": 75183,
+      "kinds": {
+       "zstd": 1
+      },
+      "verified_byte_exact": 1
+     },
+     "ref_bytes": 0,
+     "refs": 0,
+     "reject_bytes_incl_prefix": 0,
+     "rejected": 0,
+     "retransmit_bytes_incl_prefix": 0,
+     "sync_download": 10900,
+     "sync_total": 11990,
+     "sync_upload": 1090,
+     "total": 156530,
+     "total_over_input_bytes": 0.555265855743683,
+     "total_per_eligible_message": 837.0588235294117
+    },
+    "4b-delta": {
+     "all_message_total": 174318,
+     "byte_weighted_message_ratio": 0.4601473566961451,
+     "control_bytes": 14606,
+     "control_prefix_bytes": 218,
+     "covered_bytes": 0,
+     "declare_bytes_incl_prefix": 14824,
+     "eligible_messages": 187,
+     "input_bytes": 281901,
+     "kinds": {
+      "zstd": 187
+     },
+     "lit_segments": 0,
+     "mean_per_message_ratio": 0.7450156495828834,
+     "message_bytes": 129418,
+     "message_plus_control_total": 144540,
+     "message_prefix_bytes": 298,
+     "messages_with_refs": 0,
+     "oversized": {
+      "count": 1,
+      "fallback_bytes": 14343,
+      "fallback_prefix_bytes": 2,
+      "input_bytes": 75183,
+      "kinds": {
+       "zstd": 1
+      },
+      "verified_byte_exact": 1
+     },
+     "ref_bytes": 0,
+     "refs": 0,
+     "reject_bytes_incl_prefix": 0,
+     "rejected": 0,
+     "retransmit_bytes_incl_prefix": 0,
+     "sync_download": 14030,
+     "sync_total": 15433,
+     "sync_upload": 1403,
+     "total": 159973,
+     "total_over_input_bytes": 0.5674793633225849,
+     "total_per_eligible_message": 855.4705882352941
+    },
+    "5": {
+     "all_message_total": 342929,
+     "byte_weighted_message_ratio": 1.0582686829773573,
+     "control_bytes": 14606,
+     "control_prefix_bytes": 218,
+     "covered_bytes": 0,
+     "declare_bytes_incl_prefix": 14824,
+     "eligible_messages": 187,
+     "input_bytes": 281901,
+     "kinds": {
+      "raw": 187
+     },
+     "lit_segments": 0,
+     "mean_per_message_ratio": 1.286159993774758,
+     "message_bytes": 297983,
+     "message_plus_control_total": 313151,
+     "message_prefix_bytes": 344,
+     "messages_with_refs": 0,
+     "oversized": {
+      "count": 1,
+      "fallback_bytes": 14343,
+      "fallback_prefix_bytes": 2,
+      "input_bytes": 75183,
+      "kinds": {
+       "zstd": 1
+      },
+      "verified_byte_exact": 1
+     },
+     "ref_bytes": 0,
+     "refs": 0,
+     "reject_bytes_incl_prefix": 0,
+     "rejected": 0,
+     "retransmit_bytes_incl_prefix": 0,
+     "sync_download": 14030,
+     "sync_total": 15433,
+     "sync_upload": 1403,
+     "total": 328584,
+     "total_over_input_bytes": 1.1656006896037971,
+     "total_per_eligible_message": 1757.1336898395723
+    },
+    "6": {
+     "all_message_total": 183966,
+     "byte_weighted_message_ratio": 0.45441484776570495,
+     "control_bytes": 14606,
+     "control_prefix_bytes": 218,
+     "covered_bytes": 0,
+     "declare_bytes_incl_prefix": 14824,
+     "eligible_messages": 187,
+     "input_bytes": 281901,
+     "kinds": {
+      "zstd_raw": 187
+     },
+     "lit_segments": 0,
+     "mean_per_message_ratio": 0.8071593871804496,
+     "message_bytes": 127799,
+     "message_plus_control_total": 142924,
+     "message_prefix_bytes": 301,
+     "messages_with_refs": 0,
+     "oversized": {
+      "count": 1,
+      "fallback_bytes": 14343,
+      "fallback_prefix_bytes": 2,
+      "input_bytes": 75183,
+      "kinds": {
+       "zstd": 1
+      },
+      "verified_byte_exact": 1
+     },
+     "ref_bytes": 0,
+     "refs": 0,
+     "reject_bytes_incl_prefix": 0,
+     "rejected": 0,
+     "retransmit_bytes_incl_prefix": 0,
+     "sync_download": 24270,
+     "sync_total": 26697,
+     "sync_upload": 2427,
+     "total": 169621,
+     "total_over_input_bytes": 0.6017041443627372,
+     "total_per_eligible_message": 907.0641711229947
+    },
+    "7": {
+     "all_message_total": 324434,
+     "byte_weighted_message_ratio": 0.9926605439498264,
+     "control_bytes": 14606,
+     "control_prefix_bytes": 218,
+     "covered_bytes": 3270,
+     "declare_bytes_incl_prefix": 14824,
+     "eligible_messages": 187,
+     "encoder": {
+      "candidates": 3,
+      "cap_hit_messages": 0,
+      "entries_pending": 0,
+      "enumerated_messages": 187,
+      "eval_cap_hit_messages": 0,
+      "match_cap_hit_messages": 0,
+      "matcher_calls": 0,
+      "matcher_span_chars": 0,
+      "messages": 187,
+      "raw_fallback_sends": 0,
+      "reasons": {
+       "compact": 187
+      },
+      "receiver_rejects_after_send": 0,
+      "template_evaluations": 0,
+      "verified_ok": 187,
+      "verify_errors": {},
+      "verify_failed": 0
+     },
+     "input_bytes": 281901,
+     "kinds": {
+      "compact": 187
+     },
+     "lit_segments": 187,
+     "mean_per_message_ratio": 1.0197746189756713,
+     "message_bytes": 279513,
+     "message_plus_control_total": 294656,
+     "message_prefix_bytes": 319,
+     "messages_with_refs": 3,
+     "oversized": {
+      "count": 1,
+      "fallback_bytes": 14343,
+      "fallback_prefix_bytes": 2,
+      "input_bytes": 75183,
+      "kinds": {
+       "zstd": 1
+      },
+      "verified_byte_exact": 1
+     },
+     "ref_bytes": 6,
+     "refs": 3,
+     "reject_bytes_incl_prefix": 0,
+     "rejected": 0,
+     "retransmit_bytes_incl_prefix": 0,
+     "sync_download": 14030,
+     "sync_total": 15433,
+     "sync_upload": 1403,
+     "total": 310089,
+     "total_over_input_bytes": 1.0999925505762662,
+     "total_per_eligible_message": 1658.2299465240642
+    }
+   },
+   "break_even": {
+    "ingredients": {
+     "1": {
+      "initial_sync": 0,
+      "message_plus_control": 298327,
+      "per_join_sync": null,
+      "per_update_sync": null,
+      "sync_total": 0
+     },
+     "3": {
+      "initial_sync": 0,
+      "message_plus_control": 133603,
+      "per_join_sync": null,
+      "per_update_sync": null,
+      "sync_total": 0
+     },
+     "4": {
+      "initial_sync": 11264,
+      "message_plus_control": 120139,
+      "per_join_sync": null,
+      "per_update_sync": null,
+      "sync_total": 11264
+     },
+     "4b": {
+      "initial_sync": 11990,
+      "message_plus_control": 144540,
+      "per_join_sync": null,
+      "per_update_sync": null,
+      "sync_total": 11990
+     },
+     "4b-delta": {
+      "initial_sync": 15433,
+      "message_plus_control": 144540,
+      "per_join_sync": null,
+      "per_update_sync": null,
+      "sync_total": 15433
+     },
+     "5": {
+      "initial_sync": 15433,
+      "message_plus_control": 313151,
+      "per_join_sync": null,
+      "per_update_sync": null,
+      "sync_total": 15433
+     },
+     "6": {
+      "initial_sync": 26697,
+      "message_plus_control": 142924,
+      "per_join_sync": null,
+      "per_update_sync": null,
+      "sync_total": 26697
+     },
+     "7": {
+      "initial_sync": 15433,
+      "message_plus_control": 294656,
+      "per_join_sync": null,
+      "per_update_sync": null,
+      "sync_total": 15433
+     }
+    },
+    "joins_observed": 0,
+    "pairs": {
+     "7_vs_3": {
+      "advantage_at_zero_updates_and_joins": -176486,
+      "advantage_observed": -176486,
+      "break_even_joins": "undefined: no join observed",
+      "break_even_updates": "undefined: no update observed",
+      "per_join_delta_X_minus_Y": null,
+      "per_update_delta_X_minus_Y": null
+     },
+     "7_vs_4": {
+      "advantage_at_zero_updates_and_joins": -178686,
+      "advantage_observed": -178686,
+      "break_even_joins": "undefined: no join observed",
+      "break_even_updates": "undefined: no update observed",
+      "per_join_delta_X_minus_Y": null,
+      "per_update_delta_X_minus_Y": null
+     },
+     "7_vs_4b": {
+      "advantage_at_zero_updates_and_joins": -153559,
+      "advantage_observed": -153559,
+      "break_even_joins": "undefined: no join observed",
+      "break_even_updates": "undefined: no update observed",
+      "per_join_delta_X_minus_Y": null,
+      "per_update_delta_X_minus_Y": null
+     },
+     "7_vs_4b-delta": {
+      "advantage_at_zero_updates_and_joins": -150116,
+      "advantage_observed": -150116,
+      "break_even_joins": "undefined: no join observed",
+      "break_even_updates": "undefined: no update observed",
+      "per_join_delta_X_minus_Y": null,
+      "per_update_delta_X_minus_Y": null
+     },
+     "7_vs_5": {
+      "advantage_at_zero_updates_and_joins": 18495,
+      "advantage_observed": 18495,
+      "break_even_joins": "undefined: no join observed",
+      "break_even_updates": "undefined: no update observed",
+      "per_join_delta_X_minus_Y": null,
+      "per_update_delta_X_minus_Y": null
+     },
+     "7_vs_6": {
+      "advantage_at_zero_updates_and_joins": -140468,
+      "advantage_observed": -140468,
+      "break_even_joins": "undefined: no join observed",
+      "break_even_updates": "undefined: no update observed",
+      "per_join_delta_X_minus_Y": null,
+      "per_update_delta_X_minus_Y": null
+     }
+    },
+    "updates_observed": 0
+   },
+   "chain": {
+    "entries_final": 1,
+    "entry_body_bytes_final": 1090,
+    "full_artifact_bytes_final": 1403,
+    "kinds_final": {
+     "literal": 1,
+     "template": 0
+    },
+    "lineage": {
+     "entries_by_number_of_source_conversations": {
+      "3": 1
+     }
+    },
+    "max_scheduled_version_curated": 5,
+    "new_entries_per_snapshot": [
+     1
+    ],
+    "overflow_by_scheduled_version": [],
+    "overflow_entries_dropped": 0,
+    "overflow_entries_dropped_byte_limit": 0,
+    "overflow_entries_dropped_count_limit": 0,
+    "published_snapshots": 1,
+    "scheduled_versions": [
+     {
+      "n_convs": 20,
+      "new_entries": 1,
+      "overflow": 0,
+      "overflow_bytes": 0,
+      "overflow_count": 0,
+      "picks": 1,
+      "published_index": 1,
+      "sched_version": 1,
+      "status": "published"
+     },
+     {
+      "n_convs": 40,
+      "new_entries": 0,
+      "overflow": 0,
+      "overflow_bytes": 0,
+      "overflow_count": 0,
+      "picks": 1,
+      "published_index": null,
+      "sched_version": 2,
+      "status": "empty"
+     },
+     {
+      "n_convs": 59,
+      "new_entries": 0,
+      "overflow": 0,
+      "overflow_bytes": 0,
+      "overflow_count": 0,
+      "picks": 1,
+      "published_index": null,
+      "sched_version": 3,
+      "status": "empty"
+     },
+     {
+      "n_convs": 79,
+      "new_entries": 0,
+      "overflow": 0,
+      "overflow_bytes": 0,
+      "overflow_count": 0,
+      "picks": 1,
+      "published_index": null,
+      "sched_version": 4,
+      "status": "empty"
+     },
+     {
+      "n_convs": 98,
+      "new_entries": 0,
+      "overflow": 0,
+      "overflow_bytes": 0,
+      "overflow_count": 0,
+      "picks": 1,
+      "published_index": null,
+      "sched_version": 5,
+      "status": "empty"
+     }
+    ],
+    "skipped_schedule_versions": [],
+    "trailing_skipped_schedule_versions": [
+     2,
+     3,
+     4,
+     5
+    ]
+   },
+   "joiner_published_indexes": [],
+   "primary": false,
+   "scenario": {
+    "V": 5,
+    "joiners": 0,
+    "participants": 10
+   }
+  },
+  {
+   "arm7_vs_4b_delta_total": 164724,
+   "arm7_vs_4b_total": 164724,
+   "arm7_vs_arm6_total": 155891,
+   "arms": {
+    "1": {
+     "all_message_total": 312672,
+     "byte_weighted_message_ratio": 1.0582686829773573,
+     "control_bytes": 0,
+     "control_prefix_bytes": 0,
+     "covered_bytes": 0,
+     "declare_bytes_incl_prefix": 0,
+     "eligible_messages": 187,
+     "input_bytes": 281901,
+     "kinds": {
+      "raw": 187
+     },
+     "lit_segments": 0,
+     "mean_per_message_ratio": 1.286159993774758,
+     "message_bytes": 297983,
+     "message_plus_control_total": 298327,
+     "message_prefix_bytes": 344,
+     "messages_with_refs": 0,
+     "oversized": {
+      "count": 1,
+      "fallback_bytes": 14343,
+      "fallback_prefix_bytes": 2,
+      "input_bytes": 75183,
+      "kinds": {
+       "zstd": 1
+      },
+      "verified_byte_exact": 1
+     },
+     "ref_bytes": 0,
+     "refs": 0,
+     "reject_bytes_incl_prefix": 0,
+     "rejected": 0,
+     "retransmit_bytes_incl_prefix": 0,
+     "sync_download": 0,
+     "sync_total": 0,
+     "sync_upload": 0,
+     "total": 298327,
+     "total_over_input_bytes": 1.0582686829773573,
+     "total_per_eligible_message": 1595.331550802139
+    },
+    "3": {
+     "all_message_total": 147948,
+     "byte_weighted_message_ratio": 0.47393588529306385,
+     "control_bytes": 0,
+     "control_prefix_bytes": 0,
+     "covered_bytes": 0,
+     "declare_bytes_incl_prefix": 0,
+     "eligible_messages": 187,
+     "input_bytes": 281901,
+     "kinds": {
+      "zstd": 187
+     },
+     "lit_segments": 0,
+     "mean_per_message_ratio": 0.7648065698386581,
+     "message_bytes": 133305,
+     "message_plus_control_total": 133603,
+     "message_prefix_bytes": 298,
+     "messages_with_refs": 0,
+     "oversized": {
+      "count": 1,
+      "fallback_bytes": 14343,
+      "fallback_prefix_bytes": 2,
+      "input_bytes": 75183,
+      "kinds": {
+       "zstd": 1
+      },
+      "verified_byte_exact": 1
+     },
+     "ref_bytes": 0,
+     "refs": 0,
+     "reject_bytes_incl_prefix": 0,
+     "rejected": 0,
+     "retransmit_bytes_incl_prefix": 0,
+     "sync_download": 0,
+     "sync_total": 0,
+     "sync_upload": 0,
+     "total": 133603,
+     "total_over_input_bytes": 0.47393588529306385,
+     "total_per_eligible_message": 714.4545454545455
+    },
+    "4": {
+     "all_message_total": 148820,
+     "byte_weighted_message_ratio": 0.42617443712509,
+     "control_bytes": 0,
+     "control_prefix_bytes": 0,
+     "covered_bytes": 0,
+     "declare_bytes_incl_prefix": 0,
+     "eligible_messages": 187,
+     "input_bytes": 281901,
+     "kinds": {
+      "zstd": 187
+     },
+     "lit_segments": 0,
+     "mean_per_message_ratio": 0.5930005454081945,
+     "message_bytes": 119847,
+     "message_plus_control_total": 120139,
+     "message_prefix_bytes": 292,
+     "messages_with_refs": 0,
+     "oversized": {
+      "count": 1,
+      "fallback_bytes": 14343,
+      "fallback_prefix_bytes": 2,
+      "input_bytes": 75183,
+      "kinds": {
+       "zstd": 1
+      },
+      "verified_byte_exact": 1
+     },
+     "ref_bytes": 0,
+     "refs": 0,
+     "reject_bytes_incl_prefix": 0,
+     "rejected": 0,
+     "retransmit_bytes_incl_prefix": 0,
+     "sync_download": 13312,
+     "sync_total": 14336,
+     "sync_upload": 1024,
+     "total": 134475,
+     "total_over_input_bytes": 0.47702916981493504,
+     "total_per_eligible_message": 719.1176470588235
+    },
+    "4b": {
+     "all_message_total": 162772,
+     "byte_weighted_message_ratio": 0.47393588529306385,
+     "control_bytes": 14606,
+     "control_prefix_bytes": 218,
+     "covered_bytes": 0,
+     "declare_bytes_incl_prefix": 14824,
+     "eligible_messages": 187,
+     "input_bytes": 281901,
+     "kinds": {
+      "zstd": 187
+     },
+     "lit_segments": 0,
+     "mean_per_message_ratio": 0.7648065698386581,
+     "message_bytes": 133305,
+     "message_plus_control_total": 148427,
+     "message_prefix_bytes": 298,
+     "messages_with_refs": 0,
+     "oversized": {
+      "count": 1,
+      "fallback_bytes": 14343,
+      "fallback_prefix_bytes": 2,
+      "input_bytes": 75183,
+      "kinds": {
+       "zstd": 1
+      },
+      "verified_byte_exact": 1
+     },
+     "ref_bytes": 0,
+     "refs": 0,
+     "reject_bytes_incl_prefix": 0,
+     "rejected": 0,
+     "retransmit_bytes_incl_prefix": 0,
+     "sync_download": 0,
+     "sync_total": 0,
+     "sync_upload": 0,
+     "total": 148427,
+     "total_over_input_bytes": 0.5265217221648735,
+     "total_per_eligible_message": 793.7272727272727
+    },
+    "4b-delta": {
+     "all_message_total": 162772,
+     "byte_weighted_message_ratio": 0.47393588529306385,
+     "control_bytes": 14606,
+     "control_prefix_bytes": 218,
+     "covered_bytes": 0,
+     "declare_bytes_incl_prefix": 14824,
+     "eligible_messages": 187,
+     "input_bytes": 281901,
+     "kinds": {
+      "zstd": 187
+     },
+     "lit_segments": 0,
+     "mean_per_message_ratio": 0.7648065698386581,
+     "message_bytes": 133305,
+     "message_plus_control_total": 148427,
+     "message_prefix_bytes": 298,
+     "messages_with_refs": 0,
+     "oversized": {
+      "count": 1,
+      "fallback_bytes": 14343,
+      "fallback_prefix_bytes": 2,
+      "input_bytes": 75183,
+      "kinds": {
+       "zstd": 1
+      },
+      "verified_byte_exact": 1
+     },
+     "ref_bytes": 0,
+     "refs": 0,
+     "reject_bytes_incl_prefix": 0,
+     "rejected": 0,
+     "retransmit_bytes_incl_prefix": 0,
+     "sync_download": 0,
+     "sync_total": 0,
+     "sync_upload": 0,
+     "total": 148427,
+     "total_over_input_bytes": 0.5265217221648735,
+     "total_per_eligible_message": 793.7272727272727
+    },
+    "5": {
+     "all_message_total": 327496,
+     "byte_weighted_message_ratio": 1.0582686829773573,
+     "control_bytes": 14606,
+     "control_prefix_bytes": 218,
+     "covered_bytes": 0,
+     "declare_bytes_incl_prefix": 14824,
+     "eligible_messages": 187,
+     "input_bytes": 281901,
+     "kinds": {
+      "raw": 187
+     },
+     "lit_segments": 0,
+     "mean_per_message_ratio": 1.286159993774758,
+     "message_bytes": 297983,
+     "message_plus_control_total": 313151,
+     "message_prefix_bytes": 344,
+     "messages_with_refs": 0,
+     "oversized": {
+      "count": 1,
+      "fallback_bytes": 14343,
+      "fallback_prefix_bytes": 2,
+      "input_bytes": 75183,
+      "kinds": {
+       "zstd": 1
+      },
+      "verified_byte_exact": 1
+     },
+     "ref_bytes": 0,
+     "refs": 0,
+     "reject_bytes_incl_prefix": 0,
+     "rejected": 0,
+     "retransmit_bytes_incl_prefix": 0,
+     "sync_download": 0,
+     "sync_total": 0,
+     "sync_upload": 0,
+     "total": 313151,
+     "total_over_input_bytes": 1.1108545198491668,
+     "total_per_eligible_message": 1674.6042780748662
+    },
+    "6": {
+     "all_message_total": 171605,
+     "byte_weighted_message_ratio": 0.45441484776570495,
+     "control_bytes": 14606,
+     "control_prefix_bytes": 218,
+     "covered_bytes": 0,
+     "declare_bytes_incl_prefix": 14824,
+     "eligible_messages": 187,
+     "input_bytes": 281901,
+     "kinds": {
+      "zstd_raw": 187
+     },
+     "lit_segments": 0,
+     "mean_per_message_ratio": 0.8071593871804496,
+     "message_bytes": 127799,
+     "message_plus_control_total": 142924,
+     "message_prefix_bytes": 301,
+     "messages_with_refs": 0,
+     "oversized": {
+      "count": 1,
+      "fallback_bytes": 14343,
+      "fallback_prefix_bytes": 2,
+      "input_bytes": 75183,
+      "kinds": {
+       "zstd": 1
+      },
+      "verified_byte_exact": 1
+     },
+     "ref_bytes": 0,
+     "refs": 0,
+     "reject_bytes_incl_prefix": 0,
+     "rejected": 0,
+     "retransmit_bytes_incl_prefix": 0,
+     "sync_download": 13312,
+     "sync_total": 14336,
+     "sync_upload": 1024,
+     "total": 157260,
+     "total_over_input_bytes": 0.5578554173273597,
+     "total_per_eligible_message": 840.9625668449198
+    },
+    "7": {
+     "all_message_total": 327496,
+     "byte_weighted_message_ratio": 1.0582686829773573,
+     "control_bytes": 14606,
+     "control_prefix_bytes": 218,
+     "covered_bytes": 0,
+     "declare_bytes_incl_prefix": 14824,
+     "eligible_messages": 187,
+     "encoder": {
+      "messages": 187,
+      "raw_fallback_sends": 187,
+      "reasons": {
+       "unknown_declared_snapshot": 187
+      },
+      "receiver_rejects_after_send": 0,
+      "verified_ok": 0,
+      "verify_errors": {},
+      "verify_failed": 0
+     },
+     "input_bytes": 281901,
+     "kinds": {
+      "raw": 187
+     },
+     "lit_segments": 0,
+     "mean_per_message_ratio": 1.286159993774758,
+     "message_bytes": 297983,
+     "message_plus_control_total": 313151,
+     "message_prefix_bytes": 344,
+     "messages_with_refs": 0,
+     "oversized": {
+      "count": 1,
+      "fallback_bytes": 14343,
+      "fallback_prefix_bytes": 2,
+      "input_bytes": 75183,
+      "kinds": {
+       "zstd": 1
+      },
+      "verified_byte_exact": 1
+     },
+     "ref_bytes": 0,
+     "refs": 0,
+     "reject_bytes_incl_prefix": 0,
+     "rejected": 0,
+     "retransmit_bytes_incl_prefix": 0,
+     "sync_download": 0,
+     "sync_total": 0,
+     "sync_upload": 0,
+     "total": 313151,
+     "total_over_input_bytes": 1.1108545198491668,
+     "total_per_eligible_message": 1674.6042780748662
+    }
+   },
+   "break_even": {
+    "ingredients": {
+     "1": {
+      "initial_sync": 0,
+      "message_plus_control": 298327,
+      "per_join_sync": 0.0,
+      "per_update_sync": null,
+      "sync_total": 0
+     },
+     "3": {
+      "initial_sync": 0,
+      "message_plus_control": 133603,
+      "per_join_sync": 0.0,
+      "per_update_sync": null,
+      "sync_total": 0
+     },
+     "4": {
+      "initial_sync": 11264,
+      "message_plus_control": 120139,
+      "per_join_sync": 1024.0,
+      "per_update_sync": null,
+      "sync_total": 14336
+     },
+     "4b": {
+      "initial_sync": 0,
+      "message_plus_control": 148427,
+      "per_join_sync": 0.0,
+      "per_update_sync": null,
+      "sync_total": 0
+     },
+     "4b-delta": {
+      "initial_sync": 0,
+      "message_plus_control": 148427,
+      "per_join_sync": 0.0,
+      "per_update_sync": null,
+      "sync_total": 0
+     },
+     "5": {
+      "initial_sync": 0,
+      "message_plus_control": 313151,
+      "per_join_sync": 0.0,
+      "per_update_sync": null,
+      "sync_total": 0
+     },
+     "6": {
+      "initial_sync": 11264,
+      "message_plus_control": 142924,
+      "per_join_sync": 1024.0,
+      "per_update_sync": null,
+      "sync_total": 14336
+     },
+     "7": {
+      "initial_sync": 0,
+      "message_plus_control": 313151,
+      "per_join_sync": 0.0,
+      "per_update_sync": null,
+      "sync_total": 0
+     }
+    },
+    "joins_observed": 3,
+    "pairs": {
+     "7_vs_3": {
+      "advantage_at_zero_updates_and_joins": -179548,
+      "advantage_observed": -179548,
+      "break_even_joins": "undefined: identical per-join cost (X behind at every count)",
+      "break_even_updates": "undefined: no update observed",
+      "per_join_delta_X_minus_Y": 0.0,
+      "per_update_delta_X_minus_Y": null
+     },
+     "7_vs_4": {
+      "advantage_at_zero_updates_and_joins": -181748,
+      "advantage_observed": -178676.0,
+      "break_even_joins": 177.48828125,
+      "break_even_updates": "undefined: no update observed",
+      "per_join_delta_X_minus_Y": -1024.0,
+      "per_update_delta_X_minus_Y": null
+     },
+     "7_vs_4b": {
+      "advantage_at_zero_updates_and_joins": -164724,
+      "advantage_observed": -164724,
+      "break_even_joins": "undefined: identical per-join cost (X behind at every count)",
+      "break_even_updates": "undefined: no update observed",
+      "per_join_delta_X_minus_Y": 0.0,
+      "per_update_delta_X_minus_Y": null
+     },
+     "7_vs_4b-delta": {
+      "advantage_at_zero_updates_and_joins": -164724,
+      "advantage_observed": -164724,
+      "break_even_joins": "undefined: identical per-join cost (X behind at every count)",
+      "break_even_updates": "undefined: no update observed",
+      "per_join_delta_X_minus_Y": 0.0,
+      "per_update_delta_X_minus_Y": null
+     },
+     "7_vs_5": {
+      "advantage_at_zero_updates_and_joins": 0,
+      "advantage_observed": 0,
+      "break_even_joins": "undefined: identical per-join cost (X tie at every count)",
+      "break_even_updates": "undefined: no update observed",
+      "per_join_delta_X_minus_Y": 0.0,
+      "per_update_delta_X_minus_Y": null
+     },
+     "7_vs_6": {
+      "advantage_at_zero_updates_and_joins": -158963,
+      "advantage_observed": -155891.0,
+      "break_even_joins": 155.2373046875,
+      "break_even_updates": "undefined: no update observed",
+      "per_join_delta_X_minus_Y": -1024.0,
+      "per_update_delta_X_minus_Y": null
+     }
+    },
+    "updates_observed": 0
+   },
+   "chain": {
+    "entries_final": 0,
+    "entry_body_bytes_final": 0,
+    "full_artifact_bytes_final": 0,
+    "kinds_final": {},
+    "lineage": {
+     "entries_by_number_of_source_conversations": {}
+    },
+    "max_scheduled_version_curated": 5,
+    "new_entries_per_snapshot": [],
+    "overflow_by_scheduled_version": [],
+    "overflow_entries_dropped": 0,
+    "overflow_entries_dropped_byte_limit": 0,
+    "overflow_entries_dropped_count_limit": 0,
+    "published_snapshots": 0,
+    "scheduled_versions": [
+     {
+      "n_convs": 20,
+      "new_entries": 0,
+      "overflow": 0,
+      "overflow_bytes": 0,
+      "overflow_count": 0,
+      "picks": 0,
+      "published_index": null,
+      "sched_version": 1,
+      "status": "empty"
+     },
+     {
+      "n_convs": 40,
+      "new_entries": 0,
+      "overflow": 0,
+      "overflow_bytes": 0,
+      "overflow_count": 0,
+      "picks": 0,
+      "published_index": null,
+      "sched_version": 2,
+      "status": "empty"
+     },
+     {
+      "n_convs": 59,
+      "new_entries": 0,
+      "overflow": 0,
+      "overflow_bytes": 0,
+      "overflow_count": 0,
+      "picks": 0,
+      "published_index": null,
+      "sched_version": 3,
+      "status": "empty"
+     },
+     {
+      "n_convs": 79,
+      "new_entries": 0,
+      "overflow": 0,
+      "overflow_bytes": 0,
+      "overflow_count": 0,
+      "picks": 0,
+      "published_index": null,
+      "sched_version": 4,
+      "status": "empty"
+     },
+     {
+      "n_convs": 98,
+      "new_entries": 0,
+      "overflow": 0,
+      "overflow_bytes": 0,
+      "overflow_count": 0,
+      "picks": 0,
+      "published_index": null,
+      "sched_version": 5,
+      "status": "empty"
+     }
+    ],
+    "skipped_schedule_versions": [],
+    "trailing_skipped_schedule_versions": [
+     1,
+     2,
+     3,
+     4,
+     5
+    ]
+   },
+   "joiner_published_indexes": [
+    0,
+    0,
+    0
+   ],
+   "primary": false,
+   "scenario": {
+    "V": 5,
+    "joiners": 3,
+    "participants": 10
+   }
+  },
+  {
+   "arm7_vs_4b_delta_total": 152315,
+   "arm7_vs_4b_total": 153254,
+   "arm7_vs_arm6_total": 152509,
+   "arms": {
+    "1": {
+     "all_message_total": 312672,
+     "byte_weighted_message_ratio": 1.0582686829773573,
+     "control_bytes": 0,
+     "control_prefix_bytes": 0,
+     "covered_bytes": 0,
+     "declare_bytes_incl_prefix": 0,
+     "eligible_messages": 187,
+     "input_bytes": 281901,
+     "kinds": {
+      "raw": 187
+     },
+     "lit_segments": 0,
+     "mean_per_message_ratio": 1.286159993774758,
+     "message_bytes": 297983,
+     "message_plus_control_total": 298327,
+     "message_prefix_bytes": 344,
+     "messages_with_refs": 0,
+     "oversized": {
+      "count": 1,
+      "fallback_bytes": 14343,
+      "fallback_prefix_bytes": 2,
+      "input_bytes": 75183,
+      "kinds": {
+       "zstd": 1
+      },
+      "verified_byte_exact": 1
+     },
+     "ref_bytes": 0,
+     "refs": 0,
+     "reject_bytes_incl_prefix": 0,
+     "rejected": 0,
+     "retransmit_bytes_incl_prefix": 0,
+     "sync_download": 0,
+     "sync_total": 0,
+     "sync_upload": 0,
+     "total": 298327,
+     "total_over_input_bytes": 1.0582686829773573,
+     "total_per_eligible_message": 1595.331550802139
+    },
+    "3": {
+     "all_message_total": 147948,
+     "byte_weighted_message_ratio": 0.47393588529306385,
+     "control_bytes": 0,
+     "control_prefix_bytes": 0,
+     "covered_bytes": 0,
+     "declare_bytes_incl_prefix": 0,
+     "eligible_messages": 187,
+     "input_bytes": 281901,
+     "kinds": {
+      "zstd": 187
+     },
+     "lit_segments": 0,
+     "mean_per_message_ratio": 0.7648065698386581,
+     "message_bytes": 133305,
+     "message_plus_control_total": 133603,
+     "message_prefix_bytes": 298,
+     "messages_with_refs": 0,
+     "oversized": {
+      "count": 1,
+      "fallback_bytes": 14343,
+      "fallback_prefix_bytes": 2,
+      "input_bytes": 75183,
+      "kinds": {
+       "zstd": 1
+      },
+      "verified_byte_exact": 1
+     },
+     "ref_bytes": 0,
+     "refs": 0,
+     "reject_bytes_incl_prefix": 0,
+     "rejected": 0,
+     "retransmit_bytes_incl_prefix": 0,
+     "sync_download": 0,
+     "sync_total": 0,
+     "sync_upload": 0,
+     "total": 133603,
+     "total_over_input_bytes": 0.47393588529306385,
+     "total_per_eligible_message": 714.4545454545455
+    },
+    "4": {
+     "all_message_total": 137556,
+     "byte_weighted_message_ratio": 0.42617443712509,
+     "control_bytes": 0,
+     "control_prefix_bytes": 0,
+     "covered_bytes": 0,
+     "declare_bytes_incl_prefix": 0,
+     "eligible_messages": 187,
+     "input_bytes": 281901,
+     "kinds": {
+      "zstd": 187
+     },
+     "lit_segments": 0,
+     "mean_per_message_ratio": 0.5930005454081945,
+     "message_bytes": 119847,
+     "message_plus_control_total": 120139,
+     "message_prefix_bytes": 292,
+     "messages_with_refs": 0,
+     "oversized": {
+      "count": 1,
+      "fallback_bytes": 14343,
+      "fallback_prefix_bytes": 2,
+      "input_bytes": 75183,
+      "kinds": {
+       "zstd": 1
+      },
+      "verified_byte_exact": 1
+     },
+     "ref_bytes": 0,
+     "refs": 0,
+     "reject_bytes_incl_prefix": 0,
+     "rejected": 0,
+     "retransmit_bytes_incl_prefix": 0,
+     "sync_download": 2048,
+     "sync_total": 3072,
+     "sync_upload": 1024,
+     "total": 123211,
+     "total_over_input_bytes": 0.43707187984434254,
+     "total_per_eligible_message": 658.8823529411765
+    },
+    "4b": {
+     "all_message_total": 163805,
+     "byte_weighted_message_ratio": 0.4660004753441811,
+     "control_bytes": 14606,
+     "control_prefix_bytes": 218,
+     "covered_bytes": 0,
+     "declare_bytes_incl_prefix": 14824,
+     "eligible_messages": 187,
+     "input_bytes": 281901,
+     "kinds": {
+      "zstd": 187
+     },
+     "lit_segments": 0,
+     "mean_per_message_ratio": 0.7518252457590973,
+     "message_bytes": 131068,
+     "message_plus_control_total": 146190,
+     "message_prefix_bytes": 298,
+     "messages_with_refs": 0,
+     "oversized": {
+      "count": 1,
+      "fallback_bytes": 14343,
+      "fallback_prefix_bytes": 2,
+      "input_bytes": 75183,
+      "kinds": {
+       "zstd": 1
+      },
+      "verified_byte_exact": 1
+     },
+     "ref_bytes": 0,
+     "refs": 0,
+     "reject_bytes_incl_prefix": 0,
+     "rejected": 0,
+     "retransmit_bytes_incl_prefix": 0,
+     "sync_download": 2180,
+     "sync_total": 3270,
+     "sync_upload": 1090,
+     "total": 149460,
+     "total_over_input_bytes": 0.5301861291730076,
+     "total_per_eligible_message": 799.2513368983957
+    },
+    "4b-delta": {
+     "all_message_total": 164744,
+     "byte_weighted_message_ratio": 0.4660004753441811,
+     "control_bytes": 14606,
+     "control_prefix_bytes": 218,
+     "covered_bytes": 0,
+     "declare_bytes_incl_prefix": 14824,
+     "eligible_messages": 187,
+     "input_bytes": 281901,
+     "kinds": {
+      "zstd": 187
+     },
+     "lit_segments": 0,
+     "mean_per_message_ratio": 0.7518252457590973,
+     "message_bytes": 131068,
+     "message_plus_control_total": 146190,
+     "message_prefix_bytes": 298,
+     "messages_with_refs": 0,
+     "oversized": {
+      "count": 1,
+      "fallback_bytes": 14343,
+      "fallback_prefix_bytes": 2,
+      "input_bytes": 75183,
+      "kinds": {
+       "zstd": 1
+      },
+      "verified_byte_exact": 1
+     },
+     "ref_bytes": 0,
+     "refs": 0,
+     "reject_bytes_incl_prefix": 0,
+     "rejected": 0,
+     "retransmit_bytes_incl_prefix": 0,
+     "sync_download": 2806,
+     "sync_total": 4209,
+     "sync_upload": 1403,
+     "total": 150399,
+     "total_over_input_bytes": 0.5335170857854353,
+     "total_per_eligible_message": 804.2727272727273
+    },
+    "5": {
+     "all_message_total": 331705,
+     "byte_weighted_message_ratio": 1.0582686829773573,
+     "control_bytes": 14606,
+     "control_prefix_bytes": 218,
+     "covered_bytes": 0,
+     "declare_bytes_incl_prefix": 14824,
+     "eligible_messages": 187,
+     "input_bytes": 281901,
+     "kinds": {
+      "raw": 187
+     },
+     "lit_segments": 0,
+     "mean_per_message_ratio": 1.286159993774758,
+     "message_bytes": 297983,
+     "message_plus_control_total": 313151,
+     "message_prefix_bytes": 344,
+     "messages_with_refs": 0,
+     "oversized": {
+      "count": 1,
+      "fallback_bytes": 14343,
+      "fallback_prefix_bytes": 2,
+      "input_bytes": 75183,
+      "kinds": {
+       "zstd": 1
+      },
+      "verified_byte_exact": 1
+     },
+     "ref_bytes": 0,
+     "refs": 0,
+     "reject_bytes_incl_prefix": 0,
+     "rejected": 0,
+     "retransmit_bytes_incl_prefix": 0,
+     "sync_download": 2806,
+     "sync_total": 4209,
+     "sync_upload": 1403,
+     "total": 317360,
+     "total_over_input_bytes": 1.1257852934186114,
+     "total_per_eligible_message": 1697.1122994652405
+    },
+    "6": {
+     "all_message_total": 164550,
+     "byte_weighted_message_ratio": 0.45441484776570495,
+     "control_bytes": 14606,
+     "control_prefix_bytes": 218,
+     "covered_bytes": 0,
+     "declare_bytes_incl_prefix": 14824,
+     "eligible_messages": 187,
+     "input_bytes": 281901,
+     "kinds": {
+      "zstd_raw": 187
+     },
+     "lit_segments": 0,
+     "mean_per_message_ratio": 0.8071593871804496,
+     "message_bytes": 127799,
+     "message_plus_control_total": 142924,
+     "message_prefix_bytes": 301,
+     "messages_with_refs": 0,
+     "oversized": {
+      "count": 1,
+      "fallback_bytes": 14343,
+      "fallback_prefix_bytes": 2,
+      "input_bytes": 75183,
+      "kinds": {
+       "zstd": 1
+      },
+      "verified_byte_exact": 1
+     },
+     "ref_bytes": 0,
+     "refs": 0,
+     "reject_bytes_incl_prefix": 0,
+     "rejected": 0,
+     "retransmit_bytes_incl_prefix": 0,
+     "sync_download": 4854,
+     "sync_total": 7281,
+     "sync_upload": 2427,
+     "total": 150205,
+     "total_over_input_bytes": 0.5328289009262117,
+     "total_per_eligible_message": 803.2352941176471
+    },
+    "7": {
+     "all_message_total": 317059,
+     "byte_weighted_message_ratio": 1.0063142734506085,
+     "control_bytes": 14606,
+     "control_prefix_bytes": 218,
+     "covered_bytes": 1090,
+     "declare_bytes_incl_prefix": 14824,
+     "eligible_messages": 187,
+     "encoder": {
+      "candidates": 1,
+      "cap_hit_messages": 0,
+      "entries_pending": 0,
+      "enumerated_messages": 158,
+      "eval_cap_hit_messages": 0,
+      "match_cap_hit_messages": 0,
+      "matcher_calls": 0,
+      "matcher_span_chars": 0,
+      "messages": 187,
+      "raw_fallback_sends": 29,
+      "reasons": {
+       "compact": 158,
+       "unknown_declared_snapshot": 29
+      },
+      "receiver_rejects_after_send": 0,
+      "template_evaluations": 0,
+      "verified_ok": 158,
+      "verify_errors": {},
+      "verify_failed": 0
+     },
+     "input_bytes": 281901,
+     "kinds": {
+      "compact": 158,
+      "raw": 29
+     },
+     "lit_segments": 158,
+     "mean_per_message_ratio": 1.0632815898290375,
+     "message_bytes": 283360,
+     "message_plus_control_total": 298505,
+     "message_prefix_bytes": 321,
+     "messages_with_refs": 1,
+     "oversized": {
+      "count": 1,
+      "fallback_bytes": 14343,
+      "fallback_prefix_bytes": 2,
+      "input_bytes": 75183,
+      "kinds": {
+       "zstd": 1
+      },
+      "verified_byte_exact": 1
+     },
+     "ref_bytes": 2,
+     "refs": 1,
+     "reject_bytes_incl_prefix": 0,
+     "rejected": 0,
+     "retransmit_bytes_incl_prefix": 0,
+     "sync_download": 2806,
+     "sync_total": 4209,
+     "sync_upload": 1403,
+     "total": 302714,
+     "total_over_input_bytes": 1.0738308838918627,
+     "total_per_eligible_message": 1618.7914438502673
+    }
+   },
+   "break_even": {
+    "ingredients": {
+     "1": {
+      "initial_sync": 0,
+      "message_plus_control": 298327,
+      "per_join_sync": null,
+      "per_update_sync": null,
+      "sync_total": 0
+     },
+     "3": {
+      "initial_sync": 0,
+      "message_plus_control": 133603,
+      "per_join_sync": null,
+      "per_update_sync": null,
+      "sync_total": 0
+     },
+     "4": {
+      "initial_sync": 3072,
+      "message_plus_control": 120139,
+      "per_join_sync": null,
+      "per_update_sync": null,
+      "sync_total": 3072
+     },
+     "4b": {
+      "initial_sync": 3270,
+      "message_plus_control": 146190,
+      "per_join_sync": null,
+      "per_update_sync": null,
+      "sync_total": 3270
+     },
+     "4b-delta": {
+      "initial_sync": 4209,
+      "message_plus_control": 146190,
+      "per_join_sync": null,
+      "per_update_sync": null,
+      "sync_total": 4209
+     },
+     "5": {
+      "initial_sync": 4209,
+      "message_plus_control": 313151,
+      "per_join_sync": null,
+      "per_update_sync": null,
+      "sync_total": 4209
+     },
+     "6": {
+      "initial_sync": 7281,
+      "message_plus_control": 142924,
+      "per_join_sync": null,
+      "per_update_sync": null,
+      "sync_total": 7281
+     },
+     "7": {
+      "initial_sync": 4209,
+      "message_plus_control": 298505,
+      "per_join_sync": null,
+      "per_update_sync": null,
+      "sync_total": 4209
+     }
+    },
+    "joins_observed": 0,
+    "pairs": {
+     "7_vs_3": {
+      "advantage_at_zero_updates_and_joins": -169111,
+      "advantage_observed": -169111,
+      "break_even_joins": "undefined: no join observed",
+      "break_even_updates": "undefined: no update observed",
+      "per_join_delta_X_minus_Y": null,
+      "per_update_delta_X_minus_Y": null
+     },
+     "7_vs_4": {
+      "advantage_at_zero_updates_and_joins": -179503,
+      "advantage_observed": -179503,
+      "break_even_joins": "undefined: no join observed",
+      "break_even_updates": "undefined: no update observed",
+      "per_join_delta_X_minus_Y": null,
+      "per_update_delta_X_minus_Y": null
+     },
+     "7_vs_4b": {
+      "advantage_at_zero_updates_and_joins": -153254,
+      "advantage_observed": -153254,
+      "break_even_joins": "undefined: no join observed",
+      "break_even_updates": "undefined: no update observed",
+      "per_join_delta_X_minus_Y": null,
+      "per_update_delta_X_minus_Y": null
+     },
+     "7_vs_4b-delta": {
+      "advantage_at_zero_updates_and_joins": -152315,
+      "advantage_observed": -152315,
+      "break_even_joins": "undefined: no join observed",
+      "break_even_updates": "undefined: no update observed",
+      "per_join_delta_X_minus_Y": null,
+      "per_update_delta_X_minus_Y": null
+     },
+     "7_vs_5": {
+      "advantage_at_zero_updates_and_joins": 14646,
+      "advantage_observed": 14646,
+      "break_even_joins": "undefined: no join observed",
+      "break_even_updates": "undefined: no update observed",
+      "per_join_delta_X_minus_Y": null,
+      "per_update_delta_X_minus_Y": null
+     },
+     "7_vs_6": {
+      "advantage_at_zero_updates_and_joins": -152509,
+      "advantage_observed": -152509,
+      "break_even_joins": "undefined: no join observed",
+      "break_even_updates": "undefined: no update observed",
+      "per_join_delta_X_minus_Y": null,
+      "per_update_delta_X_minus_Y": null
+     }
+    },
+    "updates_observed": 0
+   },
+   "chain": {
+    "entries_final": 1,
+    "entry_body_bytes_final": 1090,
+    "full_artifact_bytes_final": 1403,
+    "kinds_final": {
+     "literal": 1,
+     "template": 0
+    },
+    "lineage": {
+     "entries_by_number_of_source_conversations": {
+      "3": 1
+     }
+    },
+    "max_scheduled_version_curated": 20,
+    "new_entries_per_snapshot": [
+     1
+    ],
+    "overflow_by_scheduled_version": [],
+    "overflow_entries_dropped": 0,
+    "overflow_entries_dropped_byte_limit": 0,
+    "overflow_entries_dropped_count_limit": 0,
+    "published_snapshots": 1,
+    "scheduled_versions": [
+     {
+      "n_convs": 5,
+      "new_entries": 0,
+      "overflow": 0,
+      "overflow_bytes": 0,
+      "overflow_count": 0,
+      "picks": 0,
+      "published_index": null,
+      "sched_version": 1,
+      "status": "empty"
+     },
+     {
+      "n_convs": 10,
+      "new_entries": 0,
+      "overflow": 0,
+      "overflow_bytes": 0,
+      "overflow_count": 0,
+      "picks": 0,
+      "published_index": null,
+      "sched_version": 2,
+      "status": "empty"
+     },
+     {
+      "n_convs": 15,
+      "new_entries": 0,
+      "overflow": 0,
+      "overflow_bytes": 0,
+      "overflow_count": 0,
+      "picks": 0,
+      "published_index": null,
+      "sched_version": 3,
+      "status": "empty"
+     },
+     {
+      "n_convs": 20,
+      "new_entries": 1,
+      "overflow": 0,
+      "overflow_bytes": 0,
+      "overflow_count": 0,
+      "picks": 1,
+      "published_index": 1,
+      "sched_version": 4,
+      "status": "published"
+     },
+     {
+      "n_convs": 25,
+      "new_entries": 0,
+      "overflow": 0,
+      "overflow_bytes": 0,
+      "overflow_count": 0,
+      "picks": 1,
+      "published_index": null,
+      "sched_version": 5,
+      "status": "empty"
+     },
+     {
+      "n_convs": 30,
+      "new_entries": 0,
+      "overflow": 0,
+      "overflow_bytes": 0,
+      "overflow_count": 0,
+      "picks": 1,
+      "published_index": null,
+      "sched_version": 6,
+      "status": "empty"
+     },
+     {
+      "n_convs": 35,
+      "new_entries": 0,
+      "overflow": 0,
+      "overflow_bytes": 0,
+      "overflow_count": 0,
+      "picks": 1,
+      "published_index": null,
+      "sched_version": 7,
+      "status": "empty"
+     },
+     {
+      "n_convs": 40,
+      "new_entries": 0,
+      "overflow": 0,
+      "overflow_bytes": 0,
+      "overflow_count": 0,
+      "picks": 1,
+      "published_index": null,
+      "sched_version": 8,
+      "status": "empty"
+     },
+     {
+      "n_convs": 45,
+      "new_entries": 0,
+      "overflow": 0,
+      "overflow_bytes": 0,
+      "overflow_count": 0,
+      "picks": 1,
+      "published_index": null,
+      "sched_version": 9,
+      "status": "empty"
+     },
+     {
+      "n_convs": 49,
+      "new_entries": 0,
+      "overflow": 0,
+      "overflow_bytes": 0,
+      "overflow_count": 0,
+      "picks": 1,
+      "published_index": null,
+      "sched_version": 10,
+      "status": "empty"
+     },
+     {
+      "n_convs": 54,
+      "new_entries": 0,
+      "overflow": 0,
+      "overflow_bytes": 0,
+      "overflow_count": 0,
+      "picks": 1,
+      "published_index": null,
+      "sched_version": 11,
+      "status": "empty"
+     },
+     {
+      "n_convs": 59,
+      "new_entries": 0,
+      "overflow": 0,
+      "overflow_bytes": 0,
+      "overflow_count": 0,
+      "picks": 1,
+      "published_index": null,
+      "sched_version": 12,
+      "status": "empty"
+     },
+     {
+      "n_convs": 64,
+      "new_entries": 0,
+      "overflow": 0,
+      "overflow_bytes": 0,
+      "overflow_count": 0,
+      "picks": 1,
+      "published_index": null,
+      "sched_version": 13,
+      "status": "empty"
+     },
+     {
+      "n_convs": 69,
+      "new_entries": 0,
+      "overflow": 0,
+      "overflow_bytes": 0,
+      "overflow_count": 0,
+      "picks": 1,
+      "published_index": null,
+      "sched_version": 14,
+      "status": "empty"
+     },
+     {
+      "n_convs": 74,
+      "new_entries": 0,
+      "overflow": 0,
+      "overflow_bytes": 0,
+      "overflow_count": 0,
+      "picks": 1,
+      "published_index": null,
+      "sched_version": 15,
+      "status": "empty"
+     },
+     {
+      "n_convs": 79,
+      "new_entries": 0,
+      "overflow": 0,
+      "overflow_bytes": 0,
+      "overflow_count": 0,
+      "picks": 1,
+      "published_index": null,
+      "sched_version": 16,
+      "status": "empty"
+     },
+     {
+      "n_convs": 84,
+      "new_entries": 0,
+      "overflow": 0,
+      "overflow_bytes": 0,
+      "overflow_count": 0,
+      "picks": 1,
+      "published_index": null,
+      "sched_version": 17,
+      "status": "empty"
+     },
+     {
+      "n_convs": 89,
+      "new_entries": 0,
+      "overflow": 0,
+      "overflow_bytes": 0,
+      "overflow_count": 0,
+      "picks": 1,
+      "published_index": null,
+      "sched_version": 18,
+      "status": "empty"
+     },
+     {
+      "n_convs": 94,
+      "new_entries": 0,
+      "overflow": 0,
+      "overflow_bytes": 0,
+      "overflow_count": 0,
+      "picks": 1,
+      "published_index": null,
+      "sched_version": 19,
+      "status": "empty"
+     },
+     {
+      "n_convs": 98,
+      "new_entries": 0,
+      "overflow": 0,
+      "overflow_bytes": 0,
+      "overflow_count": 0,
+      "picks": 1,
+      "published_index": null,
+      "sched_version": 20,
+      "status": "empty"
+     }
+    ],
+    "skipped_schedule_versions": [
+     1,
+     2,
+     3
+    ],
+    "trailing_skipped_schedule_versions": [
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12,
+     13,
+     14,
+     15,
+     16,
+     17,
+     18,
+     19,
+     20
+    ]
+   },
+   "joiner_published_indexes": [],
+   "primary": false,
+   "scenario": {
+    "V": 20,
+    "joiners": 0,
+    "participants": 2
+   }
+  },
+  {
+   "arm7_vs_4b_delta_total": 164724,
+   "arm7_vs_4b_total": 164724,
+   "arm7_vs_arm6_total": 164083,
+   "arms": {
+    "1": {
+     "all_message_total": 312672,
+     "byte_weighted_message_ratio": 1.0582686829773573,
+     "control_bytes": 0,
+     "control_prefix_bytes": 0,
+     "covered_bytes": 0,
+     "declare_bytes_incl_prefix": 0,
+     "eligible_messages": 187,
+     "input_bytes": 281901,
+     "kinds": {
+      "raw": 187
+     },
+     "lit_segments": 0,
+     "mean_per_message_ratio": 1.286159993774758,
+     "message_bytes": 297983,
+     "message_plus_control_total": 298327,
+     "message_prefix_bytes": 344,
+     "messages_with_refs": 0,
+     "oversized": {
+      "count": 1,
+      "fallback_bytes": 14343,
+      "fallback_prefix_bytes": 2,
+      "input_bytes": 75183,
+      "kinds": {
+       "zstd": 1
+      },
+      "verified_byte_exact": 1
+     },
+     "ref_bytes": 0,
+     "refs": 0,
+     "reject_bytes_incl_prefix": 0,
+     "rejected": 0,
+     "retransmit_bytes_incl_prefix": 0,
+     "sync_download": 0,
+     "sync_total": 0,
+     "sync_upload": 0,
+     "total": 298327,
+     "total_over_input_bytes": 1.0582686829773573,
+     "total_per_eligible_message": 1595.331550802139
+    },
+    "3": {
+     "all_message_total": 147948,
+     "byte_weighted_message_ratio": 0.47393588529306385,
+     "control_bytes": 0,
+     "control_prefix_bytes": 0,
+     "covered_bytes": 0,
+     "declare_bytes_incl_prefix": 0,
+     "eligible_messages": 187,
+     "input_bytes": 281901,
+     "kinds": {
+      "zstd": 187
+     },
+     "lit_segments": 0,
+     "mean_per_message_ratio": 0.7648065698386581,
+     "message_bytes": 133305,
+     "message_plus_control_total": 133603,
+     "message_prefix_bytes": 298,
+     "messages_with_refs": 0,
+     "oversized": {
+      "count": 1,
+      "fallback_bytes": 14343,
+      "fallback_prefix_bytes": 2,
+      "input_bytes": 75183,
+      "kinds": {
+       "zstd": 1
+      },
+      "verified_byte_exact": 1
+     },
+     "ref_bytes": 0,
+     "refs": 0,
+     "reject_bytes_incl_prefix": 0,
+     "rejected": 0,
+     "retransmit_bytes_incl_prefix": 0,
+     "sync_download": 0,
+     "sync_total": 0,
+     "sync_upload": 0,
+     "total": 133603,
+     "total_over_input_bytes": 0.47393588529306385,
+     "total_per_eligible_message": 714.4545454545455
+    },
+    "4": {
+     "all_message_total": 140628,
+     "byte_weighted_message_ratio": 0.42617443712509,
+     "control_bytes": 0,
+     "control_prefix_bytes": 0,
+     "covered_bytes": 0,
+     "declare_bytes_incl_prefix": 0,
+     "eligible_messages": 187,
+     "input_bytes": 281901,
+     "kinds": {
+      "zstd": 187
+     },
+     "lit_segments": 0,
+     "mean_per_message_ratio": 0.5930005454081945,
+     "message_bytes": 119847,
+     "message_plus_control_total": 120139,
+     "message_prefix_bytes": 292,
+     "messages_with_refs": 0,
+     "oversized": {
+      "count": 1,
+      "fallback_bytes": 14343,
+      "fallback_prefix_bytes": 2,
+      "input_bytes": 75183,
+      "kinds": {
+       "zstd": 1
+      },
+      "verified_byte_exact": 1
+     },
+     "ref_bytes": 0,
+     "refs": 0,
+     "reject_bytes_incl_prefix": 0,
+     "rejected": 0,
+     "retransmit_bytes_incl_prefix": 0,
+     "sync_download": 5120,
+     "sync_total": 6144,
+     "sync_upload": 1024,
+     "total": 126283,
+     "total_over_input_bytes": 0.447969322563595,
+     "total_per_eligible_message": 675.3101604278074
+    },
+    "4b": {
+     "all_message_total": 162772,
+     "byte_weighted_message_ratio": 0.47393588529306385,
+     "control_bytes": 14606,
+     "control_prefix_bytes": 218,
+     "covered_bytes": 0,
+     "declare_bytes_incl_prefix": 14824,
+     "eligible_messages": 187,
+     "input_bytes": 281901,
+     "kinds": {
+      "zstd": 187
+     },
+     "lit_segments": 0,
+     "mean_per_message_ratio": 0.7648065698386581,
+     "message_bytes": 133305,
+     "message_plus_control_total": 148427,
+     "message_prefix_bytes": 298,
+     "messages_with_refs": 0,
+     "oversized": {
+      "count": 1,
+      "fallback_bytes": 14343,
+      "fallback_prefix_bytes": 2,
+      "input_bytes": 75183,
+      "kinds": {
+       "zstd": 1
+      },
+      "verified_byte_exact": 1
+     },
+     "ref_bytes": 0,
+     "refs": 0,
+     "reject_bytes_incl_prefix": 0,
+     "rejected": 0,
+     "retransmit_bytes_incl_prefix": 0,
+     "sync_download": 0,
+     "sync_total": 0,
+     "sync_upload": 0,
+     "total": 148427,
+     "total_over_input_bytes": 0.5265217221648735,
+     "total_per_eligible_message": 793.7272727272727
+    },
+    "4b-delta": {
+     "all_message_total": 162772,
+     "byte_weighted_message_ratio": 0.47393588529306385,
+     "control_bytes": 14606,
+     "control_prefix_bytes": 218,
+     "covered_bytes": 0,
+     "declare_bytes_incl_prefix": 14824,
+     "eligible_messages": 187,
+     "input_bytes": 281901,
+     "kinds": {
+      "zstd": 187
+     },
+     "lit_segments": 0,
+     "mean_per_message_ratio": 0.7648065698386581,
+     "message_bytes": 133305,
+     "message_plus_control_total": 148427,
+     "message_prefix_bytes": 298,
+     "messages_with_refs": 0,
+     "oversized": {
+      "count": 1,
+      "fallback_bytes": 14343,
+      "fallback_prefix_bytes": 2,
+      "input_bytes": 75183,
+      "kinds": {
+       "zstd": 1
+      },
+      "verified_byte_exact": 1
+     },
+     "ref_bytes": 0,
+     "refs": 0,
+     "reject_bytes_incl_prefix": 0,
+     "rejected": 0,
+     "retransmit_bytes_incl_prefix": 0,
+     "sync_download": 0,
+     "sync_total": 0,
+     "sync_upload": 0,
+     "total": 148427,
+     "total_over_input_bytes": 0.5265217221648735,
+     "total_per_eligible_message": 793.7272727272727
+    },
+    "5": {
+     "all_message_total": 327496,
+     "byte_weighted_message_ratio": 1.0582686829773573,
+     "control_bytes": 14606,
+     "control_prefix_bytes": 218,
+     "covered_bytes": 0,
+     "declare_bytes_incl_prefix": 14824,
+     "eligible_messages": 187,
+     "input_bytes": 281901,
+     "kinds": {
+      "raw": 187
+     },
+     "lit_segments": 0,
+     "mean_per_message_ratio": 1.286159993774758,
+     "message_bytes": 297983,
+     "message_plus_control_total": 313151,
+     "message_prefix_bytes": 344,
+     "messages_with_refs": 0,
+     "oversized": {
+      "count": 1,
+      "fallback_bytes": 14343,
+      "fallback_prefix_bytes": 2,
+      "input_bytes": 75183,
+      "kinds": {
+       "zstd": 1
+      },
+      "verified_byte_exact": 1
+     },
+     "ref_bytes": 0,
+     "refs": 0,
+     "reject_bytes_incl_prefix": 0,
+     "rejected": 0,
+     "retransmit_bytes_incl_prefix": 0,
+     "sync_download": 0,
+     "sync_total": 0,
+     "sync_upload": 0,
+     "total": 313151,
+     "total_over_input_bytes": 1.1108545198491668,
+     "total_per_eligible_message": 1674.6042780748662
+    },
+    "6": {
+     "all_message_total": 163413,
+     "byte_weighted_message_ratio": 0.45441484776570495,
+     "control_bytes": 14606,
+     "control_prefix_bytes": 218,
+     "covered_bytes": 0,
+     "declare_bytes_incl_prefix": 14824,
+     "eligible_messages": 187,
+     "input_bytes": 281901,
+     "kinds": {
+      "zstd_raw": 187
+     },
+     "lit_segments": 0,
+     "mean_per_message_ratio": 0.8071593871804496,
+     "message_bytes": 127799,
+     "message_plus_control_total": 142924,
+     "message_prefix_bytes": 301,
+     "messages_with_refs": 0,
+     "oversized": {
+      "count": 1,
+      "fallback_bytes": 14343,
+      "fallback_prefix_bytes": 2,
+      "input_bytes": 75183,
+      "kinds": {
+       "zstd": 1
+      },
+      "verified_byte_exact": 1
+     },
+     "ref_bytes": 0,
+     "refs": 0,
+     "reject_bytes_incl_prefix": 0,
+     "rejected": 0,
+     "retransmit_bytes_incl_prefix": 0,
+     "sync_download": 5120,
+     "sync_total": 6144,
+     "sync_upload": 1024,
+     "total": 149068,
+     "total_over_input_bytes": 0.5287955700760196,
+     "total_per_eligible_message": 797.1550802139037
+    },
+    "7": {
+     "all_message_total": 327496,
+     "byte_weighted_message_ratio": 1.0582686829773573,
+     "control_bytes": 14606,
+     "control_prefix_bytes": 218,
+     "covered_bytes": 0,
+     "declare_bytes_incl_prefix": 14824,
+     "eligible_messages": 187,
+     "encoder": {
+      "messages": 187,
+      "raw_fallback_sends": 187,
+      "reasons": {
+       "unknown_declared_snapshot": 187
+      },
+      "receiver_rejects_after_send": 0,
+      "verified_ok": 0,
+      "verify_errors": {},
+      "verify_failed": 0
+     },
+     "input_bytes": 281901,
+     "kinds": {
+      "raw": 187
+     },
+     "lit_segments": 0,
+     "mean_per_message_ratio": 1.286159993774758,
+     "message_bytes": 297983,
+     "message_plus_control_total": 313151,
+     "message_prefix_bytes": 344,
+     "messages_with_refs": 0,
+     "oversized": {
+      "count": 1,
+      "fallback_bytes": 14343,
+      "fallback_prefix_bytes": 2,
+      "input_bytes": 75183,
+      "kinds": {
+       "zstd": 1
+      },
+      "verified_byte_exact": 1
+     },
+     "ref_bytes": 0,
+     "refs": 0,
+     "reject_bytes_incl_prefix": 0,
+     "rejected": 0,
+     "retransmit_bytes_incl_prefix": 0,
+     "sync_download": 0,
+     "sync_total": 0,
+     "sync_upload": 0,
+     "total": 313151,
+     "total_over_input_bytes": 1.1108545198491668,
+     "total_per_eligible_message": 1674.6042780748662
+    }
+   },
+   "break_even": {
+    "ingredients": {
+     "1": {
+      "initial_sync": 0,
+      "message_plus_control": 298327,
+      "per_join_sync": 0.0,
+      "per_update_sync": null,
+      "sync_total": 0
+     },
+     "3": {
+      "initial_sync": 0,
+      "message_plus_control": 133603,
+      "per_join_sync": 0.0,
+      "per_update_sync": null,
+      "sync_total": 0
+     },
+     "4": {
+      "initial_sync": 3072,
+      "message_plus_control": 120139,
+      "per_join_sync": 1024.0,
+      "per_update_sync": null,
+      "sync_total": 6144
+     },
+     "4b": {
+      "initial_sync": 0,
+      "message_plus_control": 148427,
+      "per_join_sync": 0.0,
+      "per_update_sync": null,
+      "sync_total": 0
+     },
+     "4b-delta": {
+      "initial_sync": 0,
+      "message_plus_control": 148427,
+      "per_join_sync": 0.0,
+      "per_update_sync": null,
+      "sync_total": 0
+     },
+     "5": {
+      "initial_sync": 0,
+      "message_plus_control": 313151,
+      "per_join_sync": 0.0,
+      "per_update_sync": null,
+      "sync_total": 0
+     },
+     "6": {
+      "initial_sync": 3072,
+      "message_plus_control": 142924,
+      "per_join_sync": 1024.0,
+      "per_update_sync": null,
+      "sync_total": 6144
+     },
+     "7": {
+      "initial_sync": 0,
+      "message_plus_control": 313151,
+      "per_join_sync": 0.0,
+      "per_update_sync": null,
+      "sync_total": 0
+     }
+    },
+    "joins_observed": 3,
+    "pairs": {
+     "7_vs_3": {
+      "advantage_at_zero_updates_and_joins": -179548,
+      "advantage_observed": -179548,
+      "break_even_joins": "undefined: identical per-join cost (X behind at every count)",
+      "break_even_updates": "undefined: no update observed",
+      "per_join_delta_X_minus_Y": 0.0,
+      "per_update_delta_X_minus_Y": null
+     },
+     "7_vs_4": {
+      "advantage_at_zero_updates_and_joins": -189940,
+      "advantage_observed": -186868.0,
+      "break_even_joins": 185.48828125,
+      "break_even_updates": "undefined: no update observed",
+      "per_join_delta_X_minus_Y": -1024.0,
+      "per_update_delta_X_minus_Y": null
+     },
+     "7_vs_4b": {
+      "advantage_at_zero_updates_and_joins": -164724,
+      "advantage_observed": -164724,
+      "break_even_joins": "undefined: identical per-join cost (X behind at every count)",
+      "break_even_updates": "undefined: no update observed",
+      "per_join_delta_X_minus_Y": 0.0,
+      "per_update_delta_X_minus_Y": null
+     },
+     "7_vs_4b-delta": {
+      "advantage_at_zero_updates_and_joins": -164724,
+      "advantage_observed": -164724,
+      "break_even_joins": "undefined: identical per-join cost (X behind at every count)",
+      "break_even_updates": "undefined: no update observed",
+      "per_join_delta_X_minus_Y": 0.0,
+      "per_update_delta_X_minus_Y": null
+     },
+     "7_vs_5": {
+      "advantage_at_zero_updates_and_joins": 0,
+      "advantage_observed": 0,
+      "break_even_joins": "undefined: identical per-join cost (X tie at every count)",
+      "break_even_updates": "undefined: no update observed",
+      "per_join_delta_X_minus_Y": 0.0,
+      "per_update_delta_X_minus_Y": null
+     },
+     "7_vs_6": {
+      "advantage_at_zero_updates_and_joins": -167155,
+      "advantage_observed": -164083.0,
+      "break_even_joins": 163.2373046875,
+      "break_even_updates": "undefined: no update observed",
+      "per_join_delta_X_minus_Y": -1024.0,
+      "per_update_delta_X_minus_Y": null
+     }
+    },
+    "updates_observed": 0
+   },
+   "chain": {
+    "entries_final": 0,
+    "entry_body_bytes_final": 0,
+    "full_artifact_bytes_final": 0,
+    "kinds_final": {},
+    "lineage": {
+     "entries_by_number_of_source_conversations": {}
+    },
+    "max_scheduled_version_curated": 20,
+    "new_entries_per_snapshot": [],
+    "overflow_by_scheduled_version": [],
+    "overflow_entries_dropped": 0,
+    "overflow_entries_dropped_byte_limit": 0,
+    "overflow_entries_dropped_count_limit": 0,
+    "published_snapshots": 0,
+    "scheduled_versions": [
+     {
+      "n_convs": 5,
+      "new_entries": 0,
+      "overflow": 0,
+      "overflow_bytes": 0,
+      "overflow_count": 0,
+      "picks": 0,
+      "published_index": null,
+      "sched_version": 1,
+      "status": "empty"
+     },
+     {
+      "n_convs": 10,
+      "new_entries": 0,
+      "overflow": 0,
+      "overflow_bytes": 0,
+      "overflow_count": 0,
+      "picks": 0,
+      "published_index": null,
+      "sched_version": 2,
+      "status": "empty"
+     },
+     {
+      "n_convs": 15,
+      "new_entries": 0,
+      "overflow": 0,
+      "overflow_bytes": 0,
+      "overflow_count": 0,
+      "picks": 0,
+      "published_index": null,
+      "sched_version": 3,
+      "status": "empty"
+     },
+     {
+      "n_convs": 20,
+      "new_entries": 0,
+      "overflow": 0,
+      "overflow_bytes": 0,
+      "overflow_count": 0,
+      "picks": 0,
+      "published_index": null,
+      "sched_version": 4,
+      "status": "empty"
+     },
+     {
+      "n_convs": 25,
+      "new_entries": 0,
+      "overflow": 0,
+      "overflow_bytes": 0,
+      "overflow_count": 0,
+      "picks": 0,
+      "published_index": null,
+      "sched_version": 5,
+      "status": "empty"
+     },
+     {
+      "n_convs": 30,
+      "new_entries": 0,
+      "overflow": 0,
+      "overflow_bytes": 0,
+      "overflow_count": 0,
+      "picks": 0,
+      "published_index": null,
+      "sched_version": 6,
+      "status": "empty"
+     },
+     {
+      "n_convs": 35,
+      "new_entries": 0,
+      "overflow": 0,
+      "overflow_bytes": 0,
+      "overflow_count": 0,
+      "picks": 0,
+      "published_index": null,
+      "sched_version": 7,
+      "status": "empty"
+     },
+     {
+      "n_convs": 40,
+      "new_entries": 0,
+      "overflow": 0,
+      "overflow_bytes": 0,
+      "overflow_count": 0,
+      "picks": 0,
+      "published_index": null,
+      "sched_version": 8,
+      "status": "empty"
+     },
+     {
+      "n_convs": 45,
+      "new_entries": 0,
+      "overflow": 0,
+      "overflow_bytes": 0,
+      "overflow_count": 0,
+      "picks": 0,
+      "published_index": null,
+      "sched_version": 9,
+      "status": "empty"
+     },
+     {
+      "n_convs": 49,
+      "new_entries": 0,
+      "overflow": 0,
+      "overflow_bytes": 0,
+      "overflow_count": 0,
+      "picks": 0,
+      "published_index": null,
+      "sched_version": 10,
+      "status": "empty"
+     },
+     {
+      "n_convs": 54,
+      "new_entries": 0,
+      "overflow": 0,
+      "overflow_bytes": 0,
+      "overflow_count": 0,
+      "picks": 0,
+      "published_index": null,
+      "sched_version": 11,
+      "status": "empty"
+     },
+     {
+      "n_convs": 59,
+      "new_entries": 0,
+      "overflow": 0,
+      "overflow_bytes": 0,
+      "overflow_count": 0,
+      "picks": 0,
+      "published_index": null,
+      "sched_version": 12,
+      "status": "empty"
+     },
+     {
+      "n_convs": 64,
+      "new_entries": 0,
+      "overflow": 0,
+      "overflow_bytes": 0,
+      "overflow_count": 0,
+      "picks": 0,
+      "published_index": null,
+      "sched_version": 13,
+      "status": "empty"
+     },
+     {
+      "n_convs": 69,
+      "new_entries": 0,
+      "overflow": 0,
+      "overflow_bytes": 0,
+      "overflow_count": 0,
+      "picks": 0,
+      "published_index": null,
+      "sched_version": 14,
+      "status": "empty"
+     },
+     {
+      "n_convs": 74,
+      "new_entries": 0,
+      "overflow": 0,
+      "overflow_bytes": 0,
+      "overflow_count": 0,
+      "picks": 0,
+      "published_index": null,
+      "sched_version": 15,
+      "status": "empty"
+     },
+     {
+      "n_convs": 79,
+      "new_entries": 0,
+      "overflow": 0,
+      "overflow_bytes": 0,
+      "overflow_count": 0,
+      "picks": 0,
+      "published_index": null,
+      "sched_version": 16,
+      "status": "empty"
+     },
+     {
+      "n_convs": 84,
+      "new_entries": 0,
+      "overflow": 0,
+      "overflow_bytes": 0,
+      "overflow_count": 0,
+      "picks": 0,
+      "published_index": null,
+      "sched_version": 17,
+      "status": "empty"
+     },
+     {
+      "n_convs": 89,
+      "new_entries": 0,
+      "overflow": 0,
+      "overflow_bytes": 0,
+      "overflow_count": 0,
+      "picks": 0,
+      "published_index": null,
+      "sched_version": 18,
+      "status": "empty"
+     },
+     {
+      "n_convs": 94,
+      "new_entries": 0,
+      "overflow": 0,
+      "overflow_bytes": 0,
+      "overflow_count": 0,
+      "picks": 0,
+      "published_index": null,
+      "sched_version": 19,
+      "status": "empty"
+     },
+     {
+      "n_convs": 98,
+      "new_entries": 0,
+      "overflow": 0,
+      "overflow_bytes": 0,
+      "overflow_count": 0,
+      "picks": 0,
+      "published_index": null,
+      "sched_version": 20,
+      "status": "empty"
+     }
+    ],
+    "skipped_schedule_versions": [],
+    "trailing_skipped_schedule_versions": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12,
+     13,
+     14,
+     15,
+     16,
+     17,
+     18,
+     19,
+     20
+    ]
+   },
+   "joiner_published_indexes": [
+    0,
+    0,
+    0
+   ],
+   "primary": false,
+   "scenario": {
+    "V": 20,
+    "joiners": 3,
+    "participants": 2
+   }
+  },
+  {
+   "arm7_vs_4b_delta_total": 152315,
+   "arm7_vs_4b_total": 155758,
+   "arm7_vs_arm6_total": 144317,
+   "arms": {
+    "1": {
+     "all_message_total": 312672,
+     "byte_weighted_message_ratio": 1.0582686829773573,
+     "control_bytes": 0,
+     "control_prefix_bytes": 0,
+     "covered_bytes": 0,
+     "declare_bytes_incl_prefix": 0,
+     "eligible_messages": 187,
+     "input_bytes": 281901,
+     "kinds": {
+      "raw": 187
+     },
+     "lit_segments": 0,
+     "mean_per_message_ratio": 1.286159993774758,
+     "message_bytes": 297983,
+     "message_plus_control_total": 298327,
+     "message_prefix_bytes": 344,
+     "messages_with_refs": 0,
+     "oversized": {
+      "count": 1,
+      "fallback_bytes": 14343,
+      "fallback_prefix_bytes": 2,
+      "input_bytes": 75183,
+      "kinds": {
+       "zstd": 1
+      },
+      "verified_byte_exact": 1
+     },
+     "ref_bytes": 0,
+     "refs": 0,
+     "reject_bytes_incl_prefix": 0,
+     "rejected": 0,
+     "retransmit_bytes_incl_prefix": 0,
+     "sync_download": 0,
+     "sync_total": 0,
+     "sync_upload": 0,
+     "total": 298327,
+     "total_over_input_bytes": 1.0582686829773573,
+     "total_per_eligible_message": 1595.331550802139
+    },
+    "3": {
+     "all_message_total": 147948,
+     "byte_weighted_message_ratio": 0.47393588529306385,
+     "control_bytes": 0,
+     "control_prefix_bytes": 0,
+     "covered_bytes": 0,
+     "declare_bytes_incl_prefix": 0,
+     "eligible_messages": 187,
+     "input_bytes": 281901,
+     "kinds": {
+      "zstd": 187
+     },
+     "lit_segments": 0,
+     "mean_per_message_ratio": 0.7648065698386581,
+     "message_bytes": 133305,
+     "message_plus_control_total": 133603,
+     "message_prefix_bytes": 298,
+     "messages_with_refs": 0,
+     "oversized": {
+      "count": 1,
+      "fallback_bytes": 14343,
+      "fallback_prefix_bytes": 2,
+      "input_bytes": 75183,
+      "kinds": {
+       "zstd": 1
+      },
+      "verified_byte_exact": 1
+     },
+     "ref_bytes": 0,
+     "refs": 0,
+     "reject_bytes_incl_prefix": 0,
+     "rejected": 0,
+     "retransmit_bytes_incl_prefix": 0,
+     "sync_download": 0,
+     "sync_total": 0,
+     "sync_upload": 0,
+     "total": 133603,
+     "total_over_input_bytes": 0.47393588529306385,
+     "total_per_eligible_message": 714.4545454545455
+    },
+    "4": {
+     "all_message_total": 145748,
+     "byte_weighted_message_ratio": 0.42617443712509,
+     "control_bytes": 0,
+     "control_prefix_bytes": 0,
+     "covered_bytes": 0,
+     "declare_bytes_incl_prefix": 0,
+     "eligible_messages": 187,
+     "input_bytes": 281901,
+     "kinds": {
+      "zstd": 187
+     },
+     "lit_segments": 0,
+     "mean_per_message_ratio": 0.5930005454081945,
+     "message_bytes": 119847,
+     "message_plus_control_total": 120139,
+     "message_prefix_bytes": 292,
+     "messages_with_refs": 0,
+     "oversized": {
+      "count": 1,
+      "fallback_bytes": 14343,
+      "fallback_prefix_bytes": 2,
+      "input_bytes": 75183,
+      "kinds": {
+       "zstd": 1
+      },
+      "verified_byte_exact": 1
+     },
+     "ref_bytes": 0,
+     "refs": 0,
+     "reject_bytes_incl_prefix": 0,
+     "rejected": 0,
+     "retransmit_bytes_incl_prefix": 0,
+     "sync_download": 10240,
+     "sync_total": 11264,
+     "sync_upload": 1024,
+     "total": 131403,
+     "total_over_input_bytes": 0.4661317270956825,
+     "total_per_eligible_message": 702.6898395721926
+    },
+    "4b": {
+     "all_message_total": 172525,
+     "byte_weighted_message_ratio": 0.4660004753441811,
+     "control_bytes": 14606,
+     "control_prefix_bytes": 218,
+     "covered_bytes": 0,
+     "declare_bytes_incl_prefix": 14824,
+     "eligible_messages": 187,
+     "input_bytes": 281901,
+     "kinds": {
+      "zstd": 187
+     },
+     "lit_segments": 0,
+     "mean_per_message_ratio": 0.7518252457590973,
+     "message_bytes": 131068,
+     "message_plus_control_total": 146190,
+     "message_prefix_bytes": 298,
+     "messages_with_refs": 0,
+     "oversized": {
+      "count": 1,
+      "fallback_bytes": 14343,
+      "fallback_prefix_bytes": 2,
+      "input_bytes": 75183,
+      "kinds": {
+       "zstd": 1
+      },
+      "verified_byte_exact": 1
+     },
+     "ref_bytes": 0,
+     "refs": 0,
+     "reject_bytes_incl_prefix": 0,
+     "rejected": 0,
+     "retransmit_bytes_incl_prefix": 0,
+     "sync_download": 10900,
+     "sync_total": 11990,
+     "sync_upload": 1090,
+     "total": 158180,
+     "total_over_input_bytes": 0.5611189743917191,
+     "total_per_eligible_message": 845.8823529411765
+    },
+    "4b-delta": {
+     "all_message_total": 175968,
+     "byte_weighted_message_ratio": 0.4660004753441811,
+     "control_bytes": 14606,
+     "control_prefix_bytes": 218,
+     "covered_bytes": 0,
+     "declare_bytes_incl_prefix": 14824,
+     "eligible_messages": 187,
+     "input_bytes": 281901,
+     "kinds": {
+      "zstd": 187
+     },
+     "lit_segments": 0,
+     "mean_per_message_ratio": 0.7518252457590973,
+     "message_bytes": 131068,
+     "message_plus_control_total": 146190,
+     "message_prefix_bytes": 298,
+     "messages_with_refs": 0,
+     "oversized": {
+      "count": 1,
+      "fallback_bytes": 14343,
+      "fallback_prefix_bytes": 2,
+      "input_bytes": 75183,
+      "kinds": {
+       "zstd": 1
+      },
+      "verified_byte_exact": 1
+     },
+     "ref_bytes": 0,
+     "refs": 0,
+     "reject_bytes_incl_prefix": 0,
+     "rejected": 0,
+     "retransmit_bytes_incl_prefix": 0,
+     "sync_download": 14030,
+     "sync_total": 15433,
+     "sync_upload": 1403,
+     "total": 161623,
+     "total_over_input_bytes": 0.5733324819706209,
+     "total_per_eligible_message": 864.2941176470588
+    },
+    "5": {
+     "all_message_total": 342929,
+     "byte_weighted_message_ratio": 1.0582686829773573,
+     "control_bytes": 14606,
+     "control_prefix_bytes": 218,
+     "covered_bytes": 0,
+     "declare_bytes_incl_prefix": 14824,
+     "eligible_messages": 187,
+     "input_bytes": 281901,
+     "kinds": {
+      "raw": 187
+     },
+     "lit_segments": 0,
+     "mean_per_message_ratio": 1.286159993774758,
+     "message_bytes": 297983,
+     "message_plus_control_total": 313151,
+     "message_prefix_bytes": 344,
+     "messages_with_refs": 0,
+     "oversized": {
+      "count": 1,
+      "fallback_bytes": 14343,
+      "fallback_prefix_bytes": 2,
+      "input_bytes": 75183,
+      "kinds": {
+       "zstd": 1
+      },
+      "verified_byte_exact": 1
+     },
+     "ref_bytes": 0,
+     "refs": 0,
+     "reject_bytes_incl_prefix": 0,
+     "rejected": 0,
+     "retransmit_bytes_incl_prefix": 0,
+     "sync_download": 14030,
+     "sync_total": 15433,
+     "sync_upload": 1403,
+     "total": 328584,
+     "total_over_input_bytes": 1.1656006896037971,
+     "total_per_eligible_message": 1757.1336898395723
+    },
+    "6": {
+     "all_message_total": 183966,
+     "byte_weighted_message_ratio": 0.45441484776570495,
+     "control_bytes": 14606,
+     "control_prefix_bytes": 218,
+     "covered_bytes": 0,
+     "declare_bytes_incl_prefix": 14824,
+     "eligible_messages": 187,
+     "input_bytes": 281901,
+     "kinds": {
+      "zstd_raw": 187
+     },
+     "lit_segments": 0,
+     "mean_per_message_ratio": 0.8071593871804496,
+     "message_bytes": 127799,
+     "message_plus_control_total": 142924,
+     "message_prefix_bytes": 301,
+     "messages_with_refs": 0,
+     "oversized": {
+      "count": 1,
+      "fallback_bytes": 14343,
+      "fallback_prefix_bytes": 2,
+      "input_bytes": 75183,
+      "kinds": {
+       "zstd": 1
+      },
+      "verified_byte_exact": 1
+     },
+     "ref_bytes": 0,
+     "refs": 0,
+     "reject_bytes_incl_prefix": 0,
+     "rejected": 0,
+     "retransmit_bytes_incl_prefix": 0,
+     "sync_download": 24270,
+     "sync_total": 26697,
+     "sync_upload": 2427,
+     "total": 169621,
+     "total_over_input_bytes": 0.6017041443627372,
+     "total_per_eligible_message": 907.0641711229947
+    },
+    "7": {
+     "all_message_total": 328283,
+     "byte_weighted_message_ratio": 1.0063142734506085,
+     "control_bytes": 14606,
+     "control_prefix_bytes": 218,
+     "covered_bytes": 1090,
+     "declare_bytes_incl_prefix": 14824,
+     "eligible_messages": 187,
+     "encoder": {
+      "candidates": 1,
+      "cap_hit_messages": 0,
+      "entries_pending": 0,
+      "enumerated_messages": 158,
+      "eval_cap_hit_messages": 0,
+      "match_cap_hit_messages": 0,
+      "matcher_calls": 0,
+      "matcher_span_chars": 0,
+      "messages": 187,
+      "raw_fallback_sends": 29,
+      "reasons": {
+       "compact": 158,
+       "unknown_declared_snapshot": 29
+      },
+      "receiver_rejects_after_send": 0,
+      "template_evaluations": 0,
+      "verified_ok": 158,
+      "verify_errors": {},
+      "verify_failed": 0
+     },
+     "input_bytes": 281901,
+     "kinds": {
+      "compact": 158,
+      "raw": 29
+     },
+     "lit_segments": 158,
+     "mean_per_message_ratio": 1.0632815898290375,
+     "message_bytes": 283360,
+     "message_plus_control_total": 298505,
+     "message_prefix_bytes": 321,
+     "messages_with_refs": 1,
+     "oversized": {
+      "count": 1,
+      "fallback_bytes": 14343,
+      "fallback_prefix_bytes": 2,
+      "input_bytes": 75183,
+      "kinds": {
+       "zstd": 1
+      },
+      "verified_byte_exact": 1
+     },
+     "ref_bytes": 2,
+     "refs": 1,
+     "reject_bytes_incl_prefix": 0,
+     "rejected": 0,
+     "retransmit_bytes_incl_prefix": 0,
+     "sync_download": 14030,
+     "sync_total": 15433,
+     "sync_upload": 1403,
+     "total": 313938,
+     "total_over_input_bytes": 1.1136462800770484,
+     "total_per_eligible_message": 1678.8128342245989
+    }
+   },
+   "break_even": {
+    "ingredients": {
+     "1": {
+      "initial_sync": 0,
+      "message_plus_control": 298327,
+      "per_join_sync": null,
+      "per_update_sync": null,
+      "sync_total": 0
+     },
+     "3": {
+      "initial_sync": 0,
+      "message_plus_control": 133603,
+      "per_join_sync": null,
+      "per_update_sync": null,
+      "sync_total": 0
+     },
+     "4": {
+      "initial_sync": 11264,
+      "message_plus_control": 120139,
+      "per_join_sync": null,
+      "per_update_sync": null,
+      "sync_total": 11264
+     },
+     "4b": {
+      "initial_sync": 11990,
+      "message_plus_control": 146190,
+      "per_join_sync": null,
+      "per_update_sync": null,
+      "sync_total": 11990
+     },
+     "4b-delta": {
+      "initial_sync": 15433,
+      "message_plus_control": 146190,
+      "per_join_sync": null,
+      "per_update_sync": null,
+      "sync_total": 15433
+     },
+     "5": {
+      "initial_sync": 15433,
+      "message_plus_control": 313151,
+      "per_join_sync": null,
+      "per_update_sync": null,
+      "sync_total": 15433
+     },
+     "6": {
+      "initial_sync": 26697,
+      "message_plus_control": 142924,
+      "per_join_sync": null,
+      "per_update_sync": null,
+      "sync_total": 26697
+     },
+     "7": {
+      "initial_sync": 15433,
+      "message_plus_control": 298505,
+      "per_join_sync": null,
+      "per_update_sync": null,
+      "sync_total": 15433
+     }
+    },
+    "joins_observed": 0,
+    "pairs": {
+     "7_vs_3": {
+      "advantage_at_zero_updates_and_joins": -180335,
+      "advantage_observed": -180335,
+      "break_even_joins": "undefined: no join observed",
+      "break_even_updates": "undefined: no update observed",
+      "per_join_delta_X_minus_Y": null,
+      "per_update_delta_X_minus_Y": null
+     },
+     "7_vs_4": {
+      "advantage_at_zero_updates_and_joins": -182535,
+      "advantage_observed": -182535,
+      "break_even_joins": "undefined: no join observed",
+      "break_even_updates": "undefined: no update observed",
+      "per_join_delta_X_minus_Y": null,
+      "per_update_delta_X_minus_Y": null
+     },
+     "7_vs_4b": {
+      "advantage_at_zero_updates_and_joins": -155758,
+      "advantage_observed": -155758,
+      "break_even_joins": "undefined: no join observed",
+      "break_even_updates": "undefined: no update observed",
+      "per_join_delta_X_minus_Y": null,
+      "per_update_delta_X_minus_Y": null
+     },
+     "7_vs_4b-delta": {
+      "advantage_at_zero_updates_and_joins": -152315,
+      "advantage_observed": -152315,
+      "break_even_joins": "undefined: no join observed",
+      "break_even_updates": "undefined: no update observed",
+      "per_join_delta_X_minus_Y": null,
+      "per_update_delta_X_minus_Y": null
+     },
+     "7_vs_5": {
+      "advantage_at_zero_updates_and_joins": 14646,
+      "advantage_observed": 14646,
+      "break_even_joins": "undefined: no join observed",
+      "break_even_updates": "undefined: no update observed",
+      "per_join_delta_X_minus_Y": null,
+      "per_update_delta_X_minus_Y": null
+     },
+     "7_vs_6": {
+      "advantage_at_zero_updates_and_joins": -144317,
+      "advantage_observed": -144317,
+      "break_even_joins": "undefined: no join observed",
+      "break_even_updates": "undefined: no update observed",
+      "per_join_delta_X_minus_Y": null,
+      "per_update_delta_X_minus_Y": null
+     }
+    },
+    "updates_observed": 0
+   },
+   "chain": {
+    "entries_final": 1,
+    "entry_body_bytes_final": 1090,
+    "full_artifact_bytes_final": 1403,
+    "kinds_final": {
+     "literal": 1,
+     "template": 0
+    },
+    "lineage": {
+     "entries_by_number_of_source_conversations": {
+      "3": 1
+     }
+    },
+    "max_scheduled_version_curated": 20,
+    "new_entries_per_snapshot": [
+     1
+    ],
+    "overflow_by_scheduled_version": [],
+    "overflow_entries_dropped": 0,
+    "overflow_entries_dropped_byte_limit": 0,
+    "overflow_entries_dropped_count_limit": 0,
+    "published_snapshots": 1,
+    "scheduled_versions": [
+     {
+      "n_convs": 5,
+      "new_entries": 0,
+      "overflow": 0,
+      "overflow_bytes": 0,
+      "overflow_count": 0,
+      "picks": 0,
+      "published_index": null,
+      "sched_version": 1,
+      "status": "empty"
+     },
+     {
+      "n_convs": 10,
+      "new_entries": 0,
+      "overflow": 0,
+      "overflow_bytes": 0,
+      "overflow_count": 0,
+      "picks": 0,
+      "published_index": null,
+      "sched_version": 2,
+      "status": "empty"
+     },
+     {
+      "n_convs": 15,
+      "new_entries": 0,
+      "overflow": 0,
+      "overflow_bytes": 0,
+      "overflow_count": 0,
+      "picks": 0,
+      "published_index": null,
+      "sched_version": 3,
+      "status": "empty"
+     },
+     {
+      "n_convs": 20,
+      "new_entries": 1,
+      "overflow": 0,
+      "overflow_bytes": 0,
+      "overflow_count": 0,
+      "picks": 1,
+      "published_index": 1,
+      "sched_version": 4,
+      "status": "published"
+     },
+     {
+      "n_convs": 25,
+      "new_entries": 0,
+      "overflow": 0,
+      "overflow_bytes": 0,
+      "overflow_count": 0,
+      "picks": 1,
+      "published_index": null,
+      "sched_version": 5,
+      "status": "empty"
+     },
+     {
+      "n_convs": 30,
+      "new_entries": 0,
+      "overflow": 0,
+      "overflow_bytes": 0,
+      "overflow_count": 0,
+      "picks": 1,
+      "published_index": null,
+      "sched_version": 6,
+      "status": "empty"
+     },
+     {
+      "n_convs": 35,
+      "new_entries": 0,
+      "overflow": 0,
+      "overflow_bytes": 0,
+      "overflow_count": 0,
+      "picks": 1,
+      "published_index": null,
+      "sched_version": 7,
+      "status": "empty"
+     },
+     {
+      "n_convs": 40,
+      "new_entries": 0,
+      "overflow": 0,
+      "overflow_bytes": 0,
+      "overflow_count": 0,
+      "picks": 1,
+      "published_index": null,
+      "sched_version": 8,
+      "status": "empty"
+     },
+     {
+      "n_convs": 45,
+      "new_entries": 0,
+      "overflow": 0,
+      "overflow_bytes": 0,
+      "overflow_count": 0,
+      "picks": 1,
+      "published_index": null,
+      "sched_version": 9,
+      "status": "empty"
+     },
+     {
+      "n_convs": 49,
+      "new_entries": 0,
+      "overflow": 0,
+      "overflow_bytes": 0,
+      "overflow_count": 0,
+      "picks": 1,
+      "published_index": null,
+      "sched_version": 10,
+      "status": "empty"
+     },
+     {
+      "n_convs": 54,
+      "new_entries": 0,
+      "overflow": 0,
+      "overflow_bytes": 0,
+      "overflow_count": 0,
+      "picks": 1,
+      "published_index": null,
+      "sched_version": 11,
+      "status": "empty"
+     },
+     {
+      "n_convs": 59,
+      "new_entries": 0,
+      "overflow": 0,
+      "overflow_bytes": 0,
+      "overflow_count": 0,
+      "picks": 1,
+      "published_index": null,
+      "sched_version": 12,
+      "status": "empty"
+     },
+     {
+      "n_convs": 64,
+      "new_entries": 0,
+      "overflow": 0,
+      "overflow_bytes": 0,
+      "overflow_count": 0,
+      "picks": 1,
+      "published_index": null,
+      "sched_version": 13,
+      "status": "empty"
+     },
+     {
+      "n_convs": 69,
+      "new_entries": 0,
+      "overflow": 0,
+      "overflow_bytes": 0,
+      "overflow_count": 0,
+      "picks": 1,
+      "published_index": null,
+      "sched_version": 14,
+      "status": "empty"
+     },
+     {
+      "n_convs": 74,
+      "new_entries": 0,
+      "overflow": 0,
+      "overflow_bytes": 0,
+      "overflow_count": 0,
+      "picks": 1,
+      "published_index": null,
+      "sched_version": 15,
+      "status": "empty"
+     },
+     {
+      "n_convs": 79,
+      "new_entries": 0,
+      "overflow": 0,
+      "overflow_bytes": 0,
+      "overflow_count": 0,
+      "picks": 1,
+      "published_index": null,
+      "sched_version": 16,
+      "status": "empty"
+     },
+     {
+      "n_convs": 84,
+      "new_entries": 0,
+      "overflow": 0,
+      "overflow_bytes": 0,
+      "overflow_count": 0,
+      "picks": 1,
+      "published_index": null,
+      "sched_version": 17,
+      "status": "empty"
+     },
+     {
+      "n_convs": 89,
+      "new_entries": 0,
+      "overflow": 0,
+      "overflow_bytes": 0,
+      "overflow_count": 0,
+      "picks": 1,
+      "published_index": null,
+      "sched_version": 18,
+      "status": "empty"
+     },
+     {
+      "n_convs": 94,
+      "new_entries": 0,
+      "overflow": 0,
+      "overflow_bytes": 0,
+      "overflow_count": 0,
+      "picks": 1,
+      "published_index": null,
+      "sched_version": 19,
+      "status": "empty"
+     },
+     {
+      "n_convs": 98,
+      "new_entries": 0,
+      "overflow": 0,
+      "overflow_bytes": 0,
+      "overflow_count": 0,
+      "picks": 1,
+      "published_index": null,
+      "sched_version": 20,
+      "status": "empty"
+     }
+    ],
+    "skipped_schedule_versions": [
+     1,
+     2,
+     3
+    ],
+    "trailing_skipped_schedule_versions": [
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12,
+     13,
+     14,
+     15,
+     16,
+     17,
+     18,
+     19,
+     20
+    ]
+   },
+   "joiner_published_indexes": [],
+   "primary": false,
+   "scenario": {
+    "V": 20,
+    "joiners": 0,
+    "participants": 10
+   }
+  },
+  {
+   "arm7_vs_4b_delta_total": 164724,
+   "arm7_vs_4b_total": 164724,
+   "arm7_vs_arm6_total": 155891,
+   "arms": {
+    "1": {
+     "all_message_total": 312672,
+     "byte_weighted_message_ratio": 1.0582686829773573,
+     "control_bytes": 0,
+     "control_prefix_bytes": 0,
+     "covered_bytes": 0,
+     "declare_bytes_incl_prefix": 0,
+     "eligible_messages": 187,
+     "input_bytes": 281901,
+     "kinds": {
+      "raw": 187
+     },
+     "lit_segments": 0,
+     "mean_per_message_ratio": 1.286159993774758,
+     "message_bytes": 297983,
+     "message_plus_control_total": 298327,
+     "message_prefix_bytes": 344,
+     "messages_with_refs": 0,
+     "oversized": {
+      "count": 1,
+      "fallback_bytes": 14343,
+      "fallback_prefix_bytes": 2,
+      "input_bytes": 75183,
+      "kinds": {
+       "zstd": 1
+      },
+      "verified_byte_exact": 1
+     },
+     "ref_bytes": 0,
+     "refs": 0,
+     "reject_bytes_incl_prefix": 0,
+     "rejected": 0,
+     "retransmit_bytes_incl_prefix": 0,
+     "sync_download": 0,
+     "sync_total": 0,
+     "sync_upload": 0,
+     "total": 298327,
+     "total_over_input_bytes": 1.0582686829773573,
+     "total_per_eligible_message": 1595.331550802139
+    },
+    "3": {
+     "all_message_total": 147948,
+     "byte_weighted_message_ratio": 0.47393588529306385,
+     "control_bytes": 0,
+     "control_prefix_bytes": 0,
+     "covered_bytes": 0,
+     "declare_bytes_incl_prefix": 0,
+     "eligible_messages": 187,
+     "input_bytes": 281901,
+     "kinds": {
+      "zstd": 187
+     },
+     "lit_segments": 0,
+     "mean_per_message_ratio": 0.7648065698386581,
+     "message_bytes": 133305,
+     "message_plus_control_total": 133603,
+     "message_prefix_bytes": 298,
+     "messages_with_refs": 0,
+     "oversized": {
+      "count": 1,
+      "fallback_bytes": 14343,
+      "fallback_prefix_bytes": 2,
+      "input_bytes": 75183,
+      "kinds": {
+       "zstd": 1
+      },
+      "verified_byte_exact": 1
+     },
+     "ref_bytes": 0,
+     "refs": 0,
+     "reject_bytes_incl_prefix": 0,
+     "rejected": 0,
+     "retransmit_bytes_incl_prefix": 0,
+     "sync_download": 0,
+     "sync_total": 0,
+     "sync_upload": 0,
+     "total": 133603,
+     "total_over_input_bytes": 0.47393588529306385,
+     "total_per_eligible_message": 714.4545454545455
+    },
+    "4": {
+     "all_message_total": 148820,
+     "byte_weighted_message_ratio": 0.42617443712509,
+     "control_bytes": 0,
+     "control_prefix_bytes": 0,
+     "covered_bytes": 0,
+     "declare_bytes_incl_prefix": 0,
+     "eligible_messages": 187,
+     "input_bytes": 281901,
+     "kinds": {
+      "zstd": 187
+     },
+     "lit_segments": 0,
+     "mean_per_message_ratio": 0.5930005454081945,
+     "message_bytes": 119847,
+     "message_plus_control_total": 120139,
+     "message_prefix_bytes": 292,
+     "messages_with_refs": 0,
+     "oversized": {
+      "count": 1,
+      "fallback_bytes": 14343,
+      "fallback_prefix_bytes": 2,
+      "input_bytes": 75183,
+      "kinds": {
+       "zstd": 1
+      },
+      "verified_byte_exact": 1
+     },
+     "ref_bytes": 0,
+     "refs": 0,
+     "reject_bytes_incl_prefix": 0,
+     "rejected": 0,
+     "retransmit_bytes_incl_prefix": 0,
+     "sync_download": 13312,
+     "sync_total": 14336,
+     "sync_upload": 1024,
+     "total": 134475,
+     "total_over_input_bytes": 0.47702916981493504,
+     "total_per_eligible_message": 719.1176470588235
+    },
+    "4b": {
+     "all_message_total": 162772,
+     "byte_weighted_message_ratio": 0.47393588529306385,
+     "control_bytes": 14606,
+     "control_prefix_bytes": 218,
+     "covered_bytes": 0,
+     "declare_bytes_incl_prefix": 14824,
+     "eligible_messages": 187,
+     "input_bytes": 281901,
+     "kinds": {
+      "zstd": 187
+     },
+     "lit_segments": 0,
+     "mean_per_message_ratio": 0.7648065698386581,
+     "message_bytes": 133305,
+     "message_plus_control_total": 148427,
+     "message_prefix_bytes": 298,
+     "messages_with_refs": 0,
+     "oversized": {
+      "count": 1,
+      "fallback_bytes": 14343,
+      "fallback_prefix_bytes": 2,
+      "input_bytes": 75183,
+      "kinds": {
+       "zstd": 1
+      },
+      "verified_byte_exact": 1
+     },
+     "ref_bytes": 0,
+     "refs": 0,
+     "reject_bytes_incl_prefix": 0,
+     "rejected": 0,
+     "retransmit_bytes_incl_prefix": 0,
+     "sync_download": 0,
+     "sync_total": 0,
+     "sync_upload": 0,
+     "total": 148427,
+     "total_over_input_bytes": 0.5265217221648735,
+     "total_per_eligible_message": 793.7272727272727
+    },
+    "4b-delta": {
+     "all_message_total": 162772,
+     "byte_weighted_message_ratio": 0.47393588529306385,
+     "control_bytes": 14606,
+     "control_prefix_bytes": 218,
+     "covered_bytes": 0,
+     "declare_bytes_incl_prefix": 14824,
+     "eligible_messages": 187,
+     "input_bytes": 281901,
+     "kinds": {
+      "zstd": 187
+     },
+     "lit_segments": 0,
+     "mean_per_message_ratio": 0.7648065698386581,
+     "message_bytes": 133305,
+     "message_plus_control_total": 148427,
+     "message_prefix_bytes": 298,
+     "messages_with_refs": 0,
+     "oversized": {
+      "count": 1,
+      "fallback_bytes": 14343,
+      "fallback_prefix_bytes": 2,
+      "input_bytes": 75183,
+      "kinds": {
+       "zstd": 1
+      },
+      "verified_byte_exact": 1
+     },
+     "ref_bytes": 0,
+     "refs": 0,
+     "reject_bytes_incl_prefix": 0,
+     "rejected": 0,
+     "retransmit_bytes_incl_prefix": 0,
+     "sync_download": 0,
+     "sync_total": 0,
+     "sync_upload": 0,
+     "total": 148427,
+     "total_over_input_bytes": 0.5265217221648735,
+     "total_per_eligible_message": 793.7272727272727
+    },
+    "5": {
+     "all_message_total": 327496,
+     "byte_weighted_message_ratio": 1.0582686829773573,
+     "control_bytes": 14606,
+     "control_prefix_bytes": 218,
+     "covered_bytes": 0,
+     "declare_bytes_incl_prefix": 14824,
+     "eligible_messages": 187,
+     "input_bytes": 281901,
+     "kinds": {
+      "raw": 187
+     },
+     "lit_segments": 0,
+     "mean_per_message_ratio": 1.286159993774758,
+     "message_bytes": 297983,
+     "message_plus_control_total": 313151,
+     "message_prefix_bytes": 344,
+     "messages_with_refs": 0,
+     "oversized": {
+      "count": 1,
+      "fallback_bytes": 14343,
+      "fallback_prefix_bytes": 2,
+      "input_bytes": 75183,
+      "kinds": {
+       "zstd": 1
+      },
+      "verified_byte_exact": 1
+     },
+     "ref_bytes": 0,
+     "refs": 0,
+     "reject_bytes_incl_prefix": 0,
+     "rejected": 0,
+     "retransmit_bytes_incl_prefix": 0,
+     "sync_download": 0,
+     "sync_total": 0,
+     "sync_upload": 0,
+     "total": 313151,
+     "total_over_input_bytes": 1.1108545198491668,
+     "total_per_eligible_message": 1674.6042780748662
+    },
+    "6": {
+     "all_message_total": 171605,
+     "byte_weighted_message_ratio": 0.45441484776570495,
+     "control_bytes": 14606,
+     "control_prefix_bytes": 218,
+     "covered_bytes": 0,
+     "declare_bytes_incl_prefix": 14824,
+     "eligible_messages": 187,
+     "input_bytes": 281901,
+     "kinds": {
+      "zstd_raw": 187
+     },
+     "lit_segments": 0,
+     "mean_per_message_ratio": 0.8071593871804496,
+     "message_bytes": 127799,
+     "message_plus_control_total": 142924,
+     "message_prefix_bytes": 301,
+     "messages_with_refs": 0,
+     "oversized": {
+      "count": 1,
+      "fallback_bytes": 14343,
+      "fallback_prefix_bytes": 2,
+      "input_bytes": 75183,
+      "kinds": {
+       "zstd": 1
+      },
+      "verified_byte_exact": 1
+     },
+     "ref_bytes": 0,
+     "refs": 0,
+     "reject_bytes_incl_prefix": 0,
+     "rejected": 0,
+     "retransmit_bytes_incl_prefix": 0,
+     "sync_download": 13312,
+     "sync_total": 14336,
+     "sync_upload": 1024,
+     "total": 157260,
+     "total_over_input_bytes": 0.5578554173273597,
+     "total_per_eligible_message": 840.9625668449198
+    },
+    "7": {
+     "all_message_total": 327496,
+     "byte_weighted_message_ratio": 1.0582686829773573,
+     "control_bytes": 14606,
+     "control_prefix_bytes": 218,
+     "covered_bytes": 0,
+     "declare_bytes_incl_prefix": 14824,
+     "eligible_messages": 187,
+     "encoder": {
+      "messages": 187,
+      "raw_fallback_sends": 187,
+      "reasons": {
+       "unknown_declared_snapshot": 187
+      },
+      "receiver_rejects_after_send": 0,
+      "verified_ok": 0,
+      "verify_errors": {},
+      "verify_failed": 0
+     },
+     "input_bytes": 281901,
+     "kinds": {
+      "raw": 187
+     },
+     "lit_segments": 0,
+     "mean_per_message_ratio": 1.286159993774758,
+     "message_bytes": 297983,
+     "message_plus_control_total": 313151,
+     "message_prefix_bytes": 344,
+     "messages_with_refs": 0,
+     "oversized": {
+      "count": 1,
+      "fallback_bytes": 14343,
+      "fallback_prefix_bytes": 2,
+      "input_bytes": 75183,
+      "kinds": {
+       "zstd": 1
+      },
+      "verified_byte_exact": 1
+     },
+     "ref_bytes": 0,
+     "refs": 0,
+     "reject_bytes_incl_prefix": 0,
+     "rejected": 0,
+     "retransmit_bytes_incl_prefix": 0,
+     "sync_download": 0,
+     "sync_total": 0,
+     "sync_upload": 0,
+     "total": 313151,
+     "total_over_input_bytes": 1.1108545198491668,
+     "total_per_eligible_message": 1674.6042780748662
+    }
+   },
+   "break_even": {
+    "ingredients": {
+     "1": {
+      "initial_sync": 0,
+      "message_plus_control": 298327,
+      "per_join_sync": 0.0,
+      "per_update_sync": null,
+      "sync_total": 0
+     },
+     "3": {
+      "initial_sync": 0,
+      "message_plus_control": 133603,
+      "per_join_sync": 0.0,
+      "per_update_sync": null,
+      "sync_total": 0
+     },
+     "4": {
+      "initial_sync": 11264,
+      "message_plus_control": 120139,
+      "per_join_sync": 1024.0,
+      "per_update_sync": null,
+      "sync_total": 14336
+     },
+     "4b": {
+      "initial_sync": 0,
+      "message_plus_control": 148427,
+      "per_join_sync": 0.0,
+      "per_update_sync": null,
+      "sync_total": 0
+     },
+     "4b-delta": {
+      "initial_sync": 0,
+      "message_plus_control": 148427,
+      "per_join_sync": 0.0,
+      "per_update_sync": null,
+      "sync_total": 0
+     },
+     "5": {
+      "initial_sync": 0,
+      "message_plus_control": 313151,
+      "per_join_sync": 0.0,
+      "per_update_sync": null,
+      "sync_total": 0
+     },
+     "6": {
+      "initial_sync": 11264,
+      "message_plus_control": 142924,
+      "per_join_sync": 1024.0,
+      "per_update_sync": null,
+      "sync_total": 14336
+     },
+     "7": {
+      "initial_sync": 0,
+      "message_plus_control": 313151,
+      "per_join_sync": 0.0,
+      "per_update_sync": null,
+      "sync_total": 0
+     }
+    },
+    "joins_observed": 3,
+    "pairs": {
+     "7_vs_3": {
+      "advantage_at_zero_updates_and_joins": -179548,
+      "advantage_observed": -179548,
+      "break_even_joins": "undefined: identical per-join cost (X behind at every count)",
+      "break_even_updates": "undefined: no update observed",
+      "per_join_delta_X_minus_Y": 0.0,
+      "per_update_delta_X_minus_Y": null
+     },
+     "7_vs_4": {
+      "advantage_at_zero_updates_and_joins": -181748,
+      "advantage_observed": -178676.0,
+      "break_even_joins": 177.48828125,
+      "break_even_updates": "undefined: no update observed",
+      "per_join_delta_X_minus_Y": -1024.0,
+      "per_update_delta_X_minus_Y": null
+     },
+     "7_vs_4b": {
+      "advantage_at_zero_updates_and_joins": -164724,
+      "advantage_observed": -164724,
+      "break_even_joins": "undefined: identical per-join cost (X behind at every count)",
+      "break_even_updates": "undefined: no update observed",
+      "per_join_delta_X_minus_Y": 0.0,
+      "per_update_delta_X_minus_Y": null
+     },
+     "7_vs_4b-delta": {
+      "advantage_at_zero_updates_and_joins": -164724,
+      "advantage_observed": -164724,
+      "break_even_joins": "undefined: identical per-join cost (X behind at every count)",
+      "break_even_updates": "undefined: no update observed",
+      "per_join_delta_X_minus_Y": 0.0,
+      "per_update_delta_X_minus_Y": null
+     },
+     "7_vs_5": {
+      "advantage_at_zero_updates_and_joins": 0,
+      "advantage_observed": 0,
+      "break_even_joins": "undefined: identical per-join cost (X tie at every count)",
+      "break_even_updates": "undefined: no update observed",
+      "per_join_delta_X_minus_Y": 0.0,
+      "per_update_delta_X_minus_Y": null
+     },
+     "7_vs_6": {
+      "advantage_at_zero_updates_and_joins": -158963,
+      "advantage_observed": -155891.0,
+      "break_even_joins": 155.2373046875,
+      "break_even_updates": "undefined: no update observed",
+      "per_join_delta_X_minus_Y": -1024.0,
+      "per_update_delta_X_minus_Y": null
+     }
+    },
+    "updates_observed": 0
+   },
+   "chain": {
+    "entries_final": 0,
+    "entry_body_bytes_final": 0,
+    "full_artifact_bytes_final": 0,
+    "kinds_final": {},
+    "lineage": {
+     "entries_by_number_of_source_conversations": {}
+    },
+    "max_scheduled_version_curated": 20,
+    "new_entries_per_snapshot": [],
+    "overflow_by_scheduled_version": [],
+    "overflow_entries_dropped": 0,
+    "overflow_entries_dropped_byte_limit": 0,
+    "overflow_entries_dropped_count_limit": 0,
+    "published_snapshots": 0,
+    "scheduled_versions": [
+     {
+      "n_convs": 5,
+      "new_entries": 0,
+      "overflow": 0,
+      "overflow_bytes": 0,
+      "overflow_count": 0,
+      "picks": 0,
+      "published_index": null,
+      "sched_version": 1,
+      "status": "empty"
+     },
+     {
+      "n_convs": 10,
+      "new_entries": 0,
+      "overflow": 0,
+      "overflow_bytes": 0,
+      "overflow_count": 0,
+      "picks": 0,
+      "published_index": null,
+      "sched_version": 2,
+      "status": "empty"
+     },
+     {
+      "n_convs": 15,
+      "new_entries": 0,
+      "overflow": 0,
+      "overflow_bytes": 0,
+      "overflow_count": 0,
+      "picks": 0,
+      "published_index": null,
+      "sched_version": 3,
+      "status": "empty"
+     },
+     {
+      "n_convs": 20,
+      "new_entries": 0,
+      "overflow": 0,
+      "overflow_bytes": 0,
+      "overflow_count": 0,
+      "picks": 0,
+      "published_index": null,
+      "sched_version": 4,
+      "status": "empty"
+     },
+     {
+      "n_convs": 25,
+      "new_entries": 0,
+      "overflow": 0,
+      "overflow_bytes": 0,
+      "overflow_count": 0,
+      "picks": 0,
+      "published_index": null,
+      "sched_version": 5,
+      "status": "empty"
+     },
+     {
+      "n_convs": 30,
+      "new_entries": 0,
+      "overflow": 0,
+      "overflow_bytes": 0,
+      "overflow_count": 0,
+      "picks": 0,
+      "published_index": null,
+      "sched_version": 6,
+      "status": "empty"
+     },
+     {
+      "n_convs": 35,
+      "new_entries": 0,
+      "overflow": 0,
+      "overflow_bytes": 0,
+      "overflow_count": 0,
+      "picks": 0,
+      "published_index": null,
+      "sched_version": 7,
+      "status": "empty"
+     },
+     {
+      "n_convs": 40,
+      "new_entries": 0,
+      "overflow": 0,
+      "overflow_bytes": 0,
+      "overflow_count": 0,
+      "picks": 0,
+      "published_index": null,
+      "sched_version": 8,
+      "status": "empty"
+     },
+     {
+      "n_convs": 45,
+      "new_entries": 0,
+      "overflow": 0,
+      "overflow_bytes": 0,
+      "overflow_count": 0,
+      "picks": 0,
+      "published_index": null,
+      "sched_version": 9,
+      "status": "empty"
+     },
+     {
+      "n_convs": 49,
+      "new_entries": 0,
+      "overflow": 0,
+      "overflow_bytes": 0,
+      "overflow_count": 0,
+      "picks": 0,
+      "published_index": null,
+      "sched_version": 10,
+      "status": "empty"
+     },
+     {
+      "n_convs": 54,
+      "new_entries": 0,
+      "overflow": 0,
+      "overflow_bytes": 0,
+      "overflow_count": 0,
+      "picks": 0,
+      "published_index": null,
+      "sched_version": 11,
+      "status": "empty"
+     },
+     {
+      "n_convs": 59,
+      "new_entries": 0,
+      "overflow": 0,
+      "overflow_bytes": 0,
+      "overflow_count": 0,
+      "picks": 0,
+      "published_index": null,
+      "sched_version": 12,
+      "status": "empty"
+     },
+     {
+      "n_convs": 64,
+      "new_entries": 0,
+      "overflow": 0,
+      "overflow_bytes": 0,
+      "overflow_count": 0,
+      "picks": 0,
+      "published_index": null,
+      "sched_version": 13,
+      "status": "empty"
+     },
+     {
+      "n_convs": 69,
+      "new_entries": 0,
+      "overflow": 0,
+      "overflow_bytes": 0,
+      "overflow_count": 0,
+      "picks": 0,
+      "published_index": null,
+      "sched_version": 14,
+      "status": "empty"
+     },
+     {
+      "n_convs": 74,
+      "new_entries": 0,
+      "overflow": 0,
+      "overflow_bytes": 0,
+      "overflow_count": 0,
+      "picks": 0,
+      "published_index": null,
+      "sched_version": 15,
+      "status": "empty"
+     },
+     {
+      "n_convs": 79,
+      "new_entries": 0,
+      "overflow": 0,
+      "overflow_bytes": 0,
+      "overflow_count": 0,
+      "picks": 0,
+      "published_index": null,
+      "sched_version": 16,
+      "status": "empty"
+     },
+     {
+      "n_convs": 84,
+      "new_entries": 0,
+      "overflow": 0,
+      "overflow_bytes": 0,
+      "overflow_count": 0,
+      "picks": 0,
+      "published_index": null,
+      "sched_version": 17,
+      "status": "empty"
+     },
+     {
+      "n_convs": 89,
+      "new_entries": 0,
+      "overflow": 0,
+      "overflow_bytes": 0,
+      "overflow_count": 0,
+      "picks": 0,
+      "published_index": null,
+      "sched_version": 18,
+      "status": "empty"
+     },
+     {
+      "n_convs": 94,
+      "new_entries": 0,
+      "overflow": 0,
+      "overflow_bytes": 0,
+      "overflow_count": 0,
+      "picks": 0,
+      "published_index": null,
+      "sched_version": 19,
+      "status": "empty"
+     },
+     {
+      "n_convs": 98,
+      "new_entries": 0,
+      "overflow": 0,
+      "overflow_bytes": 0,
+      "overflow_count": 0,
+      "picks": 0,
+      "published_index": null,
+      "sched_version": 20,
+      "status": "empty"
+     }
+    ],
+    "skipped_schedule_versions": [],
+    "trailing_skipped_schedule_versions": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12,
+     13,
+     14,
+     15,
+     16,
+     17,
+     18,
+     19,
+     20
+    ]
+   },
+   "joiner_published_indexes": [
+    0,
+    0,
+    0
+   ],
+   "primary": false,
+   "scenario": {
+    "V": 20,
+    "joiners": 3,
+    "participants": 10
+   }
+  }
+ ],
+ "spec": "E1F_PROPOSAL_DRAFT.md + E1F_AMENDMENT_A1_DRAFT.md",
+ "stage1": {
+  "coverage": 0.011599816957016826,
+  "covered_bytes": 3270,
+  "curation": {
+   "C": 50,
+   "L": 256,
+   "bodies_over_16384_skipped": 0,
+   "common_substring_candidates": 11,
+   "joiners": 0,
+   "k": 3,
+   "line_block_candidates": 0,
+   "literal_candidates": 1,
+   "messages": 187,
+   "n_convs": 98,
+   "oversized_bytes_excluded": 75183,
+   "oversized_messages_excluded": 1,
+   "picks": 1,
+   "template_candidates": 0,
+   "templates_discarded": 0
+  },
+  "definition": "covered bytes by REF spans of the arm-7 encoder / total bytes of eligible dev messages (<= 65,536 B), V=1 static repository from all dev, joiners 0",
+  "eligible_bytes": 281901,
+  "eligible_messages": 187,
+  "entries": 1,
+  "floor": 0.2,
+  "messages_with_refs": 3,
+  "oversized_excluded": {
+   "bytes": 75183,
+   "messages": 1
+  },
+  "passes_floor": false,
+  "refs": 3
+ },
+ "stage2": {
+  "average_ref_bytes_measured": 2.0,
+  "definition": "AMENDMENT A1 section 7 Stage 2: estimate = (eligible input bytes - covered bytes) + REFs x measured average REF bytes + 2 x eligible messages (0x01 discriminator + a ONE-byte epoch; assumes every message is sent compact) + measured length prefixes + measured control bytes + measured arm-7 sync; the variant adds 2 bytes per measured LIT segment (opcode + a one-byte length; understates LIT longer than 127 bytes). Approximate: ignores raw-envelope sends and the empty-repository case. Compared with the measured 4b-delta total; primary scenario; in-sample dev replay",
+  "estimate_below_4b_delta": false,
+  "estimate_total": 298363.0,
+  "estimate_total_with_lit_overhead_2_bytes_per_lit_segment": 298737.0,
+  "estimate_with_lit_overhead_below_4b_delta": false,
+  "measured_4b_delta_total": 148749,
+  "measured_arm6_total": 150205,
+  "measured_arm7_below_4b_delta": false,
+  "measured_arm7_total": 298865
+ },
+ "tuning": {
+  "chosen": {
+   "C": 50,
+   "L": 256,
+   "k": 3
+  },
+  "scores_mean_arm7_total_bytes": {
+   "L128_k2_C1000": 91853.25,
+   "L128_k2_C200": 91853.25,
+   "L128_k2_C50": 91853.25,
+   "L128_k3_C1000": 69465.75,
+   "L128_k3_C200": 69465.75,
+   "L128_k3_C50": 69465.75,
+   "L256_k2_C1000": 88205.25,
+   "L256_k2_C200": 88205.25,
+   "L256_k2_C50": 88205.25,
+   "L256_k3_C1000": 66735.75,
+   "L256_k3_C200": 66735.75,
+   "L256_k3_C50": 66735.75,
+   "L32_k2_C1000": 94129.0,
+   "L32_k2_C200": 94129.0,
+   "L32_k2_C50": 94129.0,
+   "L32_k3_C1000": 72032.5,
+   "L32_k3_C200": 72032.5,
+   "L32_k3_C50": 72032.5,
+   "L64_k2_C1000": 93355.75,
+   "L64_k2_C200": 93355.75,
+   "L64_k2_C50": 93355.75,
+   "L64_k3_C1000": 71137.25,
+   "L64_k3_C200": 71137.25,
+   "L64_k3_C50": 71137.25
+  },
+  "seconds": 3.0
+ }
+}
