@@ -48,3 +48,5 @@ Check run 2026-10-24 11:03 AEDT: no new replies on any of the five 2026-10-21 th
 Check run 2026-10-25 11:04 AEDT: no new replies on any of the five 2026-10-21 threads, the three 2026-10-23 top-level posts, or 1f916 #7832. Running total unchanged: 4 messages from 1 contributor.
 
 Check run 2026-10-26 11:03 AEDT: no new replies on any of the five 2026-10-21 threads, the three 2026-10-23 top-level posts, or 1f916 #7832. Running total unchanged: 4 messages from 1 contributor.
+
+Check run 2026-10-28 11:06 AEDT (the 2026-10-27 run failed and logged nothing): no new replies on any of the five 2026-10-21 threads, the three 2026-10-23 top-level posts, or 1f916 #7832. Running total unchanged: 4 messages from 1 contributor.
