@@ -1,5 +1,6 @@
 """Local span redaction. Patterns are defence in depth, not an anonymity proof."""
 import ast
+import ipaddress
 import re
 import unicodedata
 import urllib.parse
@@ -12,7 +13,7 @@ OBFUSCATED_EMAIL = re.compile(r"(?i)\b[\w.+-]+\s+(?:at|\[at\]|\(at\))\s+[\w-]+(?
 # Same decorator exemptions as the repository sanitiser, plus broadcast mentions.
 HANDLE = re.compile(r"(?<![\w@])@(?!(?:property|staticmethod|classmethod|dataclass|abstractmethod|here|channel)(?![\w.]))[\w][\w.-]*|(?<![\w/])u/[\w-]+", re.UNICODE)
 PHONE = re.compile(r"(?<![\w.])(?:\(\d{1,4}\)[ \t]*\d|\+?\d)[\d ()\t.-]{5,}\d(?!\w|\.\d)")
-NUMERIC_CONTEXT = re.compile(r"(?<![\w.])(?:\d{4}-\d{2}-\d{2}|(?!\d{3}\.\d{3}\.\d{4}(?!\w|\.\d))\d+(?:\.\d+)+)(?!\w|\.\d)")
+NUMERIC_CONTEXT = re.compile(r"(?<![\w.+])(?:\d{4}-\d{2}-\d{2}|\+?\d+(?:\.\d+)+)(?!\w|\.\d)")
 URL = re.compile(r'''(?i)\b(?:[a-z][a-z0-9+.-]*://|www\.)[^\s<>"'`]+|(?<![\w@.-])(?:[a-z0-9-]+\.)+(?:com|org|net|io|dev|ai|app|co|edu|gov|au|uk|me|info|xyz|invalid|example)\b(?:/[^\s<>"'`]*)?''')
 KEY = re.compile(r"(?i)\b(?:sk_(?:live|test)_|sk-|gh[pousr]_|github_pat_|glpat-|xox[baprs]-|hf_|AKIA|ASIA|AIza)[A-Za-z0-9_/-]{8,}|\beyJ[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+")
 PEM = re.compile(r"-----BEGIN [^-\r\n]+-----.*?(?:-----END [^-\r\n]+-----|\Z)", re.S)
@@ -73,28 +74,53 @@ def canonical_scan_text(text):
 
 
 
-def _dotted_decorator(text, match):
-    """Require a valid decorator line followed by a declaration, allowing decorator chains."""
-    token = match[0]
-    if not token.startswith("@") or "." not in token:
-        return False
-    line_start = text.rfind("\n", 0, match.start()) + 1
-    if text[line_start:match.start()].strip():
-        return False
-    lines = text[line_start:].splitlines()
-    for index, line in enumerate(lines):
+def _dotted_decorator_starts(text):
+    """Classify each decorator line once, working backward from declarations."""
+    lines, offset = [], 0
+    for line in text.splitlines(keepends=True):
+        lines.append((offset, line))
+        offset += len(line)
+    starts, declaration_follows = set(), False
+    for offset, line in reversed(lines):
         value = line.strip()
         if not value:
             continue
-        if value.startswith("@"):
-            try:
-                # Parse syntax only: never evaluate a decorator or its arguments.
-                ast.parse(value + "\ndef _glyph_placeholder():\n    pass\n")
-            except (SyntaxError, ValueError, RecursionError):
-                return False
+        if not value.startswith("@"):
+            declaration_follows = bool(re.match(r"(?:async\s+def|def|class)\s+", value))
             continue
-        return index > 0 and bool(re.match(r"(?:async\s+def|def|class)\s+", value))
-    return False
+        try:
+            # Syntax only; never evaluate decorators or their arguments.
+            ast.parse(value + "\ndef _glyph_placeholder():\n    pass\n")
+        except (SyntaxError, ValueError, RecursionError):
+            declaration_follows = False
+            continue
+        if declaration_follows:
+            starts.add(offset + len(line) - len(line.lstrip()))
+    return starts
+
+
+def _dotted_phone(value):
+    """Resolve dotted numeric ambiguity conservatively, preserving valid IPv4 first."""
+    if value.startswith("+"):
+        return True
+    try:
+        ipaddress.IPv4Address(value)
+        return False
+    except ipaddress.AddressValueError:
+        pass
+    groups = value.split(".")
+    sizes = tuple(map(len, groups))
+    return (value.startswith("0")
+            or any(len(group) > 1 and group.startswith("0") for group in groups[1:])
+            or sizes == (3, 3, 4)
+            or (groups[0] == "1" and sizes == (1, 3, 3, 4)))
+
+
+def _protected_numeric_matches(text):
+    for match in NUMERIC_CONTEXT.finditer(text):
+        if "." in match[0] and _dotted_phone(match[0]):
+            continue
+        yield match
 
 
 def _nonliteral_credential(tail):
@@ -176,14 +202,16 @@ def _findings(text, allow_handles=(), extra_terms=()):
             yield m.start(), m.end(), "opaque-token"
     # Split around dates, versions and IP addresses so they cannot be swallowed by a phone match.
     pos = 0
-    for protected in list(NUMERIC_CONTEXT.finditer(text)) + [None]:
+    for protected in list(_protected_numeric_matches(text)) + [None]:
         end = protected.start() if protected else len(text)
         for m in PHONE.finditer(text[pos:end]):
             if 7 <= sum(c.isdigit() for c in m[0]) <= 18:
                 yield pos + m.start(), pos + m.end(), "phone"
         pos = protected.end() if protected else len(text)
+    decorator_starts = _dotted_decorator_starts(text) if "@" in text else set()
     for m in HANDLE.finditer(text):
-        if m[0].casefold() not in allowed and not _dotted_decorator(text, m):
+        decorator = "." in m[0] and m.start() in decorator_starts
+        if m[0].casefold() not in allowed and not decorator:
             yield m.start(), m.end(), "handle"
     for a, b in _credential_spans(text):
         yield a, b, "credential-value"

@@ -15,7 +15,7 @@ from errors import KitError
 from formats import MAX_INPUT, check_text, parse, LABEL
 from scrub import scrub, scan, safe_display
 
-VERSION = "4"
+VERSION = "5"
 GENERIC_ROLES = frozenset("planner worker reviewer orchestrator coordinator assistant user tool agent sender receiver system developer client server manager executor researcher supervisor controller contributor collector unknown".split())
 GENERIC_KINDS = frozenset("handoff result task status chat tool_result tool_call delegation request response message report update error".split())
 
