@@ -1,0 +1,46 @@
+{
+ "all_round_trips_exact": true,
+ "bytes_full_64hex": {
+  "raw_envelope_total_if_all_raw": 47194,
+  "raw_message_total": 32225,
+  "ref_messages_raw_total": 1415,
+  "ref_messages_wire_total": 5134,
+  "wire_total": 50058
+ },
+ "conversations": 30,
+ "data": "data/synthetic_gpt_r1.jsonl",
+ "dictionary": {
+  "entries": 8,
+  "full_snapshot_bytes": 2407,
+  "literal": 5,
+  "template": 3
+ },
+ "encoded_as_ref": 19,
+ "excess_breakdown_full_64hex": {
+  "hex_digit_bytes_in_refs_total": 2432,
+  "note": "hex digits are part of the excess; the remainder is keys, prefixes, ids, versions, args, quoting/escaping, not separated here",
+  "ref_excess_over_raw_message_bytes_total": 3719
+ },
+ "full_64hex": {
+  "ref_wire_gt_raw_envelope_bytes": 19,
+  "ref_wire_gt_raw_message_bytes": 19
+ },
+ "hypothetical_12hex": {
+  "note": "HYPOTHETICAL: arithmetic only, 2 digests x 52 hex chars removed, sha256: prefix kept; no such format exists",
+  "ref_wire_gt_raw_envelope_bytes": 19,
+  "ref_wire_gt_raw_message_bytes": 19
+ },
+ "hypothetical_8hex": {
+  "note": "HYPOTHETICAL: arithmetic only, 2 digests x 56 hex chars removed, sha256: prefix kept; no such format exists",
+  "ref_wire_gt_raw_envelope_bytes": 19,
+  "ref_wire_gt_raw_message_bytes": 19
+ },
+ "hypothetical_no_digest_fields_values": {
+  "note": "HYPOTHETICAL: both digest values removed entirely (quotes, sha256: prefix and 64 hex); keys, ids, versions, args and framing remain; does not isolate escaping",
+  "ref_wire_gt_raw_envelope_bytes": 9,
+  "ref_wire_gt_raw_message_bytes": 19
+ },
+ "label": "DEVELOPMENT DIAGNOSTIC ONLY - synthetic GPT-generated data, in-sample dictionary, NOT a savings claim",
+ "messages": 300,
+ "sent_raw": 281
+}
