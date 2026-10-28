@@ -10,7 +10,7 @@ EMAIL = re.compile(r'''(?<![\w.!#$%&'*+/=?^`{|}~-])(?:"[^"\r\n]+"|[\w.!#$%&'*+/=
 OBFUSCATED_EMAIL = re.compile(r"(?i)\b[\w.+-]+\s+(?:at|\[at\]|\(at\))\s+[\w-]+(?:\s+(?:dot|\[dot\]|\(dot\))\s+[\w-]+)+\b")
 # Same decorator exemptions as the repository sanitiser, plus broadcast mentions.
 HANDLE = re.compile(r"(?<![\w@])@(?!(?:property|staticmethod|classmethod|dataclass|abstractmethod|here|channel)(?![\w.]))[\w][\w.-]*|(?<![\w/])u/[\w-]+", re.UNICODE)
-PHONE = re.compile(r"(?<![\w.])(?:\(\d{1,4}\)[ \t]*\d|\+?\d)[\d ()\t.-]{5,}\d(?![\w.])")
+PHONE = re.compile(r"(?<![\w.])(?:\(\d{1,4}\)[ \t]*\d|\+?\d)[\d ()\t.-]{5,}\d(?!\w|\.\d)")
 NUMERIC_CONTEXT = re.compile(r"(?<!\w)(?:\d{4}-\d{2}-\d{2}|\d+(?:\.\d+)+)(?!\w)")
 URL = re.compile(r'''(?i)\b(?:[a-z][a-z0-9+.-]*://|www\.)[^\s<>"'`]+|(?<![\w@.-])(?:[a-z0-9-]+\.)+(?:com|org|net|io|dev|ai|app|co|edu|gov|au|uk|me|info|xyz|invalid|example)\b(?:/[^\s<>"'`]*)?''')
 KEY = re.compile(r"(?i)\b(?:sk_(?:live|test)_|sk-|gh[pousr]_|github_pat_|glpat-|xox[baprs]-|hf_|AKIA|ASIA|AIza)[A-Za-z0-9_/-]{8,}|\beyJ[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+")
@@ -19,11 +19,12 @@ SSH = re.compile(r"\b(?:ssh-rsa|ssh-ed25519|ecdsa-sha2-[\w-]+)[ \t]+[A-Za-z0-9+/
 UUID = re.compile(r"(?i)\b[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}\b")
 # Do not treat ordinary long snake_case identifiers as secrets.
 OPAQUE = re.compile(r"(?<![\w])(?:[A-Fa-f0-9]{32,}|[A-Za-z0-9+/=]{40,})(?![\w])")
-CREDENTIAL = re.compile(r'''(?ix)(?<![\w])(?:\\?["']?)(?P<key>[\w.-]*?(?:token|secret[_-]?key|secret|password|passwd|passphrase|pass|pwd|api[_-]?key|private[_-]?key|session[_-]?(?:id|key)|credentials?|cookie|authorization|authentication))(?:\\?["']?)[ \t]*[=:][ \t]*''')
+CREDENTIAL = re.compile(r'''(?ix)(?<![\w])(?:\\?["']?)(?P<key>[\w.-]*?(?:token|secret[_-]?key|secret|password|passwd|passphrase|pass|pwd|api[_-]?key|private[_-]?key|session[_-]?(?:id|key)|credentials?|cookie|authorization|authentication))(?:\\?["']?)[ \t]*(?P<separator>==|!=|=|:)[ \t]*''')
+USER_HOST = re.compile(r"(?<![\w@])[-\w.+]+@[-\w]+(?:\.[-\w]+)*(?![\w@])")
 AUTH = re.compile(r"(?i)(?<![/\w])(?:Bearer|Basic)[ \t]+[^\s<>]+")
 CLI_SECRET = re.compile(r'''(?i)(?:--(?:password|token|secret|api-key)(?:=|[ \t]+)|(?<!\w)-u[ \t]+)(?P<value>"[^"\r\n]*"|'[^'\r\n]*'|[^\s]+)''')
 HOME = re.compile(r'''(?i)(?<![\w])(?:[A-Z]:[\\/](?:Users|Documents and Settings)[\\/][^\s/\\"'<>]+|/(?:home|Users)/[^\s/"'<>]+|/root(?=/|\b)|~/[^\s/"'<>]+)(?:[/\\][^\s"'<>]*)?''')
-PATTERNS = (("URL", URL), ("email", EMAIL), ("obfuscated-email", OBFUSCATED_EMAIL),
+PATTERNS = (("URL", URL), ("email", EMAIL), ("user-host", USER_HOST), ("obfuscated-email", OBFUSCATED_EMAIL),
             ("key", KEY), ("private-key", PEM), ("ssh-key", SSH), ("uuid", UUID),
             ("authorization", AUTH), ("command-credential", CLI_SECRET), ("home-path", HOME))
 
@@ -70,6 +71,29 @@ def canonical_scan_text(text):
     return _canonical_with_spans(text)[0]
 
 
+
+def _dotted_decorator(text, match):
+    """Exempt decorator syntax, not dotted mentions embedded in prose."""
+    token = match[0]
+    if not token.startswith("@") or "." not in token:
+        return False
+    line_start = text.rfind("\n", 0, match.start()) + 1
+    if text[line_start:match.start()].strip():
+        return False
+    tail = text[match.end():].split("\n", 1)[0].strip()
+    return tail.startswith("(") or (not tail and token.startswith("@pytest."))
+
+
+def _nonliteral_credential(tail):
+    # Environment lookups contain a variable name, not the secret value itself.
+    lookup = re.match(r"""(?:os\.environ\s*\[\s*(['"])[\w.-]+\1\s*\]|os\.getenv\s*\(\s*(['"])[\w.-]+\2\s*\))""", tail)
+    return bool(lookup and re.fullmatch(r"[\s,}\]]*", tail[lookup.end():]))
+
+
+def _type_hint(tail):
+    return bool(re.fullmatch(r"(?:str|bytes|int|float|bool|list|dict|set|tuple|object|Optional|Union|Literal)(?:\[[\w\[\], .|]+\])?(?:[ \t]*\|[ \t]*(?:None|str|bytes))*[ \t]*(?:#.*)?", tail))
+
+
 def _credential_spans(text):
     lines = text.splitlines(keepends=True)
     offset, block_indent = 0, None
@@ -96,6 +120,10 @@ def _credential_spans(text):
                 block_indent = indent
                 continue
             if m[0].rstrip().endswith(":") and re.match(r"^\s*(?:if|elif|while)\s+", body) and ":" not in body[:m.start()]:
+                continue
+            if m["separator"] == ":" and not body[:m.start()].strip() and m[0].lstrip()[0] not in "\\\"'" and _type_hint(tail):
+                continue
+            if _nonliteral_credential(tail):
                 continue
             if tail.startswith(('\\"', "\\'")):
                 close = body.find(tail[:2], start + 2)
@@ -142,7 +170,7 @@ def _findings(text, allow_handles=(), extra_terms=()):
                 yield pos + m.start(), pos + m.end(), "phone"
         pos = protected.end() if protected else len(text)
     for m in HANDLE.finditer(text):
-        if m[0].casefold() not in allowed:
+        if m[0].casefold() not in allowed and not _dotted_decorator(text, m):
             yield m.start(), m.end(), "handle"
     for a, b in _credential_spans(text):
         yield a, b, "credential-value"

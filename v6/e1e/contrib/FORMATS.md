@@ -76,7 +76,7 @@ The output is ordinary JSONL with the existing core fields `conv_id`, `seq`, `se
 `text`, `synthetic=false`. Intake metadata is attached to **each row**, so privacy instructions cannot be separated
 from messages simply by splitting the file:
 
-- `sanitised=true`, `scrubber_version="2"`, `source_type`, and an intake-only `provenance` description;
+- `sanitised=true`, `scrubber_version="3"`, `source_type`, and an intake-only `provenance` description;
 - random `contribution_id` and `contributor_id`; conversations remapped under the contribution ID, sequences start at 1;
 - `consent`: publication (`raw`/`private`), use (`byte-savings-research`), credit (`type`, `value`), date, and explicit
   `permission_attested`/`agent_traffic_attested` flags.
@@ -104,7 +104,7 @@ Redactions replace matched source spans, including spans mapped from supported U
 compatibility characters; unrelated Unicode, JSON fields and line endings stay intact. Credential scalars and
 explicit YAML block scalars are scrubbed, while empty mapping containers and Python condition headers are kept.
 ISO dates, dotted versions and IP addresses are not classified as phones; use `--redact` for sensitive values in
-these categories. Decorators exempted by the repository sanitiser and `@here`/`@channel` are retained. Common
+these categories. Known decorators, dotted decorator syntax such as `@pytest.fixture` / `@app.route(...)`, and `@here`/`@channel` are retained. Bare built-in type hints and environment-variable lookups are preserved; literal credential comparisons are scrubbed. Common
 scheme-less domains, known key prefixes, credential assignments/flags, UUIDs, obfuscated emails, SSH keys and home
 paths are covered, but neither this list nor its regexes is exhaustive. Long plain/snake_case identifiers are not
 blanket-redacted solely for length. No third-party API, model, tokenizer or network service is used.

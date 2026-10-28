@@ -193,7 +193,7 @@ class ImportRegressions(unittest.TestCase):
             result = subprocess.run([sys.executable, str(KIT / "contribute.py"), str(path), "--format", "chatgpt", "--dry-run"], capture_output=True, text=True)
         self.assertEqual(result.returncode, 2)
         self.assertIn("rule chatgpt-author", result.stderr)
-        self.assertIn("message 2", result.stderr)
+        self.assertIn("message 1", result.stderr)
         self.assertNotIn("Traceback", result.stderr)
         self.assertNotIn("DO-NOT-PRINT", result.stdout + result.stderr)
 

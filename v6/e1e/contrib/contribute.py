@@ -15,7 +15,7 @@ from errors import KitError
 from formats import MAX_INPUT, check_text, parse, LABEL
 from scrub import scrub, scan, safe_display
 
-VERSION = "2"
+VERSION = "3"
 GENERIC_ROLES = frozenset("planner worker reviewer orchestrator coordinator assistant user tool agent sender receiver system developer client server manager executor researcher supervisor controller contributor collector unknown".split())
 GENERIC_KINDS = frozenset("handoff result task status chat tool_result tool_call delegation request response message report update error".split())
 
@@ -202,7 +202,7 @@ def main(argv=None):
     if a.conversations:
         try:
             selection = {int(s) for s in a.conversations.split(",")}
-        except ValueError as exc:
+        except ValueError:
             raise KitError("conversation-selection", "Conversation selection must contain numbers.") from None
         if not selection or any(n < 1 for n in selection):
             raise KitError("conversation-selection", "Conversation numbers must be positive.")

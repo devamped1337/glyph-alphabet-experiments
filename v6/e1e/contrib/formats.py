@@ -95,9 +95,11 @@ def chatgpt(text, selection=None):
             chain.append(node.get("message"))
             cursor = node.get("parent")
         seq = 0
-        for mi, message in enumerate(reversed(chain), 1):
+        mi = 0
+        for message in reversed(chain):
             if message is None:
-                continue  # root placeholders carry no message
+                continue  # root placeholders do not count as messages
+            mi += 1
             if not isinstance(message, dict):
                 raise KitError("chatgpt-message", "Expected a message object.", mi)
             author = message.get("author")
@@ -174,7 +176,7 @@ def parse(raw, kind, selection=None):
         raise KitError("input-size", "Input exceeds 32 MiB; export a selected subset.")
     try:
         text = raw.decode("utf-8-sig")  # optional file BOM; message BOMs remain untouched
-    except UnicodeError as exc:
+    except UnicodeError:
         raise KitError("input-encoding", "Input must be UTF-8; no replacement decoding is performed.") from None
     try:
         if kind == "chatgpt":
