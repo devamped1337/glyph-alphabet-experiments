@@ -52,7 +52,7 @@ class ReReview(unittest.TestCase):
             s.scan(s.scrub(value))
 
     def test_dotted_decorator_context_preserved_but_prose_handles_scrubbed(self):
-        for value in ("@pytest.fixture\n", "@pytest.mark.slow\ndef test_example():\n    pass\n", '@app.route("/")\ndef index():\n    pass\n'):
+        for value in ("@pytest.fixture\ndef test_fixture():\n    pass\n", "@pytest.mark.slow\ndef test_example():\n    pass\n", '@app.route("/")\ndef index():\n    pass\n'):
             self.assertEqual(s.scrub(value), value)
             s.scan(value)
         self.assertEqual(s.scrub("Ping @person.other please."), "Ping <REDACTED> please.")

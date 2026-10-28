@@ -1,4 +1,5 @@
 """Local span redaction. Patterns are defence in depth, not an anonymity proof."""
+import ast
 import re
 import unicodedata
 import urllib.parse
@@ -11,7 +12,7 @@ OBFUSCATED_EMAIL = re.compile(r"(?i)\b[\w.+-]+\s+(?:at|\[at\]|\(at\))\s+[\w-]+(?
 # Same decorator exemptions as the repository sanitiser, plus broadcast mentions.
 HANDLE = re.compile(r"(?<![\w@])@(?!(?:property|staticmethod|classmethod|dataclass|abstractmethod|here|channel)(?![\w.]))[\w][\w.-]*|(?<![\w/])u/[\w-]+", re.UNICODE)
 PHONE = re.compile(r"(?<![\w.])(?:\(\d{1,4}\)[ \t]*\d|\+?\d)[\d ()\t.-]{5,}\d(?!\w|\.\d)")
-NUMERIC_CONTEXT = re.compile(r"(?<!\w)(?:\d{4}-\d{2}-\d{2}|\d+(?:\.\d+)+)(?!\w)")
+NUMERIC_CONTEXT = re.compile(r"(?<![\w.])(?:\d{4}-\d{2}-\d{2}|(?!\d{3}\.\d{3}\.\d{4}(?!\w|\.\d))\d+(?:\.\d+)+)(?!\w|\.\d)")
 URL = re.compile(r'''(?i)\b(?:[a-z][a-z0-9+.-]*://|www\.)[^\s<>"'`]+|(?<![\w@.-])(?:[a-z0-9-]+\.)+(?:com|org|net|io|dev|ai|app|co|edu|gov|au|uk|me|info|xyz|invalid|example)\b(?:/[^\s<>"'`]*)?''')
 KEY = re.compile(r"(?i)\b(?:sk_(?:live|test)_|sk-|gh[pousr]_|github_pat_|glpat-|xox[baprs]-|hf_|AKIA|ASIA|AIza)[A-Za-z0-9_/-]{8,}|\beyJ[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+")
 PEM = re.compile(r"-----BEGIN [^-\r\n]+-----.*?(?:-----END [^-\r\n]+-----|\Z)", re.S)
@@ -73,15 +74,27 @@ def canonical_scan_text(text):
 
 
 def _dotted_decorator(text, match):
-    """Exempt decorator syntax, not dotted mentions embedded in prose."""
+    """Require a valid decorator line followed by a declaration, allowing decorator chains."""
     token = match[0]
     if not token.startswith("@") or "." not in token:
         return False
     line_start = text.rfind("\n", 0, match.start()) + 1
     if text[line_start:match.start()].strip():
         return False
-    tail = text[match.end():].split("\n", 1)[0].strip()
-    return tail.startswith("(") or (not tail and token.startswith("@pytest."))
+    lines = text[line_start:].splitlines()
+    for index, line in enumerate(lines):
+        value = line.strip()
+        if not value:
+            continue
+        if value.startswith("@"):
+            try:
+                # Parse syntax only: never evaluate a decorator or its arguments.
+                ast.parse(value + "\ndef _glyph_placeholder():\n    pass\n")
+            except (SyntaxError, ValueError, RecursionError):
+                return False
+            continue
+        return index > 0 and bool(re.match(r"(?:async\s+def|def|class)\s+", value))
+    return False
 
 
 def _nonliteral_credential(tail):
