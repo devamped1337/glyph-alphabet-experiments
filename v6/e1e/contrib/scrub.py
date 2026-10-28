@@ -205,7 +205,9 @@ def _findings(text, allow_handles=(), extra_terms=()):
     for protected in list(_protected_numeric_matches(text)) + [None]:
         end = protected.start() if protected else len(text)
         for m in PHONE.finditer(text[pos:end]):
-            if 7 <= sum(c.isdigit() for c in m[0]) <= 18:
+            # Adjacent phones can merge into a candidate longer than 18 digits.
+            # Redact the whole candidate rather than dropping it as implausibly long.
+            if sum(c.isdigit() for c in m[0]) >= 7:
                 yield pos + m.start(), pos + m.end(), "phone"
         pos = protected.end() if protected else len(text)
     decorator_starts = _dotted_decorator_starts(text) if "@" in text else set()
