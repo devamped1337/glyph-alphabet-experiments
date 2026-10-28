@@ -76,7 +76,7 @@ The output is ordinary JSONL with the existing core fields `conv_id`, `seq`, `se
 `text`, `synthetic=false`. Intake metadata is attached to **each row**, so privacy instructions cannot be separated
 from messages simply by splitting the file:
 
-- `sanitised=true`, `scrubber_version="6"`, `source_type`, and an intake-only `provenance` description;
+- `sanitised=true`, `scrubber_version="7"`, `source_type`, and an intake-only `provenance` description;
 - random `contribution_id` and `contributor_id`; conversations remapped under the contribution ID, sequences start at 1;
 - `consent`: publication (`raw`/`private`), use (`byte-savings-research`), credit (`type`, `value`), date, and explicit
   `permission_attested`/`agent_traffic_attested` flags.
@@ -118,13 +118,18 @@ blanket-redacted solely for length. No third-party API, model, tokenizer or netw
 Phone candidates with seven or more digits are redacted even when the pattern joins several adjacent phone
 numbers into one long run. The entire candidate is removed; separators inside it may also be removed. This is
 conservative and can over-redact long harmless digit runs. Recognized version/date/IPv4 spans are still excluded
-before phone matching.
+before phone matching. Unicode dashes `‐ ‑ ‒ – — −` are folded to `-` for detection, including
+supported Unicode/percent escapes; the matched original source span is redacted. Unmatched punctuation is kept.
+Searches that require `@`, whitespace or credential separators are skipped when those characters are absent;
+this avoids the reported repeated-dot stall without imposing credential/username length caps.
 
 Known numeric ambiguities remain: unprefixed dotted phones such as `61.412.345.678`, `44.7911.123456` and
 `555.1234` can be preserved as versions. Inspect for these and use exact `--redact` terms or edit a private source
 copy before sharing. Conversely, the dotted date `2024.01.15` is treated as phone-like and redacted; inspect the
 local diff for this known false positive. The final scan uses the same numeric classification and cannot resolve
-these ambiguities for you.
+these ambiguities for you. Phones separated by `/`, `_` or `·` are not reliably detected; inspect for these
+and use exact `--redact` terms or edit a private source copy. Other adversarial inputs can still be slow; the
+separator prechecks are not a general regex runtime bound.
 
 Output is refused inside git checkouts (including `.git` files used by linked worktrees), bare repositories and
 symlink paths into them. The exclusive create still protects existing files and symlinks, and destination checks

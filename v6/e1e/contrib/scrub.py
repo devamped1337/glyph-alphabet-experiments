@@ -39,7 +39,7 @@ def _canonical_with_spans(text):
         for c, start, end in chars:
             for d in unicodedata.normalize("NFKC", c):
                 if unicodedata.category(d) != "Cf":
-                    normal.append((d, start, end))
+                    normal.append(("-" if d in "‐‑‒–—−" else d, start, end))
         value = "".join(c for c, _, _ in normal)
         out, pos = [], 0
         for m in re.finditer(r"(?:%[0-9a-fA-F]{2})+|\\u[0-9a-fA-F]{4}|\\x[0-9a-fA-F]{2}", value):
@@ -149,7 +149,8 @@ def _credential_spans(text):
                 offset += len(line)
                 continue
             block_indent = None
-        for m in CREDENTIAL.finditer(body):
+        # Without an assignment/comparison separator no credential pattern can match.
+        for m in CREDENTIAL.finditer(body) if "=" in body or ":" in body else ():
             start = m.end()
             tail = body[start:]
             # Empty YAML containers and Python control-flow headers have no scalar secret.
@@ -189,6 +190,11 @@ def _credential_spans(text):
 def _findings(text, allow_handles=(), extra_terms=()):
     allowed = {h.casefold() for h in allow_handles}
     for rule, pattern in PATTERNS:
+        # Cheap necessary conditions avoid rescanning long punctuation runs.
+        if rule in ("email", "user-host") and "@" not in text:
+            continue
+        if rule == "obfuscated-email" and not re.search(r"\s", text):
+            continue
         for m in pattern.finditer(text):
             if rule == "command-credential":
                 if m["value"] != PLACEHOLDER:
