@@ -1,12 +1,9 @@
 """Synthetic byte fixtures and security/consent regressions; no real contributor data."""
 import contextlib
-import datetime
-import importlib.util
 import io
 import json
 from pathlib import Path
 import socket
-import subprocess
 import sys
 import tempfile
 import unittest
@@ -77,11 +74,11 @@ class Formats(unittest.TestCase):
         with self.assertRaises(ValueError): f.parse(b"user: ambiguous transcript", "text")
 
     def chat(self, content=None):
-        def message(role, text): return dict(author=dict(role=role), content=dict(content_type="text", parts=[text]))
+        def message(role, text): return dict(author=dict(role=role), recipient="tool" if role == "assistant" else "assistant", content=dict(content_type="text", parts=[text]))
         return dict(current_node="selected", mapping={
             "root": dict(parent=None, message=None),
-            "prompt": dict(parent="root", message=message("user", "Task\r\n")),
-            "selected": dict(parent="prompt", message=content or message("assistant", "Done\u0301")),
+            "prompt": dict(parent="root", message=message("assistant", "Task\r\n")),
+            "selected": dict(parent="prompt", message=content or message("tool", "Done\u0301")),
             "alternative": dict(parent="prompt", message=message("assistant", "DO NOT INCLUDE THIS BRANCH"))})
 
     def test_chatgpt_only_current_branch_and_no_ids_titles(self):
@@ -90,12 +87,13 @@ class Formats(unittest.TestCase):
         self.assertEqual([r["text"] for r in parsed], ["Task\r\n", "Done\u0301"])
         self.assertNotIn("Private name", json.dumps(parsed))
 
-    def test_chatgpt_rejects_broken_cycles_nontext(self):
+    def test_chatgpt_rejects_broken_cycles_and_skips_nontext(self):
         cycle = self.chat(); cycle["mapping"]["prompt"]["parent"] = "selected"
         broken = self.chat(); broken["current_node"] = "missing"
         image = self.chat(dict(author=dict(role="user"), content=dict(content_type="text", parts=[{}])))
-        for conv in (cycle, broken, image):
+        for conv in (cycle, broken):
             with self.assertRaises(ValueError): f.chatgpt(json.dumps(conv))
+        self.assertEqual([r["text"] for r in f.chatgpt(json.dumps(image))], ["Task\r\n"])
 
 
 class Scrubber(unittest.TestCase):
@@ -130,7 +128,7 @@ class Scrubber(unittest.TestCase):
             # Either scrubbed completely or final validation refuses it.
             try: s.scan(clean)
             except ValueError: pass
-            else: self.assertEqual(clean, "<REDACTED>")
+            else: self.assertEqual(clean, "password%3D<REDACTED>" if value == "password%3Dviolet" else "<REDACTED>")
 
     def test_extra_names_and_terminal_escape(self):
         self.assertEqual(s.scrub("Alice met ALICE", extra_terms=["Alice"]), "<REDACTED> met <REDACTED>")

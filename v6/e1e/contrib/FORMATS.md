@@ -6,13 +6,15 @@
 py -3 contribute.py "messages.jsonl" --format jsonl --redact "Alice Example" --redact "12 Example Street" --allow-handle "@public_agent" --output "C:\Users\You\submission.jsonl"
 ```
 
-- `--redact` removes that literal term, case-insensitively; repeat for names, addresses, projects, account numbers, etc.
+- `--redact` removes that literal term from message bodies (including supported encoded forms), case-insensitively;
+  matching role/type labels are anonymised too. Repeat for names, addresses, projects, account numbers, etc.
   Remember that command arguments can appear in your local shell history. For sensitive terms, edit a **private copy**
   of the source first instead.
 - `--allow-handle` keeps only that exact handle, case-insensitively. It is not a wildcard or a secrets-scan bypass.
 - `--conversations 1,3` selects conversations by their first-appearance order in the input. Their original IDs/titles
   are not copied into the submission. Use the same complete export when selecting related portions; do not split a
-  single workflow into invented “conversations” to inflate counts.
+  single workflow into invented “conversations” to inflate counts. ChatGPT selection is applied before branch/message
+  validation, using original export positions even when an earlier conversation has no eligible text.
 - `--contributor-id c-<32 hex digits>` reuses the ID printed in your previous file, so the collector counts you once
   across submissions. If omitted, a new random ID is made. Tell the collector if you previously contributed under
   another ID. IDs are pseudonyms, not identity verification.
@@ -28,17 +30,28 @@ py -3 contribute.py "messages.jsonl" --format jsonl --redact "Alice Example" --r
 
 These are **synthetic documentation examples**, not contributions. `seq` is a positive integer unique within a
 conversation. Interleaved rows are grouped by conversation and ordered by sequence. Use generic roles/types, not
-personal names. Missing required fields, duplicate JSON keys, duplicate sequence numbers, non-UTF-8 input, lone
+personal names. Labels outside the fixed generic vocabulary in `contribute.py` are consistently anonymised as
+`agent-N` or `type-N`; generated labels avoid collisions with existing generic numbered labels. Missing required fields, duplicate JSON keys, duplicate sequence numbers, non-UTF-8 input, lone
 surrogates, synthetic/dev-only flags, and messages above E1e's existing **65,536 UTF-8-byte** boundary are refused.
 Unrecognized input metadata is discarded rather than copied, including original IDs, timestamps, titles and paths.
 Missing `synthetic`/`dev_only` fields do not establish provenance; your explicit attestations are still required.
 
-**ChatGPT JSON:** supply the locally extracted `conversations.json`, or a single conversation object containing
-`mapping` and `current_node`. Only the parent chain ending at `current_node` is used; abandoned alternatives are
-excluded. Text parts are joined without added separators, and role labels are retained. Platform system messages
-are excluded. Non-text/image/attachment content and broken/cyclic branches are refused rather than silently
-flattened. The kit does not download or unzip an account export, infer tool-call structure, or reinterpret human
-messages as agent traffic. For unsupported content, prepare a curated JSONL file with the real message boundaries.
+**ChatGPT JSON (limited tool-traffic importer):** supply locally extracted `conversations.json`, or a single
+conversation object containing `mapping` and `current_node`. Conversation selection uses original list positions;
+unselected branches/messages are not validated. For each selected conversation, only the parent chain ending at
+`current_node` is used; abandoned alternatives are excluded. Broken/cyclic branches and malformed/null author or
+content objects are refused with content-free errors.
+
+Only text messages whose author role is `tool`, or `assistant` with an explicit tool recipient (not `all`/`user`),
+are retained. They become generic `tool_result` / `tool_call` messages; tool names are not copied. Text parts are
+joined without added separators. Human prompts, normal final replies, system/developer instructions, reasoning,
+code/execution-output content, image/attachment/mixed parts and empty messages are skipped, with a summary count.
+Messages with non-text content are not flattened or partly retained. Sequence numbers count only retained messages.
+
+Ordinary human-to-assistant chats are **ineligible**, and human-only exports are refused. An export may qualify
+only for real, permitted tool traffic; an explicit recipient is a structural filter, not proof of provenance or
+permission. The contributor attests and the collector checks. The kit does not download/unzip exports or infer
+missing tool-call structure. Curate unsupported real agent messages as JSONL without changing their boundaries.
 
 **Pasted text or UTF-8 `.txt`:** use these exact delimiter lines:
 
@@ -63,7 +76,7 @@ The output is ordinary JSONL with the existing core fields `conv_id`, `seq`, `se
 `text`, `synthetic=false`. Intake metadata is attached to **each row**, so privacy instructions cannot be separated
 from messages simply by splitting the file:
 
-- `sanitised=true`, `scrubber_version`, `source_type`, and an intake-only `provenance` description;
+- `sanitised=true`, `scrubber_version="2"`, `source_type`, and an intake-only `provenance` description;
 - random `contribution_id` and `contributor_id`; conversations remapped under the contribution ID, sequences start at 1;
 - `consent`: publication (`raw`/`private`), use (`byte-savings-research`), credit (`type`, `value`), date, and explicit
   `permission_attested`/`agent_traffic_attested` flags.
@@ -87,7 +100,19 @@ escape automated detection. You must inspect the full preview. Remove more from 
 needed. The independent final scan refuses detected leftovers, including several percent/Unicode-escaped forms;
 it is **not a guarantee that every possible secret has been found**. Conservative rules can also remove harmless
 hashes, IDs, numbers or code; this changes compressibility. Do not undo a redaction just to improve study results.
-No third-party API, model, tokenizer or network service is used.
+Redactions replace matched source spans, including spans mapped from supported Unicode/percent escapes and
+compatibility characters; unrelated Unicode, JSON fields and line endings stay intact. Credential scalars and
+explicit YAML block scalars are scrubbed, while empty mapping containers and Python condition headers are kept.
+ISO dates, dotted versions and IP addresses are not classified as phones; use `--redact` for sensitive values in
+these categories. Decorators exempted by the repository sanitiser and `@here`/`@channel` are retained. Common
+scheme-less domains, known key prefixes, credential assignments/flags, UUIDs, obfuscated emails, SSH keys and home
+paths are covered, but neither this list nor its regexes is exhaustive. Long plain/snake_case identifiers are not
+blanket-redacted solely for length. No third-party API, model, tokenizer or network service is used.
+
+Output is refused inside git checkouts (including `.git` files used by linked worktrees), bare repositories and
+symlink paths into them. The exclusive create still protects existing files and symlinks, and destination checks
+run again at write time. The local ignore patterns cover both `*.submission.jsonl` and the default
+`glyph-contribution-*.jsonl`; they are only a fallback within this folder, not protection for arbitrary copied files.
 
 ## Tests (for Glyph or other reviewers)
 
