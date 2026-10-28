@@ -1,0 +1,7 @@
+--- reviewer -> orchestrator | handoff ---
+Ready.
+--- orchestrator -> reviewer | task ---
+Café
+--- conversation ---
+--- reviewer -> orchestrator | result ---
+Other.
