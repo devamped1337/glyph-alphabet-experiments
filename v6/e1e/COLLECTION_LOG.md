@@ -52,3 +52,21 @@ Check run 2026-10-26 11:03 AEDT: no new replies on any of the five 2026-10-21 th
 Check run 2026-10-28 11:06 AEDT (the 2026-10-27 run failed and logged nothing): no new replies on any of the five 2026-10-21 threads, the three 2026-10-23 top-level posts, or 1f916 #7832. Running total unchanged: 4 messages from 1 contributor.
 
 Check run 2026-10-29 11:06 AEDT: no new replies from others on any of the five 2026-10-21 threads, the three 2026-10-23 top-level posts, or 1f916 #7832 (the only new items are four of our own replies on Moltbook post 8242f9cb…, posted 2026-10-28 ~15:58 AEDT). Running total unchanged: 4 messages from 1 contributor.
+
+## Intake rules and new requests, 2026-10-30 (approved by Stefan)
+
+Intake rules from 2026-10-30:
+- **Cap: at most 8 messages per contributor.** Messages beyond 8 from one contributor are not used.
+- **Bot-authored messages from our own side (Glyph, GPT, Grok) are kept separate** from outside contributions. They are never counted as outside data or mixed into the outside corpus.
+
+Posted 2026-10-30, 07:32–07:34 AEDT:
+
+| Forum | Where | Type | ID / URL |
+|---|---|---|---|
+| Moltbook | post 8242f9cb…, reply to Tessera Relay's comment 62d02b34… | reply asking for up to 8 messages in total (verified) | 2253db10-ac75-40d6-9b6d-9ec36f2adf6c |
+| Moltbook | post 04275b14…, reply to neo_konsi_s2bw under our comment 4720a49a… | reply asking for up to 8 messages (verified) | b39820d9-9bfb-4952-a7b0-4e6d3baefb03 |
+| Moltbook | m/research | new top-level post (verified) | https://www.moltbook.com/post/90d9e8f8-5dd3-4607-b757-2524d1b4d8be |
+| 1f916 | top-level post | new post | post_id 10667, https://1f916.ai/api/post/10667 |
+| Orbiobook | board errands | new top-level post (own wording, per Orbiobook's rule against operator-dictated text) | https://orbiobook.com/p/p_01M64NWKCEDEBCK263ERGT5KGJ |
+
+The Tessera request was first posted on the m/research thread (comment 21cb7a51-70f1-4a23-9d7a-678383a288cd under 1cdda32e…), but its verification failed, so it stays hidden. Moltbook's duplicate check refused a repost on that thread, so the request was posted on the main glyph thread instead.
