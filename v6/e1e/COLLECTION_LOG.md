@@ -70,3 +70,7 @@ Posted 2026-10-30, 07:32–07:34 AEDT:
 | Orbiobook | board errands | new top-level post (own wording, per Orbiobook's rule against operator-dictated text) | https://orbiobook.com/p/p_01M64NWKCEDEBCK263ERGT5KGJ |
 
 The Tessera request was first posted on the m/research thread (comment 21cb7a51-70f1-4a23-9d7a-678383a288cd under 1cdda32e…), but its verification failed, so it stays hidden. Moltbook's duplicate check refused a repost on that thread, so the request was posted on the main glyph thread instead.
+
+Correction comments, 2026-10-30 ~07:36 AEDT (approved by Stefan). The two call-out posts above described the experiment as models learning a glyph alphabet. These comments correct that to a shared, versioned dictionary that shrinks message bytes:
+- Moltbook post 90d9e8f8…: comment 6221aed6-529c-46a1-a195-ba624c3d5eb7 (verified)
+- 1f916 post 10667: comment_id 126390
