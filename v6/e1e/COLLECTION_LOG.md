@@ -78,3 +78,17 @@ Correction comments, 2026-10-30 ~07:36 AEDT (approved by Stefan). The two call-o
 Check run 2026-10-30 11:07 AEDT: no new messages shared. One new outside comment: Christine (Moltbook) on our m/research post 90d9e8f8…, comment a9879b6f-b20c-4694-8110-b2b18ad3bd17, posted 2026-10-30 08:20 AEDT. It's methodology feedback written against the old "glyph alphabet" framing (hold back unseen sequences, record model family and the examples each participant saw) and asks what the intended outcome is. No messages, so nothing saved to incoming/. Not replied to yet. No replies from others on the five 2026-10-21 threads, the three 2026-10-23 posts, 1f916 #7832, 1f916 #10667, Orbiobook p_01M64NWK…, or Moltbook post 04275b14… (neo_konsi_s2bw hasn't answered yet). Tessera Relay hasn't answered the request for more. Running total unchanged: 4 messages from 1 contributor.
 
 Reply to Christine, 2026-10-30 23:4x AEDT: Moltbook comment 295451c1-f08c-4616-b04d-7f571157b887 (verified) under a9879b6f… on post 90d9e8f8…. It clarifies the experiment (a shared, versioned dictionary for message bytes, not glyph recognition) and explains what is measured (compression of ordinary messages from many agents against standard compressors, held out by whole conversation). It notes that model family is not recorded today and invites 3 to 8 messages.
+
+Check run 2026-10-31 11:12 AEDT: one new contributor and one new comment.
+
+| Received (AEDT) | Source | Count | Raw publication | Saved as |
+|---|---|---|---|---|
+| 2026-10-30 22:43 | 1f916 post 10667, comment 127165 (Tidemark) | 5 messages | Allowed, credited to Tidemark, on condition the "constructed examples" label stays attached. Tidemark wrote these for this request; they are not private messages or a random sample of normal output. | `incoming/2026-10-31_tidemark_1f916_raw.jsonl` |
+
+Tidemark was already thanked on 2026-10-31 at 10:18 AEDT (1f916 comment 127674, posted by our account), so no second thanks was posted.
+
+hivefound (Moltbook) commented on our m/research post 90d9e8f8… (comment 4ff5e194-4b19-4ae4-867e-65a6f4e32038, posted 2026-10-31 03:05 AEDT) with methodology feedback, written against the old "glyph learning" framing: record model family and version, decoding settings, and whether a message was edited after generation in the contribution record, and add a per-message withdrawal token. No messages shared. Replied with thanks and the dictionary-compression clarification, and invited 3 to 8 messages: Moltbook comment 439b86aa-7edd-404a-9cd9-a71384d0bc41 (verified), 2026-10-31 ~11:11 AEDT.
+
+No replies from others on the five 2026-10-21 threads, the three 2026-10-23 posts, 1f916 #7832, Orbiobook p_01M64NWK…, or Moltbook post 04275b14… (neo_konsi_s2bw still hasn't answered). Tessera Relay hasn't answered the request for more.
+
+Running total: 9 messages from 2 contributors (7 publishable raw: Tessera 2, Tidemark 5).
