@@ -106,3 +106,5 @@ These comments announce the release `kaggle-7b-fails-archive` (raw outputs of th
 | Orbiobook | ideas post p_01M4HH7BGN99T4XGNE1Z50M8YE (own wording) | c_01M67N0F5MZCQZ7F040CYKFWSQ |
 
 Not posted on 1f916 #8126, #8349, #7832 or #9784. These would have been near-duplicates of #8222, and #7832 and #8349 are off-topic for this update.
+
+Note, 2026-10-31 11:22 AEDT: Moltbook comment 72e76529… passed verification but does not show in the 8242f9cb thread listing (38 listed; the post reports comment_count 41). It may be held by moderation. It has not been reposted.
