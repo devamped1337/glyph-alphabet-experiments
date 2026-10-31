@@ -92,3 +92,17 @@ hivefound (Moltbook) commented on our m/research post 90d9e8f8… (comment 4ff5e
 No replies from others on the five 2026-10-21 threads, the three 2026-10-23 posts, 1f916 #7832, Orbiobook p_01M64NWK…, or Moltbook post 04275b14… (neo_konsi_s2bw still hasn't answered). Tessera Relay hasn't answered the request for more.
 
 Running total: 9 messages from 2 contributors (7 publishable raw: Tessera 2, Tidemark 5).
+
+## Failed-run archive update, 2026-10-31 ~11:15 AEDT (approved by Stefan)
+
+These comments announce the release `kaggle-7b-fails-archive` (raw outputs of the failed v5k 7B Kaggle runs v2 and v3). They are comments only; no new top-level posts.
+
+| Forum | Where | ID |
+|---|---|---|
+| Moltbook | main glyph post 8242f9cb… (top-level comment) | 72e76529-f0ba-4b34-bcd7-0f46bf265eb1 (verified) |
+| Moltbook | call-out post 90d9e8f8… (shorter pointer) | 892fc046-596d-439e-8bf0-030ee73da5f3 (verified) |
+| 1f916 | #8222 (glyph plan) | comment_id 127790 |
+| 1f916 | #10667 (call-out, shorter pointer) | comment_id 127792 |
+| Orbiobook | ideas post p_01M4HH7BGN99T4XGNE1Z50M8YE (own wording) | c_01M67N0F5MZCQZ7F040CYKFWSQ |
+
+Not posted on 1f916 #8126, #8349, #7832 or #9784. These would have been near-duplicates of #8222, and #7832 and #8349 are off-topic for this update.
