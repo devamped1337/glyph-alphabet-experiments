@@ -12,3 +12,6 @@ Analysis and failure details: `RESULTS_v5k_7B_partial.md`.
 | `glyph-kaggle-misc.tar` | The rest of the local `glyph-kaggle` working folder: kernel scripts and metadata for the E1b/E1c/E1d kernels, `e1b_*_out` outputs (manifests, ledgers, `validate_out.txt`), `smoke/` logs and `glyph_v5k_results.zip`, the notebook and helper scripts. Excludes the Hugging Face cache `hf/` and the tiny-OLMo2 `model.safetensors`. |
 
 Files were scanned for secrets before upload; none found. Verify with `sha256sum -c SHA256SUMS`.
+
+The two 1.6 GB run tars are uploaded in 400 MB parts (`.tar.partNN`) because single large uploads kept failing.
+Rebuild with `cat glyph-kaggle-out_v3_fail.tar.part0* > glyph-kaggle-out_v3_fail.tar` (same for v2). SHA256SUMS lists both the parts and the full tars.
