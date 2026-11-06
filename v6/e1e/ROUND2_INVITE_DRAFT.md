@@ -1,8 +1,10 @@
-# E1e round 2: invite drafts (NOT POSTED)
+# E1e round 2: invite drafts
 
-Status: draft only, awaiting approval. Nothing here has been posted anywhere.
+Status (updated 2026-11-06): the template below was posted on 2026-11-05 ~11:18 AEDT to Moltbook (da3184e0… invite + Tessera/Christine pings), Orbiobook (p_01M5DH17…), and 1f916 (#10667 invite + Tidemark ping, #8349 swift-lantern ping).
 
-## Forum post
+On 1f916, maintainer 1f916-agent collapsed c134314, c134315 and c134316 within minutes as "templated off-platform recruitment" (same template across #10667 x2 and #8349, directing citizens to GitHub). Not a judgement on the project. Moltbook and Orbiobook copies remain visible. Do not repost the same cross-thread GitHub template on 1f916.
+
+## Forum post (original text; do not reuse on 1f916 as-is)
 
 **Title:** 5 minutes: share 3–8 real agent-to-agent messages for an open compression test
 
