@@ -1,5 +1,5 @@
 {
- "amendment_sha256": "0917418c67916f2f06f72c44204f1aae4ce326852fea8b139b86d94287d3649c",
+ "amendment_sha256": "59775941b425c15b56fd686a76a02ebcae2e309ac32f99c85bfe4628fbfa3a92",
  "author_files": {
   "claude_messages.jsonl": {
    "bytes": 6308,
@@ -39,23 +39,27 @@
  "conversations": 30,
  "data_freeze": true,
  "date": "2026-11-10",
- "disclosure_sha256": "84776f38a75e5bf1f4f18ba4628efe434038c9efd2499bcb731e846148fc1ec2",
+ "disclosure_sha256": "35e926aefb073eb924f16a131f6cd20e3bfe111ebfb82fe9d75454eb447f7525",
  "external_evaluation_eligible": 0,
- "grok_capture_note": "Saved grok_messages.jsonl is the pinned file (5288 bytes). The handoff records a separate UI Copy-response paste of 5287 bytes, 24 LF, no trailing LF, parsed 25/25 identical, label Fast, not server-raw. Prompt-editor newline expansion 18530 vs 18268 is that handoff note and was not re-measured here.",
+ "grok_capture_note": "Saved grok_messages.jsonl is 5288 bytes, sha256 5e902ccbd41a86a9eefe852e7c67f224758462087ad4877d373222c5417074f0. The UI copy in the package is 5287 bytes, 24 LF, no trailing LF, sha256 ad4470bbb1b00bdbfe7ce33fbf93a3dc6b6073afbe6110a9ffa3f80007621f83, and parses equal to those 25 rows. Not server-raw. Prompt-editor 18530 vs 18268 was not re-measured.",
  "harness_sha256": "3ddc3271a93d11b832857cdd2ba6f000c034d46e0f89d9b790a21452fc432a01",
  "heldout_count": 0,
  "measurement_run": false,
  "messages": 75,
  "owner_run_approval": "exists (t1394u, about 09:35 AEDT): run after packaging and disclosure. Code and plan reviews are still pending.",
+ "partial50": "historical separate package, not modified here, superseded by this 75-message set",
  "partition": "all_dev",
  "reserved_tessera_or_tidemark_included": false,
- "review_prompt_sha256": "92d96221ccd9baa4a7c6d13361015d391ec720d07043d4fb350f635e9bf8667c",
+ "review_prompt_sha256": "f0be1f4f8489eee9903ed96e645a5a5a89ea8a772ef0f6079052f1b5b94bcc70",
  "seed": "e1e-fold-1",
  "seed_applied": false,
  "status": "DATA_FREEZE_NOT_CODE_FREEZE",
  "test_sha256": "436906624053100089717a74d4d9525e43dca603feb8a218b713da2265666a6f",
  "timezone": "Australia/Sydney",
- "zip_note": "Owner said the initial zip hash may change during packaging-only verifier hardening. The combined JSONL hash is the data freeze.",
+ "zip_bytes_canonical": 74912,
+ "zip_note": "Canonical zip is zip_sha256_canonical. The hash inside the zip's CLOUD_HANDOFF.json is the previous package pass, kept to avoid a zip/handoff hash cycle. It is not a corpus change. zip_sha256_initial_not_authoritative is an earlier initial hash, also not the corpus.",
+ "zip_sha256_canonical": "990b3ef816dedfe140ecd0a8d27675bd27b5c575f1ac825fab32c438d2e58cbc",
+ "zip_sha256_embedded_prior_pass_not_corpus": "818a0e67d34eca9119190ef21fa6ac8003cb9b1b92da8e9194e7ff934553ce0e",
  "zip_sha256_initial_not_authoritative": "b89637b7fe7443506671ea7893dad65eb2b0290d279292ed06a844ac884f6b58",
- "zip_sha256_pinned": false
+ "zip_sha256_pinned": true
 }

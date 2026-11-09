@@ -12,6 +12,8 @@ Verdict wanted: APPROVE or CHANGES, against the exact hashes in `v6/e1e/internal
 4. The fixed point `L=32,k=2,C=50` is transferred from the old public-synthetic screen, not fit on these 75. Arm 4 is omitted for that reason. Floor 0.20 and the retirement rule are unchanged. A descriptive coverage number cannot clear the old failures.
 5. The decision question is only whether arm 7's primary total is strictly smaller than both 4b-delta and arm 6 on this synthetic cohort after sync bytes. A yes would not generalise to outside traffic.
 6. Owner run approval already exists for after packaging and disclosure. Code review is still open. Say if the ack gate is too weak or too strong.
+7. Canonical zip sha256 is `990b3ef816dedfe140ecd0a8d27675bd27b5c575f1ac825fab32c438d2e58cbc` (74912 bytes). The embedded handoff hash `818a0e67d34eca9119190ef21fa6ac8003cb9b1b92da8e9194e7ff934553ce0e` is the previous package pass, not a new corpus. Combined sha256 stays `b94115fb424947f0555b2ba6669f8d3ba11b53e664e640d4b9670a6b30535439`.
+8. Planned execution if both reviews later allow it: one process, no tune, no baseline-4 training, no Kaggle/GPU/model/paid API, stop at the first byte-exact failure or zstd pin mismatch, and stop if wall time exceeds 60 seconds. No speedup claim. This review does not authorise that run by itself.
 
 ## Command
 

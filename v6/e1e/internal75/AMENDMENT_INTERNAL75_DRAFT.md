@@ -14,7 +14,7 @@ The owner accepted this 75-message set (t1393u) and said to run the experiment a
 
 `e1e-fold-1` is recorded and **not** applied. `split_real` is not called. Synthetic corpora are all dev under E1f proposal §4. The external gate remains unmet: 0 evaluation-eligible outside messages. Tessera's four and Tidemark's five are not in these files.
 
-An initial zip hash was recorded in the handoff (`b89637b7fe7443506671ea7893dad65eb2b0290d279292ed06a844ac884f6b58`). The owner said that zip hash may change during packaging-only verifier hardening. It is not pinned. The combined JSONL hash is the data freeze.
+The message bytes are the data freeze. The canonical package zip, hashed from the delivered file in this workspace, is sha256 `990b3ef816dedfe140ecd0a8d27675bd27b5c575f1ac825fab32c438d2e58cbc` (74912 bytes). The copy of the combined JSONL inside that zip is the same 22064 bytes. The handoff stored inside the zip still says zip sha256 `818a0e67d34eca9119190ef21fa6ac8003cb9b1b92da8e9194e7ff934553ce0e`. That value is the previous package-pass hash, kept so the zip and the handoff do not chase each other. It is not a change to the messages. An earlier initial hash `b89637b7fe7443506671ea7893dad65eb2b0290d279292ed06a844ac884f6b58` is also not the corpus and not the canonical zip. The historical partial-50 package is unchanged and is superseded by this 75-message set. The zip itself is not committed: it holds prompts and receipts outside this public review set.
 
 ## What a later run may do
 
@@ -27,6 +27,7 @@ One descriptive replay, in sample, on these 75 only:
 - No call to `tune`, no grid sweep, no edit of the floor or the retirement rule.
 - Byte-exact decode is the frozen `replay_arms` assert. A mismatch aborts. There is no second parameter set.
 - No timings and no speedup claim. If the run happens, a second invocation must reproduce the aggregate sha256 or the run is invalid.
+- Stop conditions, fixed before any result: one process; no Kaggle, GPU, model call, or paid API; no second parameter set; abort on the first byte-exact mismatch; abort if zstd is not 0.23.0 / libzstd 1.5.6; abort if the combined hash differs; do not overwrite the old dev-screen files. Operator wall-clock cap: kill the process if it exceeds 60 seconds. The published 300-message synthetic screen recorded 1.4 seconds including tuning. That figure is a scale reference for a larger, tuned job, not a measurement of these 75.
 
 ## Decision the run is allowed to answer
 
