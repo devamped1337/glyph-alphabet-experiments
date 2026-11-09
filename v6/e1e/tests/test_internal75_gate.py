@@ -1,5 +1,6 @@
 """Gate tests for the internal-75 prep. No compression, mining, or dictionary training."""
 import hashlib
+import signal
 import importlib.util
 import inspect
 import os
@@ -307,6 +308,58 @@ class Internal75Gate(unittest.TestCase):
         finally:
             MOD.clear_watchdog()
             for path in (final, partial, raced, pathlib.Path(str(raced) + ".partial")):
+                if path.exists():
+                    path.unlink()
+
+    def test_signal_between_create_and_register_does_not_leave_a_file(self):
+        """SIGALRM is sent after the creating call returns and before registration.
+
+        The mask must defer delivery until the new path is owned. Otherwise the
+        created file survives the 'no report kept' cleanup.
+        """
+        folder = ROOT / "measurements" / "internal75-audit"
+        folder.mkdir(parents=True, exist_ok=True)
+        cases = ("partial", "final")
+        created = []
+        real_open, real_link = os.open, os.link
+        try:
+            for case in cases:
+                dest = folder / ("signal-" + case + ".json")
+                partial = pathlib.Path(str(dest) + ".partial")
+                marker = folder / ("signal-marker-" + case)
+                for path in (dest, partial):
+                    if path.exists():
+                        path.unlink()
+                marker.write_bytes(b"KEEP")
+                created.extend((dest, partial, marker))
+
+                def wrapped_open(path, flags, mode=0o644, *, dir_fd=None):
+                    fd = real_open(path, flags, mode) if dir_fd is None else real_open(path, flags, mode, dir_fd=dir_fd)
+                    if case == "partial" and str(path).endswith(".partial") and flags & os.O_EXCL:
+                        os.kill(os.getpid(), signal.SIGALRM)
+                    return fd
+
+                def wrapped_link(src, dst, **kwargs):
+                    real_link(src, dst)
+                    if case == "final":
+                        os.kill(os.getpid(), signal.SIGALRM)
+
+                os.open = wrapped_open
+                os.link = wrapped_link
+                try:
+                    with self.assertRaises(SystemExit) as caught:
+                        MOD.run_measurement(str(dest), deadline_s=30, compute=lambda: b"NEW")
+                finally:
+                    os.open, os.link = real_open, real_link
+                    MOD.clear_watchdog()
+                self.assertIn("deadline", str(caught.exception), case)
+                self.assertFalse(dest.exists(), case)
+                self.assertFalse(partial.exists(), case)
+                self.assertEqual(marker.read_bytes(), b"KEEP", case)
+        finally:
+            os.open, os.link = real_open, real_link
+            MOD.clear_watchdog()
+            for path in created:
                 if path.exists():
                     path.unlink()
 

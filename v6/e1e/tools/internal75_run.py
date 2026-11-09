@@ -181,6 +181,17 @@ def clear_watchdog():
         signal.setitimer(signal.ITIMER_REAL, 0)
 
 
+def _block_alarm():
+    """Hold SIGALRM so creation and ownership registration stay one step."""
+    if not hasattr(signal, "pthread_sigmask"):
+        raise SystemExit("no signal mask; not measuring")
+    signal.pthread_sigmask(signal.SIG_BLOCK, [signal.SIGALRM])
+
+
+def _unblock_alarm():
+    signal.pthread_sigmask(signal.SIG_UNBLOCK, [signal.SIGALRM])
+
+
 def deadline_hit():
     import time
     if _WATCH["expired"]:
@@ -377,8 +388,11 @@ def _delete(paths):
 def commit_report(final_path, blob, owned, hook=None):
     """Publish without taking a name this process did not exclusively create.
 
-    `owned` gains a path only after O_EXCL or link succeeds. It is not cleared
-    on success; the caller drops it only after the disarmed deadline check.
+    SIGALRM stays blocked from the creating call until the new path is in
+    `owned`. A signal that arrives in that gap is delivered only after
+    registration, so cleanup cannot miss a file this process created.
+    `owned` is not cleared on success; the caller drops it only after the
+    disarmed deadline check.
     """
     def step(name):
         if hook is not None:
@@ -388,24 +402,32 @@ def commit_report(final_path, blob, owned, hook=None):
 
     step("before_create")
     temp = final_path + ".partial"
+    _block_alarm()
+    fd = None
     try:
-        fd = os.open(temp, os.O_CREAT | os.O_EXCL | os.O_WRONLY, 0o644)
-    except FileExistsError:
-        raise SystemExit("partial already exists; preexisting file kept")
-    owned.append(temp)
-    step("after_create")
-    with os.fdopen(fd, "wb") as handle:
-        handle.write(blob)
-    step("after_write")
-    try:
-        os.link(temp, final_path)
-    except FileExistsError:
-        raise SystemExit("destination appeared; preexisting file kept")
-    owned.append(final_path)
-    step("after_link")
-    os.unlink(temp)
-    owned.remove(temp)
-    step("after_publish")
+        try:
+            fd = os.open(temp, os.O_CREAT | os.O_EXCL | os.O_WRONLY, 0o644)
+        except FileExistsError:
+            raise SystemExit("partial already exists; preexisting file kept") from None
+        owned.append(temp)
+        step("after_create")
+        os.write(fd, blob)
+        os.close(fd)
+        fd = None
+        step("after_write")
+        try:
+            os.link(temp, final_path)
+        except FileExistsError:
+            raise SystemExit("destination appeared; preexisting file kept") from None
+        owned.append(final_path)
+        step("after_link")
+        os.unlink(temp)
+        owned.remove(temp)
+        step("after_publish")
+    finally:
+        if fd is not None:
+            os.close(fd)
+        _unblock_alarm()
 
 
 def _require_zstd():
