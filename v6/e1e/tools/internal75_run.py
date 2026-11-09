@@ -378,6 +378,34 @@ def build_report(summary, totals, publication, gzip_bytes, zstd_version):
     }
 
 
+def write_all(fd, blob):
+    """Write every byte. A short count is continued; zero progress or a wild count fails.
+
+    os.write is allowed to return after fewer bytes than requested. Success is
+    only a file whose size equals len(blob). One helper covers the short write,
+    the zero-progress stall, an oversized count, and a deadline between calls.
+    """
+    view = memoryview(blob)
+    total = 0
+    while total < len(view):
+        if deadline_hit():
+            raise AuditDeadline("audit exceeded during write; no report kept")
+        try:
+            count = os.write(fd, view[total:])
+        except InterruptedError:
+            continue
+        if not isinstance(count, int) or isinstance(count, bool) or count < 0 or count > len(view) - total:
+            raise SystemExit("write reported a count that is not progress within the buffer")
+        if count == 0:
+            raise SystemExit("write made no progress; partial output will not be published")
+        total += count
+    if total != len(blob):
+        raise SystemExit("write finished before the full report was stored")
+    os.fsync(fd)
+    if os.fstat(fd).st_size != len(blob):
+        raise SystemExit("stored report size does not equal the serialized byte count")
+
+
 def _delete(paths):
     """Remove only paths this process has exclusively created and still lists."""
     for path in list(paths):
@@ -411,7 +439,7 @@ def commit_report(final_path, blob, owned, hook=None):
             raise SystemExit("partial already exists; preexisting file kept") from None
         owned.append(temp)
         step("after_create")
-        os.write(fd, blob)
+        write_all(fd, blob)
         os.close(fd)
         fd = None
         step("after_write")

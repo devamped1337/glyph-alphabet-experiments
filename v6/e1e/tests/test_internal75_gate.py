@@ -311,6 +311,82 @@ class Internal75Gate(unittest.TestCase):
                 if path.exists():
                     path.unlink()
 
+    def test_write_accepts_only_a_complete_buffer(self):
+        folder = ROOT / "measurements" / "internal75-audit"
+        folder.mkdir(parents=True, exist_ok=True)
+        marker = folder / "write-marker"
+        marker.write_bytes(b"KEEP")
+        blob = b"{\"report\":true}\n"
+        real = os.write
+        created = []
+
+        def run(mode):
+            dest = folder / ("write-" + mode + ".json")
+            partial = pathlib.Path(str(dest) + ".partial")
+            for path in (dest, partial):
+                if path.exists():
+                    path.unlink()
+            created.extend((dest, partial))
+            state = {"n": 0}
+
+            def wrapped(fd, data):
+                state["n"] += 1
+                if mode == "short":
+                    if state["n"] == 1:
+                        return real(fd, data[:1])
+                    return real(fd, data)
+                if mode == "zero":
+                    return 0
+                if mode == "error":
+                    if state["n"] == 1:
+                        return real(fd, data[:1])
+                    raise OSError(28, "no space")
+                if mode == "deadline":
+                    MOD._WATCH["expired"] = True
+                    return real(fd, data[:1])
+                if mode == "wild":
+                    return len(data) + 5
+                return real(fd, data)
+
+            os.write = wrapped
+            try:
+                if mode == "short":
+                    MOD.run_measurement(str(dest), deadline_s=30, compute=lambda: blob)
+                    self.assertEqual(dest.read_bytes(), blob)
+                    self.assertFalse(partial.exists())
+                elif mode == "error":
+                    with self.assertRaises(OSError):
+                        MOD.run_measurement(str(dest), deadline_s=30, compute=lambda: blob)
+                    self.assertFalse(dest.exists())
+                    self.assertFalse(partial.exists())
+                else:
+                    with self.assertRaises(SystemExit) as caught:
+                        MOD.run_measurement(str(dest), deadline_s=30, compute=lambda: blob)
+                    self.assertFalse(dest.exists(), mode)
+                    self.assertFalse(partial.exists(), mode)
+                    if mode == "zero":
+                        self.assertIn("no progress", str(caught.exception))
+                    elif mode == "wild":
+                        self.assertIn("not progress", str(caught.exception))
+                    else:
+                        self.assertIn("deadline", str(caught.exception))
+            finally:
+                os.write = real
+                MOD.clear_watchdog()
+            self.assertEqual(marker.read_bytes(), b"KEEP", mode)
+
+        try:
+            for mode in ("short", "zero", "error", "deadline", "wild"):
+                run(mode)
+        finally:
+            os.write = real
+            MOD.clear_watchdog()
+            if marker.exists():
+                marker.unlink()
+            for path in created:
+                if path.exists():
+                    path.unlink()
+
     def test_signal_between_create_and_register_does_not_leave_a_file(self):
         """SIGALRM is sent after the creating call returns and before registration.
 
