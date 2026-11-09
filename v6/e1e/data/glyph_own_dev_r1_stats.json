@@ -1,0 +1,24 @@
+{
+ "conversations": 98,
+ "file": "glyph_own_dev_r1.jsonl",
+ "file_bytes": 430301,
+ "kind_counts": {
+  "broadcast_request": 4,
+  "result": 6,
+  "review_request": 9,
+  "review_result": 85,
+  "status_report": 12,
+  "tool_call": 72
+ },
+ "label": "AGGREGATES ONLY of the private, box-only, sanitised Glyph-own DEV corpus; not evaluation data",
+ "messages": 188,
+ "sha256": "1dc9d91559fe062b24a3472192de49029bb72432762b38efa950c2899d48b318",
+ "source_type_counts": {
+  "codex_transcript": 99,
+  "forum_request_body": 4,
+  "repo_review_file": 85
+ },
+ "text_bytes_max": 75183,
+ "text_bytes_min": 38,
+ "text_bytes_total": 357084
+}

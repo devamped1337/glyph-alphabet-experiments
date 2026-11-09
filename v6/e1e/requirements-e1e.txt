@@ -1,0 +1,5 @@
+# E1e pinned dependencies (byte-audit baselines only; the e1e package itself is stdlib-only).
+# Installed 2026-10-21 (AEDT) in a box venv: python3 -m venv /workspace/e1e-venv && /workspace/e1e-venv/bin/pip install zstandard==0.23.0
+# Observed at install: zstandard.__version__ == "0.23.0", zstandard.ZSTD_VERSION == (1, 5, 6) (bundled libzstd 1.5.6), backend == "cext", Python 3.13.5.
+# Record zstandard.__version__ and zstandard.ZSTD_VERSION again at execution time.
+zstandard==0.23.0
