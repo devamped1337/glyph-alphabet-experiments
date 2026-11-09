@@ -276,6 +276,102 @@ class Internal75Gate(unittest.TestCase):
         ran = subprocess.run([sys.executable, "-O", "-c", script], cwd=str(ROOT), capture_output=True, text=True)
         self.assertEqual(ran.returncode, 0, ran.stderr)
 
+    def test_publication_never_deletes_a_path_it_did_not_create(self):
+        folder = ROOT / "measurements" / "internal75-audit"
+        folder.mkdir(parents=True, exist_ok=True)
+        final = folder / "owned.json"
+        partial = folder / "owned.json.partial"
+        raced = folder / "raced.json"
+        for path in (final, partial, raced):
+            if path.exists():
+                path.unlink()
+        partial.write_bytes(b"KEEP-PARTIAL")
+        try:
+            with self.assertRaises(SystemExit) as caught:
+                MOD.run_measurement(str(final), deadline_s=30, compute=lambda: b"NEW")
+            self.assertIn("preexisting", str(caught.exception))
+            self.assertEqual(partial.read_bytes(), b"KEEP-PARTIAL")
+            self.assertFalse(final.exists())
+            raced.write_bytes(b"KEEP-FINAL")
+
+            def plant():
+                raced.write_bytes(b"KEEP-FINAL")
+                return b"NEW-FINAL"
+
+            raced.unlink()
+            with self.assertRaises(SystemExit) as caught:
+                MOD.run_measurement(str(raced), deadline_s=30, compute=plant)
+            self.assertIn("preexisting", str(caught.exception))
+            self.assertEqual(raced.read_bytes(), b"KEEP-FINAL")
+            self.assertFalse(pathlib.Path(str(raced) + ".partial").exists())
+        finally:
+            MOD.clear_watchdog()
+            for path in (final, partial, raced, pathlib.Path(str(raced) + ".partial")):
+                if path.exists():
+                    path.unlink()
+
+    def test_deadline_at_each_publication_boundary_leaves_no_success_file(self):
+        folder = ROOT / "measurements" / "internal75-audit"
+        folder.mkdir(parents=True, exist_ok=True)
+        boundaries = ("before_create", "after_create", "after_write", "after_link", "after_publish")
+        created = []
+        try:
+            for name in boundaries:
+                dest = folder / ("bound-" + name + ".json")
+                partial = pathlib.Path(str(dest) + ".partial")
+                marker = folder / ("marker-" + name)
+                for path in (dest, partial):
+                    if path.exists():
+                        path.unlink()
+                if name == "before_create":
+                    partial.write_bytes(b"KEEP-PARTIAL")
+                marker.write_bytes(b"KEEP")
+                created.extend((dest, partial, marker))
+
+                def hook(step, target=name):
+                    if step == target:
+                        MOD._WATCH["expired"] = True
+
+                with self.assertRaises(SystemExit) as caught:
+                    MOD.run_measurement(str(dest), deadline_s=30, compute=lambda: b"NEW", hook=hook)
+                self.assertIn("deadline", str(caught.exception), name)
+                self.assertFalse(dest.exists(), name)
+                if name == "before_create":
+                    self.assertEqual(partial.read_bytes(), b"KEEP-PARTIAL", name)
+                else:
+                    self.assertFalse(partial.exists(), name)
+                self.assertEqual(marker.read_bytes(), b"KEEP", name)
+        finally:
+            MOD.clear_watchdog()
+            for path in created:
+                if path.exists():
+                    path.unlink()
+
+    def test_late_alarm_after_publish_removes_the_report(self):
+        folder = ROOT / "measurements" / "internal75-audit"
+        folder.mkdir(parents=True, exist_ok=True)
+        dest = folder / "late-alarm.json"
+        if dest.exists():
+            dest.unlink()
+        original = MOD.clear_watchdog
+
+        def late():
+            original()
+            MOD._WATCH["expired"] = True
+
+        MOD.clear_watchdog = late
+        try:
+            with self.assertRaises(SystemExit) as caught:
+                MOD.run_measurement(str(dest), deadline_s=30, compute=lambda: b"NEW")
+            self.assertIn("deadline", str(caught.exception))
+            self.assertFalse(dest.exists())
+            self.assertFalse(pathlib.Path(str(dest) + ".partial").exists())
+        finally:
+            MOD.clear_watchdog = original
+            MOD.clear_watchdog()
+            if dest.exists():
+                dest.unlink()
+
     def test_timeout_during_compute_and_finalization_leaves_no_report(self):
         folder = ROOT / "measurements" / "internal75-audit"
         folder.mkdir(parents=True, exist_ok=True)

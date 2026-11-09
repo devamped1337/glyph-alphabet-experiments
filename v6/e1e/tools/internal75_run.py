@@ -368,28 +368,44 @@ def build_report(summary, totals, publication, gzip_bytes, zstd_version):
 
 
 def _delete(paths):
-    for path in paths:
+    """Remove only paths this process has exclusively created and still lists."""
+    for path in list(paths):
         if path and os.path.lexists(path):
             os.remove(path)
 
 
-def commit_report(final_path, blob, cleanup):
-    """Write a partial file, disarm, and publish only if the deadline has not fired."""
+def commit_report(final_path, blob, owned, hook=None):
+    """Publish without taking a name this process did not exclusively create.
+
+    `owned` gains a path only after O_EXCL or link succeeds. It is not cleared
+    on success; the caller drops it only after the disarmed deadline check.
+    """
+    def step(name):
+        if hook is not None:
+            hook(name)
+        if deadline_hit():
+            raise AuditDeadline("audit exceeded; no report kept")
+
+    step("before_create")
     temp = final_path + ".partial"
-    cleanup.append(temp)
-    fd = os.open(temp, os.O_CREAT | os.O_EXCL | os.O_WRONLY, 0o644)
+    try:
+        fd = os.open(temp, os.O_CREAT | os.O_EXCL | os.O_WRONLY, 0o644)
+    except FileExistsError:
+        raise SystemExit("partial already exists; preexisting file kept")
+    owned.append(temp)
+    step("after_create")
     with os.fdopen(fd, "wb") as handle:
         handle.write(blob)
-    clear_watchdog()
-    if deadline_hit():
-        raise AuditDeadline("audit exceeded; no report kept")
-    os.replace(temp, final_path)
-    if temp in cleanup:
-        cleanup.remove(temp)
-    cleanup.append(final_path)
-    if deadline_hit():
-        raise AuditDeadline("audit exceeded; no report kept")
-    cleanup.clear()
+    step("after_write")
+    try:
+        os.link(temp, final_path)
+    except FileExistsError:
+        raise SystemExit("destination appeared; preexisting file kept")
+    owned.append(final_path)
+    step("after_link")
+    os.unlink(temp)
+    owned.remove(temp)
+    step("after_publish")
 
 
 def _require_zstd():
@@ -446,26 +462,36 @@ def _real_blob():
     return json.dumps(report, indent=1, sort_keys=True).encode("utf-8") + b"\n"
 
 
-def run_measurement(out_path, deadline_s=DEADLINE_S, compute=None):
+def run_measurement(out_path, deadline_s=DEADLINE_S, compute=None, hook=None):
     """One fixed replay. The watchdog is armed before any e1e import in this call."""
     install_watchdog(deadline_s)
-    cleanup = []
+    owned = []
     try:
         from e1e.canon import AuditAbort, E1EError
         real = prepare_output(out_path)
         blob = _real_blob() if compute is None else compute()
-        commit_report(real, blob, cleanup)
+        commit_report(real, blob, owned, hook=hook)
     except AuditDeadline:
-        _delete(cleanup)
+        _delete(owned)
+        owned.clear()
         raise SystemExit("audit deadline exceeded; no report kept")
+    except SystemExit:
+        _delete(owned)
+        owned.clear()
+        raise
     except Exception as err:
         from e1e.canon import AuditAbort, E1EError
-        _delete(cleanup)
+        _delete(owned)
+        owned.clear()
         if isinstance(err, (AuditAbort, E1EError)):
             raise SystemExit("audit aborted on a verification failure; no report kept")
         raise
     finally:
         clear_watchdog()
+        if deadline_hit():
+            _delete(owned)
+            owned.clear()
+            raise SystemExit("audit deadline exceeded; no report kept")
 
 
 def main(argv=None):
