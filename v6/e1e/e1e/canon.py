@@ -15,6 +15,14 @@ class E1EError(Exception):
         self.detail = detail
 
 
+class AuditAbort(Exception):
+    """Stop an internal-75 strict audit before any fallback or retransmission.
+
+    Not an E1EError, so the protocol handlers that catch E1EError and send raw
+    do not swallow it. Default codec calls leave this unused.
+    """
+
+
 def _check_value(v, depth=0):
     if depth > MAX_DEPTH:
         raise E1EError("E_SCHEMA", "nesting too deep")

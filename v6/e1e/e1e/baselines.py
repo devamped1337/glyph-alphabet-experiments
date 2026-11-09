@@ -390,15 +390,15 @@ class _Tally:
         }
 
 
-def replay_arms(replay, chain, version_index, arms=ARMS, level=DEFAULT_LEVEL, b4_codec=None):
+def replay_arms(replay, chain, version_index, arms=ARMS, level=DEFAULT_LEVEL, b4_codec=None, audit_strict=False):
     """Replay `replay` (list of dicts: conv_id, sender, receiver, msg bytes) through the arms, byte-exact oracle on every
     message. chain: published snapshots (see curation.build_repository_chain). version_index(r) -> published index
     (1-based; 0 = empty repository) for the message with rank r. b4_codec: the baseline-4 codec (None = not trainable).
     Returns {arm: finished tally}; message-level only (sync is added by scenario_totals). A link is
     (conv_id, sender, receiver); a declaration is charged when the declaration used on a link changes (first use incl.).
     Repo arms: declarations are charged for 4b, 4b-delta, 5, 6, 7; not for 1, 3, 4."""
-    from .canon import E1EError
-    from .codec import Link, raw_wire, declare_wire
+    from .canon import AuditAbort, E1EError
+    from .codec import Link, decode_message, raw_wire, declare_wire
     from .compact import CompactLink, CompactReceiver
     from .repo import Receiver
     from .repo import RepoState
@@ -448,6 +448,13 @@ def replay_arms(replay, chain, version_index, arms=ARMS, level=DEFAULT_LEVEL, b4
             t = tallies[a]
             ctrl = 0
             if a == "1":
+                if audit_strict:
+                    try:
+                        got = decode_message(RepoState(), raw)
+                    except E1EError as err:
+                        raise AuditAbort("arm 1 raw envelope did not decode") from err
+                    if got != msg:
+                        raise AuditAbort("arm 1 decoded bytes differ from the message")
                 mb = t.add_first(len(raw), "raw", n)
             elif a in ("3", "4", "4b", "4b-delta"):
                 if a == "3":
@@ -457,7 +464,11 @@ def replay_arms(replay, chain, version_index, arms=ARMS, level=DEFAULT_LEVEL, b4
                 else:
                     cdc = codec_4b(idx)
                 data, kind = cdc.compress(msg), "zstd"  # the named baseline's native rule: the zstd frame, always
-                assert cdc.decompress(data) == msg  # offline byte-exact oracle
+                if audit_strict:
+                    if cdc.decompress(data) != msg:
+                        raise AuditAbort("zstd frame does not decode to the message")
+                else:
+                    assert cdc.decompress(data) == msg  # offline byte-exact oracle
                 mb = t.add_first(len(data), kind, n)
                 if a in ("4b", "4b-delta"):  # same declaration rule as arms 5/6/7, the empty repository (v0) included
                     d = {"version": idx, "digest": chain[idx - 1]["state"].digest if idx else EMPTY_DIGEST}
@@ -470,15 +481,21 @@ def replay_arms(replay, chain, version_index, arms=ARMS, level=DEFAULT_LEVEL, b4
                 lk = links[a].get(key)
                 if lk is None:
                     if a == "5":
-                        lk = Link(known, rx, require_smaller=True)
+                        lk = Link(known, rx, require_smaller=True, audit_strict=audit_strict)
                     elif a == "6":
-                        lk = Link(known, rx, require_smaller=True, codec=b4_codec or codec3)
+                        lk = Link(known, rx, require_smaller=True, codec=b4_codec or codec3, audit_strict=audit_strict)
                     else:
-                        lk = CompactLink(known, rx)
+                        lk = CompactLink(known, rx, audit_strict=audit_strict)
                     links[a][key] = lk
                 before = len(lk.frames)
                 out, info = lk.transmit(msg)
-                assert out == msg
+                if audit_strict:
+                    if out != msg or info.get("rejected") or info.get("reason") == "verify_failed":
+                        raise AuditAbort("link did not deliver the original message")
+                    if any(fr[1] == "fallback" for fr in lk.frames[before:]):
+                        raise AuditAbort("fallback frame charged after a failed decode")
+                else:
+                    assert out == msg
                 new = lk.frames[before:]
                 mb = 0
                 for fr in new:

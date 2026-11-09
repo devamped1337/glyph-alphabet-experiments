@@ -1,9 +1,10 @@
 """Gate tests for the internal-75 prep. No compression, mining, or dictionary training."""
 import hashlib
 import importlib.util
-import json
 import os
 import pathlib
+import tempfile
+import time
 import unittest
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
@@ -54,7 +55,112 @@ class Internal75Gate(unittest.TestCase):
     def test_protected_outputs_are_refused(self):
         for rel in MOD.PROTECTED:
             with self.assertRaises(SystemExit):
-                MOD._refuse_output(str(ROOT / rel))
+                MOD.prepare_output(str(ROOT / rel))
+        with self.assertRaises(SystemExit):
+            MOD.prepare_output(str(ROOT / "data" / "internal75" / "combined75_messages.jsonl"))
+        with self.assertRaises(SystemExit):
+            MOD.prepare_output(str(ROOT / "tools" / "internal75_run.py"))
+
+    def test_review_text_must_approve_full_source_and_this_candidate(self):
+        head, harness = "a" * 40, "b" * 64
+        good = "VERDICT: APPROVE\nSOURCE_COVERAGE: full\nCANDIDATE: %s\nHARNESS: %s\n" % (head, harness)
+        self.assertEqual(MOD.review_problems(good, head, harness), [])
+        self.assertTrue(MOD.review_problems("VERDICT: CHANGES REQUIRED\nSOURCE_COVERAGE: full\nCANDIDATE: %s\nHARNESS: %s\n" % (head, harness), head, harness))
+        self.assertTrue(MOD.review_problems("VERDICT: APPROVE\nSOURCE_COVERAGE: partial\nCANDIDATE: %s\nHARNESS: %s\n" % (head, harness), head, harness))
+        self.assertTrue(MOD.review_problems(good, "c" * 40, harness))
+        self.assertTrue(MOD.review_problems(good, head, "d" * 64))
+
+    def test_ack_rejects_unbound_support_hashes(self):
+        claimed = MOD.support_hashes()
+        claimed["e1e/codec.py"] = "0" * 64
+        path = self._ack({"authorize_run": True, "candidate_commit": "a" * 40,
+                          "harness_sha256": MOD._sha256(MOD.__file__),
+                          "combined_sha256": MOD.manifest()["combined_sha256"],
+                          "support_sha256": claimed})
+        reason = MOD.ack_refusal(path, head_sha="a" * 40)
+        self.assertIn("support", reason)
+
+    def test_coverage_does_not_invent_zero_and_gzip_is_not_an_arm(self):
+        with self.assertRaises(SystemExit):
+            MOD.coverage_record({"input_bytes": 10})
+        zero = MOD.coverage_record({"covered_bytes": 0, "input_bytes": 0})
+        self.assertIsNone(zero["coverage"])
+        self.assertFalse(zero["coverage_defined"])
+        gzip = MOD.gzip_record(12)
+        self.assertFalse(gzip["comparable_as_arm_total"])
+        self.assertNotIn("gzip", MOD.ARMS)
+
+    def test_strict_decode_failure_does_not_retransmit(self):
+        import e1e.codec as codec
+        from e1e.canon import AuditAbort
+        from e1e.compact import CompactLink
+
+        class Rx:
+            def declare(self):
+                return {"version": 0, "digest": "sha256:" + "ab" * 32}
+
+            @property
+            def state(self):
+                return self
+
+            def fingerprint(self):
+                return "fp"
+
+        calls = {"n": 0}
+        original = codec.decode_message
+
+        def once(state, wire):
+            calls["n"] += 1
+            if calls["n"] == 1:
+                raise codec.E1EError("E_SCHEMA", "forced")
+            return b"hello"
+
+        codec.decode_message = once
+        try:
+            plain = codec.Link({}, Rx())
+            out, info = plain.transmit(b"hello")
+            self.assertEqual(out, b"hello")
+            self.assertTrue(any(frame[1] == "fallback" for frame in plain.frames))
+            calls["n"] = 0
+            strict = codec.Link({}, Rx(), audit_strict=True)
+            with self.assertRaises(AuditAbort):
+                strict.transmit(b"hello")
+            self.assertFalse(any(frame[1] == "fallback" for frame in strict.frames))
+        finally:
+            codec.decode_message = original
+
+        class Bad:
+            class state:
+                @staticmethod
+                def fingerprint():
+                    return "fp"
+
+            @staticmethod
+            def decode(payload):
+                return b"other"
+
+        strict_compact = CompactLink({}, Bad(), audit_strict=True)
+        with self.assertRaises(AuditAbort):
+            strict_compact.deliver(b"{}", b"hello", "raw")
+        self.assertFalse(any(frame[1] == "fallback" for frame in strict_compact.frames))
+
+    def test_watchdog_fires_and_is_not_an_exception(self):
+        self.assertTrue(issubclass(MOD.AuditDeadline, BaseException))
+        self.assertFalse(issubclass(MOD.AuditDeadline, Exception))
+        MOD.install_watchdog(0.05)
+        try:
+            with self.assertRaises(MOD.AuditDeadline):
+                time.sleep(0.4)
+        finally:
+            MOD.clear_watchdog()
+
+    def _ack(self, payload):
+        handle = tempfile.NamedTemporaryFile("w", suffix=".json", delete=False)
+        import json
+        json.dump(payload, handle)
+        handle.close()
+        self.addCleanup(os.remove, handle.name)
+        return handle.name
 
 
 if __name__ == "__main__":

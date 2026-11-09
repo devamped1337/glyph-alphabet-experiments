@@ -27,7 +27,7 @@ One descriptive replay, in sample, on these 75 only:
 - No call to `tune`, no grid sweep, no edit of the floor or the retirement rule.
 - Byte-exact decode is the frozen `replay_arms` assert. A mismatch aborts. There is no second parameter set.
 - No timings and no speedup claim. If the run happens, a second invocation must reproduce the aggregate sha256 or the run is invalid.
-- Stop conditions, fixed before any result: one process; no Kaggle, GPU, model call, or paid API; no second parameter set; abort on the first byte-exact mismatch; abort if zstd is not 0.23.0 / libzstd 1.5.6; abort if the combined hash differs; do not overwrite the old dev-screen files. Operator wall-clock cap: kill the process if it exceeds 60 seconds. The published 300-message synthetic screen recorded 1.4 seconds including tuning. That figure is a scale reference for a larger, tuned job, not a measurement of these 75.
+- Stop conditions, fixed before any result: one process; no Kaggle, GPU, model call, or paid API; no second parameter set. `audit_strict=True` raises `AuditAbort` before a raw fallback or retransmission, including under Python `-O`, and arm 1 is checked with `decode_message`. The process also sets a 60-second interval timer around validation, imports, curation, replay, and output; on expiry it keeps no report. A zstd pin mismatch or a combined-hash mismatch aborts. Output can be created only as a new file inside `measurements/internal75-audit/`. The published 300-message synthetic screen recorded 1.4 seconds including tuning. That figure is a scale reference for a larger, tuned job, not a measurement of these 75. Gzip-9 is reported as message frames only and is not an arm total.
 
 ## Decision the run is allowed to answer
 

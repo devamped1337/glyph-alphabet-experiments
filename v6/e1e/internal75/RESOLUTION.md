@@ -1,0 +1,23 @@
+# Resolution of the 6019ee8 reviews
+
+GPT/Codex on `6019ee8c968986ef8889aa242404e385e3fdb565`: CHANGES REQUIRED. Grok on the same commit: APPROVE, and Grok stated that `compact.py` was only partly read. That approval is not treated as full-source approval. Neither review authorises a measurement. This commit changes the harness and the audit path, so both must review it again.
+
+## What was wrong
+
+1. `replay_arms` used `assert` for byte equality. Python `-O` removes asserts. `codec.encode` skipped a reference after a failed verify and could send raw. `CompactLink.deliver` caught a bad decode and retransmitted raw. The harness treated a finished replay as success.
+2. The ack accepted any 64-hex strings. It did not read a review, require `VERDICT: APPROVE`, require `SOURCE_COVERAGE: full`, or bind the candidate commit and the support files.
+3. The 60-second limit was only a written instruction.
+4. The output check blocked a few named files and still allowed an overwrite of the corpus, the manifest, or the harness.
+5. The saved report kept arm totals only. Gzip sat beside them in a way that looked like another complete arm. Missing coverage keys would become zero.
+
+## What this commit does
+
+Normal codec calls are unchanged: `audit_strict` defaults to false, and existing tests call that default. The internal-75 replay passes `audit_strict=True`. On a verification or decode failure the codec raises `AuditAbort` before charging a fallback frame. `AuditAbort` is not an `E1EError`, so the fallback handlers do not catch it. Arm 1 calls `decode_message` and compares the bytes with an `if`, not an assert.
+
+The ack must name two review files, those files must hash to the ack, and each file must contain `VERDICT: APPROVE`, `SOURCE_COVERAGE: full`, `CANDIDATE:` equal to `git rev-parse HEAD`, and `HARNESS:` equal to this harness file. Support hashes for canon, schema, repo, codec, compact, curation, and baselines must match the manifest and the files on disk.
+
+`install_watchdog(60)` uses `signal.setitimer` for the whole measurement function, including the zstd import, validation, curation, replay, and output. `AuditDeadline` is a `BaseException`. Timeout deletes a partial output and does not leave a successful report.
+
+The only legal output is a new file directly inside `measurements/internal75-audit/`, created with `O_EXCL`. The report stores each arm's component tally, break-even, and publication/schedule records without entry text or source-conversation ids. Gzip is under `gzip9_message_frames_only` with `comparable_as_arm_total: false`. Coverage is omitted from the arithmetic when the fields are absent; a zero eligible-byte denominator is `coverage: null`, not zero.
+
+The message files are the same bytes. `L=32`, `k=2`, `C=50` is unchanged. There is still no `tune()`, no baseline-4 training, and no measurement in this commit.

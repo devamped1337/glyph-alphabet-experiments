@@ -13,7 +13,7 @@ Verdict wanted: APPROVE or CHANGES, against the exact hashes in `v6/e1e/internal
 5. The decision question is only whether arm 7's primary total is strictly smaller than both 4b-delta and arm 6 on this synthetic cohort after sync bytes. A yes would not generalise to outside traffic.
 6. Owner run approval already exists for after packaging and disclosure. Code review is still open. Say if the ack gate is too weak or too strong.
 7. Canonical zip sha256 is `990b3ef816dedfe140ecd0a8d27675bd27b5c575f1ac825fab32c438d2e58cbc` (74912 bytes). The embedded handoff hash `818a0e67d34eca9119190ef21fa6ac8003cb9b1b92da8e9194e7ff934553ce0e` is the previous package pass, not a new corpus. Combined sha256 stays `b94115fb424947f0555b2ba6669f8d3ba11b53e664e640d4b9670a6b30535439`.
-8. Planned execution if both reviews later allow it: one process, no tune, no baseline-4 training, no Kaggle/GPU/model/paid API, stop at the first byte-exact failure or zstd pin mismatch, and stop if wall time exceeds 60 seconds. No speedup claim. This review does not authorise that run by itself.
+8. Planned execution if both reviews later allow it: one process, `audit_strict=True`, no tune, no baseline-4 training, no Kaggle/GPU/model/paid API. A decode or verification failure aborts before fallback. A 60-second interval timer covers the run and leaves no report. Output is a new file inside `measurements/internal75-audit/` only. Gzip-9 is not an arm total. No speedup claim. An approval of `6019ee8` does not approve this commit. A review that is not `VERDICT: APPROVE` with `SOURCE_COVERAGE: full`, and bound to this commit and harness, does not open the gate.
 
 ## Command
 
