@@ -30,6 +30,22 @@ def reject_wire(code, wire):
     return canonical({"format": MSG_FORMAT, "type": "reject", "code": code, "msg": sha256_hex(wire)})
 
 
+def audit_arm1(msg, wire):
+    """Decode an arm-1 raw envelope and require the original bytes.
+
+    The comparison is an if, not an assert, so Python -O cannot skip it.
+    Used only when a caller asks for the strict audit.
+    """
+    from .repo import RepoState
+    try:
+        got = decode_message(RepoState(), wire)
+    except E1EError as err:
+        raise AuditAbort("arm 1 raw envelope did not decode") from err
+    if got != msg:
+        raise AuditAbort("arm 1 decoded bytes differ from the message")
+    return got
+
+
 def decode_message(state, wire):
     """Receiver-side decoder. Returns the original message bytes or raises E1EError."""
     obj = parse_canonical(wire, MAX_WIRE_BYTES)

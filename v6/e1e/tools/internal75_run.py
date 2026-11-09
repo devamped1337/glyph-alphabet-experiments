@@ -151,20 +151,43 @@ class AuditDeadline(BaseException):
     """Interval-timer stop. A BaseException so protocol `except Exception` handlers cannot continue."""
 
 
+_WATCH = {"armed": False, "expired": False, "t0": 0.0, "limit": 0.0}
+
+
 def install_watchdog(seconds):
+    """Arm the interval timer. A late signal after disarm sets expired and does not raise."""
     if not hasattr(signal, "setitimer"):
         raise SystemExit("no interval timer; not measuring")
+    import time
+    _WATCH["expired"] = False
+    _WATCH["t0"] = time.monotonic()
+    _WATCH["limit"] = seconds
 
     def handler(signum, frame):
-        raise AuditDeadline("audit exceeded %ss; no report kept" % seconds)
+        _WATCH["expired"] = True
+        if _WATCH["armed"]:
+            _WATCH["armed"] = False
+            raise AuditDeadline("audit exceeded %ss; no report kept" % seconds)
 
+    _WATCH["armed"] = True
     signal.signal(signal.SIGALRM, handler)
     signal.setitimer(signal.ITIMER_REAL, seconds)
 
 
 def clear_watchdog():
+    """Disarm first so a signal delivered during this call cannot skip cleanup."""
+    _WATCH["armed"] = False
     if hasattr(signal, "setitimer"):
         signal.setitimer(signal.ITIMER_REAL, 0)
+
+
+def deadline_hit():
+    import time
+    if _WATCH["expired"]:
+        return True
+    if not _WATCH["limit"]:
+        return False
+    return (time.monotonic() - _WATCH["t0"]) > _WATCH["limit"]
 
 
 def _git_head():
@@ -312,6 +335,63 @@ def publication_evidence(chain, version_index):
     return {"publications": publications, "schedule": schedule, "version_index_by_rank": list(version_index)}
 
 
+def build_report(summary, totals, publication, gzip_bytes, zstd_version):
+    """Assemble the persisted report. Gzip stays outside the arm totals."""
+    coverage = coverage_record(totals["7"])
+    arms = {}
+    for arm in ARMS:
+        row = dict(totals[arm])
+        for key in ("message_bytes", "message_prefix_bytes", "control_bytes", "control_prefix_bytes",
+                    "declare_bytes_incl_prefix", "reject_bytes_incl_prefix", "retransmit_bytes_incl_prefix",
+                    "sync_upload", "sync_download", "sync_total", "total"):
+            if key not in row:
+                raise SystemExit("arm tally is missing " + key)
+        arms[arm] = row
+    return {
+        "label": "EXPLORATORY INTERNAL ALL-DEV. Not held-out evidence. Not an outside-traffic result. Does not clear the prior Stage-1 failures and does not change the retirement rule.",
+        "combined_sha256": summary["combined_sha256"],
+        "counts": summary,
+        "plan": plan(),
+        "bindings": {"candidate_commit": _git_head(), "harness_sha256": _sha256(__file__),
+                     "support_sha256": support_hashes()},
+        "zstd": {"version": zstd_version[0], "lib": list(zstd_version[1])},
+        "conversation_order": "order_conversations without timestamps; held-out split not applied",
+        "gzip9_message_frames_only": gzip_record(gzip_bytes),
+        "coverage_descriptive": coverage,
+        "arms": arms,
+        "break_even": totals["_break_even"],
+        "publication": publication,
+        "primary_totals": {arm: arms[arm]["total"] for arm in ARMS},
+        "arm7_strictly_smaller_than_both_4b_delta_and_6": arms["7"]["total"] < arms["4b-delta"]["total"] and arms["7"]["total"] < arms["6"]["total"],
+        "claim_scope": "synthetic internal cohort only",
+    }
+
+
+def _delete(paths):
+    for path in paths:
+        if path and os.path.lexists(path):
+            os.remove(path)
+
+
+def commit_report(final_path, blob, cleanup):
+    """Write a partial file, disarm, and publish only if the deadline has not fired."""
+    temp = final_path + ".partial"
+    cleanup.append(temp)
+    fd = os.open(temp, os.O_CREAT | os.O_EXCL | os.O_WRONLY, 0o644)
+    with os.fdopen(fd, "wb") as handle:
+        handle.write(blob)
+    clear_watchdog()
+    if deadline_hit():
+        raise AuditDeadline("audit exceeded; no report kept")
+    os.replace(temp, final_path)
+    if temp in cleanup:
+        cleanup.remove(temp)
+    cleanup.append(final_path)
+    if deadline_hit():
+        raise AuditDeadline("audit exceeded; no report kept")
+    cleanup.clear()
+
+
 def _require_zstd():
     import zstandard
     if getattr(zstandard, "__version__", None) != "0.23.0" or getattr(zstandard, "ZSTD_VERSION", None) != (1, 5, 6):
@@ -319,86 +399,71 @@ def _require_zstd():
     return zstandard.__version__, zstandard.ZSTD_VERSION
 
 
-def run_measurement(out_path, deadline_s=DEADLINE_S):
-    """One fixed replay. Reached only after ack_refusal returns None."""
-    from e1e.canon import AuditAbort, E1EError
+def _real_blob():
+    """Corpus replay. Called only after the watchdog is already armed."""
+    from e1e.canon import AuditAbort
+    zstd_version = _require_zstd()
+    summary = validate()
+    from e1e import baselines as B
+    from e1e import curation as K
+
+    raw, rows = _load_jsonl(os.path.join(DATA, COMBINED))
+    by = {}
+    for row in rows:
+        by.setdefault(row["conv_id"], []).append(row)
+    messages = [{"conv_id": c, "seq": r["seq"], "text": r["text"]} for c, rs in by.items() for r in rs]
+    order = K.order_conversations(messages)  # synthetic all-dev order; not a held-out split
+    convs = [(c, [r["text"] for r in by[c]]) for c in order]
+    replay = [{"conv_id": c, "sender": r["sender_role"], "receiver": r["receiver_role"],
+               "msg": r["text"].encode("utf-8")} for c in order for r in by[c]]
+    if len(replay) != 75:
+        raise SystemExit("replay length changed")
+    miner = K.Miner(convs, "synthetic")
+    chain = K.build_repository_chain(
+        miner, len(convs), FIXED["V"], FIXED["L"], FIXED["k"], FIXED["C"], FIXED["joiners"])
+    sched = [K.version_for_rank(r, len(replay), FIXED["V"]) for r in range(len(replay))]
+
+    def version_map(sched_version):
+        idx = 0
+        for i, rec in enumerate(chain, 1):
+            if rec["sched_version"] <= sched_version:
+                idx = i
+        return idx
+
+    indexes = [version_map(item) for item in sched]
+    res = B.replay_arms(
+        replay, chain, lambda r: indexes[r], ARMS, level=FIXED["zstd_level"],
+        b4_codec=None, audit_strict=True)
+    totals = B.scenario_totals(res, chain, FIXED["participants"], [], b4_codec=None)
+    gzip_bytes = 0
+    for item in replay:
+        frame = gzip.compress(item["msg"], 9, mtime=0)
+        if gzip.decompress(frame) != item["msg"]:
+            raise AuditAbort("gzip frame does not decode to the message")
+        gzip_bytes += len(frame)
+    report = build_report(summary, totals, publication_evidence(chain, indexes), gzip_bytes, zstd_version)
+    report["combined_sha256"] = hashlib.sha256(raw).hexdigest()
+    return json.dumps(report, indent=1, sort_keys=True).encode("utf-8") + b"\n"
+
+
+def run_measurement(out_path, deadline_s=DEADLINE_S, compute=None):
+    """One fixed replay. The watchdog is armed before any e1e import in this call."""
     install_watchdog(deadline_s)
-    written = None
+    cleanup = []
     try:
+        from e1e.canon import AuditAbort, E1EError
         real = prepare_output(out_path)
-        zstd_version = _require_zstd()
-        summary = validate()
-        from e1e import baselines as B
-        from e1e import curation as K
-
-        raw, rows = _load_jsonl(os.path.join(DATA, COMBINED))
-        by = {}
-        for row in rows:
-            by.setdefault(row["conv_id"], []).append(row)
-        messages = [{"conv_id": c, "seq": r["seq"], "text": r["text"]} for c, rs in by.items() for r in rs]
-        order = K.order_conversations(messages)  # synthetic all-dev order; not a held-out split
-        convs = [(c, [r["text"] for r in by[c]]) for c in order]
-        replay = [{"conv_id": c, "sender": r["sender_role"], "receiver": r["receiver_role"],
-                   "msg": r["text"].encode("utf-8")} for c in order for r in by[c]]
-        if len(replay) != 75:
-            raise SystemExit("replay length changed")
-        miner = K.Miner(convs, "synthetic")
-        chain = K.build_repository_chain(
-            miner, len(convs), FIXED["V"], FIXED["L"], FIXED["k"], FIXED["C"], FIXED["joiners"])
-        sched = [K.version_for_rank(r, len(replay), FIXED["V"]) for r in range(len(replay))]
-
-        def version_map(sched_version):
-            idx = 0
-            for i, rec in enumerate(chain, 1):
-                if rec["sched_version"] <= sched_version:
-                    idx = i
-            return idx
-
-        indexes = [version_map(item) for item in sched]
-        res = B.replay_arms(
-            replay, chain, lambda r: indexes[r], ARMS, level=FIXED["zstd_level"],
-            b4_codec=None, audit_strict=True)
-        totals = B.scenario_totals(res, chain, FIXED["participants"], [], b4_codec=None)
-        gzip_bytes = 0
-        for item in replay:
-            frame = gzip.compress(item["msg"], 9, mtime=0)
-            if gzip.decompress(frame) != item["msg"]:
-                raise AuditAbort("gzip frame does not decode to the message")
-            gzip_bytes += len(frame)
-        coverage = coverage_record(totals["7"])
-        arm7, arm6, arm4bd = totals["7"]["total"], totals["6"]["total"], totals["4b-delta"]["total"]
-        report = {
-            "label": "EXPLORATORY INTERNAL ALL-DEV. Not held-out evidence. Not an outside-traffic result. Does not clear the prior Stage-1 failures and does not change the retirement rule.",
-            "combined_sha256": hashlib.sha256(raw).hexdigest(),
-            "counts": summary,
-            "plan": plan(),
-            "bindings": {"candidate_commit": _git_head(), "harness_sha256": _sha256(__file__),
-                         "support_sha256": support_hashes()},
-            "zstd": {"version": zstd_version[0], "lib": list(zstd_version[1])},
-            "conversation_order": "order_conversations without timestamps; held-out split not applied",
-            "gzip9_message_frames_only": gzip_record(gzip_bytes),
-            "coverage_descriptive": coverage,
-            "arms": {arm: totals[arm] for arm in ARMS},
-            "break_even": totals["_break_even"],
-            "publication": publication_evidence(chain, indexes),
-            "primary_totals": {arm: totals[arm]["total"] for arm in ARMS},
-            "arm7_strictly_smaller_than_both_4b_delta_and_6": arm7 < arm4bd and arm7 < arm6,
-            "claim_scope": "synthetic internal cohort only",
-        }
-        blob = json.dumps(report, indent=1, sort_keys=True).encode("utf-8") + b"\n"
-        fd = os.open(real, os.O_CREAT | os.O_EXCL | os.O_WRONLY, 0o644)
-        written = real
-        with os.fdopen(fd, "wb") as handle:
-            handle.write(blob)
-        return report
+        blob = _real_blob() if compute is None else compute()
+        commit_report(real, blob, cleanup)
     except AuditDeadline:
-        if written and os.path.lexists(written):
-            os.remove(written)
+        _delete(cleanup)
         raise SystemExit("audit deadline exceeded; no report kept")
-    except (AuditAbort, E1EError):
-        if written and os.path.lexists(written):
-            os.remove(written)
-        raise SystemExit("audit aborted on a verification failure; no report kept")
+    except Exception as err:
+        from e1e.canon import AuditAbort, E1EError
+        _delete(cleanup)
+        if isinstance(err, (AuditAbort, E1EError)):
+            raise SystemExit("audit aborted on a verification failure; no report kept")
+        raise
     finally:
         clear_watchdog()
 

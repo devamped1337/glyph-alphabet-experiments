@@ -398,7 +398,7 @@ def replay_arms(replay, chain, version_index, arms=ARMS, level=DEFAULT_LEVEL, b4
     (conv_id, sender, receiver); a declaration is charged when the declaration used on a link changes (first use incl.).
     Repo arms: declarations are charged for 4b, 4b-delta, 5, 6, 7; not for 1, 3, 4."""
     from .canon import AuditAbort, E1EError
-    from .codec import Link, decode_message, raw_wire, declare_wire
+    from .codec import Link, audit_arm1, raw_wire, declare_wire
     from .compact import CompactLink, CompactReceiver
     from .repo import Receiver
     from .repo import RepoState
@@ -449,12 +449,7 @@ def replay_arms(replay, chain, version_index, arms=ARMS, level=DEFAULT_LEVEL, b4
             ctrl = 0
             if a == "1":
                 if audit_strict:
-                    try:
-                        got = decode_message(RepoState(), raw)
-                    except E1EError as err:
-                        raise AuditAbort("arm 1 raw envelope did not decode") from err
-                    if got != msg:
-                        raise AuditAbort("arm 1 decoded bytes differ from the message")
+                    audit_arm1(msg, raw)
                 mb = t.add_first(len(raw), "raw", n)
             elif a in ("3", "4", "4b", "4b-delta"):
                 if a == "3":

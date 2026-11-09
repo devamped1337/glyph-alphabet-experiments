@@ -1,8 +1,11 @@
 """Gate tests for the internal-75 prep. No compression, mining, or dictionary training."""
 import hashlib
 import importlib.util
+import inspect
 import os
 import pathlib
+import subprocess
+import sys
 import tempfile
 import time
 import unittest
@@ -153,6 +156,164 @@ class Internal75Gate(unittest.TestCase):
                 time.sleep(0.4)
         finally:
             MOD.clear_watchdog()
+
+    def test_watchdog_is_armed_before_the_package_import(self):
+        src = inspect.getsource(MOD.run_measurement)
+        self.assertLess(src.index("install_watchdog"), src.index("from e1e"))
+
+    def test_complete_ack_accepts_and_rejects_tampered_reviews(self):
+        head = "ab" * 20
+        harness = MOD._sha256(MOD.__file__)
+        support = MOD.support_hashes()
+        approve = "VERDICT: APPROVE\nSOURCE_COVERAGE: full\nCANDIDATE: %s\nHARNESS: %s\n" % (head, harness)
+        gpt = self._text(approve)
+        grok = self._text(approve)
+        payload = {
+            "authorize_run": True,
+            "candidate_commit": head,
+            "combined_sha256": MOD.manifest()["combined_sha256"],
+            "harness_sha256": harness,
+            "support_sha256": support,
+            "gpt_review_path": gpt[0],
+            "gpt_review_sha256": gpt[1],
+            "grok_review_path": grok[0],
+            "grok_review_sha256": grok[1],
+        }
+        self.assertIsNone(MOD.ack_refusal(self._ack(payload), head_sha=head))
+        changed = self._text("VERDICT: CHANGES REQUIRED\nSOURCE_COVERAGE: full\nCANDIDATE: %s\nHARNESS: %s\n" % (head, harness))
+        payload["gpt_review_path"], payload["gpt_review_sha256"] = changed[0], changed[1]
+        self.assertIn("verdict", MOD.ack_refusal(self._ack(payload), head_sha=head))
+        payload["gpt_review_path"], payload["gpt_review_sha256"] = gpt
+        payload["gpt_review_sha256"] = "0" * 64
+        self.assertIn("hash mismatch", MOD.ack_refusal(self._ack(payload), head_sha=head))
+        payload["gpt_review_path"] = os.path.join(ROOT, "internal75", "NO_SUCH_REVIEW.md")
+        payload["gpt_review_sha256"] = gpt[1]
+        self.assertIn("missing", MOD.ack_refusal(self._ack(payload), head_sha=head))
+        partial = self._text("VERDICT: APPROVE\nSOURCE_COVERAGE: partial\nCANDIDATE: %s\nHARNESS: %s\n" % (head, harness))
+        payload["gpt_review_path"], payload["gpt_review_sha256"] = partial[0], partial[1]
+        self.assertIn("coverage", MOD.ack_refusal(self._ack(payload), head_sha=head))
+
+    def test_existing_output_is_not_overwritten(self):
+        folder = ROOT / "measurements" / "internal75-audit"
+        folder.mkdir(parents=True, exist_ok=True)
+        path = folder / "collision.json"
+        path.write_bytes(b"keep")
+        try:
+            with self.assertRaises(SystemExit):
+                MOD.prepare_output(str(path))
+            self.assertEqual(path.read_bytes(), b"keep")
+        finally:
+            path.unlink()
+
+    def test_report_keeps_component_tallies_and_separates_gzip(self):
+        def arm(total):
+            return {
+                "message_bytes": 3, "message_prefix_bytes": 1, "control_bytes": 2, "control_prefix_bytes": 1,
+                "declare_bytes_incl_prefix": 4, "reject_bytes_incl_prefix": 0, "retransmit_bytes_incl_prefix": 0,
+                "sync_upload": 8, "sync_download": 16, "sync_total": 24, "total": total,
+                "covered_bytes": 1, "input_bytes": 9,
+            }
+        totals = {name: arm(10) for name in MOD.ARMS}
+        totals["7"]["total"] = 30
+        totals["_break_even"] = {"updates_observed": 0, "joins_observed": 0}
+        publication = {"publications": [{"sched_version": 1, "new_entries": 2, "full_bytes": 40}],
+                       "schedule": [{"sched_version": 1, "status": "published"}],
+                       "version_index_by_rank": [1]}
+        report = MOD.build_report({"combined_sha256": "abc", "messages": 1}, totals, publication, 7, ("0.23.0", (1, 5, 6)))
+        self.assertEqual(report["arms"]["5"]["sync_upload"], 8)
+        self.assertEqual(report["arms"]["5"]["message_bytes"], 3)
+        self.assertEqual(report["arms"]["5"]["declare_bytes_incl_prefix"], 4)
+        self.assertEqual(report["break_even"]["updates_observed"], 0)
+        self.assertEqual(report["publication"]["publications"][0]["new_entries"], 2)
+        self.assertFalse(report["gzip9_message_frames_only"]["comparable_as_arm_total"])
+        self.assertNotIn("gzip9", report["primary_totals"])
+
+    def test_encoder_verify_failure_aborts_before_raw_fallback(self):
+        from e1e import Publisher, make_entry
+        from e1e.canon import AuditAbort, E1EError
+        from e1e import compact as compact
+        pub = Publisher()
+        pub.publish([make_entry("e00", 1, "OK")])
+        state = pub.state
+        known = {state.digest: state}
+        decl = {"version": state.version, "digest": state.digest}
+        original = compact.decode_compact
+
+        def bad(*args, **kwargs):
+            raise E1EError("E_SCHEMA", "forced")
+
+        compact.decode_compact = bad
+        try:
+            with self.assertRaises(AuditAbort):
+                compact.encode(known, decl, b"OK", audit_strict=True)
+            payload, info = compact.encode(known, decl, b"OK", audit_strict=False)
+            self.assertEqual(info["reason"], "verify_failed")
+            self.assertTrue(payload.startswith(b"{"))
+        finally:
+            compact.decode_compact = original
+
+    def test_arm1_mismatch_aborts_under_optimization(self):
+        from e1e.canon import AuditAbort
+        from e1e import codec
+        self.assertNotIn("\n    assert ", inspect.getsource(codec.audit_arm1))
+        original = codec.decode_message
+        codec.decode_message = lambda state, wire: b"nope"
+        try:
+            with self.assertRaises(AuditAbort):
+                codec.audit_arm1(b"hello", codec.raw_wire(b"hello"))
+        finally:
+            codec.decode_message = original
+        script = (
+            "import e1e.codec as codec\n"
+            "from e1e.canon import AuditAbort\n"
+            "codec.decode_message = lambda state, wire: b'nope'\n"
+            "try:\n"
+            "    codec.audit_arm1(b'hello', codec.raw_wire(b'hello'))\n"
+            "except AuditAbort:\n"
+            "    raise SystemExit(0)\n"
+            "raise SystemExit(1)\n"
+        )
+        ran = subprocess.run([sys.executable, "-O", "-c", script], cwd=str(ROOT), capture_output=True, text=True)
+        self.assertEqual(ran.returncode, 0, ran.stderr)
+
+    def test_timeout_during_compute_and_finalization_leaves_no_report(self):
+        folder = ROOT / "measurements" / "internal75-audit"
+        folder.mkdir(parents=True, exist_ok=True)
+        slow_path = folder / "slow.json"
+        late_path = folder / "late.json"
+
+        def slow():
+            time.sleep(0.3)
+            return b"{}\n"
+
+        def late():
+            MOD._WATCH["expired"] = True
+            return b"{}\n"
+
+        try:
+            with self.assertRaises(SystemExit) as caught:
+                MOD.run_measurement(str(slow_path), deadline_s=0.05, compute=slow)
+            self.assertIn("deadline", str(caught.exception))
+            self.assertFalse(slow_path.exists())
+            self.assertFalse(pathlib.Path(str(slow_path) + ".partial").exists())
+            with self.assertRaises(SystemExit) as caught:
+                MOD.run_measurement(str(late_path), deadline_s=30, compute=late)
+            self.assertIn("deadline", str(caught.exception))
+            self.assertFalse(late_path.exists())
+            self.assertFalse(pathlib.Path(str(late_path) + ".partial").exists())
+        finally:
+            MOD.clear_watchdog()
+            for path in (slow_path, late_path, pathlib.Path(str(slow_path) + ".partial"), pathlib.Path(str(late_path) + ".partial")):
+                if path.exists():
+                    path.unlink()
+
+    def _text(self, text):
+        handle = tempfile.NamedTemporaryFile("w", suffix=".md", delete=False)
+        handle.write(text)
+        handle.close()
+        self.addCleanup(os.remove, handle.name)
+        raw = pathlib.Path(handle.name).read_bytes()
+        return handle.name, hashlib.sha256(raw).hexdigest()
 
     def _ack(self, payload):
         handle = tempfile.NamedTemporaryFile("w", suffix=".json", delete=False)

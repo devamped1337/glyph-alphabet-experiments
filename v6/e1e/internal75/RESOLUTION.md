@@ -21,3 +21,11 @@ The ack must name two review files, those files must hash to the ack, and each f
 The only legal output is a new file directly inside `measurements/internal75-audit/`, created with `O_EXCL`. The report stores each arm's component tally, break-even, and publication/schedule records without entry text or source-conversation ids. Gzip is under `gzip9_message_frames_only` with `comparable_as_arm_total: false`. Coverage is omitted from the arithmetic when the fields are absent; a zero eligible-byte denominator is `coverage: null`, not zero.
 
 The message files are the same bytes. `L=32`, `k=2`, `C=50` is unchanged. There is still no `tune()`, no baseline-4 training, and no measurement in this commit.
+
+## Second GPT review
+
+GPT's full-source review of `c84b5814b64549a56f6537de18415c76d0bddcba` is `VERDICT: CHANGES REQUIRED` with `SOURCE_COVERAGE: full`. Its file sha256 is `0d4e05cc29f93834cc04a69ccb968e5832b797192700f1ebdc35a8d57a7ae40a`. It does not approve a run. A separate Grok review of that same commit cannot approve the commit that contains these further fixes.
+
+The watchdog is now installed before the `e1e` import inside `run_measurement`. Disarming clears the armed flag before the timer is stopped, so a signal delivered while disarming does not raise out of `finally` and skip deletion. The report is published only after that disarm, and only if the deadline flag and the monotonic clock are still inside the limit. A late deadline deletes the partial file and the final file.
+
+The gate tests now drive the whole ack function through an accepting pair of review files, a `CHANGES REQUIRED` verdict, a tampered digest, a missing file, and `SOURCE_COVERAGE: partial`. They refuse an existing output file, check that a fake tally keeps sync and message components with gzip outside the arm totals, abort a tiny `OK` entry when compact verification fails, and abort an arm-1 mismatch under `python -O`. Timeout coverage calls `run_measurement` with a stand-in compute function, not the 75-message replay. The export of this commit includes `test_rejections.py`, `test_roundtrip.py`, `test_compact.py`, and the helpers those modules import.
