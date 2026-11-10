@@ -77,7 +77,8 @@ class Internal75Gate(unittest.TestCase):
     def test_ack_rejects_unbound_support_hashes(self):
         claimed = MOD.support_hashes()
         claimed["e1e/codec.py"] = "0" * 64
-        path = self._ack({"authorize_run": True, "candidate_commit": "a" * 40,
+        path = self._ack({"authorize_run": True, "reviewer_policy": MOD.REVIEWER_POLICY,
+                          "candidate_commit": "a" * 40,
                           "harness_sha256": MOD._sha256(MOD.__file__),
                           "combined_sha256": MOD.manifest()["combined_sha256"],
                           "support_sha256": claimed})
@@ -168,18 +169,25 @@ class Internal75Gate(unittest.TestCase):
         support = MOD.support_hashes()
         approve = "VERDICT: APPROVE\nSOURCE_COVERAGE: full\nCANDIDATE: %s\nHARNESS: %s\n" % (head, harness)
         gpt = self._text(approve)
-        grok = self._text(approve)
         payload = {
             "authorize_run": True,
+            "reviewer_policy": MOD.REVIEWER_POLICY,
             "candidate_commit": head,
             "combined_sha256": MOD.manifest()["combined_sha256"],
             "harness_sha256": harness,
             "support_sha256": support,
             "gpt_review_path": gpt[0],
             "gpt_review_sha256": gpt[1],
-            "grok_review_path": grok[0],
-            "grok_review_sha256": grok[1],
         }
+        self.assertIsNone(MOD.ack_refusal(self._ack(payload), head_sha=head))
+        partial_grok = self._text("VERDICT: APPROVE\nSOURCE_COVERAGE: partial\nCANDIDATE: %s\nHARNESS: %s\n" % (head, harness))
+        payload["grok_review_path"], payload["grok_review_sha256"] = partial_grok[0], partial_grok[1]
+        self.assertIsNone(MOD.ack_refusal(self._ack(payload), head_sha=head))
+        payload.pop("grok_review_path")
+        payload.pop("grok_review_sha256")
+        payload["reviewer_policy"] = "both-reviewers"
+        self.assertIn("policy", MOD.ack_refusal(self._ack(payload), head_sha=head))
+        payload["reviewer_policy"] = MOD.REVIEWER_POLICY
         self.assertIsNone(MOD.ack_refusal(self._ack(payload), head_sha=head))
         changed = self._text("VERDICT: CHANGES REQUIRED\nSOURCE_COVERAGE: full\nCANDIDATE: %s\nHARNESS: %s\n" % (head, harness))
         payload["gpt_review_path"], payload["gpt_review_sha256"] = changed[0], changed[1]

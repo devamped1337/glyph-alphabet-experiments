@@ -28,6 +28,9 @@ FIXED = {"L": 32, "k": 2, "C": 50, "V": 5, "participants": 2, "joiners": 0, "zst
 ARMS = ("1", "3", "4b", "4b-delta", "5", "6", "7")  # arm 4 omitted: selecting it would train on these messages
 FLOOR = 0.20  # unchanged; a number on this cohort does not clear the earlier failures
 DEADLINE_S = 60
+# Owner decision 2026-11-10 11:01 Australia/Sydney, this CPU audit only.
+# Grok full-source coverage was not verified, so Grok is not an authorization input.
+REVIEWER_POLICY = "internal75-cpu-gpt-full-source-only-2026-11-10"
 AUDIT_DIR_REL = "measurements/internal75-audit"
 SUPPORT = ("e1e/canon.py", "e1e/schema.py", "e1e/repo.py", "e1e/codec.py", "e1e/compact.py",
            "e1e/curation.py", "e1e/baselines.py")
@@ -138,6 +141,8 @@ def plan():
         "floor_on_this_cohort_cannot_clear_prior_screens": True,
         "retirement_rule_unchanged": True,
         "external_gate": "unmet",
+        "reviewer_policy": REVIEWER_POLICY,
+        "grok_review_required": False,
         "zstd_pin": "zstandard==0.23.0, libzstd 1.5.6, level 19, headline frame",
         "byte_exact": "audit_strict=True raises AuditAbort, which is not an assert, before raw fallback or retransmission. Python -O cannot strip it. Arm 1 is checked through decode_message.",
         "watchdog_seconds": DEADLINE_S,
@@ -262,6 +267,8 @@ def ack_refusal(path, head_sha=None):
     man = manifest()
     if ack.get("authorize_run") is not True:
         return "review ack does not authorise the run"
+    if ack.get("reviewer_policy") != REVIEWER_POLICY or man.get("reviewer_policy") != REVIEWER_POLICY:
+        return "review ack is not bound to the owner GPT-only policy for this CPU audit"
     head = _git_head() if head_sha is None else head_sha
     if not head or ack.get("candidate_commit") != head:
         return "review ack is not bound to this candidate commit"
@@ -274,13 +281,12 @@ def ack_refusal(path, head_sha=None):
     live = support_hashes()
     if claimed != live or claimed != man.get("support_sha256"):
         return "review ack support hashes are not this tree"
-    for who in ("gpt", "grok"):
-        reason, text = _load_review(ack.get(who + "_review_path"), ack.get(who + "_review_sha256"))
-        if reason:
-            return who + " " + reason
-        problems = review_problems(text, head, harness)
-        if problems:
-            return who + " review rejected: " + "; ".join(problems)
+    reason, text = _load_review(ack.get("gpt_review_path"), ack.get("gpt_review_sha256"))
+    if reason:
+        return "gpt " + reason
+    problems = review_problems(text, head, harness)
+    if problems:
+        return "gpt review rejected: " + "; ".join(problems)
     return None
 
 
