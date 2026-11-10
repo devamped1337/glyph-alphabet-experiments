@@ -12,7 +12,7 @@ import bisect
 import collections
 import heapq
 
-from .canon import E1EError
+from .canon import AuditAbort, E1EError
 from .codec import MAX_MESSAGE_BYTES, decode_message, declare_wire, raw_wire, reject_wire
 from .repo import Receiver, RepoState
 from .schema import INT_RE, WORD_RE, match_template, parse_template
@@ -559,7 +559,7 @@ def send_rule(compact_payload, raw_payload):
     return raw_payload, "raw"
 
 
-def encode(known, declaration, msg):
+def encode(known, declaration, msg, audit_strict=False):
     """Arm 7 sender. `known` maps snapshot digest -> RepoState the sender holds; `declaration` is the receiver's
     {"version","digest"}. Returns (payload, info). payload is a compact frame body or the raw E1E-MSG/1 envelope
     (always the JSON envelope); the strictly smaller wins, ties go to the raw envelope (section 3.5).
@@ -590,6 +590,8 @@ def encode(known, declaration, msg):
         ok = False
         info["verify_error"] = err.code
     if not ok:
+        if audit_strict:
+            raise AuditAbort("compact frame failed verification; raw fallback was not sent")
         info["reason"] = "verify_failed"
         return raw, info
     chosen, kind = send_rule(payload, raw)
@@ -613,8 +615,9 @@ class CompactLink:
     payload bytes under its kind plus its canonical length prefix under 'prefix' (reported as its own line).
     Kinds: compact, raw (first sends); declare, reject (receiver->sender); fallback (re-send after a reject)."""
 
-    def __init__(self, known, receiver):
+    def __init__(self, known, receiver, audit_strict=False):
         self._known, self._receiver = known, receiver
+        self._audit_strict = audit_strict
         self._frames = []  # (direction, kind, payload_bytes, prefix_bytes)
         self._last_decl = None
 
@@ -643,18 +646,25 @@ class CompactLink:
             if out != original:
                 raise E1EError("E_SCHEMA", "decoded bytes differ from the original")
         except E1EError as err:
+            if self._audit_strict:
+                raise AuditAbort("compact decode failed; raw retransmission was not sent") from err
             rejected = err.code
             self._charge("back", "reject", reject_wire(err.code, payload))
             fb = raw_wire(original)
             self._charge("fwd", "fallback", fb)
             out = decode_message(self._receiver.state, fb)
-        assert self._receiver.state.fingerprint() == before
+        after = self._receiver.state.fingerprint()
+        if self._audit_strict and after != before:
+            raise AuditAbort("receiver state changed during compact decode")
+        assert after == before
+        if self._audit_strict and out != original:
+            raise AuditAbort("compact output differs from the message")
         return out, rejected
 
     def transmit(self, msg, declaration=None):
         decl = self._receiver.declare() if declaration is None else declaration
         self._declare(decl)
-        payload, info = encode(self._known, decl, msg)
+        payload, info = encode(self._known, decl, msg, audit_strict=self._audit_strict)
         out, rejected = self.deliver(payload, msg, info["kind"])
         info = dict(info)
         info["rejected"] = rejected

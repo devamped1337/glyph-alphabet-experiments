@@ -1,0 +1,565 @@
+#!/usr/bin/env python3
+"""Gated exploratory byte replay for the internal-75 synthetic cohort.
+
+Importing this module does not compress, mine, or train. main() refuses
+unless an external review ack authorises the run. The ack is not part of
+this repository. This file does not change the frozen grid, coverage floor,
+retirement rule, or e1e-fold-1 split.
+"""
+import gzip
+import hashlib
+import json
+import os
+import signal
+import subprocess
+import sys
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+ROOT = os.path.dirname(HERE)
+sys.path.insert(0, ROOT)
+
+DATA = os.path.join(ROOT, "data", "internal75")
+MANIFEST_PATH = os.path.join(ROOT, "internal75", "MANIFEST.json")
+COMBINED = "combined75_messages.jsonl"
+AUTHORS = ("gpt_messages.jsonl", "grok_messages.jsonl", "claude_messages.jsonl", "glyph_messages.jsonl")
+EXPECTED_COUNTS = {"gpt": 25, "grok": 25, "claude": 15, "glyph": 10}
+# Transferred from the already published synthetic dev screen. Not re-selected here.
+FIXED = {"L": 32, "k": 2, "C": 50, "V": 5, "participants": 2, "joiners": 0, "zstd_level": 19}
+ARMS = ("1", "3", "4b", "4b-delta", "5", "6", "7")  # arm 4 omitted: selecting it would train on these messages
+FLOOR = 0.20  # unchanged; a number on this cohort does not clear the earlier failures
+DEADLINE_S = 60
+# Owner decision 2026-11-10 11:01 Australia/Sydney, this CPU audit only.
+# Grok full-source coverage was not verified, so Grok is not an authorization input.
+REVIEWER_POLICY = "internal75-cpu-gpt-full-source-only-2026-11-10"
+AUDIT_DIR_REL = "measurements/internal75-audit"
+SUPPORT = ("e1e/canon.py", "e1e/schema.py", "e1e/repo.py", "e1e/codec.py", "e1e/compact.py",
+           "e1e/curation.py", "e1e/baselines.py")
+PROTECTED = ("measurements/e1f_dev_screen_synthetic.json",
+             "measurements/e1f_dev_screen_glyph_own_aggregates.json",
+             "measurements/dev_inflation_synthetic.json",
+             "data/synthetic_gpt_r1.jsonl")
+
+
+def _sha256(path):
+    h = hashlib.sha256()
+    with open(path, "rb") as f:
+        h.update(f.read())
+    return h.hexdigest()
+
+
+def manifest():
+    with open(MANIFEST_PATH, encoding="utf-8") as f:
+        return json.load(f)
+
+
+def author_of(conv_id):
+    if conv_id.startswith("ix50-c") and conv_id[len("ix50-c"):].isdigit():
+        n = int(conv_id[len("ix50-c"):])
+        if 1 <= n <= 10:
+            return "gpt"
+        if 11 <= n <= 20:
+            return "grok"
+    if conv_id.startswith("claude-c") and conv_id[len("claude-c"):].isdigit() and 1 <= int(conv_id[len("claude-c"):]) <= 5:
+        return "claude"
+    if conv_id.startswith("glyph-c") and conv_id[len("glyph-c"):].isdigit() and 1 <= int(conv_id[len("glyph-c"):]) <= 5:
+        return "glyph"
+    return None
+
+
+def _load_jsonl(path):
+    with open(path, "rb") as handle:
+        raw = handle.read()
+    rows = []
+    for line in raw.splitlines():
+        if not line.strip():
+            raise SystemExit("blank line in " + os.path.basename(path))
+        rows.append(json.loads(line.decode("utf-8")))
+    return raw, rows
+
+
+def validate():
+    """Check the frozen bytes and counts. Does not rewrite or normalise text."""
+    man = manifest()
+    if man.get("data_freeze") is not True or man.get("code_freeze") is not False:
+        raise SystemExit("manifest must mark data frozen and code not frozen")
+    raw, rows = _load_jsonl(os.path.join(DATA, COMBINED))
+    got = hashlib.sha256(raw).hexdigest()
+    if got != man["combined_sha256"] or len(raw) != man["combined_bytes"]:
+        raise SystemExit("combined JSONL hash or size mismatch")
+    if len(rows) != 75:
+        raise SystemExit("combined record count is not 75")
+    convs = {}
+    authors = {k: 0 for k in EXPECTED_COUNTS}
+    allowed = {"conv_id", "seq", "sender_role", "receiver_role", "kind", "text", "synthetic"}
+    for row in rows:
+        if set(row) != allowed or row["synthetic"] is not True or "ts" in row:
+            raise SystemExit("unexpected field, synthetic flag, or timestamp")
+        if not isinstance(row["text"], str) or row["text"] == "":
+            raise SystemExit("empty or non-text body")
+        if len(row["text"].encode("utf-8")) > 65536:
+            raise SystemExit("message exceeds 65536 bytes; refusing rather than dropping it")
+        who = author_of(row["conv_id"])
+        if who is None:
+            raise SystemExit("conversation id is outside the frozen 30")
+        authors[who] += 1
+        convs.setdefault(row["conv_id"], []).append(row["seq"])
+    if authors != EXPECTED_COUNTS or len(convs) != 30:
+        raise SystemExit("author or conversation count mismatch")
+    for seqs in convs.values():
+        if seqs != list(range(1, len(seqs) + 1)):
+            raise SystemExit("sequence gap or reorder inside a conversation")
+    parsed = []
+    for name in AUTHORS:
+        path = os.path.join(DATA, name)
+        araw, arows = _load_jsonl(path)
+        pin = man["author_files"][name]
+        if hashlib.sha256(araw).hexdigest() != pin["sha256"] or len(araw) != pin["bytes"]:
+            raise SystemExit("author file hash mismatch: " + name)
+        parsed.extend(arows)
+    if [(r["conv_id"], r["seq"], r["text"]) for r in rows] != [(r["conv_id"], r["seq"], r["text"]) for r in parsed]:
+        raise SystemExit("combined bodies differ from the author files")
+    return {"messages": 75, "conversations": 30, "authors": authors, "combined_sha256": got}
+
+
+def plan():
+    return {
+        "question": "On this synthetic internal cohort, after repository and setup bytes, is arm 7's primary-scenario total strictly smaller than both arm 4b-delta and arm 6?",
+        "generalisable_to_outside_traffic": False,
+        "partition": "all_dev",
+        "heldout_count": 0,
+        "seed": "e1e-fold-1",
+        "seed_applied_to_heldout_split": False,
+        "calls_tune": False,
+        "calls_select_baseline4": False,
+        "calls_dev_screen": False,
+        "fixed_point_transferred_from_prior_synthetic_screen": dict(FIXED),
+        "arms": list(ARMS),
+        "arm4": "not run; dictionary-size search would fit the same 75 messages being scored",
+        "baseline2_gzip9": "included as byte-audit plan baseline 2, stdlib, mtime=0, no sync, no training",
+        "coverage_floor_unchanged": FLOOR,
+        "prior_negative_screens_remain_failed": True,
+        "floor_on_this_cohort_cannot_clear_prior_screens": True,
+        "retirement_rule_unchanged": True,
+        "external_gate": "unmet",
+        "reviewer_policy": REVIEWER_POLICY,
+        "grok_review_required": False,
+        "zstd_pin": "zstandard==0.23.0, libzstd 1.5.6, level 19, headline frame",
+        "byte_exact": "audit_strict=True raises AuditAbort, which is not an assert, before raw fallback or retransmission. Python -O cannot strip it. Arm 1 is checked through decode_message.",
+        "watchdog_seconds": DEADLINE_S,
+        "repeats": "no timings and no speedup claim; if a run is later authorised, a second invocation must reproduce the aggregate sha256 or the run is invalid",
+        "search_space": 1,
+        "gzip9": "message frames only; not an arm total and not part of the arm 7 comparison",
+    }
+
+
+class AuditDeadline(BaseException):
+    """Interval-timer stop. A BaseException so protocol `except Exception` handlers cannot continue."""
+
+
+_WATCH = {"armed": False, "expired": False, "t0": 0.0, "limit": 0.0}
+
+
+def install_watchdog(seconds):
+    """Arm the interval timer. A late signal after disarm sets expired and does not raise."""
+    if not hasattr(signal, "setitimer"):
+        raise SystemExit("no interval timer; not measuring")
+    import time
+    _WATCH["expired"] = False
+    _WATCH["t0"] = time.monotonic()
+    _WATCH["limit"] = seconds
+
+    def handler(signum, frame):
+        _WATCH["expired"] = True
+        if _WATCH["armed"]:
+            _WATCH["armed"] = False
+            raise AuditDeadline("audit exceeded %ss; no report kept" % seconds)
+
+    _WATCH["armed"] = True
+    signal.signal(signal.SIGALRM, handler)
+    signal.setitimer(signal.ITIMER_REAL, seconds)
+
+
+def clear_watchdog():
+    """Disarm first so a signal delivered during this call cannot skip cleanup."""
+    _WATCH["armed"] = False
+    if hasattr(signal, "setitimer"):
+        signal.setitimer(signal.ITIMER_REAL, 0)
+
+
+def _block_alarm():
+    """Hold SIGALRM so creation and ownership registration stay one step."""
+    if not hasattr(signal, "pthread_sigmask"):
+        raise SystemExit("no signal mask; not measuring")
+    signal.pthread_sigmask(signal.SIG_BLOCK, [signal.SIGALRM])
+
+
+def _unblock_alarm():
+    signal.pthread_sigmask(signal.SIG_UNBLOCK, [signal.SIGALRM])
+
+
+def deadline_hit():
+    import time
+    if _WATCH["expired"]:
+        return True
+    if not _WATCH["limit"]:
+        return False
+    return (time.monotonic() - _WATCH["t0"]) > _WATCH["limit"]
+
+
+def _git_head():
+    repo = os.path.abspath(os.path.join(ROOT, "..", ".."))
+    try:
+        return subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=repo, text=True).strip()
+    except (OSError, subprocess.CalledProcessError):
+        return None
+
+
+def support_hashes():
+    return {rel: _sha256(os.path.join(ROOT, rel)) for rel in SUPPORT}
+
+
+def parse_review(text):
+    found = {}
+    for line in text.splitlines():
+        if ": " not in line:
+            continue
+        key, value = line.split(": ", 1)
+        if key in ("VERDICT", "SOURCE_COVERAGE", "CANDIDATE", "HARNESS") and key not in found:
+            found[key] = value.strip()
+    return found
+
+
+def review_problems(text, head, harness):
+    found = parse_review(text)
+    problems = []
+    if found.get("VERDICT") != "APPROVE":
+        problems.append("verdict is not APPROVE")
+    if found.get("SOURCE_COVERAGE") != "full":
+        problems.append("source coverage is not full")
+    if found.get("CANDIDATE") != head:
+        problems.append("candidate commit is not bound")
+    if found.get("HARNESS") != harness:
+        problems.append("harness hash is not bound")
+    return problems
+
+
+def _load_review(path, expect):
+    if not isinstance(path, str) or not os.path.isfile(path):
+        return "review artifact missing", None
+    with open(path, "rb") as handle:
+        raw = handle.read()
+    if hashlib.sha256(raw).hexdigest() != expect:
+        return "review artifact hash mismatch", None
+    try:
+        return None, raw.decode("utf-8")
+    except UnicodeError:
+        return "review artifact is not utf-8", None
+
+
+def ack_refusal(path, head_sha=None):
+    if not path or not os.path.isfile(path):
+        return "review ack missing; measurement not started"
+    try:
+        with open(path, encoding="utf-8") as handle:
+            ack = json.load(handle)
+    except (OSError, json.JSONDecodeError):
+        return "review ack is not JSON"
+    man = manifest()
+    if ack.get("authorize_run") is not True:
+        return "review ack does not authorise the run"
+    if ack.get("reviewer_policy") != REVIEWER_POLICY or man.get("reviewer_policy") != REVIEWER_POLICY:
+        return "review ack is not bound to the owner GPT-only policy for this CPU audit"
+    head = _git_head() if head_sha is None else head_sha
+    if not head or ack.get("candidate_commit") != head:
+        return "review ack is not bound to this candidate commit"
+    harness = _sha256(__file__)
+    if ack.get("harness_sha256") != harness or man.get("harness_sha256") != harness:
+        return "review ack harness hash is not this file"
+    if ack.get("combined_sha256") != man["combined_sha256"]:
+        return "review ack combined hash mismatch"
+    claimed = ack.get("support_sha256")
+    live = support_hashes()
+    if claimed != live or claimed != man.get("support_sha256"):
+        return "review ack support hashes are not this tree"
+    reason, text = _load_review(ack.get("gpt_review_path"), ack.get("gpt_review_sha256"))
+    if reason:
+        return "gpt " + reason
+    problems = review_problems(text, head, harness)
+    if problems:
+        return "gpt review rejected: " + "; ".join(problems)
+    return None
+
+
+def prepare_output(path):
+    """Refuse every destination except a new file directly inside the audit directory."""
+    if not isinstance(path, str) or not path:
+        raise SystemExit("output path is missing")
+    allowed = os.path.realpath(os.path.join(ROOT, AUDIT_DIR_REL))
+    parent = os.path.realpath(os.path.dirname(os.path.abspath(path)))
+    name = os.path.basename(os.path.abspath(path))
+    if parent != allowed or name in ("", ".", ".."):
+        raise SystemExit("output must be a new file inside measurements/internal75-audit")
+    os.makedirs(allowed, exist_ok=True)
+    real = os.path.join(allowed, name)
+    frozen = list(PROTECTED) + [os.path.join("data", "internal75", item) for item in (COMBINED,) + AUTHORS]
+    frozen += ["tools/internal75_run.py", "internal75/MANIFEST.json", "e1e/codec.py", "e1e/compact.py", "e1e/baselines.py"]
+    for rel in frozen:
+        if os.path.realpath(os.path.join(ROOT, rel)) == real:
+            raise SystemExit("refusing to overwrite a frozen input or result")
+    if os.path.lexists(real):
+        raise SystemExit("output already exists; refusing to overwrite")
+    return real
+
+
+_refuse_output = prepare_output
+
+
+def coverage_record(arm7):
+    if "covered_bytes" not in arm7 or "input_bytes" not in arm7:
+        raise SystemExit("arm 7 coverage fields are missing; not defaulting them to zero")
+    eligible = arm7["input_bytes"]
+    if not eligible:
+        return {"covered_bytes": arm7["covered_bytes"], "eligible_bytes": 0, "coverage": None,
+                "coverage_defined": False, "floor": FLOOR, "prior_screens_remain_failed": True}
+    return {"covered_bytes": arm7["covered_bytes"], "eligible_bytes": eligible,
+            "coverage": arm7["covered_bytes"] / eligible, "coverage_defined": True,
+            "floor": FLOOR, "prior_screens_remain_failed": True}
+
+
+def gzip_record(message_bytes):
+    return {"scope": "message_frames_only", "message_bytes": message_bytes, "sync_bytes": 0,
+            "included_in_arm_totals": False, "comparable_as_arm_total": False}
+
+
+def publication_evidence(chain, version_index):
+    publications = []
+    for rec in chain:
+        publications.append({
+            "sched_version": rec["sched_version"],
+            "new_entries": rec["new_entries"],
+            "overflow": rec["overflow"],
+            "overflow_count": rec["overflow_count"],
+            "overflow_bytes": rec["overflow_bytes"],
+            "full_bytes": len(rec["full"]),
+            "delta_bytes": 0 if rec["delta"] is None else len(rec["delta"]),
+            "skipped_versions": list(rec["skipped_versions"]),
+        })
+    schedule = []
+    for row in getattr(chain, "schedule", ()):
+        schedule.append({key: row[key] for key in (
+            "sched_version", "n_convs", "status", "published_index", "new_entries",
+            "overflow", "overflow_count", "overflow_bytes", "picks")})
+    return {"publications": publications, "schedule": schedule, "version_index_by_rank": list(version_index)}
+
+
+def build_report(summary, totals, publication, gzip_bytes, zstd_version):
+    """Assemble the persisted report. Gzip stays outside the arm totals."""
+    coverage = coverage_record(totals["7"])
+    arms = {}
+    for arm in ARMS:
+        row = dict(totals[arm])
+        for key in ("message_bytes", "message_prefix_bytes", "control_bytes", "control_prefix_bytes",
+                    "declare_bytes_incl_prefix", "reject_bytes_incl_prefix", "retransmit_bytes_incl_prefix",
+                    "sync_upload", "sync_download", "sync_total", "total"):
+            if key not in row:
+                raise SystemExit("arm tally is missing " + key)
+        arms[arm] = row
+    return {
+        "label": "EXPLORATORY INTERNAL ALL-DEV. Not held-out evidence. Not an outside-traffic result. Does not clear the prior Stage-1 failures and does not change the retirement rule.",
+        "combined_sha256": summary["combined_sha256"],
+        "counts": summary,
+        "plan": plan(),
+        "bindings": {"candidate_commit": _git_head(), "harness_sha256": _sha256(__file__),
+                     "support_sha256": support_hashes()},
+        "zstd": {"version": zstd_version[0], "lib": list(zstd_version[1])},
+        "conversation_order": "order_conversations without timestamps; held-out split not applied",
+        "gzip9_message_frames_only": gzip_record(gzip_bytes),
+        "coverage_descriptive": coverage,
+        "arms": arms,
+        "break_even": totals["_break_even"],
+        "publication": publication,
+        "primary_totals": {arm: arms[arm]["total"] for arm in ARMS},
+        "arm7_strictly_smaller_than_both_4b_delta_and_6": arms["7"]["total"] < arms["4b-delta"]["total"] and arms["7"]["total"] < arms["6"]["total"],
+        "claim_scope": "synthetic internal cohort only",
+    }
+
+
+def write_all(fd, blob):
+    """Write every byte. A short count is continued; zero progress or a wild count fails.
+
+    os.write is allowed to return after fewer bytes than requested. Success is
+    only a file whose size equals len(blob). One helper covers the short write,
+    the zero-progress stall, an oversized count, and a deadline between calls.
+    """
+    view = memoryview(blob)
+    total = 0
+    while total < len(view):
+        if deadline_hit():
+            raise AuditDeadline("audit exceeded during write; no report kept")
+        try:
+            count = os.write(fd, view[total:])
+        except InterruptedError:
+            continue
+        if not isinstance(count, int) or isinstance(count, bool) or count < 0 or count > len(view) - total:
+            raise SystemExit("write reported a count that is not progress within the buffer")
+        if count == 0:
+            raise SystemExit("write made no progress; partial output will not be published")
+        total += count
+    if total != len(blob):
+        raise SystemExit("write finished before the full report was stored")
+    os.fsync(fd)
+    if os.fstat(fd).st_size != len(blob):
+        raise SystemExit("stored report size does not equal the serialized byte count")
+
+
+def _delete(paths):
+    """Remove only paths this process has exclusively created and still lists."""
+    for path in list(paths):
+        if path and os.path.lexists(path):
+            os.remove(path)
+
+
+def commit_report(final_path, blob, owned, hook=None):
+    """Publish without taking a name this process did not exclusively create.
+
+    SIGALRM stays blocked from the creating call until the new path is in
+    `owned`. A signal that arrives in that gap is delivered only after
+    registration, so cleanup cannot miss a file this process created.
+    `owned` is not cleared on success; the caller drops it only after the
+    disarmed deadline check.
+    """
+    def step(name):
+        if hook is not None:
+            hook(name)
+        if deadline_hit():
+            raise AuditDeadline("audit exceeded; no report kept")
+
+    step("before_create")
+    temp = final_path + ".partial"
+    _block_alarm()
+    fd = None
+    try:
+        try:
+            fd = os.open(temp, os.O_CREAT | os.O_EXCL | os.O_WRONLY, 0o644)
+        except FileExistsError:
+            raise SystemExit("partial already exists; preexisting file kept") from None
+        owned.append(temp)
+        step("after_create")
+        write_all(fd, blob)
+        os.close(fd)
+        fd = None
+        step("after_write")
+        try:
+            os.link(temp, final_path)
+        except FileExistsError:
+            raise SystemExit("destination appeared; preexisting file kept") from None
+        owned.append(final_path)
+        step("after_link")
+        os.unlink(temp)
+        owned.remove(temp)
+        step("after_publish")
+    finally:
+        if fd is not None:
+            os.close(fd)
+        _unblock_alarm()
+
+
+def _require_zstd():
+    import zstandard
+    if getattr(zstandard, "__version__", None) != "0.23.0" or getattr(zstandard, "ZSTD_VERSION", None) != (1, 5, 6):
+        raise SystemExit("zstd pin mismatch; not measuring")
+    return zstandard.__version__, zstandard.ZSTD_VERSION
+
+
+def _real_blob():
+    """Corpus replay. Called only after the watchdog is already armed."""
+    from e1e.canon import AuditAbort
+    zstd_version = _require_zstd()
+    summary = validate()
+    from e1e import baselines as B
+    from e1e import curation as K
+
+    raw, rows = _load_jsonl(os.path.join(DATA, COMBINED))
+    by = {}
+    for row in rows:
+        by.setdefault(row["conv_id"], []).append(row)
+    messages = [{"conv_id": c, "seq": r["seq"], "text": r["text"]} for c, rs in by.items() for r in rs]
+    order = K.order_conversations(messages)  # synthetic all-dev order; not a held-out split
+    convs = [(c, [r["text"] for r in by[c]]) for c in order]
+    replay = [{"conv_id": c, "sender": r["sender_role"], "receiver": r["receiver_role"],
+               "msg": r["text"].encode("utf-8")} for c in order for r in by[c]]
+    if len(replay) != 75:
+        raise SystemExit("replay length changed")
+    miner = K.Miner(convs, "synthetic")
+    chain = K.build_repository_chain(
+        miner, len(convs), FIXED["V"], FIXED["L"], FIXED["k"], FIXED["C"], FIXED["joiners"])
+    sched = [K.version_for_rank(r, len(replay), FIXED["V"]) for r in range(len(replay))]
+
+    def version_map(sched_version):
+        idx = 0
+        for i, rec in enumerate(chain, 1):
+            if rec["sched_version"] <= sched_version:
+                idx = i
+        return idx
+
+    indexes = [version_map(item) for item in sched]
+    res = B.replay_arms(
+        replay, chain, lambda r: indexes[r], ARMS, level=FIXED["zstd_level"],
+        b4_codec=None, audit_strict=True)
+    totals = B.scenario_totals(res, chain, FIXED["participants"], [], b4_codec=None)
+    gzip_bytes = 0
+    for item in replay:
+        frame = gzip.compress(item["msg"], 9, mtime=0)
+        if gzip.decompress(frame) != item["msg"]:
+            raise AuditAbort("gzip frame does not decode to the message")
+        gzip_bytes += len(frame)
+    report = build_report(summary, totals, publication_evidence(chain, indexes), gzip_bytes, zstd_version)
+    report["combined_sha256"] = hashlib.sha256(raw).hexdigest()
+    return json.dumps(report, indent=1, sort_keys=True).encode("utf-8") + b"\n"
+
+
+def run_measurement(out_path, deadline_s=DEADLINE_S, compute=None, hook=None):
+    """One fixed replay. The watchdog is armed before any e1e import in this call."""
+    install_watchdog(deadline_s)
+    owned = []
+    try:
+        from e1e.canon import AuditAbort, E1EError
+        real = prepare_output(out_path)
+        blob = _real_blob() if compute is None else compute()
+        commit_report(real, blob, owned, hook=hook)
+    except AuditDeadline:
+        _delete(owned)
+        owned.clear()
+        raise SystemExit("audit deadline exceeded; no report kept")
+    except SystemExit:
+        _delete(owned)
+        owned.clear()
+        raise
+    except Exception as err:
+        from e1e.canon import AuditAbort, E1EError
+        _delete(owned)
+        owned.clear()
+        if isinstance(err, (AuditAbort, E1EError)):
+            raise SystemExit("audit aborted on a verification failure; no report kept")
+        raise
+    finally:
+        clear_watchdog()
+        if deadline_hit():
+            _delete(owned)
+            owned.clear()
+            raise SystemExit("audit deadline exceeded; no report kept")
+
+
+def main(argv=None):
+    argv = sys.argv[1:] if argv is None else argv
+    if argv[:1] != ["--ack"] or len(argv) != 4 or argv[2] != "--out":
+        raise SystemExit("usage: python3 tools/internal75_run.py --ack ACK.json --out measurements/internal75-audit/report.json")
+    reason = ack_refusal(argv[1])
+    if reason:
+        raise SystemExit(reason)
+    prepare_output(argv[3])
+    run_measurement(argv[3])
+
+
+if __name__ == "__main__":
+    main()

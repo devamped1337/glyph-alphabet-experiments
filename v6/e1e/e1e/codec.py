@@ -2,7 +2,7 @@
 import base64
 import copy
 
-from .canon import E1EError, canonical, parse_canonical, sha256_hex
+from .canon import AuditAbort, E1EError, canonical, parse_canonical, sha256_hex
 from .schema import match_template, render, validate_args
 
 MSG_FORMAT = "E1E-MSG/1"
@@ -28,6 +28,22 @@ def declare_wire(decl):
 
 def reject_wire(code, wire):
     return canonical({"format": MSG_FORMAT, "type": "reject", "code": code, "msg": sha256_hex(wire)})
+
+
+def audit_arm1(msg, wire):
+    """Decode an arm-1 raw envelope and require the original bytes.
+
+    The comparison is an if, not an assert, so Python -O cannot skip it.
+    Used only when a caller asks for the strict audit.
+    """
+    from .repo import RepoState
+    try:
+        got = decode_message(RepoState(), wire)
+    except E1EError as err:
+        raise AuditAbort("arm 1 raw envelope did not decode") from err
+    if got != msg:
+        raise AuditAbort("arm 1 decoded bytes differ from the message")
+    return got
 
 
 def decode_message(state, wire):
@@ -87,7 +103,7 @@ def candidates(state, text, k=MAX_CANDIDATES):
     return [copy.deepcopy(state._e[i]) for _, i in cs[:k]]  # never expose snapshot internals
 
 
-def encode(known, declaration, msg, k=MAX_CANDIDATES, require_smaller=False):
+def encode(known, declaration, msg, k=MAX_CANDIDATES, require_smaller=False, audit_strict=False):
     """Encode `msg` (bytes) for a receiver that declared `declaration`.
     `known` maps snapshot digest -> RepoState the sender can see. Returns (wire, info).
     require_smaller=False: this mechanics draft sends any verified reference, even when it is
@@ -119,6 +135,8 @@ def encode(known, declaration, msg, k=MAX_CANDIDATES, require_smaller=False):
         except E1EError:
             ok = False
         if not ok:
+            if audit_strict:
+                raise AuditAbort("reference verification failed; raw fallback was not sent")
             info["skipped"].append((e["id"], "verify_failed")); continue
         if best is None or (len(wire), e["id"]) < (len(best[0]), best[1]):
             best = (wire, e["id"])
@@ -132,11 +150,14 @@ def encode(known, declaration, msg, k=MAX_CANDIDATES, require_smaller=False):
 class Link:
     """One sender->receiver channel with byte accounting of every frame."""
 
-    def __init__(self, known, receiver, require_smaller=True, codec=None):
+    def __init__(self, known, receiver, require_smaller=True, codec=None, audit_strict=False):
         """require_smaller=True is the audit policy (plan section 8, Stefan 2026-10-23). codec: a
-        baselines.ZstdCodec enables the baseline-6 three-way selection; None sends uncompressed (baseline 5)."""
+        baselines.ZstdCodec enables the baseline-6 three-way selection; None sends uncompressed (baseline 5).
+        audit_strict is off for every existing caller. The internal-75 run sets it so a decode failure
+        aborts before the raw retransmission."""
         self._known, self._receiver = known, receiver
         self._require_smaller, self._codec = require_smaller, codec
+        self._audit_strict = audit_strict
         self._frames = []  # (direction, kind, nbytes)
         self._last_decl = None
 
@@ -156,11 +177,12 @@ class Link:
             self._frames.append(("back", "declare", len(declare_wire(decl))))
             self._last_decl = dict(decl) if isinstance(decl, dict) else decl
         if self._codec is None:
-            wire, info = encode(self._known, decl, msg, require_smaller=self._require_smaller)
+            wire, info = encode(self._known, decl, msg, require_smaller=self._require_smaller,
+                                audit_strict=self._audit_strict)
             kind = "ref" if info["reason"] == "ref" else "raw"
         else:  # baseline 6: the ref competes after compression, so do not pre-filter by uncompressed size
             from .baselines import select_b6
-            ref, info = encode(self._known, decl, msg, require_smaller=False)
+            ref, info = encode(self._known, decl, msg, require_smaller=False, audit_strict=self._audit_strict)
             wire, kind = select_b6(ref if info["reason"] == "ref" else None, raw_wire(msg), self._codec)
             if kind != "zstd_ref" and info["reason"] == "ref":
                 info["reason"] = "ref_not_smaller"
@@ -174,13 +196,20 @@ class Link:
                 out = decode_message(self._receiver.state, unwrap(wire, self._codec))
             rejected = None
         except E1EError as err:
+            if self._audit_strict:
+                raise AuditAbort("receiver rejected the selected frame; raw retransmission was not sent") from err
             rejected = err.code
             rej = reject_wire(err.code, wire)
             self._frames.append(("back", "reject", len(rej)))
             fb = raw_wire(msg)
             self._frames.append(("fwd", "fallback", len(fb)))
             out = decode_message(self._receiver.state, fb)
-        assert self._receiver.state.fingerprint() == before  # decoding never mutates state
+        after = self._receiver.state.fingerprint()
+        if self._audit_strict and after != before:
+            raise AuditAbort("receiver state changed during decode")
+        assert after == before  # decoding never mutates state
+        if self._audit_strict and out != msg:
+            raise AuditAbort("decoded link output differs from the message")
         return out, {"kind": kind, "rejected": rejected, "reason": info["reason"]}
 
     def totals(self):
